@@ -1,0 +1,1961 @@
+<template name="Empresas">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			
+					
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						<h3>Empresas</h3>
+						<br>
+						<div class="page-header clearfix" style="margin-top: 0px;">
+						    <h4 class="pull-left">
+						    	<input type="text" style="position: relative; top: 5px; width: 275px" name="search" class="form-control" width="250px" placeholder="Buscar por Nombre o RUC">
+						    	
+						    </h4>
+
+						    <h4 class="pull-right">
+						    	<span class="action-btn agregar-empresa">
+									<a style="width: 220px; margin-left: 0px; font-weight: 300; background-color: #3498db;" class="top-nav-btn blue">Agregar Empresa</a>
+								</span>
+						    </h4>
+    
+  						</div>
+
+					  	<ul class="list-group">
+					    {{#if searching}}
+      						<h3>Cargando...</h3>
+    					{{else}}
+					    	{{#each empresas}}
+					        <li class="list-group-item clearfix">
+					          	<span class="pull-left">{{nombre}}</span>
+					          	<span class="pull-right" style="width: 255px">
+					          		<select id="listarutas" style="width: 88px; display: inline-block; position: relative; top: 1px; margin-right: 5px;" class="form-control">
+					          			{{#each rutas}}
+											<option value="{{this._id}}">{{this.nombre}}</option>
+					          			{{/each}}
+					          		</select>
+						          	<label class="btn btn-success btn-file">
+						    			<i class="fa fa-upload" aria-hidden="true"></i> <input type="file" id="subirFlota" style="display: none;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+									</label> 
+									<a href="/empresas/{{this._id}}" class="btn btn-primary">
+										<i class="fa fa-eye" aria-hidden="true"></i>
+									</a>
+					          	</span>
+					        </li>
+					     	
+					     	{{else}}
+								<h3>Lo sentimos no tenemos resultados para {{query}}</h3>
+					     	{{/each}}
+
+					    {{/if}}
+					    
+					  	</ul>
+
+					</div>
+				</div>
+			</div>	
+		</div>
+	</div>
+</template>
+
+<template name="CargandoExcel">
+	<div class="modal fade" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" style="margin-top: 150px;">
+            <div class="modal-content">
+                <div class="modal-body" style="background: #455a64; height: 60vh;">
+                	<div class="container">
+  						<div class="holder">
+    						<div class="box2"></div>
+  						</div>
+						  <div class="holder">
+						    <div class="box2"></div>
+						  </div>
+						  <div class="holder">
+						    <div class="box2"></div>
+						  </div>
+					</div>
+                    <h1 style="width: 80%; margin: 0 auto; padding-top: 25px; text-align: center; color: white; font-size: 30px;">Cargando Excel...</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="DetalleDeEmpresa">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						<div class="page-header clearfix" style="margin-top: 0;">
+							<div class="pull-left">
+								<h3 class="title-box">Detalle de Empresa</h3>
+							</div>
+							<div class="pull-right">
+								<button class="btn btn-success edit">
+									<i class="fa fa-pencil" aria-hidden="true"></i>
+								</button>
+							</div>
+					  	</div>
+					  	
+					  	
+						<table class="table">
+							<tbody>
+    							<tr>
+							        <td>Nombre:</td>
+							        <td>{{nombre}}</td>
+      							</tr>
+      							<tr>
+							        <td>RUC:</td>
+							        <td>{{ruc}}</td>
+      							</tr>
+      							<tr>
+							        <td>Domicilio Fiscal:</td>
+							        <td>{{domicilio}}</td>
+      							</tr>
+      							<tr>
+							        <td>Representante Legal:</td>
+							        <td>{{representante}}</td>
+      							</tr>
+      							<tr>
+							        <td>Teléfono:</td>
+							        <td>{{telefono}}</td>
+      							</tr>
+      							<tr>
+							        <td>Email:</td>
+							        <td>{{email}}</td>
+      							</tr>
+    						</tbody>
+						</table>
+						
+
+							
+						
+					</div>
+				</div>
+			</div>	
+
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						{{>Opciones}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="Opciones">
+
+	<ul class="nav nav-tabs">
+		<li class="active"><a data-toggle="tab" href="#home">Vehículos</a></li>
+		<li><a data-toggle="tab" href="#menu1">Operadores</a></li>
+		<li><a data-toggle="tab" href="#menu2">Administradores</a></li>
+	</ul>
+
+	<div class="tab-content">
+		<div id="home" class="tab-pane fade in active">
+		    {{>ListaDeVehiculosPorEmpresas}}
+		</div>
+		<div id="menu1" class="tab-pane fade">
+		    {{>Operadores}}
+		</div>
+		<div id="menu2" class="tab-pane fade">
+		   {{>GestorAdministradores}}
+		</div>
+	</div>
+</template>
+
+<template name="GestorAdministradores">
+	<br>
+	<button class="btn btn-success nuevo-usuario">Nuevo Usuario</button>
+	<br><br>
+	<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 35vh;">
+		<ul class="nav nav-tabs">
+			<li class="active"><a data-toggle="tab" href="#directores">Directores</a></li>
+			<li><a data-toggle="tab" href="#operadores">Operadores</a></li>
+		</ul>
+
+		<div class="tab-content">
+			
+			<div id="directores" class="tab-pane fade in active">
+			  
+			  {{>ListaDeDirectoresPorEmpresa}}
+				
+			</div>
+			
+			<div id="operadores" class="tab-pane fade">
+			    {{>ListaDeOperadoresPorEmpresa}}
+			</div>
+			
+		</div>
+	</div>
+</template>
+
+<template name="ListaDeDirectoresPorEmpresa">
+	
+		<table class="table">
+		    <thead>
+			    <tr>
+			        <th>Nombre</th>
+			        <th>Email</th>
+			        <th>Opciones</th>
+			    </tr>
+		    </thead>
+		    <tbody>
+			    {{#each directores}}
+			    <tr>
+			        <td>{{this.nombre}}</td>
+			        <td>{{this.email}}</td>
+			        <td>
+			        	<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+			        	<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			        </td>
+			    </tr> 
+			    {{/each}}
+		    </tbody>
+		</table>
+	
+</template>
+
+<template name="ListaDeOperadoresPorEmpresa">
+	
+		<table class="table">
+		    <thead>
+			    <tr>
+			        <th>Nombre</th>
+			        <th>Email</th>
+			        <th>Opciones</th>
+			    </tr>
+		    </thead>
+		    <tbody>
+			    {{#each operadores}}
+			    <tr>
+			        <td>{{this.nombre}}</td>
+			        <td>{{this.email}}</td>
+			        <td>
+			        	<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+			        	<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			        </td>
+			    </tr> 
+			    {{/each}}
+		    </tbody>
+		</table>
+	
+</template>
+
+<template name="Operadores">
+	<br>
+	<ul class="nav nav-tabs">
+		<li class="active"><a data-toggle="tab" href="#conductores">Conductores</a></li>
+		<li><a data-toggle="tab" href="#cobradores">Cobradores</a></li>
+	</ul>
+
+	<div class="tab-content">
+		
+		<div id="conductores" class="tab-pane fade in active">
+		  
+		  {{>ListaDeConductoresPorEmpresa}}
+			
+		</div>
+		
+		<div id="cobradores" class="tab-pane fade">
+		    {{>ListaDeCobradoresPorEmpresa}}
+		</div>
+		
+	</div>
+</template>
+
+<template name="ListaDeConductoresPorEmpresa">
+	<br>
+	<div class="page-header clearfix" style="margin-top: 0;">
+		<div class="pull-left">
+			<input type="text" name="search" class="form-control" style="width: 350px;" placeholder="Buscar conductor por DNI">
+		</div>
+  	</div>
+	
+	{{#if searching}}
+      	<h3>Cargando...</h3>
+    {{else}}
+		{{#each conductores}}
+			<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 35vh;">
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#con3{{this._id}}">Detalles</a></li>
+					<li><a data-toggle="tab" href="#p3{{this._id}}">Licencia</a></li>
+					<li><a data-toggle="tab" href="#s3{{this._id}}">CEV</a></li>
+					<li><a data-toggle="tab" href="#t3{{this._id}}">Credencial</a></li>
+					
+				</ul>
+
+				<div class="tab-content">
+					<div id="con3{{this._id}}" class="tab-pane fade in active">
+						<br>
+						<div class="pull-left" style="margin-bottom: 20px;">
+	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+	      					<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+	    				</div>
+						
+						<br>
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Nombres:</td>
+							        <td>{{this.datos.nombre}}</td>
+      							</tr>
+      							<tr>
+							        <td>Apellidos:</td>
+							        <td>{{this.datos.apellido}}</td>
+      							</tr>
+      							<tr>
+							        <td>DNI:</td>
+							        <td>{{this.datos.dni}}</td>
+      							</tr>
+      							<tr>
+							        <td>Caducidad:</td>
+							        <td>{{this.datos.caducidad}}</td>
+      							</tr>
+      							<tr>
+							        <td>Distrito:</td>
+							        <td>{{this.datos.distrito}}</td>
+      							</tr>
+      							<tr>
+							        <td>Domicilio: </td>
+							        <td>{{this.datos.domicilio}}</td>
+      							</tr>
+      							<tr>
+      								<td>Teléfono:</td>
+      								<td>{{this.datos.telefono}}</td>
+      							</tr>
+    						</tbody>
+						</table>
+						<br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor1" style="display: none;" accept="image/*">
+						</label>
+						<br><br>						
+						{{>FotosDeConductores1}}
+					</div>
+					<div id="p3{{this._id}}" class="tab-pane fade">
+					    <br>
+					  
+
+					     <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Código:</td>
+							        <td>{{this.licencia.codigo}}</td>
+      							</tr>
+      							<tr>
+							        <td>Categoría:</td>
+							        <td>{{this.licencia.categoria}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Expedición:</td>
+							        <td>{{this.licencia.expedicion}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Revalidación:</td>
+							        <td>{{this.licencia.revalidacion}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+						<br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor2" style="display: none;" accept="image/*">
+						</label>
+						<br><br>	
+					    {{>FotosDeConductores2}}
+					</div>
+					<div id="s3{{this._id}}" class="tab-pane fade">
+					    <br>
+					   
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Código:</td>
+							        <td>{{this.CEV.codigo}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Emisión:</td>
+							        <td>{{this.CEV.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.CEV.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+						<br>
+					    <label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor3" style="display: none;" accept="image/*">
+						</label>
+						<br><br>	
+						{{>FotosDeConductores3}}
+					</div>
+					<div id="t3{{this._id}}" class="tab-pane fade">
+					   	<br>
+					   
+
+					   	 <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número de Credencial:</td>
+							        <td>{{this.credencial.numero}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Emisión:</td>
+							        <td>{{this.credencial.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.credencial.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+						<br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor4" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeConductores4}}	
+					</div>
+					
+					
+				</div>
+			</div>
+		{{else}}
+			Lo sentimos, no encontramos resultados para {{query}}
+		{{/each}}
+
+	{{/if}}
+
+</template>
+
+<template name="FotosDeConductores1">
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}
+	</div>
+</template>
+
+<template name="FotosDeConductores2">
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}
+	</div>
+</template>
+
+<template name="FotosDeConductores3">
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}
+	</div>
+</template>
+
+<template name="FotosDeConductores4">
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}
+	</div>
+</template>
+
+<template name="ListaDeCobradoresPorEmpresa">
+	<br>
+	<div class="page-header clearfix" style="margin-top: 1px;">
+		<div class="pull-left">
+			<input type="text" name="search" class="form-control" style="width: 350px;" placeholder="Buscar cobrador por DNI">
+	    </div>
+  	</div>
+
+  	{{#if searching}}
+      	<h3>Cargando...</h3>
+    {{else}}
+		{{#each cobradores}}
+			<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 35vh;">
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#co2{{this._id}}">Detalles</a></li>
+					<li><a data-toggle="tab" href="#p2{{this._id}}">CEV</a></li>
+					<li><a data-toggle="tab" href="#s2{{this._id}}">Credenciales</a></li>
+					
+				</ul>
+
+				<div class="tab-content">
+					<div id="co2{{this._id}}" class="tab-pane fade in active">
+						<br>
+						<div class="pull-left" style="margin-bottom: 20px">
+	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+	      					<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+	    				</div>
+						<br>
+					   
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Nombres:</td>
+							        <td>{{this.datos.nombre}}</td>
+      							</tr>
+      							<tr>
+							        <td>Apellidos:</td>
+							        <td>{{this.datos.apellido}}</td>
+      							</tr>
+      							<tr>
+							        <td>DNI:</td>
+							        <td>{{this.datos.dni}}</td>
+      							</tr>
+      							
+      							<tr>
+							        <td>Domicilio: </td>
+							        <td>{{this.datos.domicilio}}</td>
+      							</tr>
+
+      							<tr>
+							        <td>Distrito:</td>
+							        <td>{{this.datos.distrito}}</td>
+      							</tr>
+
+      							
+    						</tbody>
+						</table>
+						<br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotocobrador1" style="display: none;" accept="image/*">
+			    			
+						</label>
+						<br><br>
+						{{>FotosDeCobradores1}}
+					</div>
+					<div id="p2{{this._id}}" class="tab-pane fade">
+					    <br>
+					  
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Código:</td>
+							        <td>{{this.CEV.codigo}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Emisión:</td>
+							        <td>{{this.CEV.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.CEV.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotocobrador2" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeCobradores2}}
+					</div>
+					<div id="s2{{this._id}}" class="tab-pane fade">
+					    <br>
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número:</td>
+							        <td>{{this.credencial.numero}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Emisión:</td>
+							        <td>{{this.credencial.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.credencial.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotocobrador3" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeCobradores3}}
+					</div>
+
+					
+					
+				</div>
+			</div>
+		{{else}}
+			Lo sentimos, no encontramos resultados para {{query}}
+		{{/each}}
+
+	{{/if}}
+				
+</template>
+
+<template name="ListaDeVehiculosPorEmpresas">
+	<br>
+	<div class="page-header clearfix" style="margin-top: 0;">
+	    
+	    <div class="pull-left">
+	      <input type="text" name="search" class="form-control" style="width: 350px;" placeholder="Buscar vehículo por placa o padron">
+	    </div>
+  	</div>
+	
+	{{#if searching}}
+      	<h3>Cargando...</h3>
+    {{else}}
+		{{#each vehiculo}}
+			<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 40vh;">
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#{{this._id}}">Detalles</a></li>
+					<li><a data-toggle="tab" href="#p{{this._id}}">Propietario</a></li>
+					<li><a data-toggle="tab" href="#s{{this._id}}">SOAT</a></li>
+					<li><a data-toggle="tab" href="#t{{this._id}}">Tarjeta de Circulación</a></li>
+					<li><a data-toggle="tab" href="#r{{this._id}}">Revisión Tecnica</a></li>
+					<li><a data-toggle="tab" href="#rc{{this._id}}">RC</a></li>
+					<li><a data-toggle="tab" href="#tc{{this._id}}">TCH</a></li>
+					
+				</ul>
+
+				<div class="tab-content">
+					<div id="{{this._id}}" class="tab-pane fade in active">
+						<br>
+						<div class="pull-left" style="margin-bottom: 20px;">
+	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+	      					<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+	    				</div>
+						<br>
+
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Padrón:</td>
+							        <td>{{this.padron}}</td>
+      							</tr>
+      							<tr>
+      								<td>Placa:</td>
+      								<td>{{this.placa}}</td>
+      							</tr>
+      							<tr>
+							        <td>Compañia:</td>
+							        <td>{{this.compania}}</td>
+      							</tr>
+      							<tr>
+							        <td>Código de Ruta:</td>
+							        <td>{{this.codigoDeRuta}}</td>
+      							</tr>
+      							<tr>
+      								<td>Aseguradora:</td>
+      								<td>{{this.aseguradora}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Permanencia en la Empresa:</td>
+      								<td>{{this.fechaDePermanenciaEnLaEmpresa}}</td>
+      							</tr>
+    						</tbody>
+						</table>
+
+						<br>
+					    <h3>Fotos</h3>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeVehiculos}}
+					    
+					</div>
+					<div id="p{{this._id}}" class="tab-pane fade">
+					    <br>
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Nombre del Propietario:</td>
+							        <td>{{this.propietario.nombre}}</td>
+      							</tr>
+      							<tr>
+      								<td>DNI:</td>
+      								<td>{{this.propietario.dni}}</td>
+      							</tr>
+      							<tr>
+							        <td>Domicilio del Propietario:</td>
+							        <td>{{this.propietario.domicilio}}</td>
+      							</tr>
+      							<tr>
+							        <td>Distrito:</td>
+							        <td>{{this.propietario.distrito}}</td>
+      							</tr>
+      							<tr>
+      								<td>Teléfono:</td>
+      								<td>{{this.propietario.telefono}}</td>
+      							</tr>
+    						</tbody>
+						</table>
+
+						<br>
+					    <h3>Fotos</h3>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo2" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeVehiculos2}}
+					</div>
+					<div id="s{{this._id}}" class="tab-pane fade">
+					    <br>
+					 
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número:</td>
+							        <td>{{this.SOAT.numero}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Emisión: </td>
+      								<td>{{this.SOAT.inicio}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.SOAT.fin}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+					    <br>
+					    <h3>Fotos</h3>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo3" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeVehiculos3}}
+					</div>
+					<div id="t{{this._id}}" class="tab-pane fade">
+					   	<br>
+					   	<table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número: </td>
+							        <td>{{this.TC.numero}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Emisión: </td>
+      								<td>{{this.TC.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.TC.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+
+						<br>
+					    <h3>Fotos</h3>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo4" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeVehiculos4}}
+					</div>
+					<div id="r{{this._id}}" class="tab-pane fade">
+					    <br>
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número de Revisión Tecnica:</td>
+							        <td>{{this.CITV.numero}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Emisión: </td>
+      								<td>{{this.CITV.inicio}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td> {{this.CITV.fin}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+
+						<br>
+					    <h3>Fotos</h3>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo5" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeVehiculos5}}
+					</div>
+					<div id="rc{{this._id}}" class="tab-pane fade">
+						<br>
+					  
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número:</td>
+							        <td>{{this.RC.numero}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Emisión: </td>
+      								<td>{{this.RC.inicio}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.RC.fin}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+						<br>
+					    <h3>Fotos</h3>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo6" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeVehiculos6}}
+					</div>
+					<div id="tc{{this._id}}" class="tab-pane fade">
+					    <br>
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número:</td>
+							        <td>{{this.TCH.numero}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Emisión: </td>
+      								<td>{{this.TCH.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.TCH.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+					</div>
+					
+				</div>
+			</div>
+		{{else}}
+			Lo sentimos, no encontramos resultados para {{query}}
+		{{/each}}
+
+	{{/if}}
+							
+</template>
+
+<template name="FotosDeCobradores">
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}	
+	</div>
+	
+</template>
+
+<template name="FotosDeCobradores1">
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}	
+	</div>
+	
+</template>
+
+<template name="FotosDeCobradores2">
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}	
+	</div>
+	
+</template>
+
+<template name="FotosDeCobradores3">
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}	
+	</div>
+	
+</template>
+
+<template name="FotosDeCobradores4">
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}	
+	</div>
+	
+</template>
+
+<template name="FotosDeConductores">
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}
+	</div>
+	
+</template>
+
+<template name="FotosDeVehiculos">
+
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}
+	</div>
+	
+</template>
+
+<template name="FotosDeVehiculos2">
+
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}
+	</div>
+	
+</template>
+
+<template name="FotosDeVehiculos3">
+
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}
+	</div>
+	
+</template>
+
+<template name="FotosDeVehiculos4">
+
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}
+	</div>
+	
+</template>
+
+<template name="FotosDeVehiculos5">
+
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}
+	</div>
+	
+</template>
+
+<template name="FotosDeVehiculos6">
+
+	<div class="lista-photos">
+		{{#each fotos}}
+		
+			{{#if isImage}}
+				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			{{/if}}  
+	    
+		{{/each}}
+	</div>
+	
+</template>
+
+<template name="agregarEmpresa">
+	
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Agregar Empresa</h4>
+                </div>
+
+                <div class="modal-body">
+                	<br>
+
+                	<form class="form-inline">
+	                	
+	                	<div class="form-group">
+						    <label for="nombre">Nombre</label>
+						    <input type="text" name="nombre" style="margin-left: 48px; width: 432px;" class="form-control" id="nombre">
+	  					</div>
+						<br><br>
+	  					<div class="form-group">
+						    <label for="ruc">RUC</label>
+						    <input type="number" max="99999999999"  name="ruc" style="width: 138px; margin-left: 70px;" class="form-control" id="ruc">
+	  					</div>
+	  					
+						<div class="form-group">
+			                <label for="movil" style="margin-left: 2px;">Fecha de Inicio</label>
+			                <div class='input-group date' id='datetimepicker1'>
+			                	
+			                    <input type='text' name="movil" style="width: 115px; margin-left: 19px;" class="form-control" />
+			                    <span class="input-group-addon">
+			                        <span class="glyphicon glyphicon-calendar"></span>
+			                    </span>
+			                </div>
+            			</div>
+						<br><br>
+	  					<div class="form-group">
+						    <label for="domicilio">Domicilio</label>
+						    <input type="text" name="domicilio" style="width: 430px; margin-left: 40px;" class="form-control" id="domicilio">
+	  					</div>
+						<br><br>
+	  					<div class="form-group">
+						    <label for="representante">Representante</label>
+						    <input type="text" name="representante" style="width: 430px;" class="form-control" id="representante">
+	  					</div>
+						<br><br>
+	                	<div class="form-group">
+						    <label for="telefono">Teléfono</label>
+						    <input type="number" name="telefono" style="width: 117px; margin-left: 45px;" class="form-control" id="telefono">
+	  					</div>
+
+						<div class="form-group">
+						    <label for="movil" style="margin-left: 130px;"> Móvil</label>
+						    <input type="number" name="movil" style="width: 115px; margin-left: 19px;" class="form-control" id="movil">
+						</div>
+  						<br><br>
+  						<div class="form-group">
+						    <label for="email">Email</label>
+						    <input type="email" name="email" style="width: 165px; margin-left: 66px;" class="form-control" id="email">
+						</div>
+					</form>
+                    
+                    <form class="__formulario">
+                    
+                   <!-- <div class="group">      
+                        <input type="text" required name="nombre">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Nombre</label>
+                    </div> 
+
+                    <div class="group">      
+                        <input type="text" required name="ruc">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>RUC</label>
+                    </div> 
+
+                    <div class="group">      
+                        <input type="text" required name="domicilio">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Domicilio</label>
+                    </div> 
+
+                    <div class="group">      
+                        <input type="text" required name="representante">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Representante</label>
+                    </div> 
+
+                    <div class="group">      
+                        <input type="text" required name="telefono">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Teléfono</label>
+                    </div> 
+
+                    <div class="group">      
+                        <input type="email" required name="email">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Email</label>
+                    </div>  -->
+                   
+                    <button type="submit" class="__button">
+                        Agregar
+                    </button>
+                </form>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</template>
+
+<template name="EditarEmpresa">
+			<div class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar Datos de Empresa</h4>
+                </div>
+
+                <div class="modal-body">
+				{{#with empresa}}
+                	
+					<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="nombre" value="{{this.nombre}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Nombre</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="ruc" value="{{this.ruc}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>RUC</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="domicilio" value="{{this.domicilio}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Domicilio</label>
+		                    </div>
+		                    <div class="group">      
+		                        <input type="text" required name="representante" value="{{this.representante}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Representante Legal</label>
+		                    </div>
+		                    <div class="group">      
+		                        <input type="text" required name="telefono" value="{{this.telefono}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Teléfono</label>
+		                    </div>
+		                    <div class="group">      
+		                        <input type="email" required name="email" value="{{this.email}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Email</label>
+		                    </div>
+                		</form>				
+				
+				{{/with}}
+			
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success guardar ">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="EditarCobrador">
+		<div class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar Datos de Cobrador</h4>
+                </div>
+
+                <div class="modal-body">
+                	<br>
+					{{#with cobrador}}
+                	
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#1{{this._id}}">Detalles</a></li>
+						<li><a data-toggle="tab" href="#p1{{this._id}}">CEV</a></li>
+						<li><a data-toggle="tab" href="#tec1{{this._id}}">Credencial</a></li>
+					</ul>
+				
+				<div class="tab-content">
+					<div id="1{{this._id}}" class="tab-pane fade in active">
+						<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="nombre" value="{{this.datos.nombre}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Nombres</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="apellidos" value="{{this.datos.apellido}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Apellidos</label>
+		                    </div> 
+		                     <div class="group">      
+		                        <input type="text" required name="dni" value="{{this.datos.dni}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>DNI</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="domicilio" value="{{this.datos.domicilio}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Domicilio</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="distrito" value="{{this.datos.distrito}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Distrito</label>
+		                    </div> 
+                    	
+                		</form>
+					    
+					</div>
+					<div id="p1{{this._id}}" class="tab-pane fade">
+						
+						<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="codigocev" value="{{this.CEV.codigo}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Código de CEV</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="emisioncev" value="{{this.CEV.emision}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Emisión CEV</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="caducidadcev" value="{{this.CEV.caducidad}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Caducidad de CEV</label>
+		                    </div> 
+              
+                		</form>
+					</div>
+					<div id="tec1{{this._id}}" class="tab-pane fade">
+						
+						<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="numerocredencial" value="{{this.credencial.numero}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Número de Credencial</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="emisioncredencial" value="{{this.credencial.emision}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Emisión de Credencial</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="caducidadcredencial" value="{{this.credencial.caducidad}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Caducidad de Credencial</label>
+		                    </div>
+                    	
+                		</form>
+					</div>
+					
+				</div>
+				{{/with}}
+			
+                    
+                    
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success guardar ">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="EditarConductor">
+			<div class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar Datos de Conductor</h4>
+                </div>
+
+                <div class="modal-body">
+                	<br>
+					{{#with conductor}}
+                	
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#1{{this._id}}">Detalles</a></li>
+						<li><a data-toggle="tab" href="#p1{{this._id}}">Licencia</a></li>
+						<li><a data-toggle="tab" href="#tec1{{this._id}}">CEV</a></li>
+						<li><a data-toggle="tab" href="#s1{{this._id}}">Credencial</a></li>
+						
+					</ul>
+				
+				<div class="tab-content">
+					<div id="1{{this._id}}" class="tab-pane fade in active">
+						<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="nombre" value="{{this.datos.nombre}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Nombres</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="apellido" value="{{this.datos.apellido}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Apellidos</label>
+		                    </div> 
+		                     <div class="group">      
+		                        <input type="text" required name="dni" value="{{this.datos.dni}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>DNI</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="caducidaddni" value="{{this.datos.caducidad}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Caducidad</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="domicilio" value="{{this.datos.domicilio}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Domicilio</label>
+		                    </div> 
+                    		 <div class="group">      
+		                        <input type="text" required name="distrito" value="{{this.datos.distrito}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Distrito</label>
+		                    </div> 
+		                     <div class="group">      
+		                        <input type="text" required name="telefono" value="{{this.datos.telefono}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Teléfono</label>
+		                    </div> 
+                    	
+                    	
+                		</form>
+					    
+					</div>
+					<div id="p1{{this._id}}" class="tab-pane fade">
+						
+						<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="codigolicencia" value="{{this.licencia.codigo}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Código</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="categoria" value="{{this.licencia.categoria}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Categoría</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="expedicion" value="{{this.licencia.revalidacion}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha Expedición</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="revalidacion" value="{{this.licencia.revalidacion}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Revalidación</label>
+		                    </div>
+                    	
+                		</form>
+					</div>
+					<div id="tec1{{this._id}}" class="tab-pane fade">
+						
+						<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="codigocev" value="{{this.CEV.codigo}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Código</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="emision" value="{{this.CEV.emision}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Emisión</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="caducidad" value="{{this.CEV.caducidad}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Caducidad</label>
+		                    </div> 
+		                    
+                		</form>
+					</div>
+					<div id="s1{{this._id}}" class="tab-pane fade">
+					    
+					    <br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="codigocredencial" value="{{this.credencial.numero}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Número de Credencial</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="emisionsoat" value="{{this.credencial.caducidad}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Emisión de Credencial</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="emisionsoat" value="{{this.credencial.caducidad}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Caducidad de Credencial</label>
+		                    </div> 
+                    	
+                		</form>
+
+					</div>
+					
+				</div>
+				{{/with}}
+			
+                    
+                    
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success guardar ">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="EditarVehiculo">
+
+	<div class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar Datos de Vehículo</h4>
+                </div>
+
+                <div class="modal-body">
+                	<br>
+					{{#with vehiculo}}
+                	
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#1{{this._id}}">Detalles</a></li>
+						<li><a data-toggle="tab" href="#p1{{this._id}}">Propietario</a></li>
+						<li><a data-toggle="tab" href="#tec1{{this._id}}">Tecnico</a></li>
+						<li><a data-toggle="tab" href="#s1{{this._id}}">SOAT</a></li>
+						<li><a data-toggle="tab" href="#t1{{this._id}}">Tarjeta de Circulación</a></li>
+						<li><a data-toggle="tab" href="#r1{{this._id}}">Revisión Tecnica</a></li>
+						<li><a data-toggle="tab" href="#rc1{{this._id}}">RC</a></li>
+						<li><a data-toggle="tab" href="#tc1{{this._id}}">TCH</a></li>
+					</ul>
+				
+				<div class="tab-content">
+					<div id="1{{this._id}}" class="tab-pane fade in active">
+						<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="placa" value="{{this.placa}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Placa</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="compania" value="{{this.compania}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Compañia</label>
+		                    </div> 
+		                     <div class="group">      
+		                        <input type="text" required name="aseguradora" value="{{this.aseguradora}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Aseguradora</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="codigoDeRuta" value="{{this.codigoDeRuta}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Código de Ruta</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="fechaDePermanenciaEnLaEmpresa" value="{{this.fechaDePermanenciaEnLaEmpresa}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Permanencia en la Empresa</label>
+		                    </div> 
+                    	
+                		</form>
+					    
+					</div>
+					<div id="p1{{this._id}}" class="tab-pane fade">
+						
+						<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="propietario" value="{{this.propietario.nombre}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Nombre del Propietario</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="dni" value="{{this.propietario.dni}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>DNI</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="domicilio" value="{{this.propietario.domicilio}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Domicilio del Propietario</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="distrito" value="{{this.propietario.distrito}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Distrito</label>
+		                    </div>
+
+		                    <div class="group">      
+		                        <input type="text" required name="telefono" value="{{this.propietario.telefono}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Teléfono</label>
+		                    </div> 
+                    	
+                		</form>
+					</div>
+					<div id="tec1{{this._id}}" class="tab-pane fade">
+						
+						<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="marca" value="{{this.propietario.nombre}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Marca</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="modelo" value="{{this.tecnico.modelo}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Modelo</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="serie" value="{{this.tecnico.serie}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Serie</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="combustible" value="{{this.tecnico.combustible}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Combustible</label>
+		                    </div>
+
+		                    <div class="group">      
+		                        <input type="number" required name="anioDeFabricacion" value="{{this.tecnico.anioDeFabricacion}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Año de Fabricación</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="number" required name="longitud" value="{{this.tecnico.longitud}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Longitud</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="number" required name="asientos" value="{{this.tecnico.asientos}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Asientos</label>
+		                    </div> 
+                    	
+                		</form>
+					</div>
+					<div id="s1{{this._id}}" class="tab-pane fade">
+					    
+					    <br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="soat" value="{{this.SOAT.numero}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Número de SOAT</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="emisionsoat" value="{{this.SOAT.inicio}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Emisión de SOAT</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="caducidadsoat" value="{{this.SOAT.fin}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Caducidad de SOAT</label>
+		                    </div> 
+                    	
+                		</form>
+
+					</div>
+					<div id="t1{{this._id}}" class="tab-pane fade">
+						<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="tc" value="{{this.TC.numero}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Número de Tarjeta de Circulación</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="emisiontc" value="{{this.TC.emision}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Emisión de Tarjeta de Circulación</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="caducidadtc" value="{{this.TC.caducidad}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Caducidad de Tarjeta de Circulación</label>
+		                    </div> 
+                    	
+                		</form>
+
+					</div>
+					<div id="r1{{this._id}}" class="tab-pane fade">
+					    
+					    <br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="rt" value="{{this.CITV.numero}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Número de Revisión Tecnica</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="emisionrt" value="{{this.CITV.inicio}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Emisión de Revisión Tecnica</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="caducidadrt" value="{{this.CITV.fin}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Caducidad de Revisión Tecnica</label>
+		                    </div> 
+                    	
+                		</form>
+
+					</div>
+					<div id="rc1{{this._id}}" class="tab-pane fade">
+						
+						<br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="rc" value="{{this.RC.numero}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Número</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="emisionrc" value="{{this.RC.inicio}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Emisión</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="caducidadrc" value="{{this.RC.fin}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Caducidad</label>
+		                    </div> 
+                    	
+                		</form>
+
+					</div>
+					<div id="tc1{{this._id}}" class="tab-pane fade">
+					    
+					    <br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="tch" value="{{this.TCH.numero}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Número</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="emisiontch" value="{{this.TCH.emision}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Emisión</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="caducidadtch" value="{{this.TCH.caducidad}}">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Fecha de Caducidad</label>
+		                    </div> 
+                    	
+                		</form>
+
+					</div>
+				</div>
+				{{/with}}
+			
+                    
+                    
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success guardar ">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="DetalleVehiculos">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						<h3 class="title-box">Detalle de Vehículo</h3>
+							<table class="table">
+								<thead>
+									<tr>
+									
+										<th>Placa</th>
+										<th>Propietario</th>
+										<th>DNI</th>
+										<th>Domicilio</th>
+										<th>Distrito</th>
+										<th>Teléfono</th>
+										<th>Marca</th>
+										<th>Modelo</th>
+									</tr>
+								</thead>
+								<tbody>
+									{{#with vehiculo}}
+									<tr>
+										<td>{{this.placa}}</td>
+										<td>
+											{{this.propietario.nombre}}
+										</td>
+										<td>
+											{{this.propietario.dni}}
+										</td>
+										<td>
+											{{this.propietario.domicilio}}
+										</td>
+										<td>
+											{{this.propietario.distrito}}
+										</td>
+										<td>
+											{{this.propietario.telefono}}
+										</td>
+										<td>
+											{{this.tecnico.marca}}
+										</td>
+										<td>
+											{{this.tecnico.modelo}}
+										</td>
+									</tr>
+									{{/with}}
+								</tbody>
+						</table>
+					</div>
+				</div>
+			</div>	
+		</div>
+	</div>
+</template>
+
+<template name="nuevoUsuario">
+	<div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Nuevo Usuario</h4>
+                </div>
+
+                <div class="modal-body">
+                    <br>
+						<form class="__formulario">
+	                    
+		                    <div class="group">      
+		                        <input type="text" required name="nombre">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Nombre Completo</label>
+		                    </div> 
+		                    <div class="group">      
+		                        <input type="text" required name="email">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Email</label>
+		                    </div> 
+		                     <div class="group">      
+		                        <input type="password" required name="password">
+		                        <span class="highlight"></span>
+		                        <span class="bar"></span>
+		                        <label>Contraseña</label>
+		                    </div> 
+		                    <div class="group">
+		                    	<select id="rol">
+								  	<option value="1">Director</option>
+								  	<option value="2">Operador</option>
+								</select>
+		                    </div> 
+		                    
+                    	
+                		</form>
+                </div>
+
+                <div class="modal-footer">
+                	<button class="btn btn-success agregar-usuario">Agregar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>

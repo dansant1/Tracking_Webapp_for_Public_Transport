@@ -1,0 +1,11 @@
+<template name="mapaCliente">
+	<div class="content-wrapper" style="padding: 0px; padding-top: 57px;">
+		<div class="map-container">
+	   	{{#if carga}}
+	    	{{> googleMap name="map" options=mapOptions}}
+	   	{{else}}
+	   		{{>Loader}}
+	   	{{/if}}
+	  </div>
+	</div>
+</template>

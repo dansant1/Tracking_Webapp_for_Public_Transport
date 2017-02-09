@@ -1,0 +1,235 @@
+/* Custom Scroolbar */
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	border-radius: 0px;   
+}
+
+/*Login Styles*/
+
+.content-login {
+
+	/* Set rules to fill background */
+  	min-height: 100%;
+  	min-width: 1024px;
+	
+  	/* Set up proportionate scaling */
+  	width: 100%;
+  	height: auto;
+	
+  	/* Set up positioning */
+  	position: fixed;
+  	top: 0;
+  	left: 0;
+
+	background: url("../img/login-register.jpg") no-repeat center center / cover !important;; 
+  	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
+}
+
+.cd-form {
+	width: 400px;
+	margin: 0 auto;
+	margin-top: 8%;
+	font-family: 'Open Sans', sans-serif
+}
+
+.cd-form input {
+	display: block;
+	width: 90%;
+	height: 35px;
+	margin: 20px auto;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: 1px solid #bdc3c7;
+	background-color: #FBFCFC;
+}
+
+.cd-form input[type="submit"] {
+	background-color: #2ecc71;
+	border: none;
+	color: white;
+	height: 50px;
+	text-transform: uppercase;
+	font-weight: bold;
+	border-radius: 4px;
+}
+
+.cd-form input:focus, .cd-form input:hover {
+	border-color: #2ecc71;
+}
+
+@media screen and (max-width: 1024px) { /* Specific to this particular image */
+  .content-login {
+    left: 50%;
+    margin-left: -512px;   
+  }
+}
+@media screen and (max-width: 768px) {
+	.cd-form {
+  		width: 23%;
+  	}
+}
+
+/* Container for boxes*/
+.box {
+	background-color: #FBFCFC;
+	padding: 25px;
+	margin-bottom: 15px;
+	min-height: 180px;
+	border-radius: 4px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.title-box {
+	margin: 0 0 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	font-size: 14px;
+	font-family: 'Open Sans', sans-serif
+}
+
+.stats {
+	width: 100%;
+	margin: 15px 0;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.stats h5 {
+	margin-bottom: 10px;
+	font-size: 14px;
+}
+
+.stat-col {
+	width: 33.3%;
+}
+
+.stat-col > b {
+	font-weight: bold;
+}
+
+/* Center stat-col */
+.center {
+	text-align: center;
+}
+
+/* Circle of charts */
+
+.circle-chart {
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	position: relative;
+	top: 2px;
+	border: none;
+	border-radius: 70%;
+}
+
+/* Center a chart into col */
+.chart-position {
+	text-align: center;
+}
+
+
+/* Colors */
+.blue {
+  background-color: #1784c7;
+}
+
+.green {
+  background-color: #27ae60;
+}
+
+.yellow {
+  background-color: #f39c12;
+}
+
+.red {
+	background-color: #c0392b;
+}
+
+.blue:hover {
+  background-color: #1a93de;
+}
+
+.green:hover {
+  background-color: #2ecc71;
+}
+
+.yellow:hover {
+  background-color: #f1c40f;
+}
+
+.red:hover {
+	background-color: #e74c3c;
+}
+
+/* Button Styles */
+.action-btn a {
+  display: block;
+  margin: 8px 5%;
+  padding: 0.5em 0;  
+  border-radius: .25em;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold;
+}
+.action-btn a::before {
+  display: none;
+}
+
+
+.list-group-item:hover {
+	cursor: pointer;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.lista-photos {
+	width: 99%;
+	margin: 5px auto;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	
+	padding: 10px;
+	border-radius: 3px;
+}
+
+.photo {
+	display: inline-block;
+	width: 30%;
+	min-height: 100px;
+	max-height: 300px;
+	margin: 5px;
+	border-radius: 3px;
+	box-shadow: 0px 1px 3px 0px rgba(50, 50, 93, 0.2);
+}

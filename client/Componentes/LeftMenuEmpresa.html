@@ -1,0 +1,180 @@
+<template name="LeftMenuEmpresa">
+
+		<nav class="cd-side-nav">
+			<ul>
+				<li class="cd-label">Monitoreo</li>
+				<li class="has-children overview top-nav-btn">
+					<a href="#0">Rastreo</a>
+				</li>
+				<li class="has-children notifications app top-nav-btn">
+					<a href="#0">Control</a>
+				</li>
+
+				<li class="has-children comments top-nav-btn">
+					<a href="#0">Alarmas <span class="count">3</span></a>
+				</li>
+			</ul>
+
+			<ul>
+				<li class="cd-label">Despacho</li>
+				
+				<li class="has-children images top-nav-btn">
+					<a href="#0">Vehículos</a>
+					
+					<ul>
+						<li><a href="#0">Lista de Vehículos</a></li>
+						<li><a href="#0">Estado de Vehículos</a></li>
+						<li><a href="#0">Agregar Vehículos</a></li>
+					</ul>
+				</li>
+
+				<li class="has-children users top-nav-btn">
+					<a href="#0">Paradas</a>
+					
+					<ul>
+						<li><a href="#0">Lista de Paradas</a></li>
+						<li><a href="#0">Agregar Paradas</a></li>
+					</ul>
+				</li>
+				<li class="has-children users top-nav-btn">
+					<a href="#0">Rutas</a>
+					
+					<ul>
+						<li><a href="#0">Lista de Rutas</a></li>
+						<li><a href="#0">Agregar Ruta</a></li>
+					</ul>
+				</li>
+
+				<li class="has-children users top-nav-btn">
+					<a href="#0">Planeamiento</a>
+					
+					<ul>
+						<li><a href="#0">Agregar Planeamiento</a></li>
+						<li><a href="#0">Visualizar Planeamiento</a></li>
+						<li><a href="#"><input type="file" id="prueba"></a></li>
+					</ul>
+				</li>
+
+
+				<li class="has-children users top-nav-btn">
+					<a href="#0">Colaboradores</a>
+					
+					<ul>
+						<li><a href="#0">Lista de Colaboradores</a></li>
+						<li><a href="#0">Agregar Colaborador</a></li>
+					</ul>
+				</li>
+
+				
+			</ul>
+
+			<ul>
+				<li class="cd-label">Soporte</li>
+				<li class="action-btn"><a href="#0" class="top-nav-btn blue" style="padding: 10px;text-align: center;">Manual</a></li>
+				
+				
+			</ul>
+		</nav>
+
+</template>
+
+<template name="LeftMenuAdministrador">
+			<nav class="cd-side-nav">
+			<ul>
+				<li class="cd-label">Gestión</li>
+				<li class="has-children overview top-nav-btn">
+					<a href="/empresas">Empresas <span class="count">{{numeroEmpresas}}</span></a>
+				</li>
+				<li class="has-children notifications app top-nav-btn">
+					<a href="/admin/equipo">Equipo</a>
+				</li>
+
+				<li class="has-children comments top-nav-btn">
+					<a href="/admin/rastreo">Monitoreo</a>
+				</li>
+				
+				<li class="has-children comments top-nav-btn">
+					<a href="/admin/rutas">Rutas</a>
+				</li>
+				
+				<li class="has-children comments top-nav-btn">
+					<a href="/admin/planeamiento">Planeamiento</a>
+				</li>		
+			</ul>
+
+			<ul>
+				<li class="cd-label">Recaudación</li>
+				<li class="has-children notifications app top-nav-btn">
+					<a href="#0">Gestión</a>
+				</li>
+				<li class="has-children images top-nav-btn">
+					<a href="/admin/reportes">Reportes</a>
+					
+					
+				</li>
+				
+
+				
+			</ul>
+
+			<!--<ul>
+				<li class="cd-label">Despacho</li>
+				
+				<li class="has-children images top-nav-btn">
+					<a href="#0">Vehículos</a>
+					
+					<ul>
+						<li><a href="#0">Lista de Vehículos</a></li>
+						<li><a href="#0">Estado de Vehículos</a></li>
+						<li><a href="#0">Agregar Vehículos</a></li>
+					</ul>
+				</li>
+
+				<li class="has-children users top-nav-btn">
+					<a href="#0">Paradas</a>
+					
+					<ul>
+						<li><a href="#0">Lista de Paradas</a></li>
+						<li><a href="#0">Agregar Paradas</a></li>
+					</ul>
+				</li>
+				<li class="has-children users top-nav-btn">
+					<a href="#0">Rutas</a>
+					
+					<ul>
+						<li><a href="#0">Lista de Rutas</a></li>
+						<li><a href="#0">Agregar Ruta</a></li>
+					</ul>
+				</li>
+
+				<li class="has-children users top-nav-btn">
+					<a href="#0">Planeamiento</a>
+					
+					<ul>
+						<li><a href="#0">Agregar Planeamiento</a></li>
+						<li><a href="#0">Visualizar Planeamiento</a></li>
+						<li><a href="#"><input type="file" id="prueba"></a></li>
+					</ul>
+				</li>
+
+
+				<li class="has-children users top-nav-btn">
+					<a href="#0">Colaboradores</a>
+					
+					<ul>
+						<li><a href="#0">Lista de Colaboradores</a></li>
+						<li><a href="#0">Agregar Colaborador</a></li>
+					</ul>
+				</li>
+
+				
+			</ul> -->
+
+			<ul>
+				<li class="cd-label">Soporte</li>
+				<li class="action-btn"><a style="padding: 10px;text-align: center;" href="#0" class="top-nav-btn blue">Manual</a></li>
+				
+				
+			</ul>
+		</nav>
+</template>

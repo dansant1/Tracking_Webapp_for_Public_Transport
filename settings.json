@@ -1,0 +1,10 @@
+{
+	"galaxy.meteor.com":
+	{
+			"env":
+				{
+        			"ROOT_URL": "http://tpi.grupoddv.com",
+					"MONGO_URL": "mongodb://admin:admin@ds139899.mlab.com:39899/tpi"
+				}
+	}
+}

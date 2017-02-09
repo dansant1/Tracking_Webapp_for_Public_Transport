@@ -1,0 +1,953 @@
+<template name="AdministradorPlaneamiento">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			
+
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+							<h3>Planeamientos por Empresas</h3>
+							<br>
+							<div class="page-header clearfix" style="margin-top: 0px;">
+							    <h4 class="pull-left">
+							    	<input type="text" name="search" class="form-control" width="250px" placeholder="Buscar Empresas..." style="margin-top: 5.5px;">
+							    	
+							    </h4>
+
+							    <h4 class="pull-right" style="width: 210px;">
+									<span class="action-btn agregar-empresa">
+										<a href="/admin/agregarplan" style=" margin-left: 0px; font-weight: 300; background-color: #3498db;" class="top-nav-btn blue">Agregar Planeamiento</a>
+									</span>				    	
+							    </h4>
+    
+  							</div>
+
+							<ul class="list-group">
+					    		{{#if searching}}
+      								<h3>Cargando...</h3>
+    							{{else}}
+							    	{{#each empresas}}
+							        <li class="list-group-item clearfix">
+							          	<span class="pull-left">{{nombre}}</span>
+							          	<span class="pull-right">
+								          	<a href="/admin/planeamientos/{{this._id}}" class="btn btn-primary">
+												<i class="fa fa-eye" aria-hidden="true"></i>
+											</a>
+							          	</span>
+							        </li>
+							     	
+							     	{{else}}
+										<h3>Lo sentimos no tenemos resultados para {{query}}</h3>
+							     	{{/each}}
+
+					    		{{/if}}
+					    
+					  	</ul>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="AdministradorReportes">
+	 <div class="content-wrapper">
+	 	<div class="container-fluid">
+	 		<div class="row">
+	 			<div class="col-md-12 col-sm-18 col-xs-18">
+	 				<div class="box">
+	 					<br>
+	 					<div class="row">
+	 						<div class="col-md-2">
+	 							{{>selectEmpresas}}
+	 						</div>
+	 					</div>
+						<br>
+						<div class="row">
+							<div class="col-md-12">
+									<ul class="nav nav-tabs">
+										<li class="active"><a data-toggle="tab" href="#home">Conductores</a></li>
+										<li><a data-toggle="tab" href="#menu1">Conductores por Ruta</a></li>
+										<li><a data-toggle="tab" href="#menu2">Propietarios de Vehículos</a></li>
+										<li><a data-toggle="tab" href="#menu3">SOAT</a></li>
+										<li><a data-toggle="tab" href="#menu4">Licencia de Conducir</a></li>
+										<li><a data-toggle="tab" href="#menu5">Lista de Cobradores</a></li>
+									</ul>
+									<div class="tab-content">
+
+									  	<div id="home" class="tab-pane fade in active">
+										    <h3>
+										    	<a class="btn btn-success" id="test" >
+										    		<i class="fa fa-file-excel-o" aria-hidden="true"></i>
+										    	</a>
+										    	<a id="reporte1PDF" class="btn btn-danger">
+										    		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+										    	</a>
+
+										    	
+										    </h3>
+										    <br>
+										    <div class="table-responsive" id="r1">          
+											  	<table class="table-bordered" style="font-size: 10.4px;" id="reporte01">
+												    <thead>
+												      	<tr>
+													        <th>Placa</th>
+													        <th>Nombre</th>
+													        <th>Apellidos</th>
+													        <th>DNI</th>
+													        <th>Caducidad de DNI</th>
+													        <th>Domicilio</th>
+													        <th>Distrito</th>
+													        <th>Teléfono</th>
+													        <th>Código de Licencia</th>
+													        <th>Categoría</th>
+													        <th>Expedición</th>
+													        <th>Revalidación</th>
+													        <th>Código de CEV</th>
+													        <th>Emisión</th>
+													        <th>Caducidad</th>
+													        <th>Número de Credencial</th>
+													        <th>Emisión de Credencial</th>
+													        <th>Caducidad de Credencial</th>
+												      	</tr>
+												    </thead>
+												    <tbody>
+												    {{#each conductores}}
+												    	<tr>
+													        <td>{{placa}}</td>
+													        <td>{{this.datos.nombre}}</td>
+													        <td>{{this.datos.apellido}}</td>
+													        <td>{{this.datos.dni}}</td>
+													        <td>{{this.datos.caducidad}}</td>
+													        <td>{{this.datos.domicilio}}</td>
+													        <td>{{this.datos.distrito}}</td>
+													        <td>{{this.datos.telefono}}</td>
+													        <td>{{this.licencia.codigo}}</td>
+													        <td>{{this.licencia.categoria}}</td>
+													        <td>{{this.licencia.expedicion}}</td>
+													        <td>{{this.licencia.revalidacion}}</td>
+													        <td>{{this.CEV.codigo}}</td>
+													        <td>{{this.CEV.emision}}</td>
+													        <td>{{this.CEV.caducidad}}</td>
+													        <td>{{this.credencial.numero}}</td>
+													        <td>{{this.credencial.emision}}</td>
+													        <td>{{this.credencial.caducidad}}</td>
+												    	</tr>
+												    {{else}}
+												    <tr>
+												    	Cargando...
+												    </tr>
+												    {{/each}}
+												    </tbody>
+											  	</table>
+											  	<br>
+	  										</div>
+									  	</div>
+
+									  	<div id="menu1" class="tab-pane fade">
+									    <h3>
+									    	<a id="test2" class="btn btn-success">
+									    		<i class="fa fa-file-excel-o" aria-hidden="true"></i>
+									    	</a>
+									    	<button id="reporte2PDF" class="btn btn-danger">
+									    		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+									    	</button>
+									    </h3>
+									    <br>
+										    <div class="table-responsive">          
+											  	<table class="table-bordered" style="font-size: 10.4px;" id="reporte02">
+												    <thead>
+												      	<tr>
+													        <th>Placa</th>
+													        <th>Ruta</th>
+													        <th>Nombre</th>
+													        <th>Apellidos</th>
+													        <th>DNI</th>
+													       
+													       
+													        <th>Distrito</th>
+													       
+													       
+													        
+												      	</tr>
+												    </thead>
+												    <tbody>
+												    {{#each conductores}}
+												    	<tr>
+													        <td>{{placa}}</td>
+													        <td>{{ruta}}</td>
+													        <td>{{this.datos.nombre}}</td>
+													        <td>{{this.datos.apellido}}</td>
+													        <td>{{this.datos.dni}}</td>
+													        <td>{{this.datos.distrito}}</td>
+												    	</tr>
+												    {{else}}
+												    <tr>
+												    	Cargando...
+												    </tr>
+												    {{/each}}
+												    </tbody>
+											  	</table>
+											  	<br>
+	  										</div>
+									  	</div>
+
+									  	<div id="menu2" class="tab-pane fade">
+									    <h3>
+									    	<a id="test3" class="btn btn-success">
+									    		<i class="fa fa-file-excel-o" aria-hidden="true"></i>
+									    	</a>
+									    	<button id="reporte3PDF" class="btn btn-danger">
+									    		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+									    	</button>
+									    </h3>
+									    <br>
+									    <div class="table-responsive">          
+											  	<table class="table-bordered" style="font-size: 10.4px;"  id="reporte03">
+												    <thead>
+												      	<tr>
+													        <th>Placa</th>
+													        <th>Nombres y Apellidos</th>
+													       
+													        <th>DNI</th> 
+													        <th>Domicilio</th>
+													        <th>Distrito</th>
+													        <th>Teléfono</th>
+													        
+												      	</tr>
+												    </thead>
+												    <tbody>
+												    {{#each vehiculos}}
+												    	<tr>
+													        <td>{{this.placa}}</td>
+													        <td>{{this.propietario.nombre}}</td>
+													        
+													        <td>{{this.propietario.dni}}</td>	        
+													        <td>{{this.propietario.domicilio}}</td>
+													        <td>{{this.propietario.distrito}}</td>
+													        <td>{{this.propietario.telefono}}</td>
+												    	</tr>
+												    {{else}}
+												    <tr>
+												    	Cargando...
+												    </tr>
+												    {{/each}}
+												    </tbody>
+											  	</table>
+											  	<br>
+	  										</div>
+									  	</div>
+
+									  	<div id="menu3" class="tab-pane fade">
+									    <h3>
+									    	<a id="test4" class="btn btn-success">
+									    		<i class="fa fa-file-excel-o" aria-hidden="true"></i>
+									    	</a>
+									    	<button id="reporte4PDF" class="btn btn-danger">
+									    		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+									    	</button>
+									    </h3>
+									    <br>
+									    <div class="table-responsive">          
+											  	<table id="reporte04" style="font-size: 10.4px;" class="table-bordered" >
+												    <thead>
+												      	<tr>
+													        <th>Placa</th>
+													        <th>Número de SOAT</th>
+													        <th>Emisión</th>
+													        <th>Caducidad</th> 
+												      	</tr>
+												    </thead>
+												    <tbody>
+												    {{#each vehiculos}}
+												    	<tr>
+													        <td>{{this.placa}}</td>
+													        <td>{{this.SOAT.numero}}</td>
+													        <td>{{this.SOAT.inicio}}</td>
+													        <td>{{this.SOAT.fin}}</td>	        
+													    </tr>
+													{{else}}
+												    <tr>
+												    	Cargando...
+												    </tr>
+												    {{/each}}
+												    </tbody>
+											  	</table>
+											  	<br>
+	  										</div>
+									  	</div>
+
+									  	<div id="menu4" class="tab-pane fade">
+									    <h3>
+									    	<a id="test5" class="btn btn-success">
+									    		<i class="fa fa-file-excel-o" aria-hidden="true"></i>
+									    	</a>
+									    	<button id="reporte5PDF" class="btn btn-danger">
+									    		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+									    	</button>
+									    </h3>
+									       <br>
+										    <div class="table-responsive">          
+											  	<table class="table-bordered" style="font-size: 10.4px;" id="reporte05">
+												    <thead>
+												      	<tr>
+													        <th>Placa</th>
+													        <th>Nombre</th>
+													        <th>Apellidos</th>
+													        <th>DNI</th>
+													       
+													       
+													        <th>Distrito</th>
+													       
+													        <th>Código de Licencia</th>
+													        <th>Categoría</th>
+													        <th>Expedición</th>
+													        <th>Revalidación</th>
+													        
+												      	</tr>
+												    </thead>
+												    <tbody>
+												    {{#each conductores}}
+												    	<tr>
+													        <td>{{placa}}</td>
+													        <td>{{this.datos.nombre}}</td>
+													        <td>{{this.datos.apellido}}</td>
+													        <td>{{this.datos.dni}}</td>
+													        
+													        
+													        <td>{{this.datos.distrito}}</td>
+													        
+													        <td>{{this.licencia.codigo}}</td>
+													        <td>{{this.licencia.categoria}}</td>
+													        <td>{{this.licencia.expedicion}}</td>
+													        <td>{{this.licencia.revalidacion}}</td>
+													       
+												    	</tr>
+												   	{{else}}
+												    <tr>
+												    	Cargando...
+												    </tr>
+												    {{/each}}
+												    </tbody>
+											  	</table>
+											  	<br>
+	  										</div>
+									  	</div>
+
+									  	<div id="menu5" class="tab-pane fade">
+									    <h3>
+									    	<a id="test6" class="btn btn-success">
+									    		<i class="fa fa-file-excel-o" aria-hidden="true"></i>
+									    	</a>
+									    	<button id="reporte6PDF" class="btn btn-danger">
+									    		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+									    	</button>
+									    </h3>
+									    <br>
+										    <div class="table-responsive">          
+											  	<table class="table-bordered" style="font-size: 10.4px;" id="reporte06">
+												    <thead>
+												      	<tr>
+													        <th>Placa</th>
+													        <th>Nombre</th>
+													        <th>Apellidos</th>
+													        <th>DNI</th>
+													        
+													        <th>Domicilio</th>
+													        <th>Distrito</th>
+													        <th>Teléfono</th>
+													        
+													        <th>Código de CEV</th>
+													        <th>Emisión</th>
+													        <th>Caducidad</th>
+													        <th>Número de Credencial</th>
+													        <th>Emisión de Credencial</th>
+													        <th>Caducidad de Credencial</th>
+												      	</tr>
+												    </thead>
+												    <tbody>
+												    {{#each cobradores}}
+												    	<tr>
+													        <td>{{placa}}</td>
+													        <td>{{this.datos.nombre}}</td>
+													        <td>{{this.datos.apellido}}</td>
+													        <td>{{this.datos.dni}}</td>
+													      
+													        <td>{{this.datos.domicilio}}</td>
+													        <td>{{this.datos.distrito}}</td>
+													        <td>{{this.datos.telefono}}</td>
+													        
+													        <td>{{this.CEV.codigo}}</td>
+													        <td>{{this.CEV.emision}}</td>
+													        <td>{{this.CEV.caducidad}}</td>
+													        <td>{{this.credencial.numero}}</td>
+													        <td>{{this.credencial.emision}}</td>
+													        <td>{{this.credencial.caducidad}}</td>
+												    	</tr>
+												    {{else}}
+												    <tr>
+
+												    	Cargando...
+												    </tr>
+												    {{/each}}
+												    </tbody>
+											  	</table>
+											  	<br>
+	  										</div>
+									  	</div>
+
+								</div>
+							</div>
+						</div>
+	 				</div>
+	 			</div>
+	 		</div>
+	 	</div>
+	 </div>
+</template>
+
+<template name="AdministradorPlaneamientoPorEmpresa">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						<br>
+						<h1 style="margin: 5px; padding: 0px; font-size: 1.5em">Planeamiento actual de la empresa {{empresa}}</h1>
+						<br>
+						<table class="table-responsive">
+							<thead style="border-bottom: 2px solid #ddd;">
+						    	<tr>
+							        <th style="text-align: center;">Lunes</th>
+							        <th style="text-align: center;">Martes</th>
+							        <th style="text-align: center;">Miercoles</th>
+							        <th style="text-align: center;">Jueves</th>
+							        <th style="text-align: center;">Viernes</th>
+							        <th style="text-align: center;">Sabado</th>
+							        <th style="text-align: center;">Domingo</th>						        
+						    	</tr>
+    						</thead>
+    						{{#with planeamiento}}
+						    <tbody id="horarios">
+								
+						    	<tr id="h">
+									
+							        <td>
+							        {{#each plan.horas.lunes}}	
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control l" value="{{this.lunes}}" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							        {{/each}}
+							        </td>
+							       	
+
+							       	
+							        <td>
+							        {{#each plan.horas.martes}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control m" value="{{this.martes}}"  />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							       	{{/each}}
+							        </td>
+							       
+
+							       
+							        <td>
+							        	{{#each plan.horas.miercoles}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control mi" value="{{this.miercoles}}"  />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							        	{{/each}}
+							        </td>
+							        
+
+							        
+							        <td>
+							        {{#each plan.horas.jueves}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control j" value="{{this.jueves}}" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							        {{/each}}
+							        </td>
+							        
+
+
+							        <td>
+							        	{{#each plan.horas.viernes}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control v" value="{{this.viernes}}" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							       		{{/each}}
+							        </td>
+							       
+
+							        <td>
+							       		{{#each plan.horas.sabado}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control s" value="{{this.sabado}}" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							        	{{/each}}
+							        </td>
+							        
+
+							        
+							        <td>
+							        	{{#each plan.horas.domingo}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control d" value="{{this.domingo}}" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span> 
+                						</div>
+										<br>
+							        	{{/each}}
+							        </td>
+									
+						    	</tr>
+						      	
+						    </tbody>
+						    {{/with}}
+						</table>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="selectEmpresas">
+	<select id="planempresa"  class="form-control">
+		{{#each empresas}}
+			<option value="{{this._id}}">{{this.nombre}}</option>
+		{{/each}}
+	</select>
+</template>
+
+<template name="AdministradorAgregarPlaneamiento">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						
+						<div class="row">
+							<div class="col-md-3">
+								{{>selectEmpresas}}
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-3">
+								<select id="rutasPorEmpresa" class="form-control">
+									{{#each rutas}}
+										<option value="{{this._id}}">{{this.nombre}}</option>
+									{{/each}}
+								</select>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-3">
+								<label class="btn btn-success btn-file">
+						    			<i style="display: inline-block; margin-right: 6px;" class="fa fa-file-excel-o" aria-hidden="true"></i> Subir Excel  <input type="file" id="excelplan" style="display: none;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+								</label> 
+							</div>
+						</div>
+						<br>
+						<table class="table">
+							<thead>
+						    	<tr>
+							        <th style="text-align: center;">Lunes</th>
+							        <th style="text-align: center;">Martes</th>
+							        <th style="text-align: center;">Miercoles</th>
+							        <th style="text-align: center;">Jueves</th>
+							        <th style="text-align: center;">Viernes</th>
+							        <th style="text-align: center;">Sabado</th>
+							        <th style="text-align: center;">Domingo</th>
+							        <th style="text-align: center;">Agregar</th>
+						    	</tr>
+    						</thead>
+						    <tbody id="horarios">
+						    	<tr id="h">
+
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control l" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control m" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control mi" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control j" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control v" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control s" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control d" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span> 
+                						</div>
+							        </td>
+
+							        <td style="text-align: center;">
+							        	<button class="btn btn-primary plus"><i class="fa fa-plus" aria-hidden="true"></i></button>
+							        </td>
+						    	</tr>
+						      
+						    </tbody>
+						</table>
+						<div class="row">
+							<div class="col-md-2">
+								<button class="btn btn-success guardar">Guardar</button>
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="AdministradorRutas">
+	<!--<div class="content-wrapper" style="padding: 0px; padding-top: 57px;">
+		
+		<div class="map-container" id="map-canvas">
+		   	{{#if carga}}
+		    	{{> googleMap name="map" options=mapOptions}}
+		   	{{else}}
+		   		{{>Loader}}
+		   	{{/if}}
+	  	</div>
+	</div> -->
+
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			
+
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+							<h3>Rutas por Empresas</h3>
+							<br>
+							<div class="page-header clearfix" style="margin-top: 0px;">
+							    <h4 class="pull-left">
+							    	<input type="text" name="search" class="form-control" width="250px" placeholder="Buscar Empresas..." style="margin-top: 5.5px;">
+							    	
+							    </h4>
+
+							    <h4 class="pull-right" style="width: 210px;">
+									<span class="action-btn agregar-empresa">
+										<a href="/admin/agregaruta" style=" margin-left: 0px; font-weight: 300; background-color: #3498db;" class="top-nav-btn blue">Agregar Ruta</a>
+									</span>				    	
+							    </h4>
+    
+  							</div>
+
+							<ul class="list-group">
+					    		{{#if searching}}
+      								<h3>Cargando...</h3>
+    							{{else}}
+							    	{{#each empresas}}
+							        <li class="list-group-item clearfix">
+							          	<span class="pull-left">{{nombre}}</span>
+							          	<span class="pull-right">
+								          	<a href="/admin/rutas/{{this._id}}" class="btn btn-primary">
+												<i class="fa fa-eye" aria-hidden="true"></i>
+											</a>
+							          	</span>
+							        </li>
+							     	
+							     	{{else}}
+										<h3>Lo sentimos no tenemos resultados para {{query}}</h3>
+							     	{{/each}}
+
+					    		{{/if}}
+					    
+					  	</ul>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="AdministradorAgregarRuta">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="box">
+						
+						<div class="row">
+							<div class="col-md-3">
+								{{>selectEmpresas}}
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-3">
+								<input type="text" class="form-control" name="nombre" placeholder="Nombre de Ruta">
+							</div>
+						</div>
+						<br>
+						
+						
+						<ul class="nav nav-tabs">
+						  <li class="active"><a data-toggle="tab" href="#home">Registro Interactivo</a></li>
+						 
+						</ul>
+
+						<div class="tab-content">
+						  <div id="home" class="tab-pane fade in active">
+						  	<div class="row">
+								<div class="col-md-2">
+									<button class="btn btn-success save">Guardar</button>
+								</div>
+								<br>	
+							</div>
+							<br>
+						    <div class="row">
+							<div class="col-md-4">
+								<div class="btn-group" data-toggle="buttons">
+							      	<label class="radio-inline"><input class="r " id="ida" checked type="radio" name="optradio">Ida</label>
+									<label class="radio-inline"><input class="r" id="vuelta" type="radio" name="optradio">Vuelta</label>
+									<label class="radio-inline"><input class="r" id="misma" type="radio" name="optradio">Misma Ruta</label>
+    							</div>
+							</div>
+						</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="box-white" style="margin: 5px; width: 90%; min-height: 200px;">
+									<div class="map-container" id="map-canvas">
+									   	{{#if carga}}
+									    	{{> googleMap name="map" options=mapOptions}}
+									   	{{else}}
+
+									   		{{>Loader}}
+									   	{{/if}}
+									   	</div>
+						  			</div>
+								</div>
+							</div>
+						</div>
+					
+						  
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="AdministradorRutasPorEmpresa">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						<h1 style="margin: 0; padding: 0; font-size: 1.5em">Rutas de la empresa {{empresa}}</h1>
+						<br>
+						<ul class="nav nav-tabs">
+							<li class="active"><a data-toggle="tab" href="#home">Mapa</a></li>
+							<li><a data-toggle="tab" href="#menu1">Ruta</a></li>
+						</ul>
+
+						<div class="tab-content">
+							<div id="home" class="tab-pane fade in active">
+								
+								<!--<div class="row">
+									<div class="col-md-2">
+										<select id="ruta" class="form-control">
+											{{#each rutas}}
+												<option value="{{this._id}}">{{this.nombre}}</option>
+											{{/each}}
+										</select>
+									</div>
+								</div> -->
+								<br>
+								<div class="map-container">
+								   	{{#if carga}}
+								    	{{> googleMap name="map" options=mapOptions}}
+								   	{{else}}
+								   		<h3>Cargando mapa...</h3>
+								   	{{/if}}
+								</div>
+							    
+							</div>
+							<div id="menu1" class="tab-pane fade">
+							    <!--{{>MapaDeRuta}} -->
+							    {{>RutaPorEmpresa}}
+							</div>						
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="RutaPorEmpresa">
+	{{#each rutas}}
+		<div class="row">
+			
+			<div class="page-header clearfix" style="margin-top: 10px">
+				<h2 class="pull-left" style="font-weight: bold;">Ruta {{this.nombre}}</h2>
+	    		<h2 class="pull-right"><button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button></h2>
+	  		</div>
+			<br>
+			<div class="col-md-6">
+				<div class="page-header clearfix" style="margin-top: 10px">
+	    			<h2 class="pull-left">Ida</h2>
+	  			</div>
+				<div class="box-white" style="margin: 5px; width: 90%; min-height: 200px;">
+												
+			  		<table class="table">
+						<thead>
+							<tr>
+								<th style="text-align: center;">Latitud</th>
+								<th style="text-align: center;">Longitud</th>
+							</tr>
+						</thead>
+						<tbody id="horarios2">
+
+						{{#each this.ida}}
+							<tr id="h2">
+
+								<td>
+									<div class='input-group date' id='la'>
+										<input type='text' disabled class="form-control la" value="{{this.lat}}" />		                    
+						            </div>
+								</td>
+								<td>
+									<div class='input-group date' id='lo'>
+										<input type='text' disabled class="form-control lo" value="{{this.lng}}" />
+												                    
+						            </div>
+								</td>
+													       								       	
+							</tr>
+						{{/each}}		      
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="page-header clearfix" style="margin-top: 10px">
+	    		<h2 class="pull-left">Vuelta</h2>
+	  			</div>
+				<div class="box-white" style="margin: 5px; width: 90%; min-height: 200px;">
+												
+			  		<table class="table">
+						<thead>
+							<tr>
+								<th style="text-align: center;">Latitud</th>
+								<th style="text-align: center;">Longitud</th>
+							</tr>
+						</thead>
+						<tbody id="horarios2">
+
+						{{#each this.vuelta}}
+							<tr id="h2">
+
+								<td>
+									<div class='input-group date' id='la'>
+										<input type='text' disabled class="form-control la" value="{{this.lat}}" />		                    
+						            </div>
+								</td>
+								<td>
+									<div class='input-group date' id='lo'>
+										<input type='text' disabled class="form-control lo" value="{{this.lng}}" />
+												                    
+						            </div>
+								</td>
+													       								       	
+							</tr>
+						{{/each}}		      
+						</tbody>
+					</table>
+				</div>	
+			</div>
+		</div>
+		<br>
+	{{/each}}
+</template>
+
+<template name="MapaDeRuta">
+	<div class="map-container">
+	   	{{#if carga}}
+	    	{{> googleMap name="map" options=mapOptions}}
+	   	{{else}}
+	   		<h3>Cargando mapa...</h3>
+	   	{{/if}}
+	</div>
+</template>
+
+<template name="AdministradorRastreo"></template>
+
+<template name="AdministradorEquipo"></template>

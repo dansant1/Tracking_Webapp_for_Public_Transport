@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css?family=Catamaran:100,300,400,500,700,900');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Russo+One');
+
+.fondo {
+    background-color: #3498db;
+    width: 100%;
+    height: 100vh;
+}
+
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    -webkit-text-fill-color: #7f8c8d !important;
+}
+
+.vertical-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    resize: vertical;
+    overflow: auto;
+    height: 100vh;
+}
+
+.box-white {
+    width: 320px;
+    
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0px 1px 3px 0px rgba(50, 50, 93, 0.2);
+    margin: 100px auto;
+    padding: 10px 15px;
+    
+}
+
+.medium {
+    height: 340px;
+}
+
+.letter {
+    background: -webkit-linear-gradient(#02AAB0, #00CDAC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 300;
+}
+
+.__formulario {
+    display: block;
+    padding: 10px;
+    height: 100%;
+    font-family: 'Catamaran', sans-serif;
+}
+
+*:focus {
+    outline: 0;
+}
+
+.__formulario h3 {
+    width: 80%;
+    background: -webkit-linear-gradient(#005C97,  #363795);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 28px;
+    margin-left: 4px;
+    margin-top: 0px;
+    text-align: left;
+    margin-bottom: 0px;
+}
+
+.__descripcion {
+  width: 98%;
+  margin: 0px auto;
+  margin-top: 3px;
+  font-size: 12px;
+  color: rgba(149, 165, 166,1.0);
+  margin-bottom: 30px;
+}
+
+.group 			  { 
+  position:relative; 
+  margin-bottom:45px; 
+}
+
+.__formulario input 				{
+  font-size:18px;
+  color: rgb(149, 165, 166);
+  padding:10px 10px 10px 5px;
+  display:block;
+  width: 100%;
+  margin: 0 auto;
+  border:none;
+}
+
+.__formulario input:focus 		{ outline:none; }
+
+/* LABEL ======================================= */
+.__formulario label 				 {
+  color:#999; 
+  font-size:18px;
+  font-weight:normal;
+  position:absolute;
+  pointer-events:none;
+  left:5px;
+  top:10px;
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+
+/* active state */
+.__formulario input:focus ~ label, input:valid ~ label 		{
+  top:-20px;
+  font-size:14px;
+  color: #005C97;
+}
+
+/* BOTTOM BARS ================================= */
+.bar  { position:relative; display:block; width: 100%; }
+.bar:before, .bar:after   {
+  content:'';
+  height:2px; 
+  width:0;
+  bottom:1px; 
+  position:absolute;
+  background:#005C97; 
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+.bar:before {
+  left:50%;
+}
+.bar:after {
+  right:50%; 
+}
+
+/* active state */
+input:focus ~ .bar:before, input:focus ~ .bar:after {
+  width:50%;
+}
+
+/* HIGHLIGHTER ================================== */
+.highlight {
+  position:absolute;
+  height:60%; 
+  width:100px; 
+  top:25%; 
+  left:0;
+  pointer-events:none;
+  opacity:0.5;
+}
+
+/* active state */
+input:focus ~ .highlight {
+  -webkit-animation:inputHighlighter 0.3s ease;
+  -moz-animation:inputHighlighter 0.3s ease;
+  animation:inputHighlighter 0.3s ease;
+}
+
+/* ANIMATIONS ================ */
+@-webkit-keyframes inputHighlighter {
+  from { background: #FE786C; }
+  to  { width:0; background:transparent; }
+}
+@-moz-keyframes inputHighlighter {
+  from { background:#FE786C; }
+  to  { width:0; background:transparent; }
+}
+@keyframes inputHighlighter {
+  from { background:#FE786C; }
+  to  { width:0; background:transparent; }
+}
+
+#mini {
+  font-size: 12px;
+  color: rgba(127, 140, 141,1.0) !important;
+  font-weight: 300;
+}
+
+.__button {
+    display: block;
+    width: 140px;
+    margin: 5px auto;
+    height: 45px;
+    text-align: center;
+    color: white;
+    
+    background: #e74c3c;
+    box-shadow: 0px 1px 3px 0px rgba(50, 50, 93, 0.2);
+    border: none;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: 300;
+    font-size: 17px; 
+    line-height: 1.3333333;
+    transition: all 0.2s linear;
+    user-select: none;
+}
+
+
+.__button:hover, .__button:focus {
+    cursor: pointer;
+    background:#c0392b; /* fallback for old browsers */
+    
+    
+}
