@@ -1,202 +1,28 @@
 <template name="InicioCliente">
-<div class="content-wrapper">
-	<div class="container-fluid">
-				
-				<div class="row">
-					<div class="col-md-4 col-sm-12 col-xs-12">
-						<div class="box">
-							<h3 class="title-box">Alarmas</h3>
-							<div class="stats">
-								<div class="stat-col">
-									<h5>Faltas</h5>
-									<b>80.10%</b>
-								</div>
-								<div class="stat-col">
-									<h5>Infracciones</h5>
-									<b>50.40%</b>
-								</div>
-								<div class="stat-col">
-									<h5>Sanciones</h5>
-									<b>70.80%</b>
-								</div>
-							</div>
-							<p>
-								<span class="inlinesparkline"></span>
-							</p>
-						</div>
-					</div>
-					<div class="col-md-4 col-sm-12 col-xs-12">
-						<div class="box">
-							<h3 class="title-box">Eventos</h3>
-							<div class="stats">
-								<div class="stat-col">
-									<h5>Fuera de Ruta</h5>
-									<b>80.10%</b>
-								</div>
-								<div class="stat-col">
-									<h5>Excepciones</h5>
-									<b>50.40%</b>
-								</div>
-								<div class="stat-col">
-									<h5>Justificacioens</h5>
-									<b>70.80%</b>
-								</div>
-							</div>
-							<p>
-								<span class="inlinesparkline"></span>
-							</p>
-						</div>
-					</div>
-					<div class="col-md-4 col-sm-12 col-xs-12">
-						<div class="box">
-							<h3 class="title-box">Operadores</h3>
-							<div class="stats">
-								<div class="stat-col">
-									<h5>Activos</h5>
-									<b>80.10%</b>
-								</div>
-								<div class="stat-col">
-									<h5>No Activos</h5>
-									<b>50.40%</b>
-								</div>
-								<div class="stat-col">
-									<h5>Nuevos</h5>
-									<b>70.80%</b>
-								</div>
-							</div>
-							<p>
-								<span class="inlinesparkline"></span>
-							</p>
-						</div>
-					</div>
-				</div>		
-				
-				<div class="row">
-					<div class="col-md-7 col-lg-8 col-sm-12 col-xs-12">
-						<div class="box">
-							<h3 class="title-box">Planillas por Día y Vehículo</h3>
-							<div id="graph"></div>
-						</div>
-					</div>
-					<div class="col-md-5 col-lg-4 col-sm-12 col-xs-12">
-						<div class="box">
-							<h3 class="title-box">Vehículos</h3>
-							<div id="donutgraph" class="chart-position"></div>
-							<div class="stats center">
-								<div class="stat-col">
-									<h5>
-										<span class="circle-chart yellow"></span>
-										Orders
-									</h5>
-									<h3>8000</h3>
-								</div>
-								<div class="stat-col">
-									<h5>
-										<span class="circle-chart blue"></span>
-										Sales
-									</h5>
-									<h3>2500</h3>
-								</div>
-								<div class="stat-col">
-									<h5>
-										<span class="circle-chart green"></span>
-										Inventory
-									</h5>
-									<h3>4500</h3>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-						<div class="box">
-							<h3 class="title-box">Lista de Conductores</h3>
-							<table>
-		<thead>
-		<tr>
-			<th>Nombre</th>
-			<th>DNI</th>
-			<th>Licencia</th>
-			<th>Direción</th>
-			<th>Vencimiento de Licencia</th>
-			<th>Teléfono</th>
-			
-		</tr>
-		</thead>
-		<tbody>
-		<tr>
-			<td>James</td>
-			<td>Matman</td>
-			<td>Chief Sandwich Eater</td>
-			<td>Lettuce Green</td>
-			<td>Trek</td>
-			<td>Digby Green</td>
-			
-		</tr>
-		<tr>
-		  <td>The</td>
-		  <td>Tick</td>
-		  <td>Crimefighter Sorta</td>
-		  <td>Blue</td>
-		  <td>Wars</td>
-		  <td>John Smith</td>
-		  
-		</tr>
-		<tr>
-		  <td>Jokey</td>
-		  <td>Smurf</td>
-		  <td>Giving Exploding Presents</td>
-		  <td>Smurflow</td>
-		  <td>Smurf</td>
-		  <td>Smurflane Smurfmutt</td>
-		 
-		</tr>
-		<tr>
-		  <td>Cindy</td>
-		  <td>Beyler</td>
-		  <td>Sales Representative</td>
-		  <td>Red</td>
-		  <td>Wars</td>
-		  <td>Lori Quivey</td>
-		 
-		</tr>
-		<tr>
-		  <td>Captain</td>
-		  <td>Cool</td>
-		  <td>Tree Crusher</td>
-		  <td>Blue</td>
-		  <td>Wars</td>
-		  <td>Steve 42nd</td>
-		 
-		</tr>
-		</tbody>
-	</table>
 	
-						</div>
-					</div>
-				</div>
+	{{#if isInRole 'director' 'Empresa'}}
+		{{>ListaDeVehiculos1}}
+		
+	{{else}}
 
-				<div class="row">
-					<div class="col-md-4 col-lg-4 col-xs-12">
-						<div class="box">
-							
-						</div>
-					</div>
-					<div class="col-sm-12 col-md-4 col-xs-12">
-						<div class="box">
-							
-						</div>
-					</div>
-					<div class="col-md-4 col-lg-4 col-xs-12">
-						<div class="box">
-							
-						</div>
-					</div>
-					
-				</div>
 
-			</div>
-</div>	
+		
+		{{#if isInRole 'operador' 'Empresa'}}
+			{{>ListaDeVehiculos1}}
+		{{else}}
+			{{#if isInRole 'monitoreo' 'Empresa'}}
+				{{>mapaCliente}}
+			{{else}}
+				<h1>hola</h1>
+			{{/if}}
+		{{/if}}	
+	{{/if}}
+</template>
+
+<template name="InicioDirectorOperador">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<h1>Director/Operador</h1>			
+		</div>
+	</div>
 </template>

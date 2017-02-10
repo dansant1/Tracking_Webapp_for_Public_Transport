@@ -26,7 +26,24 @@ Template.Empresas.helpers({
     	return Template.instance().searchQuery.get();
   	},
 	empresas() {
-		return Empresas.find();
+		let query      = {},
+      	projection = { limit: 40, sort: { nombre: 1 } };
+
+      	let search = Template.instance().searchQuery.get();
+	  	if ( search ) {
+		    let regex = new RegExp( search, 'i' );
+		    console.log(regex);
+		    query = {
+		      $or: [
+		        { nombre: regex },
+		        { ruc: regex }
+		      ]
+		    };
+
+		    projection.limit = 200;
+	  	}
+
+  		return Empresas.find(query, projection );
 	},
 	rutas() {
 		return Rutas.find();
@@ -38,10 +55,14 @@ Template.Empresas.events({
   	
     	let value = event.target.value.trim();
 
-	    if ( value !== '' && event.keyCode === 13 ) {
+    	console.log(value);
+
+	    //if ( value !== '' && event.keyCode === 13 ) {
 	    	template.searchQuery.set( value );
 	    	template.searching.set( true );
-	    }
+
+	    	console.log(template.searchQuery.get());
+	    //}
 
 	    if ( value === '' ) {
 	      template.searchQuery.set( value );
@@ -84,6 +105,13 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
 	},
 	fotos() {
 		return FotosDeVehiculos.find();
+	},
+	checked() {
+		if (this.activo === false) {
+			return 'checked'
+		} else {
+			return ''
+		}
 	}
 });
 
@@ -92,10 +120,10 @@ Template.ListaDeVehiculosPorEmpresas.events({
   	
     	let value = event.target.value.trim();
 
-	    if ( value !== '' && event.keyCode === 13 ) {
+	    //if ( value !== '' && event.keyCode === 13 ) {
 	    	template.searchQuery.set( value );
 	    	template.searching.set( true );
-	    }
+	    //}
 
 	    if ( value === '' ) {
 	      template.searchQuery.set( value );
@@ -145,6 +173,26 @@ Template.ListaDeVehiculosPorEmpresas.events({
   	},
   	'change #fotovehiculo6'(e, t) {
   		SubirFotoVehiculo(e, t, this._id, 'foto6', 'fotovehiculo6');
+  	},
+  	'change .vehiculo-activo'(e, t) {
+  		if ($("#sw" + this._id).is(':checked')) {
+  			console.log($("#sw" + this._id).is(':checked'));
+  			Meteor.call('estadoVehiculo', this._id, false, (err) => {
+  				if (err) {
+  					Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
+  				} else {
+  					Bert.alert('El vehículo está inactivo', 'success');
+  				}
+  			});
+  		} else {
+  			Meteor.call('estadoVehiculo', this._id, true, (err) => {
+  				if (err) {
+  					Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
+  				} else {
+  					Bert.alert('El vehículo está activo', 'success');
+  				}
+  			});
+  		}
   	}
 });
 
@@ -190,10 +238,10 @@ Template.ListaDeConductoresPorEmpresa.events({
   	
     	let value = event.target.value.trim();
 
-	    if ( value !== '' && event.keyCode === 13 ) {
+	    //if ( value !== '' && event.keyCode === 13 ) {
 	    	template.searchQuery.set( value );
 	    	template.searching.set( true );
-	    }
+	    //}
 
 	    if ( value === '' ) {
 	      template.searchQuery.set( value );
@@ -281,10 +329,10 @@ Template.ListaDeCobradoresPorEmpresa.events({
   	
     	let value = event.target.value.trim();
 
-	    if ( value !== '' && event.keyCode === 13 ) {
+	    //if ( value !== '' && event.keyCode === 13 ) {
 	    	template.searchQuery.set( value );
 	    	template.searching.set( true );
-	    }
+	    //}
 
 	    if ( value === '' ) {
 	      template.searchQuery.set( value );
@@ -349,6 +397,18 @@ Template.EditarVehiculo.helpers({
 	vehiculo() {
 		let vehiculo = Session.get('editarVehiculo');
 		return Vehiculos.findOne({_id: vehiculo});
+	}
+});
+
+Template.Opciones.events({
+	'click .agregar-vehiculo'() {
+		Modal.show('AgregarVehiculo');
+	},
+	'click .agregar-conductor'() {
+		Modal.show('AgregarConductor');
+	},
+	'click .agregar-cobrador'() {
+		Modal.show('AgregarCobrador');	
 	}
 });
 
@@ -728,9 +788,11 @@ Template.nuevoUsuario.events({
 		let rol;
 
 		if (r === "1") {
-			rol = true;
+			rol = 1;
+ 		} else if (r === "2") {
+ 			rol = 2;
  		} else {
- 			rol = false;
+ 			rol = 3;
  		}
 
 		if (datos.email !== "" && datos.password !== "" && datos.profile.nombre !== "") {

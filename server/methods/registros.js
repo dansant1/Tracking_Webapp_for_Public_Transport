@@ -21,7 +21,7 @@ Meteor.methods({
 
 		if (id) {
 			
-			if (rol === true) {
+			if (rol === 1) {
 				Directores.insert({
 					nombre: datos.profile.nombre,
 					empresaId: datos.profile.empresaId,
@@ -29,14 +29,24 @@ Meteor.methods({
 					userId: id
 				});
 				Roles.addUsersToRoles(id, [ ROLES.empresa.director ], ROLES.grupos.empresa);
+			} else if ( rol === 2) {
+				Operadores.insert({
+					nombre: datos.profile.nombre,
+					empresaId: datos.profile.empresaId,
+					email: datos.email,
+					userId: id,
+					tipo: 'Operador de Despacho'
+				});
+				Roles.addUsersToRoles(id, [ ROLES.empresa.operador ], ROLES.grupos.empresa);
 			} else {
 				Operadores.insert({
 					nombre: datos.profile.nombre,
 					empresaId: datos.profile.empresaId,
 					email: datos.email,
-					userId: id
+					userId: id,
+					tipo: 'Operador de Monitoreo'
 				});
-				Roles.addUsersToRoles(id, [ ROLES.empresa.operador ], ROLES.grupos.empresa);
+				Roles.addUsersToRoles(id, [ ROLES.empresa.monitoreo ], ROLES.grupos.empresa);
 			}
 
 		} else {
@@ -94,6 +104,7 @@ Meteor.methods({
 			if (obj['1'] !== undefined) {
 				Vehiculos.insert({
 					empresaId: id,
+					activo: true,
 					rutaId: rutaId,
 					padron: obj['0'],
 					placa: obj['1'],
@@ -344,6 +355,41 @@ Meteor.methods({
 		
 	
 	},
+	agregarVehiculo(datos) {
+		if (this.userId) {
+			datos.activo = true;
+			Vehiculos.insert(datos);
+		} else {
+			return;
+		}
+	},
+	estadoVehiculo(id, estado) {
+		if ( this.userId ) {
+			
+			Vehiculos.update({_id: id}, {
+				$set: {
+					activo: estado
+				}
+			});
+
+		} else {
+			return;
+		}
+	},
+	agregarConductor(datos) {
+		if (this.userId) {
+			Conductores.insert(datos);
+		} else {
+			return;
+		}
+	},
+	agregarCobrador(datos) {
+		if (this.userId) {
+			Cobradores.insert(datos);
+		} else {
+			return;
+		}	
+	},
 	editarVehiculo(vehiculoId, datos) {
 
 		Vehiculos.update({_id: vehiculoId}, {
@@ -453,7 +499,24 @@ Meteor.methods({
 	AgregarRuta(datos) {
 
 		if (this.userId) {
-			Rutas.insert(datos);
+
+
+
+			let rutaId = Rutas.insert(datos);
+
+			if (rutaId) {
+				datos.empresasId.forEach( (e) => {
+					console.log(e);
+					Empresas.update({_id: e}, {
+						$push: {
+							rutas: rutaId
+						}
+					});
+				});
+			}
+
+			
+
 		} else {
 			return
 		}

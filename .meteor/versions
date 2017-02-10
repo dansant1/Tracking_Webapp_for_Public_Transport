@@ -81,6 +81,7 @@ momentjs:moment@2.8.4
 mongo@1.1.14
 mongo-id@1.0.6
 mongo-livedata@1.0.12
+natestrauser:select2@4.0.3
 netanelgilad:excel@0.2.6
 nilsdannemann:pdfmake@1.0.38
 npm-bcrypt@0.9.2

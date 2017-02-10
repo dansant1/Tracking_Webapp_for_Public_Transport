@@ -1,6 +1,4 @@
-
-
-Template.mapaCliente.onCreated( () => {
+Template.Rutas.onCreated( () => {
     let template = Template.instance();
 
     template.autorun( () => {
@@ -10,13 +8,13 @@ Template.mapaCliente.onCreated( () => {
     });
 });
 
-Template.mapaCliente.helpers({
+Template.Rutas.helpers({
     empresa() {
         return Empresas.find({_id: Meteor.user().profile.empresaId}).fetch()[0].nombre;
     }
 });
 
-Template.mapaCliente.onRendered( () => {
+Template.Rutas.onRendered( () => {
 
        var self = this;
 
@@ -147,7 +145,7 @@ Template.mapaCliente.onRendered( () => {
 
         //
 
-        map.instance.setZoom(13);    
+        map.instance.setZoom(14);    
 
 
     });
@@ -156,7 +154,7 @@ Template.mapaCliente.onRendered( () => {
 });
 
 
-Template.mapaCliente.helpers({
+Template.Rutas.helpers({
     mapOptions: function() {
         var latLng = {lat: -12.0917633 , lng: -77.0279025}
 
@@ -188,7 +186,7 @@ Template.mapaCliente.helpers({
 
             return {
                 center: new google.maps.LatLng(latLng.lat, latLng.lng),
-                zoom: 13,
+                zoom: 14,
                 styles: styles
             };
         }
@@ -208,3 +206,31 @@ Template.mapaCliente.helpers({
         return Rutas.findOne({_id: id}).nombre;
     }
   });
+
+Template.RutaManual.onCreated( () => {
+    let template = Template.instance();
+
+    template.autorun( () => {
+        let empresaId = Meteor.user().profile.empresaId;
+        console.log(empresaId);
+        template.subscribe( 'RutasPorEmpresa', empresaId);
+    });
+});
+
+Template.RutaManual.helpers({
+    rutas() {
+        return Rutas.find();
+    }
+});
+
+Template.RutaManual.events({
+    'click .remove'() {
+        Meteor.call('eliminarRuta', this._id, (err) => {
+            if (err) {
+                Bert.alert('Hubo un error, vuelva a intentarlo', 'danger', 'growl-top-right');
+            } else {
+                Bert.alert('Ruta Eliminada', 'success', 'growl-top-right');
+            }
+        });
+    }
+});

@@ -1,7 +1,8 @@
 FlowRouter.route('/', {
 	name: 'Inicio',
 	action() {
-		BlazeLayout.render('LayoutCliente', { cliente: 'InicioCliente', administrador: 'Empresas'});
+			
+			BlazeLayout.render('LayoutCliente', { cliente: 'InicioCliente', administrador: 'Empresas'});
 	}
 });
 
@@ -11,6 +12,42 @@ FlowRouter.route('/rastreo', {
 	name: 'Rastreo',
 	action() {
 		BlazeLayout.render('LayoutCliente', { cliente: 'mapaCliente'});
+	}
+});
+
+FlowRouter.route('/vehiculos', {
+	name: 'Vehiculos',
+	action() {
+		BlazeLayout.render('LayoutCliente', { cliente: 'ListaDeVehiculos1'});
+	}
+});
+
+FlowRouter.route('/colaboradores', {
+	name: 'Colaboradores',
+	action() {
+		BlazeLayout.render('LayoutCliente', { cliente: 'ListaDeColaboradores'});
+	}
+});
+
+FlowRouter.route('/planeamiento', {
+	name: 'Planeamiento',
+	action() {
+		BlazeLayout.render('LayoutCliente', { cliente: 'PlaneamientoInterno'});
+	}
+});
+
+FlowRouter.route('/rutas', {
+	name: 'Rutas',
+	action() {
+		console.log('haa');
+		BlazeLayout.render('LayoutCliente', { cliente: 'Rutas'});
+	}
+});
+
+FlowRouter.route('/agregarplaneamiento', {
+	name: 'Planeamiento',
+	action() {
+		BlazeLayout.render('LayoutCliente', { cliente: 'AgregarPlaneamiento'});
 	}
 });
 

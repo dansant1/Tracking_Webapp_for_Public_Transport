@@ -1,14 +1,19 @@
-Template.LeftMenuAdministrador.onCreated( () => {
-	let template = Template.instance();
-    template.autorun( () => {
-        
-        template.subscribe( 'Empresas');
-        
-    });
+import { handleFile, SubirFotoVehiculo, SubirFotoConductor, SubirFotoCobrador } from '../Utilities/archivos'
+
+Template.LeftMenuEmpresa.events({
+	'click .av'() {
+		Modal.show('AgregarVehiculo');
+	},
+	'click .ac'() {
+		Modal.show('AgregarConductor1');
+	},
+	'click .aco'() {
+		Modal.show('AgregarCobrador1');
+	}
 });
 
-Template.LeftMenuAdministrador.helpers({
-	numeroEmpresas() {
-		return Empresas.find().fetch().length;
+Template.LeftMenuAdministrador.events({
+	'click .ae'() {
+		Modal.show('agregarEmpresa');
 	}
 });

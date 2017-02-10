@@ -1,0 +1,137 @@
+<template name="Rutas">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						<h1 style="margin: 0; padding: 0; font-size: 1.5em">Rutas de la empresa {{empresa}}</h1>
+						<br>
+						<ul class="nav nav-tabs">
+							<li class="active"><a data-toggle="tab" href="#home">Mapa</a></li>
+							<li><a data-toggle="tab" href="#menu1">Ruta</a></li>
+						</ul>
+
+						<div class="tab-content">
+							<div id="home" class="tab-pane fade in active">
+								
+								<div class="row">
+									<div class="col-md-4">
+										<select id="ruta" class="form-control">
+											<option value="1">--Seleccione una ruta--</option>
+											{{#each empresas}}
+												
+													<option value="{{this}}">{{ruta this}}</option>
+												
+											{{/each}}
+										</select>
+										
+									</div>
+								</div> 
+								<br>
+								<div class="map-container">
+								   	{{#if carga}}
+								    	{{> googleMap name="map" options=mapOptions}}
+								   	{{else}}
+								   		<h3>Cargando mapa...</h3>
+								   	{{/if}}
+								</div>
+							    
+							</div>
+							<div id="menu1" class="tab-pane fade">
+							    
+							    {{>RutaManual}}
+							</div>						
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+
+<template name="RutaManual">
+	{{#each rutas}}
+		<div class="row">
+			
+			<div class="page-header clearfix" style="margin-top: 10px">
+				<h2 class="pull-left" style="font-weight: bold;">Ruta {{this.nombre}}</h2>
+	    		
+	  		</div>
+			<br>
+			<div class="col-md-6">
+				<div class="page-header clearfix" style="margin-top: 10px">
+	    			<h2 class="pull-left">Ida</h2>
+	  			</div>
+				<div class="box-white" style="margin: 5px; width: 90%; min-height: 200px;">
+												
+			  		<table class="table">
+						<thead>
+							<tr>
+								<th style="text-align: center;">Latitud</th>
+								<th style="text-align: center;">Longitud</th>
+							</tr>
+						</thead>
+						<tbody id="horarios2">
+
+						{{#each this.ida}}
+							<tr id="h2">
+
+								<td>
+									<div class='input-group date' id='la'>
+										<input type='text' disabled class="form-control la" value="{{this.lat}}" />		                    
+						            </div>
+								</td>
+								<td>
+									<div class='input-group date' id='lo'>
+										<input type='text' disabled class="form-control lo" value="{{this.lng}}" />
+												                    
+						            </div>
+								</td>
+													       								       	
+							</tr>
+						{{/each}}		      
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="page-header clearfix" style="margin-top: 10px">
+	    		<h2 class="pull-left">Vuelta</h2>
+	  			</div>
+				<div class="box-white" style="margin: 5px; width: 90%; min-height: 200px;">
+												
+			  		<table class="table">
+						<thead>
+							<tr>
+								<th style="text-align: center;">Latitud</th>
+								<th style="text-align: center;">Longitud</th>
+							</tr>
+						</thead>
+						<tbody id="horarios2">
+
+						{{#each this.vuelta}}
+							<tr id="h2">
+
+								<td>
+									<div class='input-group date' id='la'>
+										<input type='text' disabled class="form-control la" value="{{this.lat}}" />		                    
+						            </div>
+								</td>
+								<td>
+									<div class='input-group date' id='lo'>
+										<input type='text' disabled class="form-control lo" value="{{this.lng}}" />
+												                    
+						            </div>
+								</td>
+													       								       	
+							</tr>
+						{{/each}}		      
+						</tbody>
+					</table>
+				</div>	
+			</div>
+		</div>
+		<br>
+	{{/each}}
+</template>

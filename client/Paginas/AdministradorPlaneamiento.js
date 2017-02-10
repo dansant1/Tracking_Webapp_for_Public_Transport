@@ -23,7 +23,25 @@ Template.AdministradorRutas.helpers({
     },
 
     empresas() {
-        return Empresas.find();
+        let query      = {},
+        projection = { limit: 40, sort: { nombre: 1 } };
+
+        let search = Template.instance().searchQuery.get();
+        if ( search ) {
+            let regex = new RegExp( search, 'i' );
+            console.log(regex);
+            query = {
+              $or: [
+                { nombre: regex },
+                { ruc: regex }
+              ]
+            };
+
+            projection.limit = 200;
+        }
+
+        return Empresas.find(query, projection );
+        //return Empresas.find();
     }
 });
 
@@ -32,10 +50,10 @@ Template.AdministradorRutas.events({
     
         let value = event.target.value.trim();
 
-        if ( value !== '' && event.keyCode === 13 ) {
+        //if ( value !== '' && event.keyCode === 13 ) {
             template.searchQuery.set( value );
             template.searching.set( true );
-        }
+        //}
 
         if ( value === '' ) {
           template.searchQuery.set( value );
@@ -298,7 +316,26 @@ Template.AdministradorPlaneamiento.helpers({
         return Template.instance().searchQuery.get();
     },
     empresas() {
-        return Empresas.find();
+        //return Empresas.find();
+
+        let query      = {},
+        projection = { limit: 40, sort: { nombre: 1 } };
+
+        let search = Template.instance().searchQuery.get();
+        if ( search ) {
+            let regex = new RegExp( search, 'i' );
+            console.log(regex);
+            query = {
+              $or: [
+                { nombre: regex },
+                { ruc: regex }
+              ]
+            };
+
+            projection.limit = 200;
+        }
+
+        return Empresas.find(query, projection );
     }
 });
 
@@ -307,10 +344,10 @@ Template.AdministradorPlaneamiento.events({
     
         let value = event.target.value.trim();
 
-        if ( value !== '' && event.keyCode === 13 ) {
+        //if ( value !== '' && event.keyCode === 13 ) {
             template.searchQuery.set( value );
             template.searching.set( true );
-        }
+       // }
 
         if ( value === '' ) {
           template.searchQuery.set( value );
@@ -373,10 +410,31 @@ function getPathVariableCode(line) {
 Template.AdministradorAgregarRuta.onCreated( function () {
     Session.setDefault('ruta', 'ida');
     console.log(Session.get('ruta'));
+
+    var self = this;
+
+    self.autorun( function () {
+        self.subscribe('Empresas', function () {
+            if (Empresas.find().fetch().length > 0) {
+                $(".js-example-basic-multiple").select2({
+                    placeholder: "Asigna a una o más empresas a esta ruta",
+                });
+                
+            }
+        });
+    });
 });
 
+Template.AdministradorAgregarRuta.helpers({
+    empresas() {
+        return Empresas.find();
+    }
+});
 
 Template.AdministradorAgregarRuta.onRendered( function () {
+
+    
+
     var self = this;
 
     let template = Template.instance();
@@ -404,7 +462,8 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                         google.maps.drawing.OverlayType.MARKER,
                         google.maps.drawing.OverlayType.POLYLINE,
                        ]
-                    }
+                    },
+                    markerOptions: {icon: '/paradero.png'}
                 });
 
 
@@ -436,18 +495,17 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                                 lng: p.lng()
                             });
                         }
-                        
-                        
-
-                        
-                    
                     });
                     
                 });
 
                 google.maps.event.addListener(drawingManager, 'markercomplete', function (marker) {
-                    var position = marker.getPosition().toUrlValue(2);
-                    template.ruta.paraderos.push(position);
+                    var positionLat = marker.getPosition().lat();
+                    var positionLng = marker.getPosition().lng();
+                    template.ruta.paraderos.push({
+                        lat: positionLat,
+                        lng: positionLng
+                    });
                 });
 
 
@@ -480,10 +538,10 @@ Template.AdministradorAgregarRuta.onRendered( function () {
 Template.AdministradorAgregarRuta.events({
     'click .save'(e, t) {
        
-        t.ruta.empresaId = $('#planempresa').val();
+        t.ruta.empresasId = $(".js-example-basic-multiple").val();;
         t.ruta.nombre =  t.find("[name='nombre']").value;   
             
-        console.log(t.ruta);
+        //console.log(t.ruta);
 
 
         if (t.ruta.nombre !== "") {
@@ -618,50 +676,7 @@ Template.AdministradorReportes.events({
             }
     },
     'click #reporte1PDF'() {
-        /*var printDoc = new jsPDF();
-        printDoc.fromHTML($('#reporte01').get(0), 10, 10, {'width': 800});
-        printDoc.output("dataurlnewwindow");*/
-
-        
-           /* var pdf = new jsPDF('p', 'pt', 'letter');
-            // source can be HTML-formatted string, or a reference
-            // to an actual DOM element from which the text will be scraped.
-            source = $('#r1')[0];
-
-            // we support special element handlers. Register them with jQuery-style 
-            // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
-            // There is no support for any other type of selectors 
-            // (class, of compound) at this time.
-            specialElementHandlers = {
-                // element with id of "bypass" - jQuery style selector
-                '#bypassme': function(element, renderer) {
-                    // true = "handled elsewhere, bypass text extraction"
-                    return true
-                }
-            };
-            margins = {
-                top: 80,
-                bottom: 60,
-                left: 40,
-                width: 600
-            };
-            // all coords and widths are in jsPDF instance's declared units
-            // 'inches' in this case
-            pdf.fromHTML(
-                    source, // HTML string or DOM elem ref.
-                    margins.left, // x coord
-                    margins.top, {// y coord
-                        'width': margins.width, // max width of content on PDF
-                        'elementHandlers': specialElementHandlers
-                    },
-            function(dispose) {
-                // dispose: object with X, Y of the last line add to the PDF 
-                //          this allow the insertion of new lines after html
-                pdf.save('Test.pdf');
-            }
-            , margins);
-
-            console.log('hhh');*/
+       
 
             $("td:hidden,th:hidden","#reporte01").show();
             var pdf = new jsPDF('l', 'pt', 'a4');
@@ -1039,7 +1054,7 @@ Template.AdministradorRutasPorEmpresa.onCreated( () => {
 
 Template.AdministradorRutasPorEmpresa.helpers({
     empresa() {
-        return Empresas.findOne().nombre;
+        return Empresas.find({_id: FlowRouter.getParam('empresaId')}).fetch()[0].nombre;
     }
 });
 
@@ -1071,78 +1086,148 @@ Template.RutaPorEmpresa.events({
     }
 });
 
+
 Template.AdministradorRutasPorEmpresa.onCreated(function() {
-    var self = this;
+ 
+});
+
+Template.AdministradorRutasPorEmpresa.onRendered( () => {
+
+       var self = this;
 
     let mapa = Template.instance();
+
+    
+
     GoogleMaps.ready('map', function(map) {
 
         var marker;
 
-        mapa.ruta = new ReactiveVar(null);
-        mapa.primera = new ReactiveVar(true);
-        mapa.map = map;
+        mapa.autorun( () => {
 
-        self.autorun(function() {
+            mapa.subscribe('Empresas');
 
             let empresaId = FlowRouter.getParam('empresaId');
-            console.log(mapa.ruta.get());
-            self.subscribe('RutasPorEmpresa', empresaId, function () {
-                var latLng = {lat: -12.0196011 , lng: -77.0968634}
-                let numero = 0;
-                if (!latLng) return;
-                    
-                        Rutas.find({}).forEach( function (ruta) {
-                            
-                            var ida = ruta.ida;
 
+
+               
+                   
+                        mapa.subscribe('RutasPorEmpresa', () => {
+
+                    
+                        
+                        let numero = 0;
+
+                        mapa.defaultRuta = new ReactiveVar(Rutas.findOne()._id)
+
+                        mapa.idaPath;
+                        mapa.vueltaPath;
+                        console.log(mapa.defaultRuta.get());
+
+                        let ida;
+                        let vuelta;
+
+                        function addLine() {
+                            mapa.idaPath.setMap(map.instance);
+                            mapa.vueltaPath.setMap(map.instance);
+                        }
+
+                        function removeLine () {
+                            mapa.idaPath.setMap(null);
+                            mapa.vueltaPath.setMap(null);
+                        }
+
+                        function setMapOnAll(map, p, feature) {
                             
+
+                            marker = new google.maps.Marker({
+                                        animation: google.maps.Animation.DROP,
+                                        position: new google.maps.LatLng(p.lat, p.lng),
+                                        icon: '/paradero.png', //*'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
+                                        map: map,                                 
+                                        id: ruta._id
+                            });
+                        }
+
+                        // Removes the markers from the map, but keeps them in the array.
+                        function clearMarkers() {
+                            setMapOnAll(null);
+                        }
+
+                        // Shows any markers currently in the array.
+                        function showMarkers() {
+                            setMapOnAll(map);
+                        }
+
+                        // Deletes all markers in the array by removing references to them.
+                        function deleteMarkers() {
+                            clearMarkers();
+                            markers = [];
+                        }
+
+
+                        
+
+                        $('select#ruta').on('change', function () {
+                            
+                            Rutas.find({_id: this.value }).forEach( function (ruta) {    
+                                ida = ruta.ida;
+                                vuelta = ruta.vuelta;    
+
+                                
+
+                                ruta.paraderos.forEach( function (p) {
+                                    
+                                    setMapOnAll(map.instance, p, 'parking')
+                                       
+                                }); 
+                            });
+
+                            if (mapa.idaPath) {
+                                
+                               removeLine();
+                               //clearMarkers()
+                            } 
                                 mapa.idaPath = new google.maps.Polyline({
                                     path: ida,
                                     geodesic: true,
                                     strokeColor: '#3498db',
                                     strokeOpacity: 1.0,
                                     strokeWeight: 2
-                                }).setMap(map.instance);
-
-                                var vuelta = ruta.vuelta;
+                                });    
 
                                 mapa.vueltaPath = new google.maps.Polyline({
-                                    path: vuelta,
-                                    geodesic: true,
-                                    strokeColor: '#2ecc71',
-                                    strokeOpacity: 1.0,
-                                    strokeWeight: 2
-                                }).setMap(map.instance);
-                                console.log('holaasspae');
+                                        path: vuelta,
+                                        geodesic: true,
+                                        strokeColor: '#2ecc71',
+                                        strokeOpacity: 1.0,
+                                        strokeWeight: 2
+                                })
 
-                                ruta.paraderos.forEach( function (p) {
-                                    marker = new google.maps.Marker({
-                                
-                                        animation: google.maps.Animation.DROP,
-                                        position: new google.maps.LatLng(p[numero], -77.0279025),
-                                        map: map.instance,
-                                  // We store the document _id on the marker in order 
-                                  // to update the document within the 'dragend' event below.
-                                        id: ruta._id
-                                    });
-                                
-                                    numero++
-                                });
 
-                                
-                                console.log(numero);
-
+                                    
+                                addLine();
+                             
                         });
+       
                 
-            });   
+                });
+               
+                
+                  
+                    
+           
+             
         });
 
         //
 
         map.instance.setZoom(14);    
 
+
     });
+
+
 });
 
 
@@ -1190,19 +1275,11 @@ Template.AdministradorRutasPorEmpresa.helpers({
             return false
         }
     },
-    rutas() {
-        return Rutas.find({});
+    empresas() {
+        console.log(Empresas.find({_id: FlowRouter.getParam('empresaId')}).fetch()[0].rutas);
+        return Empresas.find({_id: FlowRouter.getParam('empresaId')}).fetch()[0].rutas;
+    },
+    ruta(id) {
+        return Rutas.findOne({_id: id}).nombre;
     }
   });
-
-Template.AdministradorRutasPorEmpresa.events({
-    'change #ruta': function (e, t) {
-        
-        t.ruta.set(e.target.value);
-        t.primera.set(false);
-        console.log(t.ruta.get());
-        console.log(t.primera.get())
-        
-        
-    }
-});

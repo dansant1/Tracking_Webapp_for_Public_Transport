@@ -5,7 +5,8 @@ export default ROLES = {
 	},
 	empresa: {
 		director: 'director',
-		operador: 'operador'
+		operador: 'operador',
+		monitoreo: 'monitoreo'
 	},
 	grupos: {
 		administracion: 'Administracion',

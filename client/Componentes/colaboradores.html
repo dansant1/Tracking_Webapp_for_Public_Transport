@@ -1,0 +1,399 @@
+<template name="ListaDeColaboradores">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+					{{>Colaboradores}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="Colaboradores">
+	<br>
+	<ul class="nav nav-tabs">
+		<li class="active"><a data-toggle="tab" href="#conductores">Conductores</a></li>
+		<li><a data-toggle="tab" href="#cobradores">Cobradores</a></li>
+	</ul>
+
+	<div class="tab-content">
+		
+		<div id="conductores" class="tab-pane fade in active">
+		 
+		  {{>ListaDeConductoresInterno}}
+			
+		</div>
+		
+		<div id="cobradores" class="tab-pane fade">
+		    {{>ListaDeCobradoresInterno}}
+		</div>
+		
+	</div>
+</template>
+
+<template name="ListaDeConductoresInterno">
+	<br>
+	<div class="page-header clearfix" style="margin-top: 0;">
+		<div class="pull-left">
+			<input type="text" name="search" class="form-control" style="width: 350px;" placeholder="Buscar conductor por DNI">
+		</div>
+  	</div>
+	
+	{{#if searching}}
+
+      	<h3>Cargando...</h3>
+    
+    {{else}}
+		{{#each conductores}}
+			<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 35vh;">
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#con3{{this._id}}">Detalles</a></li>
+					<li><a data-toggle="tab" href="#p3{{this._id}}">Licencia</a></li>
+					<li><a data-toggle="tab" href="#s3{{this._id}}">CEV</a></li>
+					<li><a data-toggle="tab" href="#t3{{this._id}}">Credencial</a></li>
+					
+				</ul>
+
+				<div class="tab-content">
+					<div id="con3{{this._id}}" class="tab-pane fade in active">
+
+						{{#if isInRole 'director' 'Empresa'}}
+						<br>
+						<div class="pull-left" style="margin-bottom: 20px;">
+	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+	      					<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+	    				</div>
+	    			{{else}}
+	    				{{#if isInRole 'operador' 'Empresa'}}
+						<br>
+						<div class="pull-left" style="margin-bottom: 20px;">
+	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+	      					
+	    				</div>
+	    				{{/if}}
+					{{/if}}
+						
+						
+						<br>
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Nombres:</td>
+							        <td>{{this.datos.nombre}}</td>
+      							</tr>
+      							<tr>
+							        <td>Apellidos:</td>
+							        <td>{{this.datos.apellido}}</td>
+      							</tr>
+      							<tr>
+							        <td>DNI:</td>
+							        <td>{{this.datos.dni}}</td>
+      							</tr>
+      							<tr>
+							        <td>Caducidad:</td>
+							        <td>{{this.datos.caducidad}}</td>
+      							</tr>
+      							<tr>
+							        <td>Distrito:</td>
+							        <td>{{this.datos.distrito}}</td>
+      							</tr>
+      							<tr>
+							        <td>Domicilio: </td>
+							        <td>{{this.datos.domicilio}}</td>
+      							</tr>
+      							<tr>
+      								<td>Teléfono:</td>
+      								<td>{{this.datos.telefono}}</td>
+      							</tr>
+    						</tbody>
+						</table>
+						<br>
+						{{#if isInRole 'operador' 'Empresa'}}
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor1" style="display: none;" accept="image/*">
+						</label>
+						<br><br>	
+						{{else}}
+							{{#if isInRole 'director' 'Empresa'}}
+							<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor1" style="display: none;" accept="image/*">
+						</label>
+						<br><br>	
+							{{/if}}
+						{{/if}}
+											
+						{{>FotosDeConductores1}}
+					</div>
+					<div id="p3{{this._id}}" class="tab-pane fade">
+					    <br>
+					  
+
+					     <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Código:</td>
+							        <td>{{this.licencia.codigo}}</td>
+      							</tr>
+      							<tr>
+							        <td>Categoría:</td>
+							        <td>{{this.licencia.categoria}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Expedición:</td>
+							        <td>{{this.licencia.expedicion}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Revalidación:</td>
+							        <td>{{this.licencia.revalidacion}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+						<br>
+						{{#if isInRole 'operador' 'Empresa'}}
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor2" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{else}}
+							{{#if isInRole 'director' 'Empresa'}}
+							<label class="btn btn-success btn-file">
+
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor2" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+							{{/if}}
+						{{/if}}
+							
+					    {{>FotosDeConductores2}}
+					</div>
+					<div id="s3{{this._id}}" class="tab-pane fade">
+					    <br>
+					   
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Código:</td>
+							        <td>{{this.CEV.codigo}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Emisión:</td>
+							        <td>{{this.CEV.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.CEV.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+						<br>
+						{{#if isInRole 'operador' 'Empresa'}}
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor3" style="display: none;" accept="image/*">
+						</label>
+						<br><br>	
+						{{else}}
+							{{#if isInRole 'director' 'Empresa'}}
+							<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor3" style="display: none;" accept="image/*">
+						</label>
+						<br><br>	
+							{{/if}}
+						{{/if}}
+					    
+						{{>FotosDeConductores3}}
+					</div>
+					<div id="t3{{this._id}}" class="tab-pane fade">
+					   	<br>
+					   
+
+					   	 <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número de Credencial:</td>
+							        <td>{{this.credencial.numero}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Emisión:</td>
+							        <td>{{this.credencial.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.credencial.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+						<br>
+						{{#if isInRole 'operador' 'Empresa'}}
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor4" style="display: none;" accept="image/*">
+						</label>
+						<br><br>	
+						{{else}}
+							{{#if isInRole 'director' 'Empresa'}}
+							<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor4" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+							{{/if}}
+						{{/if}}
+						
+						{{>FotosDeConductores4}}	
+					</div>
+					
+					
+				</div>
+			</div>
+		{{else}}
+			Lo sentimos, no encontramos resultados para {{query}}
+		{{/each}}
+
+	{{/if}}
+</template>
+
+<template name="ListaDeCobradoresInterno">
+		<br>
+	<div class="page-header clearfix" style="margin-top: 1px;">
+		<div class="pull-left">
+			<input type="text" name="search" class="form-control" style="width: 350px;" placeholder="Buscar cobrador por DNI">
+	    </div>
+  	</div>
+
+  	{{#if searching}}
+      	<h3>Cargando...</h3>
+    {{else}}
+		{{#each cobradores}}
+			<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 35vh;">
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#co2{{this._id}}">Detalles</a></li>
+					<li><a data-toggle="tab" href="#p2{{this._id}}">CEV</a></li>
+					<li><a data-toggle="tab" href="#s2{{this._id}}">Credenciales</a></li>
+					
+				</ul>
+
+				<div class="tab-content">
+					<div id="co2{{this._id}}" class="tab-pane fade in active">
+					{{#if isInRole 'director' 'Empresa'}}
+						<br>
+						<div class="pull-left" style="margin-bottom: 20px">
+	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+	      					<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+	    				</div>
+	    			{{else}}
+	    				{{#if isInRole 'operador' 'Empresa'}}
+							<br>
+						<div class="pull-left" style="margin-bottom: 20px">
+	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+	      					
+	    				</div>
+	    				{{/if}}
+					{{/if}}
+						
+						<br>
+					   
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Nombres:</td>
+							        <td>{{this.datos.nombre}}</td>
+      							</tr>
+      							<tr>
+							        <td>Apellidos:</td>
+							        <td>{{this.datos.apellido}}</td>
+      							</tr>
+      							<tr>
+							        <td>DNI:</td>
+							        <td>{{this.datos.dni}}</td>
+      							</tr>
+      							
+      							<tr>
+							        <td>Domicilio: </td>
+							        <td>{{this.datos.domicilio}}</td>
+      							</tr>
+
+      							<tr>
+							        <td>Distrito:</td>
+							        <td>{{this.datos.distrito}}</td>
+      							</tr>
+
+      							
+    						</tbody>
+						</table>
+						<br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotocobrador1" style="display: none;" accept="image/*">
+			    			
+						</label>
+						<br><br>
+						{{>FotosDeCobradores1}}
+					</div>
+					<div id="p2{{this._id}}" class="tab-pane fade">
+					    <br>
+					  
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Código:</td>
+							        <td>{{this.CEV.codigo}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Emisión:</td>
+							        <td>{{this.CEV.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.CEV.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotocobrador2" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeCobradores2}}
+					</div>
+					<div id="s2{{this._id}}" class="tab-pane fade">
+					    <br>
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número:</td>
+							        <td>{{this.credencial.numero}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Emisión:</td>
+							        <td>{{this.credencial.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.credencial.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotocobrador3" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeCobradores3}}
+					</div>
+
+					
+					
+				</div>
+			</div>
+		{{else}}
+			Lo sentimos, no encontramos resultados para {{query}}
+		{{/each}}
+
+	{{/if}}	
+</template>
+

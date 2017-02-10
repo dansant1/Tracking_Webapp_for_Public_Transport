@@ -2,15 +2,15 @@
 
 		<nav class="cd-side-nav">
 			<ul>
-				<li class="cd-label">Monitoreo</li>
+				<li class="cd-label">Rastreo</li>
 				<li class="has-children overview top-nav-btn">
-					<a href="#0">Rastreo</a>
+					<a href="/rastreo">Monitoreo</a>
 				</li>
-				<li class="has-children notifications app top-nav-btn">
+				<li class="has-children comments app top-nav-btn">
 					<a href="#0">Control</a>
 				</li>
 
-				<li class="has-children comments top-nav-btn">
+				<li class="has-children  notifications top-nav-btn">
 					<a href="#0">Alarmas <span class="count">3</span></a>
 				</li>
 			</ul>
@@ -19,49 +19,55 @@
 				<li class="cd-label">Despacho</li>
 				
 				<li class="has-children images top-nav-btn">
-					<a href="#0">Vehículos</a>
+					<a href="/vehiculos">Vehículos</a>
 					
 					<ul>
-						<li><a href="#0">Lista de Vehículos</a></li>
-						<li><a href="#0">Estado de Vehículos</a></li>
-						<li><a href="#0">Agregar Vehículos</a></li>
+						<li><a href="/vehiculos">Lista de Vehículos</a></li>
+						{{#if isInRole 'operador' 'Empresa'}}
+						<li class="av"><a href="#">Agregar Vehículos</a></li>
+						{{else}}
+							{{#if isInRole 'director' 'Empresa'}}
+								<li class="av"><a href="#">Agregar Vehículos</a></li>
+							{{/if}}
+						{{/if}}
 					</ul>
 				</li>
 
 				<li class="has-children users top-nav-btn">
-					<a href="#0">Paradas</a>
-					
-					<ul>
-						<li><a href="#0">Lista de Paradas</a></li>
-						<li><a href="#0">Agregar Paradas</a></li>
-					</ul>
+					<a href="/rutas">Rutas</a>
 				</li>
-				<li class="has-children users top-nav-btn">
-					<a href="#0">Rutas</a>
-					
-					<ul>
-						<li><a href="#0">Lista de Rutas</a></li>
-						<li><a href="#0">Agregar Ruta</a></li>
-					</ul>
-				</li>
+				
 
 				<li class="has-children users top-nav-btn">
-					<a href="#0">Planeamiento</a>
-					
+					<a href="/planeamiento">Planeamiento</a>
 					<ul>
-						<li><a href="#0">Agregar Planeamiento</a></li>
-						<li><a href="#0">Visualizar Planeamiento</a></li>
-						<li><a href="#"><input type="file" id="prueba"></a></li>
+						<li><a href="/planeamiento"> Visualizar Planeamiento</a></li>
+						{{#if isInRole 'operador' 'Empresa'}}
+						<li><a href="/agregarplaneamiento">Agregar Planeamiento</a></li>
+						{{else}}
+							{{#if isInRole 'director' 'Empresa'}}
+								<li><a href="/agregarplaneamiento">Agregar Planeamiento</a></li>
+							{{/if}}
+						{{/if}}
 					</ul>
 				</li>
 
 
 				<li class="has-children users top-nav-btn">
-					<a href="#0">Colaboradores</a>
+					<a href="/colaboradores">Colaboradores</a>
 					
 					<ul>
-						<li><a href="#0">Lista de Colaboradores</a></li>
-						<li><a href="#0">Agregar Colaborador</a></li>
+						<li><a href="/colaboradores">Lista de Colaboradores</a></li>
+						{{#if isInRole 'operador' 'Empresa'}}
+						<li class="ac"><a href="#">Agregar Conductor</a></li>
+						<li class="aco"><a href="#">Agregar Cobrador</a></li>
+						{{else}}
+							{{#if isInRole 'director' 'Empresa'}}
+								<li class="ac"><a href="#">Agregar Conductor</a></li>
+								<li class="aco"><a href="#">Agregar Cobrador</a></li>
+							{{/if}}
+						{{/if}}
+
 					</ul>
 				</li>
 
@@ -82,8 +88,13 @@
 			<nav class="cd-side-nav">
 			<ul>
 				<li class="cd-label">Gestión</li>
-				<li class="has-children overview top-nav-btn">
-					<a href="/empresas">Empresas <span class="count">{{numeroEmpresas}}</span></a>
+				<li class="has-children overview top-nav-btn" style="z-index: 1001 !important" >
+					<a href="/empresas">Empresas</a>
+					<ul style="z-index: 1001 !important">
+						<li style="z-index: 1001 !important" > <a href="/empresas">Lista de Empresa</a></li>
+						
+						<li style="z-index: 1001 !important" class="ae"><a href="#">Agregar Empresa</a></li>	
+					</ul>
 				</li>
 				<li class="has-children notifications app top-nav-btn">
 					<a href="/admin/equipo">Equipo</a>
@@ -95,10 +106,19 @@
 				
 				<li class="has-children comments top-nav-btn">
 					<a href="/admin/rutas">Rutas</a>
+					<ul>
+						<li><a href="/admin/rutas">Rutas por Empresa</a></li>
+						<li><a href="/admin/solorutas">Lista de Rutas</a></li>
+						<li><a href="/admin/agregaruta">Agregar Ruta</a></li>	
+					</ul>
 				</li>
 				
 				<li class="has-children comments top-nav-btn">
 					<a href="/admin/planeamiento">Planeamiento</a>
+					<ul>
+						<li><a href="/admin/planeamiento">Planeamientos por Empresa</a></li>
+						<li><a href="/admin/agregarplan">Agregar Planeamiento</a></li>	
+					</ul>
 				</li>		
 			</ul>
 

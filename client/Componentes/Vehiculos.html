@@ -1,0 +1,626 @@
+<template name="ListaDeVehiculos1">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						{{>ListaDeVehiculosInterno}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="ListaDeVehiculosInterno">
+	{{#if isInRole 'operador' 'Empresa'}}
+	<br>
+	<select id="listarutas" style="width: 88px; display: inline-block; position: relative; top: 1px; margin-right: 15px;" class="form-control">
+		{{#each empresas}}
+
+		<option value="{{this}}">{{ruta this}}</option>
+		{{/each}}
+	</select>
+	<label class="btn btn-success btn-file">
+		<i class="fa fa-upload" aria-hidden="true"></i> <input type="file" id="subirFlota" style="display: none;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+		Subir Matriz Excel
+	</label>
+	
+	{{else}}
+		{{#if isInRole 'director' 'Empresa'}}
+			<br>
+	<select id="listarutas" style="width: 88px; display: inline-block; position: relative; top: 1px; margin-right: 15px;" class="form-control">
+		{{#each empresas}}
+
+		<option value="{{this}}">{{ruta this}}</option>
+		{{/each}}
+	</select>
+	<label class="btn btn-success btn-file">
+		<i class="fa fa-upload" aria-hidden="true"></i> <input type="file" id="subirFlota" style="display: none;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+		Subir Matriz Excel
+	</label>
+		{{/if}}
+	{{/if}}
+	<br>
+	<br>
+	<div class="page-header clearfix" style="margin-top: 0;">
+	    
+	    <div class="pull-left">
+	      <input type="text" name="search" class="form-control" style="width: 350px;" placeholder="Buscar vehículo por placa o padron">
+	    </div>
+  	</div>
+	
+	{{#if searching}}
+      	<h3>Cargando...</h3>
+    {{else}}
+		{{#each vehiculo}}
+			<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 40vh;">
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#{{this._id}}">Detalles</a></li>
+					<li><a data-toggle="tab" href="#p{{this._id}}">Propietario</a></li>
+					<li><a data-toggle="tab" href="#s{{this._id}}">SOAT</a></li>
+					<li><a data-toggle="tab" href="#t{{this._id}}">Tarjeta de Circulación</a></li>
+					<li><a data-toggle="tab" href="#r{{this._id}}">Revisión Tecnica</a></li>
+					<li><a data-toggle="tab" href="#rc{{this._id}}">RC</a></li>
+					<li><a data-toggle="tab" href="#tc{{this._id}}">TCH</a></li>
+					
+				</ul>
+
+				<div class="tab-content">
+					<div id="{{this._id}}" class="tab-pane fade in active">
+					{{#if isInRole 'director' 'Empresa'}}
+						<br>
+						<div class="pull-left" style="margin-bottom: 20px;">
+	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+	      					<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+	    				</div>
+	    			{{else}}
+	    				{{#if isInRole 'operador' 'Empresa'}}
+							<br>
+								<div class="pull-left" style="margin-bottom: 20px;">
+			      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+			      					
+			    				</div>
+	    				{{/if}}
+					{{/if}}
+						<br>
+					
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Padrón:</td>
+							        <td>{{this.padron}}</td>
+      							</tr>
+      							<tr>
+      								<td>Placa:</td>
+      								<td>{{this.placa}}</td>
+      							</tr>
+      							<tr>
+							        <td>Compañia:</td>
+							        <td>{{this.compania}}</td>
+      							</tr>
+      							<tr>
+							        <td>Código de Ruta:</td>
+							        <td>{{this.codigoDeRuta}}</td>
+      							</tr>
+      							<tr>
+      								<td>Aseguradora:</td>
+      								<td>{{this.aseguradora}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Permanencia en la Empresa:</td>
+      								<td>{{this.fechaDePermanenciaEnLaEmpresa}}</td>
+      							</tr>
+
+    						</tbody>
+						</table>
+						 {{#if isInRole 'operador' 'Empresa'}}
+						<div class="row">
+							<div class="col-md-2">
+								<p>Activo / Inactivo</p>
+								<br>
+								<label class="switch">
+										<input type="checkbox" id="sw{{this._id}}" {{checked}} class="vehiculo-activo">
+										<div class="slider round"></div>
+								</label>
+							</div>
+						</div>
+						<br>
+						{{else}}
+							{{#if isInRole 'director' 'Empresa'}}
+							<div class="row">
+							<div class="col-md-2">
+								<p>Activo / Inactivo</p>
+								<br>
+								<label class="switch">
+										<input type="checkbox" id="sw{{this._id}}" {{checked}} class="vehiculo-activo">
+										<div class="slider round"></div>
+								</label>
+							</div>
+						</div>
+						<br>
+							{{/if}}
+						{{/if}}
+						
+					    
+					    <br>
+					    {{#if isInRole 'operador' 'Empresa'}}
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{else}}
+							{{#if isInRole 'director' 'Empresa'}}
+								<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+							{{/if}}
+						{{/if}}
+						
+						{{>FotosDeVehiculos}}
+					    
+					</div>
+					<div id="p{{this._id}}" class="tab-pane fade">
+					    <br>
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Nombre del Propietario:</td>
+							        <td>{{this.propietario.nombre}}</td>
+      							</tr>
+      							<tr>
+      								<td>DNI:</td>
+      								<td>{{this.propietario.dni}}</td>
+      							</tr>
+      							<tr>
+							        <td>Domicilio del Propietario:</td>
+							        <td>{{this.propietario.domicilio}}</td>
+      							</tr>
+      							<tr>
+							        <td>Distrito:</td>
+							        <td>{{this.propietario.distrito}}</td>
+      							</tr>
+      							<tr>
+      								<td>Teléfono:</td>
+      								<td>{{this.propietario.telefono}}</td>
+      							</tr>
+    						</tbody>
+						</table>
+
+						<br>
+					    <h3>Fotos</h3>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo2" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeVehiculos2}}
+					</div>
+					<div id="s{{this._id}}" class="tab-pane fade">
+					    <br>
+					 
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número:</td>
+							        <td>{{this.SOAT.numero}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Emisión: </td>
+      								<td>{{this.SOAT.inicio}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.SOAT.fin}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+					    <br>
+					    <h3>Fotos</h3>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo3" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeVehiculos3}}
+					</div>
+					<div id="t{{this._id}}" class="tab-pane fade">
+					   	<br>
+					   	<table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número: </td>
+							        <td>{{this.TC.numero}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Emisión: </td>
+      								<td>{{this.TC.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.TC.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+
+						<br>
+					    <h3>Fotos</h3>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo4" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeVehiculos4}}
+					</div>
+					<div id="r{{this._id}}" class="tab-pane fade">
+					    <br>
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número de Revisión Tecnica:</td>
+							        <td>{{this.CITV.numero}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Emisión: </td>
+      								<td>{{this.CITV.inicio}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td> {{this.CITV.fin}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+
+						<br>
+					    <h3>Fotos</h3>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo5" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeVehiculos5}}
+					</div>
+					<div id="rc{{this._id}}" class="tab-pane fade">
+						<br>
+					  
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número:</td>
+							        <td>{{this.RC.numero}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Emisión: </td>
+      								<td>{{this.RC.inicio}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.RC.fin}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+						<br>
+					    <h3>Fotos</h3>
+					    <br>
+						<label class="btn btn-success btn-file">
+			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo6" style="display: none;" accept="image/*">
+						</label>
+						<br><br>
+						{{>FotosDeVehiculos6}}
+					</div>
+					<div id="tc{{this._id}}" class="tab-pane fade">
+					    <br>
+					    <table class="table">
+							<tbody>
+    							<tr>
+							        <td>Número:</td>
+							        <td>{{this.TCH.numero}}</td>
+      							</tr>
+      							<tr>
+      								<td>Fecha de Emisión: </td>
+      								<td>{{this.TCH.emision}}</td>
+      							</tr>
+      							<tr>
+							        <td>Fecha de Caducidad:</td>
+							        <td>{{this.TCH.caducidad}}</td>
+      							</tr>
+      							
+    						</tbody>
+						</table>
+					</div>
+					
+				</div>
+			</div>
+		{{else}}
+			Lo sentimos, no encontramos resultados para {{query}}
+		{{/each}}
+
+	{{/if}}
+							
+</template>
+
+<template name="AgregarVehiculoInterno">
+
+	<div class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Agregar Vehículo</h4>
+                </div>
+
+                <div class="modal-body">
+                	<br>
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#1{{this._id}}">Detalles</a></li>
+						<li><a data-toggle="tab" href="#p1{{this._id}}">Propietario</a></li>
+						<li><a data-toggle="tab" href="#tec1{{this._id}}">Tecnico</a></li>
+						<li><a data-toggle="tab" href="#s1{{this._id}}">SOAT</a></li>
+						<li><a data-toggle="tab" href="#t1{{this._id}}">Tarjeta de Circulación</a></li>
+						<li><a data-toggle="tab" href="#r1{{this._id}}">Revisión Tecnica</a></li>
+						<li><a data-toggle="tab" href="#rc1{{this._id}}">RC</a></li>
+						<li><a data-toggle="tab" href="#tc1{{this._id}}">TCH</a></li>
+					</ul>
+				
+				<div class="tab-content">
+					<div id="1{{this._id}}" class="tab-pane fade in active">
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="placa">Placa</label>
+								  	<input type="text" class="form-control" id="placa" name="placa">
+								</div>
+								<div class="form-group">
+									<label for="padron">Padron</label>
+								  	<input type="number" min="1" class="form-control" id="padron" name="padron">
+								</div>
+								<div class="form-group">
+									<label for="r">Ruta</label>
+									 <select id="listaruta" class="form-control" style="width: 200px">
+			                        	{{#each rutas}}
+											<option value="{{this._id}}">{{this.nombre}}</option>
+										{{else}}
+											<option value="1">Sin Rutas</option>
+			                        	{{/each}}
+		                        	</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="compania">Compañia</label>
+								  	<input type="text" class="form-control" id="compania" name="compania">
+								</div>
+								<div class="form-group">
+									<label for="aseguradora">Aseguradora</label>
+								  	<input type="text"  class="form-control" id="aseguradora" name="aseguradora">
+								</div>
+
+								<div class="form-group">
+									<label for="fechaDePermanenciaEnLaEmpresa">Fecha de Permanencia en la Empresa</label>
+								  	<input type="date"  class="form-control" id="fechaDePermanenciaEnLaEmpresa" name="fechaDePermanenciaEnLaEmpresa">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="p1{{this._id}}" class="tab-pane fade">
+						
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="propietario">Nombre del Propietario</label>
+								  	<input type="text"  class="form-control" id="propietario" name="propietario">
+								</div>
+
+								<div class="form-group">
+									<label for="domicilio">Domicilio del Propietario</label>
+								  	<input type="text"  class="form-control" id="domicilio" name="domicilio">
+								</div>
+
+								<div class="form-group">
+									<label for="domicilio">Distrito</label>
+								  	<input type="text"  class="form-control" id="domicilio" name="distrito">
+								</div>
+							</div>
+							<div class="col-md-6">
+								
+								<div class="form-group">
+									<label for="dni">DNI</label>
+								  	<input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" class="form-control" maxlength = "8" required name="dni" id="dni">
+								</div>
+
+								<div class="form-group">
+									<label for="telefono">Teléfono</label>
+								  	<input class="form-control" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "9" required name="telefono">
+								</div>
+							</div>
+						</div>
+                    	
+					</div>
+					<div id="tec1{{this._id}}" class="tab-pane fade">
+						
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Marca</label>
+								  	<input type="text"  class="form-control" id="domicilio" name="marca">
+								</div>
+								<div class="form-group">
+									<label for="domicilio">Modelo</label>
+								  	<input type="text"  class="form-control" id="domicilio" name="modelo">
+								</div>
+								<div class="form-group">
+									<label for="domicilio">Serie</label>
+								  	<input type="text"  class="form-control" id="domicilio" name="serie" >
+								</div>
+								<div class="form-group">
+									<label for="domicilio">Combustible</label>
+								  	<input type="text"  class="form-control" id="domicilio" name="combustible">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Año de Fabricación</label>
+								  	<input type="number" min="1950" max="2018" class="form-control" id="domicilio" name="anioDeFabricacion">
+								</div>
+								<div class="form-group">
+									<label for="domicilio">Longitud</label>
+								  	<input type="number" min="1" step="0.1" class="form-control" id="domicilio" name="longitud">
+								</div>
+								<div class="form-group">
+									<label for="domicilio">Asientos</label>
+								  	<input type="number" min="1" max="100" class="form-control" id="domicilio" name="asientos">
+								</div>
+							</div>
+						</div>
+	                    
+		                    
+                    	
+                		
+					</div>
+					<div id="s1{{this._id}}" class="tab-pane fade">
+					    
+					    <br>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Número de SOAT</label>
+								  	<input type="text"  class="form-control" id="domicilio" name="soat">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Fecha de Emisión de SOAT</label>
+								  	<input type="date"  class="form-control" id="domicilio" name="emisionsoat">
+								</div>
+								<div class="form-group">
+									<label for="domicilio">Fecha de Caducidad de SOAT</label>
+								  	<input type="date"  class="form-control" id="domicilio" name="caducidadsoat">
+								</div>
+							</div>
+						</div>
+		                    
+					</div>
+					<div id="t1{{this._id}}" class="tab-pane fade">
+						<br>
+						
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Número de Tarjeta de Circulación</label>
+								  	<input type="text"  class="form-control" id="domicilio" name="tc">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Fecha de Emisión</label>
+								  	<input type="date"  class="form-control" id="domicilio" name="emisiontc">
+								</div>
+								<div class="form-group">
+									<label for="domicilio">Fecha de Caducidad</label>
+								  	<input type="date"  class="form-control" id="domicilio" name="caducidadtc">
+								</div>
+							</div>
+						</div>
+
+						
+
+					</div>
+					<div id="r1{{this._id}}" class="tab-pane fade">
+					    
+					    <br>
+
+					    <div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Número de Revisión Tecnica</label>
+								  	<input type="text"  class="form-control" id="domicilio" name="rt">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Fecha de Emisión</label>
+								  	<input type="date"  class="form-control" id="domicilio" name="emisionrt">
+								</div>
+								<div class="form-group">
+									<label for="domicilio">Fecha de Caducidad</label>
+								  	<input type="date"  class="form-control" id="domicilio" name="caducidadrt">
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					<div id="rc1{{this._id}}" class="tab-pane fade">
+						
+						<br>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Número</label>
+								  	<input type="text"  class="form-control" id="domicilio" name="rc">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Fecha de Emisión</label>
+								  	<input type="date"  class="form-control" id="domicilio" name="emisionrc">
+								</div>
+								<div class="form-group">
+									<label for="domicilio">Fecha de Caducidad</label>
+								  	<input type="date"  class="form-control" id="domicilio" name="caducidadrc">
+								</div>
+							</div>
+						</div>
+						
+
+					</div>
+					<div id="tc1{{this._id}}" class="tab-pane fade">
+					    
+					    <br>
+
+					    <div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Número</label>
+								  	<input type="text"  class="form-control" id="domicilio" name="tch">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="domicilio">Fecha de Emisión</label>
+								  	<input type="date"  class="form-control" id="domicilio" name="emisiontch">
+								</div>
+								<div class="form-group">
+									<label for="domicilio">Fecha de Caducidad</label>
+								  	<input type="date"  class="form-control" id="domicilio" name="caducidadtch">
+								</div>
+							</div>
+						</div>
+					
+
+					</div>
+				</div>
+		
+			
+                    
+                    
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success guardar ">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>

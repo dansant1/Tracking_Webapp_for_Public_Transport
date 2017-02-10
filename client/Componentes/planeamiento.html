@@ -1,0 +1,273 @@
+<template name="PlaneamientoInterno">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 40vh;">
+							<div class="row">
+								<div class="col-md-4">
+
+									<select id="ruta" class="form-control">
+										<option value="1">--Seleccione una ruta--</option>
+										{{#each empresas}}
+										<option value="{{this}}">{{ruta this}}</option>	
+										{{/each}}
+									</select>				
+								</div>
+							</div> 
+							<br>
+							<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						<br>
+						<h1 style="margin: 5px; padding: 0px; font-size: 1.5em">Planeamiento actual de la empresa {{empresa}}</h1>
+						<br>
+						<table class="table-responsive">
+							<thead style="border-bottom: 2px solid #ddd;">
+						    	<tr>
+							        <th style="text-align: center;">Lunes</th>
+							        <th style="text-align: center;">Martes</th>
+							        <th style="text-align: center;">Miercoles</th>
+							        <th style="text-align: center;">Jueves</th>
+							        <th style="text-align: center;">Viernes</th>
+							        <th style="text-align: center;">Sabado</th>
+							        <th style="text-align: center;">Domingo</th>						        
+						    	</tr>
+    						</thead>
+    						{{#with planeamiento}}
+						    <tbody id="horarios">
+								
+						    	<tr id="h">
+									
+							        <td>
+							        {{#each plan.horas.lunes}}	
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control l" value="{{this.lunes}}" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							        {{/each}}
+							        </td>
+							       	
+
+							       	
+							        <td>
+							        {{#each plan.horas.martes}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control m" value="{{this.martes}}"  />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							       	{{/each}}
+							        </td>
+							       
+
+							       
+							        <td>
+							        	{{#each plan.horas.miercoles}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control mi" value="{{this.miercoles}}"  />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							        	{{/each}}
+							        </td>
+							        
+
+							        
+							        <td>
+							        {{#each plan.horas.jueves}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control j" value="{{this.jueves}}" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							        {{/each}}
+							        </td>
+							        
+
+
+							        <td>
+							        	{{#each plan.horas.viernes}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control v" value="{{this.viernes}}" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							       		{{/each}}
+							        </td>
+							       
+
+							        <td>
+							       		{{#each plan.horas.sabado}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control s" value="{{this.sabado}}" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+                						<br>
+							        	{{/each}}
+							        </td>
+							        
+
+							        
+							        <td>
+							        	{{#each plan.horas.domingo}}
+							        	<div class='input-group date' id='hora'>
+						                    <input disabled type='text' class="form-control d" value="{{this.domingo}}" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span> 
+                						</div>
+										<br>
+							        	{{/each}}
+							        </td>
+									
+						    	</tr>
+						      	
+						    </tbody>
+						    {{/with}}
+						</table>
+						
+					</div>
+				</div>
+			</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="AgregarPlaneamiento">
+	<div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+						
+						<br>
+						<div class="row">
+							<div class="col-md-3">
+								
+								<select id="ruta" class="form-control">
+									<option value="1">--Seleccione una ruta--</option>
+									{{#each empresas}}
+									<option value="{{this}}">{{ruta this}}</option>	
+									{{/each}}
+								</select>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-3">
+								<label class="btn btn-success btn-file">
+						    			<i style="display: inline-block; margin-right: 6px;" class="fa fa-file-excel-o" aria-hidden="true"></i> Subir Excel  <input type="file" id="excelplan" style="display: none;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+								</label> 
+							</div>
+						</div>
+						<br>
+						<table class="table">
+							<thead>
+						    	<tr>
+							        <th style="text-align: center;">Lunes</th>
+							        <th style="text-align: center;">Martes</th>
+							        <th style="text-align: center;">Miercoles</th>
+							        <th style="text-align: center;">Jueves</th>
+							        <th style="text-align: center;">Viernes</th>
+							        <th style="text-align: center;">Sabado</th>
+							        <th style="text-align: center;">Domingo</th>
+							        <th style="text-align: center;">Agregar</th>
+						    	</tr>
+    						</thead>
+						    <tbody id="horarios">
+						    	<tr id="h">
+
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control l" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control m" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control mi" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control j" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control v" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control s" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span>
+                						</div>
+							        </td>
+							        <td>
+							        	<div class='input-group date' id='hora'>
+						                    <input type='text' class="form-control d" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-time"></span>
+						                    </span> 
+                						</div>
+							        </td>
+
+							        <td style="text-align: center;">
+							        	<button class="btn btn-primary plus"><i class="fa fa-plus" aria-hidden="true"></i></button>
+							        </td>
+						    	</tr>
+						      
+						    </tbody>
+						</table>
+						<div class="row">
+							<div class="col-md-2">
+								<button class="btn btn-success guardar">Guardar</button>
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>

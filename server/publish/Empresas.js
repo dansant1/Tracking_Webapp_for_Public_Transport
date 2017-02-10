@@ -54,9 +54,9 @@ Meteor.publish('DetalleDeEmpresa', function (empresaId) {
 
 
 
-Meteor.publish('RutasPorEmpresa', function (empresaId) {
+Meteor.publish('RutasPorEmpresa', function () {
   if (this.userId) {
-    return Rutas.find({empresaId: empresaId});
+    return Rutas.find({});
   } else {
     this.stop();
     return

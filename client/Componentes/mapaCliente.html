@@ -1,11 +1,25 @@
 <template name="mapaCliente">
 	<div class="content-wrapper" style="padding: 0px; padding-top: 57px;">
-		<div class="map-container">
-	   	{{#if carga}}
-	    	{{> googleMap name="map" options=mapOptions}}
-	   	{{else}}
-	   		{{>Loader}}
-	   	{{/if}}
-	  </div>
+		
+			<div class="col-md-3">
+				<select id="ruta" class="form-control" style="position: absolute; top: 7px; z-index: 1001; left: 45%;">
+						<option value="1">--Seleccione una ruta--</option>
+						{{#each empresas}}
+												
+						<option value="{{this}}">{{ruta this}}</option>
+												
+						{{/each}}
+				</select>
+			</div>
+		
+		<div class="map-container" style="height: 91.2vh">
+				   	{{#if carga}}
+				    	{{> googleMap name="map" options=mapOptions}}
+				   	{{else}}
+				   		{{>Loader}}
+				   	{{/if}}
+		</div>
 	</div>
+	
+
 </template>

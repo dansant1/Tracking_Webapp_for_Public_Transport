@@ -11,17 +11,15 @@
 				{{else}}
 					{{>Loader}}
 				{{/if}}
-			{{else}}
+		{{else}}
 				
-				{{#if isInRole 'director' 'Empresa'}}
+			{{#if Template.subscriptionsReady}}
 
-					{{#if Template.subscriptionsReady}}
-
-						{{>Cliente}}
-					{{else}}
-						{{>Loader}}
-					{{/if}}
-				{{/if}}
+				{{>Cliente}}
+			{{else}}
+				{{>Loader}}
+			{{/if}}
+				
 		
 		{{/if}}
 
