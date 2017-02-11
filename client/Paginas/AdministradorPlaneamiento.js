@@ -360,19 +360,34 @@ Template.AdministradorPlaneamientoPorEmpresa.onCreated( () => {
 
     template.autorun( () => {
         let empresaId = FlowRouter.getParam('empresaId');
-        console.log(empresaId);
+        
         template.subscribe( 'DetalleDeEmpresaPlaneamiento', empresaId);
         template.subscribe( 'DetalleDeEmpresa', empresaId);
+        template.subscribe( 'Rutas');
     });
 });
 
+Template.AdministradorPlaneamientoPorEmpresa.onRendered( () => {
+    $('select#ruta').on('change', function () {
+        
+        Session.set('r1', this.value);
+    });
+});
+
+
 Template.AdministradorPlaneamientoPorEmpresa.helpers({
     planeamiento() {
-        console.log('hola');
-        return Planeamiento.findOne();
+        return Planeamiento.findOne({rutaId: Session.get('r1')});
+        //return Planeamiento.findOne();
+    },
+    ruta(id) {
+        return Rutas.findOne({_id: id}).nombre;
     },
     empresa() {
         return Empresas.findOne().nombre;
+    },
+    empresas() {
+        return Empresas.find({_id: FlowRouter.getParam('empresaId') }).fetch()[0].rutas;
     }
 });
 

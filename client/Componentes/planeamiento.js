@@ -11,14 +11,14 @@ Template.PlaneamientoInterno.onCreated( () => {
 
 Template.PlaneamientoInterno.onRendered( () => {
 	$('select#ruta').on('change', function () {
-		console.log(this.value)
+		
 		Session.set('r', this.value);
 	});
 });
 
 Template.PlaneamientoInterno.helpers({
     empresas() {
-        console.log(Empresas.find({_id: Meteor.user().profile.empresaId }).fetch()[0].rutas);
+      
         
         return Empresas.find({_id: Meteor.user().profile.empresaId }).fetch()[0].rutas;
     },

@@ -415,6 +415,19 @@
 						<br>
 						<h1 style="margin: 5px; padding: 0px; font-size: 1.5em">Planeamiento actual de la empresa {{empresa}}</h1>
 						<br>
+						<div class="row">
+								<div class="col-md-4">
+
+									<select id="ruta" class="form-control">
+										<option value="1">--Seleccione una ruta--</option>
+										{{#each empresas}}
+										<option value="{{this}}">{{ruta this}}</option>	
+										{{/each}}
+									</select>				
+								</div>
+						</div> 
+						<br>
+						<br>
 						<table class="table-responsive">
 							<thead style="border-bottom: 2px solid #ddd;">
 						    	<tr>

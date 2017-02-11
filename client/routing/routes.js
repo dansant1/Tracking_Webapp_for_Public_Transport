@@ -114,7 +114,7 @@ FlowRouter.route('/admin/rutas', {
 FlowRouter.route('/admin/rastreo', {
 	name: 'AdministradorRastreo',
 	action() {
-		BlazeLayout.render('LayoutCliente', { administrador: 'AdministradorRastreo'});	
+		BlazeLayout.render('LayoutCliente', { administrador: 'mapaCliente'});	
 	}
 });
 
