@@ -701,9 +701,18 @@ Template.agregarEmpresa.onRendered( function () {
 
 });
 
+Template.agregarEmpresa.helpers({
+    validateEmail(email) {
+        let re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+        return re.test(email);
+    }
+});
+
 Template.agregarEmpresa.events({
 	'submit form'(e, t) {
 		e.preventDefault();
+		let re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+
 		let datos =  {
 			nombre: t.find("[name='nombre']").value,
 			ruc: t.find("[name='ruc']").value,
@@ -711,9 +720,9 @@ Template.agregarEmpresa.events({
 			representante: t.find("[name='representante']").value,
 			telefono: t.find("[name='telefono']").value,
 			email: t.find("[name='email']").value
-		}
+		};
 
-		if (datos.nombre !== "" && datos.ruc !== "" && datos.domicilio !== "" && datos.representante !== "" && datos.telefono !== "") {
+		if (datos.nombre !== "" && datos.ruc !== "" && datos.domicilio !== "" && datos.representante !== "" && datos.telefono !== "" && re.test(t.find("[name='email']").value)) {
 
 			if (datos.ruc.length === 11 ) {
 				Meteor.call('agregarEmpresa', datos, (err) => {
