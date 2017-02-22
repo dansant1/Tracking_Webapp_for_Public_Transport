@@ -16,11 +16,14 @@ Meteor.methods({
 		});
 
 	},
+	eliminarEmpresa(id) {
+		Empresas.remove({_id: id});
+	},
 	agregarUsuario(datos, rol) {
 		id = Accounts.createUser(datos);
 
 		if (id) {
-			
+
 			if (rol === 1) {
 				Directores.insert({
 					nombre: datos.profile.nombre,
@@ -38,7 +41,7 @@ Meteor.methods({
 					tipo: 'Operador de Despacho'
 				});
 				Roles.addUsersToRoles(id, [ ROLES.empresa.operador ], ROLES.grupos.empresa);
-			} else {
+			} else if (rol === 3) {
 				Operadores.insert({
 					nombre: datos.profile.nombre,
 					empresaId: datos.profile.empresaId,
@@ -47,11 +50,37 @@ Meteor.methods({
 					tipo: 'Operador de Monitoreo'
 				});
 				Roles.addUsersToRoles(id, [ ROLES.empresa.monitoreo ], ROLES.grupos.empresa);
+			} else {
+				Operadores.insert({
+					nombre: datos.profile.nombre,
+					empresaId: datos.profile.empresaId,
+					email: datos.email,
+					userId: id,
+					tipo: 'Operador Asistente'
+				});
+
+				Roles.addUsersToRoles(id, [ 'Operador Asistente' ], ROLES.grupos.empresa);
 			}
 
 		} else {
 			return;
 		}
+	},
+	AgregarAdministrador(datos) {
+		id = Accounts.createUser({
+			email: datos.email,
+			password: datos.password,
+		});
+
+		if (id) {
+			datos.createdAt = new Date()
+			Roles.addUsersToRoles(id, [ ROLES.administracion.gerente ], ROLES.grupos.administracion);
+			Administradores.insert(datos);
+		}
+
+	},
+	eliminarUsuario(id) {
+		Administradores.remove({_id: id})
 	},
 	generarReporte1() {
 		var wopts = { bookType:'xlsx', bookSST:false, type:'binary' };
@@ -63,9 +92,9 @@ Meteor.methods({
 		  var view = new Uint8Array(buf);
 		  for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
 		  return buf;
-		}	
+		}
 
-		
+
 		saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), "test.xlsx");
 	},
 	leerExcel(data, id, rutaId) {
@@ -80,9 +109,9 @@ Meteor.methods({
 		let sheet = workbook.Sheets[sheet_name_list[0]];
 		let hojaDeConductores = workbook.Sheets[sheet_name_list[1]];
 		let hojaDeCobradores = workbook.Sheets[sheet_name_list[2]];
-	
+
 		let datos = excel.utils.sheet_to_json( sheet, { header: 1 } );
-		datos.shift(); 
+		datos.shift();
 
 		let conductores = excel.utils.sheet_to_json( hojaDeConductores, { header: 1 } );
 		conductores.shift();
@@ -93,19 +122,20 @@ Meteor.methods({
 		if (Rutas.findOne({_id: rutaId}).nombre !== undefined) {
 			// Parsear los Vehiculos e insertar en la BD
 		datos.forEach( d => {
-			
+
 			let obj = d.reduce( (acc, cur, i) => {
 		    	acc[i] = cur;
 		    	return acc;
 			}, {});
 
 			console.log(rutaId);
-			
+
 			if (obj['1'] !== undefined) {
 				Vehiculos.insert({
 					empresaId: id,
 					activo: true,
 					rutaId: rutaId,
+					borrador: false,
 					padron: obj['0'],
 					placa: obj['1'],
 					propietario: {
@@ -115,7 +145,6 @@ Meteor.methods({
 						distrito: obj['5'],
 						telefono: obj['6'],
 					},
-					compania: obj['24'],
 					tecnico: {
 						marca: obj['7'],
 						modelo: obj['8'],
@@ -129,39 +158,43 @@ Meteor.methods({
 					fechaDePermanenciaEnLaEmpresa: obj['15'],
 					TC: {
 						numero: obj['16'],
-						emision: obj['17'],
-						caducidad: obj['18']
+						entidad: obj['17'],
+						emision: obj['18'],
+						caducidad: obj['19']
 					},
 					SOAT: {
-						numero: obj['19'],
-						inicio: obj['21'],
-						fin: obj['22']
+						numero: obj['20'],
+						compnia: obj['21'],
+						inicio: obj['22'],
+						fin: obj['23']
 					},
 					CITV: {
-						numero: obj['23'],
-						inicio: obj['25'],
-						fin: obj['26']
+						numero: obj['24'],
+						compania: obj['25'],
+						inicio: obj['26'],
+						fin: obj['27']
 					},
-					aseguradora: obj['28'],
 					RC: {
-						numero: obj['27'],
-						inicio: obj['29'],
-						fin: obj['30']
+						numero: obj['28'],
+						compania: obj['29'],
+						inicio: obj['30'],
+						fin: obj['31']
 					},
 					TCH: {
-						numero: obj['31'],
-						emision: obj['32'],
-						caducidad: obj['33']
+						numero: obj['32'],
+						entidad: obj['33'],
+						emision: obj['34'],
+						caducidad: obj['35']
 					}
 				});
 			}
-		
+
 		});
 		}
-		
-		
 
-		
+
+
+
 		let vehiculoId;
 		let placa;
 
@@ -182,13 +215,14 @@ Meteor.methods({
 				} else {
 					vehiculoId = Vehiculos.find({placa: placa}).fetch()[0]._id;
 				}
-				
+
 			}
-			
+
 			if (conductor['2'] !== undefined) {
 				Conductores.insert({
 					empresaId: id,
 					vehiculoId: vehiculoId,
+					borrador: false,
 					datos: {
 						nombre: conductor['3'],
 						apellido: conductor['2'],
@@ -206,47 +240,49 @@ Meteor.methods({
 					},
 					CEV: {
 						codigo: conductor['13'],
-						emision: conductor['14'],
-						caducidad: conductor['15']
+						entidad: conductor['14'],
+						emision: conductor['15'],
+						caducidad: conductor['16']
 					},
 					credencial: {
-						numero: conductor['16'],
-						emision: conductor['17'],
-						caducidad: conductor['18']
+						numero: conductor['17'],
+						emision: conductor['18'],
+						caducidad: conductor['19']
 					},
-					chc: conductor['19'],
-					fotocheck: conductor['20']
+					chc: conductor['20'],
+					fotocheck: conductor['21']
 				});
 			}
 
-					
-		
+
+
 		});
 
-		
+
 
 		// Parsear los cobradores e insertar en la BD
 		cobradores.forEach( co => {
-			
+
 			let cobrador = co.reduce( (acc, cur, i) => {
 		    	acc[i] = cur;
 		    	return acc;
 			}, {});
 
-		
+
 
 			placa = cobrador['1'];
 
 			if (placa !== undefined) {
-				
+
 				vehiculoId = Vehiculos.find({placa: placa}).fetch()[0]._id;
 			}
-			
+
 
 			if (cobrador['2'] !== undefined) {
 				Cobradores.insert({
 					empresaId: id,
 					vehiculoId: vehiculoId,
+					borrador: false,
 					datos: {
 						nombre: cobrador['3'],
 						apellido: cobrador['2'],
@@ -267,17 +303,17 @@ Meteor.methods({
 					},
 					chc: cobrador['14'],
 					fotocheck: cobrador['15']
-				});			
+				});
 			}
 
-			
-		
+
+
 		});
-	
+
 	} else {
 		return;
 	}
-	
+
 	},
 	leerPlaneamientoExcel(empresa, ruta, data) {
 		let excel = new Excel('xlsx');
@@ -286,9 +322,9 @@ Meteor.methods({
 
 		let sheet_name_list = workbook.SheetNames;
 		let sheet = workbook.Sheets[sheet_name_list[0]];
-		
+
 		let datos = excel.utils.sheet_to_json( sheet, { header: 1 } );
-		
+
 		datos.shift();
 		let plan = {
 			horas: {
@@ -301,7 +337,7 @@ Meteor.methods({
                 domingo: []
         	}
 		}
-		
+
 
 		// Parsear los conductores e insertar en la BD
 		datos.forEach( c => {
@@ -337,8 +373,8 @@ Meteor.methods({
 
             plan.horas.domingo.push({
                 domingo: hora['2']
-            });		
-		
+            });
+
 		});
 
 		if (Planeamiento.find({empresaId: empresa, rutaId: ruta}).fetch().length === 0 ) {
@@ -352,20 +388,41 @@ Meteor.methods({
 			return 'Ya existe un plan de rodamiento para esta empresa y ruta';
 		}
 
-		
-	
+
+
 	},
 	agregarVehiculo(datos) {
 		if (this.userId) {
 			datos.activo = true;
+			datos.borrador = false;
 			Vehiculos.insert(datos);
+		} else {
+			return;
+		}
+	},
+	agregarVehiculoBorrador(datos) {
+		if (this.userId) {
+			datos.activo = true;
+			datos.borrador = true;
+			Vehiculos.insert(datos);
+		} else {
+			return;
+		}
+	},
+	aprobarVehiculo(vehiculoId) {
+		if (this.userId) {
+			Vehiculos.update({_id: vehiculoId}, {
+				$set: {
+					borrador: false
+				}
+			})
 		} else {
 			return;
 		}
 	},
 	estadoVehiculo(id, estado) {
 		if ( this.userId ) {
-			
+
 			Vehiculos.update({_id: id}, {
 				$set: {
 					activo: estado
@@ -378,6 +435,26 @@ Meteor.methods({
 	},
 	agregarConductor(datos) {
 		if (this.userId) {
+			datos.borrador = false;
+			Conductores.insert(datos);
+		} else {
+			return;
+		}
+	},
+	aprobarConductor(vehiculoId) {
+		if (this.userId) {
+			Conductores.update({_id: vehiculoId}, {
+				$set: {
+					borrador: false
+				}
+			})
+		} else {
+			return;
+		}
+	},
+	agregarConductorBorrador(datos) {
+		if (this.userId) {
+			datos.borrador = true;
 			Conductores.insert(datos);
 		} else {
 			return;
@@ -385,10 +462,30 @@ Meteor.methods({
 	},
 	agregarCobrador(datos) {
 		if (this.userId) {
+			datos.borrador = false;
 			Cobradores.insert(datos);
 		} else {
 			return;
-		}	
+		}
+	},
+	aprobarCobrador(vehiculoId) {
+		if (this.userId) {
+			Cobradores.update({_id: vehiculoId}, {
+				$set: {
+					borrador: false
+				}
+			})
+		} else {
+			return;
+		}
+	},
+	agregarCobradorBorrador(datos) {
+		if (this.userId) {
+			datos.borrador = true;
+			Cobradores.insert(datos);
+		} else {
+			return;
+		}
 	},
 	editarVehiculo(vehiculoId, datos) {
 
@@ -444,22 +541,22 @@ Meteor.methods({
 		if (this.userId) {
 			let userId = Directores.findOne({_id: directorId}).userId;
 			Directores.remove({_id: directorId});
-			Meteor.users.remove({_id: userId});	
+			Meteor.users.remove({_id: userId});
 		} else {
 			return;
 		}
-		
+
 	},
 	eliminarOperador(operadorId) {
-		
+
 		if (this.userId) {
 			let userId = Operadores.findOne({_id: directorId}).userId;
 			Operadores.remove({_id: directorId});
-			Meteor.users.remove({_id: userId});	
+			Meteor.users.remove({_id: userId});
 		} else {
 			return;
 		}
-		
+
 	},
 	editarEmpresa(datos, empresaId) {
 		if (this.userId) {
@@ -473,7 +570,7 @@ Meteor.methods({
 	agregarPlaneamientoEmpresa(datos, empresaId) {
 
 		if (this.userId) {
-		
+
 			let planeamiento = Planeamiento.find({empresaId: empresaId}).fetch().length
 			console.log(planeamiento);
 			if (planeamiento > 0) {
@@ -515,7 +612,7 @@ Meteor.methods({
 				});
 			}
 
-			
+
 
 		} else {
 			return

@@ -11,7 +11,7 @@ FotosDeVehiculos = new FS.Collection("fvehiculos", {
     maxSize: 1048576, //in bytes
     allow: {
       contentTypes: ['image/*'],
-      extensions: ['png']
+      extensions: ['png', 'jpg', 'jpeg']
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {
@@ -52,7 +52,7 @@ FotosDeConductores = new FS.Collection("fconductores", {
     maxSize: 1048576, //in bytes
     allow: {
       contentTypes: ['image/*'],
-      extensions: ['png']
+      extensions: ['png', 'jpg', 'jpeg']
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {
@@ -93,7 +93,7 @@ FotosDeCobradores = new FS.Collection("fcobradores", {
     maxSize: 1048576, //in bytes
     allow: {
       contentTypes: ['image/*'],
-      extensions: ['png']
+      extensions: ['png', 'jpg', 'jpeg']
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {

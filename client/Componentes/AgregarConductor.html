@@ -9,20 +9,20 @@
 
                 <div class="modal-body">
                 	<br>
-					
-                	
+
+
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#1{{this._id}}">Detalles</a></li>
 						<li><a data-toggle="tab" href="#p1{{this._id}}">Licencia</a></li>
 						<li><a data-toggle="tab" href="#tec1{{this._id}}">CEV</a></li>
 						<li><a data-toggle="tab" href="#s1{{this._id}}">Credencial</a></li>
-						
+
 					</ul>
-				
+
 				<div class="tab-content">
 					<div id="1{{this._id}}" class="tab-pane fade in active">
 						<br>
-						
+
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
@@ -58,11 +58,11 @@
 							</div>
 						</div>
 
-						
-					    
+
+
 					</div>
 					<div id="p1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<div class="row">
 							<div class="col-md-6">
@@ -86,10 +86,10 @@
 								</div>
 							</div>
 						</div>
-						
+
 					</div>
 					<div id="tec1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<div class="row">
 							<div class="col-md-6">
@@ -97,7 +97,7 @@
 									<label for="placa">Código</label>
 								  	<input type="text" class="form-control" id="placa" name="codigocev">
 								</div>
-								
+
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
@@ -110,10 +110,10 @@
 								</div>
 							</div>
 						</div>
-						
+
 					</div>
 					<div id="s1{{this._id}}" class="tab-pane fade">
-					    
+
 					    <br>
 
 					    <div class="row">
@@ -122,7 +122,7 @@
 									<label for="placa">Número de Credencial</label>
 								  	<input type="text" class="form-control" id="placa" name="codigocredencial">
 								</div>
-								
+
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
@@ -136,12 +136,12 @@
 							</div>
 						</div>
 
-						
+
 
 					</div>
-					
+
 				</div>
-		
+
                 </div>
 
                 <div class="modal-footer">
@@ -165,20 +165,20 @@
 
                 <div class="modal-body">
                 	<br>
-					
-                	
+
+
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#1{{this._id}}">Detalles</a></li>
 						<li><a data-toggle="tab" href="#p1{{this._id}}">Licencia</a></li>
 						<li><a data-toggle="tab" href="#tec1{{this._id}}">CEV</a></li>
 						<li><a data-toggle="tab" href="#s1{{this._id}}">Credencial</a></li>
-						
+
 					</ul>
-				
+
 				<div class="tab-content">
 					<div id="1{{this._id}}" class="tab-pane fade in active">
 						<br>
-						
+
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
@@ -214,11 +214,11 @@
 							</div>
 						</div>
 
-						
-					    
+
+
 					</div>
 					<div id="p1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<div class="row">
 							<div class="col-md-6">
@@ -242,10 +242,10 @@
 								</div>
 							</div>
 						</div>
-						
+
 					</div>
 					<div id="tec1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<div class="row">
 							<div class="col-md-6">
@@ -253,7 +253,7 @@
 									<label for="placa">Código</label>
 								  	<input type="text" class="form-control" id="placa" name="codigocev">
 								</div>
-								
+
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
@@ -266,10 +266,10 @@
 								</div>
 							</div>
 						</div>
-						
+
 					</div>
 					<div id="s1{{this._id}}" class="tab-pane fade">
-					    
+
 					    <br>
 
 					    <div class="row">
@@ -278,7 +278,7 @@
 									<label for="placa">Número de Credencial</label>
 								  	<input type="text" class="form-control" id="placa" name="codigocredencial">
 								</div>
-								
+
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
@@ -292,12 +292,168 @@
 							</div>
 						</div>
 
-						
+
 
 					</div>
-					
+
 				</div>
-		
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success guardar ">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="AgregarConductorBorrador">
+	<div class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Agregar Conductor</h4>
+                </div>
+
+                <div class="modal-body">
+                	<br>
+
+
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#1{{this._id}}">Detalles</a></li>
+						<li><a data-toggle="tab" href="#p1{{this._id}}">Licencia</a></li>
+						<li><a data-toggle="tab" href="#tec1{{this._id}}">CEV</a></li>
+						<li><a data-toggle="tab" href="#s1{{this._id}}">Credencial</a></li>
+
+					</ul>
+
+				<div class="tab-content">
+					<div id="1{{this._id}}" class="tab-pane fade in active">
+						<br>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="placa">Nombres</label>
+								  	<input type="text" class="form-control" id="placa" name="nombre">
+								</div>
+								<div class="form-group">
+									<label for="placa">Apellidos</label>
+								  	<input type="text" class="form-control" id="placa" name="apellido">
+								</div>
+								<div class="form-group">
+									<label for="placa">DNI</label>
+								  	<input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" class="form-control" maxlength = "8"  name="dni">
+								</div>
+								<div class="form-group">
+									<label for="placa">Caducidad</label>
+								  	<input type="date" class="form-control" id="placa" name="caducidaddni">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="placa">Domicilio</label>
+								  	<input type="text" class="form-control" id="placa" name="domicilio">
+								</div>
+								<div class="form-group">
+									<label for="placa">Distrito</label>
+								  	<input type="text" class="form-control" id="placa" name="distrito">
+								</div>
+								<div class="form-group">
+									<label for="placa">Teléfono</label>
+								  	<input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" class="form-control" maxlength = "9" name="telefono">
+								</div>
+							</div>
+						</div>
+
+
+
+					</div>
+					<div id="p1{{this._id}}" class="tab-pane fade">
+
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="placa">Código</label>
+								  	<input type="text" class="form-control" id="placa" name="codigolicencia">
+								</div>
+								<div class="form-group">
+									<label for="placa">Categoría</label>
+								  	<input type="text" class="form-control" id="placa" name="categoria">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="placa">Fecha Expedición</label>
+								  	<input type="date" class="form-control" id="placa" name="expedicion">
+								</div>
+								<div class="form-group">
+									<label for="placa">Fecha de Revalidación</label>
+								  	<input type="date" class="form-control" id="placa" name="revalidacion">
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div id="tec1{{this._id}}" class="tab-pane fade">
+
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="placa">Código</label>
+								  	<input type="text" class="form-control" id="placa" name="codigocev">
+								</div>
+
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="placa">Fecha de Emisión</label>
+								  	<input type="date" class="form-control" id="placa" name="emision">
+								</div>
+								<div class="form-group">
+									<label for="placa">Fecha de Caducidad</label>
+								  	<input type="date" class="form-control" id="placa" name="caducidad">
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div id="s1{{this._id}}" class="tab-pane fade">
+
+					    <br>
+
+					    <div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="placa">Número de Credencial</label>
+								  	<input type="text" class="form-control" id="placa" name="codigocredencial">
+								</div>
+
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="placa">Fecha de Emisión de Credencial</label>
+								  	<input type="date" class="form-control" id="placa" name="emisionsoat">
+								</div>
+								<div class="form-group">
+									<label for="placa">Fecha de Caducidad de Credencial</label>
+								  	<input type="date" class="form-control" id="placa" name="caducidadsoat">
+								</div>
+							</div>
+						</div>
+
+
+
+					</div>
+
+				</div>
+
                 </div>
 
                 <div class="modal-footer">

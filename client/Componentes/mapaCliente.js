@@ -22,7 +22,7 @@ Template.mapaCliente.onRendered( () => {
 
     let mapa = Template.instance();
 
-    
+
 
     GoogleMaps.ready('map', function(map) {
 
@@ -35,12 +35,12 @@ Template.mapaCliente.onRendered( () => {
             let empresaId = Meteor.user().profile.empresaId;
 
 
-               
-                   
+
+
                         mapa.subscribe('RutasPorEmpresa', () => {
 
-                    
-                        
+
+
                         let numero = 0;
 
                         mapa.defaultRuta = new ReactiveVar(Rutas.findOne()._id)
@@ -63,13 +63,13 @@ Template.mapaCliente.onRendered( () => {
                         }
 
                         function setMapOnAll(map, p, feature) {
-                            
+
 
                             marker = new google.maps.Marker({
                                         animation: google.maps.Animation.DROP,
                                         position: new google.maps.LatLng(p.lat, p.lng),
                                         icon: '/paradero.png', //*'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
-                                        map: map,                                 
+                                        map: map,
                                         id: ruta._id
                             });
                         }
@@ -91,35 +91,35 @@ Template.mapaCliente.onRendered( () => {
                         }
 
 
-                        
+
 
                         $('select#ruta').on('change', function () {
-                            
-                            Rutas.find({_id: this.value }).forEach( function (ruta) {    
-                                ida = ruta.ida;
-                                vuelta = ruta.vuelta;    
 
-                                
+                            Rutas.find({_id: this.value }).forEach( function (ruta) {
+                                ida = ruta.ida;
+                                vuelta = ruta.vuelta;
+
+
 
                                 ruta.paraderos.forEach( function (p) {
-                                    
+
                                     setMapOnAll(map.instance, p, 'parking')
-                                       
-                                }); 
+
+                                });
                             });
 
                             if (mapa.idaPath) {
-                                
+
                                removeLine();
                                //clearMarkers()
-                            } 
+                            }
                                 mapa.idaPath = new google.maps.Polyline({
                                     path: ida,
                                     geodesic: true,
                                     strokeColor: '#3498db',
                                     strokeOpacity: 1.0,
                                     strokeWeight: 2
-                                });    
+                                });
 
                                 mapa.vueltaPath = new google.maps.Polyline({
                                         path: vuelta,
@@ -130,24 +130,24 @@ Template.mapaCliente.onRendered( () => {
                                 })
 
 
-                                    
+
                                 addLine();
-                             
+
                         });
-       
-                
+
+
                 });
-               
-                
-                  
-                    
-           
-             
+
+
+
+
+
+
         });
 
         //
 
-        map.instance.setZoom(13);    
+        map.instance.setZoom(13);
 
 
     });
@@ -160,7 +160,7 @@ Template.mapaCliente.helpers({
     mapOptions: function() {
         var latLng = {lat: -12.0917633 , lng: -77.0279025}
 
-        
+
         var styles = [
             {
                 stylers: [
@@ -189,7 +189,8 @@ Template.mapaCliente.helpers({
             return {
                 center: new google.maps.LatLng(latLng.lat, latLng.lng),
                 zoom: 13,
-                styles: styles
+                styles: styles,
+                mapTypeId: google.maps.MapTypeId.SATELLITE
             };
         }
     },

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import ROLES from '../Both/Roles'
 
 Meteor.startup(() => {
-  	
+
   	/*let users = [
     	{nombre: "Usuario 1", email: "superadministrador@tpi.com.pe", roles: [ ROLES.administracion.gerente ]},
     	{nombre: "Usuario 4", email: "soporte@tpi.com.pe", roles: [ ROLES.administracion.soporte ]},
@@ -21,11 +21,11 @@ Meteor.startup(() => {
 	  	})
 
 	  	switch (user.email) {
-	  		case 'superadministrador@tpi.com.pe': 
+	  		case 'superadministrador@tpi.com.pe':
 	  			Roles.addUsersToRoles(id, user.roles, ROLES.grupos.administracion);
 	  		break;
 
-	  		case 'soporte@tpi.com.pe': 
+	  		case 'soporte@tpi.com.pe':
 	  			Roles.addUsersToRoles(id, user.roles, ROLES.grupos.administracion);
 	  		break;
 
@@ -33,12 +33,12 @@ Meteor.startup(() => {
 	  			Roles.addUsersToRoles(id, user.roles, ROLES.grupos.empresa);
 	  		break;
 
-	  		case 'operador@tpi.com.pe': 
+	  		case 'operador@tpi.com.pe':
 	  			Roles.addUsersToRoles(id, user.roles, ROLES.grupos.empresa);
 	  		break;
 	  	}
 
-  		
+
 
 	});*/
 

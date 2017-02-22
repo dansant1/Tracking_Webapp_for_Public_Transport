@@ -1,8 +1,8 @@
 <template name="Empresas">
 	<div class="content-wrapper">
 		<div class="container-fluid">
-			
-					
+
+
 			<div class="row">
 				<div class="col-md-12 col-sm-18 col-xs-18">
 					<div class="box">
@@ -11,7 +11,7 @@
 						<div class="page-header clearfix" style="margin-top: 0px;">
 						    <h4 class="pull-left">
 						    	<input type="text" style="position: relative; top: 5px; width: 275px" name="search" class="form-control" width="250px" placeholder="Buscar por Nombre o RUC">
-						    	
+
 						    </h4>
 
 						    <h4 class="pull-right">
@@ -19,7 +19,7 @@
 									<a style="width: 220px; margin-left: 0px; font-weight: 300; background-color: #3498db;" class="top-nav-btn blue">Agregar Empresa</a>
 								</span>
 						    </h4>
-    
+
   						</div>
 
 					  	<ul class="list-group">
@@ -31,30 +31,32 @@
 					          	<span class="pull-left">{{nombre}}</span>
 					          	<span class="pull-right" style="width: 255px">
 					          		<select id="listarutas" style="width: 88px; display: inline-block; position: relative; top: 1px; margin-right: 5px;" class="form-control">
-					          			{{#each rutas}}
-											<option value="{{this._id}}">{{this.nombre}}</option>
+														<option value="1">RUTA</option>
+													{{#each rutas}}
+														<option value="{{this._id}}">{{this.nombre}}</option>
 					          			{{/each}}
 					          		</select>
 						          	<label class="btn btn-success btn-file">
 						    			<i class="fa fa-upload" aria-hidden="true"></i> <input type="file" id="subirFlota" style="display: none;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-									</label> 
+									</label>
 									<a href="/empresas/{{this._id}}" class="btn btn-primary">
 										<i class="fa fa-eye" aria-hidden="true"></i>
 									</a>
+									<button type="button" class="btn btn-danger eliminar-empresa">x</button>
 					          	</span>
 					        </li>
-					     	
+
 					     	{{else}}
 								<h3>Lo sentimos no tenemos resultados para {{query}}</h3>
 					     	{{/each}}
 
 					    {{/if}}
-					    
+
 					  	</ul>
 
 					</div>
 				</div>
-			</div>	
+			</div>
 		</div>
 	</div>
 </template>
@@ -98,8 +100,8 @@
 								</button>
 							</div>
 					  	</div>
-					  	
-					  	
+
+
 						<table class="table">
 							<tbody>
     							<tr>
@@ -128,16 +130,16 @@
       							</tr>
     						</tbody>
 						</table>
-						
+
 						<hr style="margin-top: -18px;">
 						{{>Opciones}}
-							
-						
+
+
 					</div>
 				</div>
-			</div>	
+			</div>
 
-			
+
 		</div>
 	</div>
 </template>
@@ -152,7 +154,7 @@
 
 	<div class="tab-content">
 		<div id="home" class="tab-pane fade in active">
-			<button class="btn btn-success agregar-vehiculo"><i class="fa fa-bus" aria-hidden="true" style="display: inline-block; margin-right: 5px;"></i> Agregar Vehículo</button>
+			<button class="btn btn-success agregar-vehiculo">Agregar Vehículo</button>
 			<br>
 		    {{>ListaDeVehiculosPorEmpresas}}
 		</div>
@@ -179,23 +181,23 @@
 		</ul>
 
 		<div class="tab-content">
-			
+
 			<div id="directores" class="tab-pane fade in active">
-			  
+
 			  {{>ListaDeDirectoresPorEmpresa}}
-				
+
 			</div>
-			
+
 			<div id="operadores" class="tab-pane fade">
 			    {{>ListaDeOperadoresPorEmpresa}}
 			</div>
-			
+
 		</div>
 	</div>
 </template>
 
 <template name="ListaDeDirectoresPorEmpresa">
-	
+
 		<table class="table">
 		    <thead>
 			    <tr>
@@ -210,23 +212,24 @@
 			        <td>{{this.nombre}}</td>
 			        <td>{{this.email}}</td>
 			        <td>
-			        	<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+			        	<button class="btn btn-success edit2"><i class="fa fa-pencil" aria-hidden="true"></i></button>
 			        	<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
 			        </td>
-			    </tr> 
+			    </tr>
 			    {{/each}}
 		    </tbody>
 		</table>
-	
+
 </template>
 
 <template name="ListaDeOperadoresPorEmpresa">
-	
+
 		<table class="table">
 		    <thead>
 			    <tr>
 			        <th>Nombre</th>
 			        <th>Email</th>
+							<th>Tipo</th>
 			        <th>Opciones</th>
 			    </tr>
 		    </thead>
@@ -235,15 +238,16 @@
 			    <tr>
 			        <td>{{this.nombre}}</td>
 			        <td>{{this.email}}</td>
+							<td>{{this.tipo}}</td>
 			        <td>
-			        	<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+			        	<button class="btn btn-success edit3"><i class="fa fa-pencil" aria-hidden="true"></i></button>
 			        	<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
 			        </td>
-			    </tr> 
+			    </tr>
 			    {{/each}}
 		    </tbody>
 		</table>
-	
+
 </template>
 
 <template name="Operadores">
@@ -254,17 +258,17 @@
 	</ul>
 
 	<div class="tab-content">
-		
+
 		<div id="conductores" class="tab-pane fade in active">
-		  
+
 		  {{>ListaDeConductoresPorEmpresa}}
-			
+
 		</div>
-		
+
 		<div id="cobradores" class="tab-pane fade">
 		    {{>ListaDeCobradoresPorEmpresa}}
 		</div>
-		
+
 	</div>
 </template>
 
@@ -275,7 +279,7 @@
 			<input type="text" name="search" class="form-control" style="width: 350px;" placeholder="Buscar conductor por DNI">
 		</div>
   	</div>
-	
+
 	{{#if searching}}
       	<h3>Cargando...</h3>
     {{else}}
@@ -286,7 +290,7 @@
 					<li><a data-toggle="tab" href="#p3{{this._id}}">Licencia</a></li>
 					<li><a data-toggle="tab" href="#s3{{this._id}}">CEV</a></li>
 					<li><a data-toggle="tab" href="#t3{{this._id}}">Credencial</a></li>
-					
+
 				</ul>
 
 				<div class="tab-content">
@@ -296,7 +300,7 @@
 	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
 	      					<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
 	    				</div>
-						
+
 						<br>
 					    <table class="table">
 							<tbody>
@@ -313,7 +317,7 @@
 							        <td>{{this.datos.dni}}</td>
       							</tr>
       							<tr>
-							        <td>Caducidad:</td>
+							        <td>Caducidad de DNI:</td>
 							        <td>{{this.datos.caducidad}}</td>
       							</tr>
       							<tr>
@@ -334,17 +338,17 @@
 						<label class="btn btn-success btn-file">
 			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor1" style="display: none;" accept="image/*">
 						</label>
-						<br><br>						
+						<br><br>
 						{{>FotosDeConductores1}}
 					</div>
 					<div id="p3{{this._id}}" class="tab-pane fade">
 					    <br>
-					  
+
 
 					     <table class="table">
 							<tbody>
     							<tr>
-							        <td>Código:</td>
+							        <td>Numero de Licencia:</td>
 							        <td>{{this.licencia.codigo}}</td>
       							</tr>
       							<tr>
@@ -359,19 +363,19 @@
 							        <td>Fecha de Revalidación:</td>
 							        <td>{{this.licencia.revalidacion}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 						<br>
 						<label class="btn btn-success btn-file">
 			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor2" style="display: none;" accept="image/*">
 						</label>
-						<br><br>	
+						<br><br>
 					    {{>FotosDeConductores2}}
 					</div>
 					<div id="s3{{this._id}}" class="tab-pane fade">
 					    <br>
-					   
+
 					    <table class="table">
 							<tbody>
     							<tr>
@@ -386,19 +390,19 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.CEV.caducidad}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 						<br>
 					    <label class="btn btn-success btn-file">
 			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor3" style="display: none;" accept="image/*">
 						</label>
-						<br><br>	
+						<br><br>
 						{{>FotosDeConductores3}}
 					</div>
 					<div id="t3{{this._id}}" class="tab-pane fade">
 					   	<br>
-					   
+
 
 					   	 <table class="table">
 							<tbody>
@@ -414,7 +418,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.credencial.caducidad}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 						<br>
@@ -422,10 +426,10 @@
 			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor4" style="display: none;" accept="image/*">
 						</label>
 						<br><br>
-						{{>FotosDeConductores4}}	
+						{{>FotosDeConductores4}}
 					</div>
-					
-					
+
+
 				</div>
 			</div>
 		{{else}}
@@ -439,12 +443,12 @@
 <template name="FotosDeConductores1">
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
+			{{/if}}
+
 		{{/each}}
 	</div>
 </template>
@@ -452,12 +456,12 @@
 <template name="FotosDeConductores2">
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
+			{{/if}}
+
 		{{/each}}
 	</div>
 </template>
@@ -465,12 +469,12 @@
 <template name="FotosDeConductores3">
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
+			{{/if}}
+
 		{{/each}}
 	</div>
 </template>
@@ -478,12 +482,12 @@
 <template name="FotosDeConductores4">
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
+			{{/if}}
+
 		{{/each}}
 	</div>
 </template>
@@ -505,7 +509,7 @@
 					<li class="active"><a data-toggle="tab" href="#co2{{this._id}}">Detalles</a></li>
 					<li><a data-toggle="tab" href="#p2{{this._id}}">CEV</a></li>
 					<li><a data-toggle="tab" href="#s2{{this._id}}">Credenciales</a></li>
-					
+
 				</ul>
 
 				<div class="tab-content">
@@ -516,7 +520,7 @@
 	      					<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
 	    				</div>
 						<br>
-					   
+
 					    <table class="table">
 							<tbody>
     							<tr>
@@ -531,7 +535,7 @@
 							        <td>DNI:</td>
 							        <td>{{this.datos.dni}}</td>
       							</tr>
-      							
+
       							<tr>
 							        <td>Domicilio: </td>
 							        <td>{{this.datos.domicilio}}</td>
@@ -542,24 +546,24 @@
 							        <td>{{this.datos.distrito}}</td>
       							</tr>
 
-      							
+
     						</tbody>
 						</table>
 						<br>
 						<label class="btn btn-success btn-file">
 			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotocobrador1" style="display: none;" accept="image/*">
-			    			
+
 						</label>
 						<br><br>
 						{{>FotosDeCobradores1}}
 					</div>
 					<div id="p2{{this._id}}" class="tab-pane fade">
 					    <br>
-					  
+
 					    <table class="table">
 							<tbody>
     							<tr>
-							        <td>Código:</td>
+							        <td>Numero de Licencia:</td>
 							        <td>{{this.CEV.codigo}}</td>
       							</tr>
       							<tr>
@@ -570,7 +574,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.CEV.caducidad}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 					    <br>
@@ -596,7 +600,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.credencial.caducidad}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 					    <br>
@@ -607,8 +611,8 @@
 						{{>FotosDeCobradores3}}
 					</div>
 
-					
-					
+
+
 				</div>
 			</div>
 		{{else}}
@@ -616,18 +620,18 @@
 		{{/each}}
 
 	{{/if}}
-				
+
 </template>
 
 <template name="ListaDeVehiculosPorEmpresas">
 	<br>
 	<div class="page-header clearfix" style="margin-top: 0;">
-	    
+
 	    <div class="pull-left">
 	      <input type="text" name="search" class="form-control" style="width: 350px;" placeholder="Buscar vehículo por placa o padron">
 	    </div>
   	</div>
-	
+
 	{{#if searching}}
       	<h3>Cargando...</h3>
     {{else}}
@@ -641,7 +645,7 @@
 					<li><a data-toggle="tab" href="#r{{this._id}}">Revisión Tecnica</a></li>
 					<li><a data-toggle="tab" href="#rc{{this._id}}">RC</a></li>
 					<li><a data-toggle="tab" href="#tc{{this._id}}">TCH</a></li>
-					
+
 				</ul>
 
 				<div class="tab-content">
@@ -700,7 +704,7 @@
 						</label>
 						<br><br>
 						{{>FotosDeVehiculos}}
-					    
+
 					</div>
 					<div id="p{{this._id}}" class="tab-pane fade">
 					    <br>
@@ -740,7 +744,7 @@
 					</div>
 					<div id="s{{this._id}}" class="tab-pane fade">
 					    <br>
-					 
+
 					    <table class="table">
 							<tbody>
     							<tr>
@@ -755,7 +759,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.SOAT.fin}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 					    <br>
@@ -783,7 +787,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.TC.caducidad}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 
@@ -812,7 +816,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td> {{this.CITV.fin}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 
@@ -827,7 +831,7 @@
 					</div>
 					<div id="rc{{this._id}}" class="tab-pane fade">
 						<br>
-					  
+
 					    <table class="table">
 							<tbody>
     							<tr>
@@ -842,7 +846,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.RC.fin}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 						<br>
@@ -870,11 +874,11 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.TCH.caducidad}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 					</div>
-					
+
 				</div>
 			</div>
 		{{else}}
@@ -882,185 +886,185 @@
 		{{/each}}
 
 	{{/if}}
-							
+
 </template>
 
 <template name="FotosDeCobradores">
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
-		{{/each}}	
+			{{/if}}
+
+		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="FotosDeCobradores1">
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
-		{{/each}}	
+			{{/if}}
+
+		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="FotosDeCobradores2">
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
-		{{/each}}	
+			{{/if}}
+
+		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="FotosDeCobradores3">
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
-		{{/each}}	
+			{{/if}}
+
+		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="FotosDeCobradores4">
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
-		{{/each}}	
+			{{/if}}
+
+		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="FotosDeConductores">
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
+			{{/if}}
+
 		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="FotosDeVehiculos">
 
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
+			{{/if}}
+
 		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="FotosDeVehiculos2">
 
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
+			{{/if}}
+
 		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="FotosDeVehiculos3">
 
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
+			{{/if}}
+
 		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="FotosDeVehiculos4">
 
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
+			{{/if}}
+
 		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="FotosDeVehiculos5">
 
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
+			{{/if}}
+
 		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="FotosDeVehiculos6">
 
 	<div class="lista-photos">
 		{{#each fotos}}
-		
+
 			{{#if isImage}}
 				<a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
 				<button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
-			{{/if}}  
-	    
+			{{/if}}
+
 		{{/each}}
 	</div>
-	
+
 </template>
 
 <template name="agregarEmpresa">
-	
+
     <div class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1073,7 +1077,7 @@
                 	<br>
 
                 	<form class="form-inline">
-	                	
+
 	                	<div class="form-group">
 						    <label for="nombre">Nombre</label>
 						    <input type="text" name="nombre" style="margin-left: 48px; width: 432px;" class="form-control" id="nombre">
@@ -1083,18 +1087,16 @@
 						    <label for="ruc">RUC</label>
 						    <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "11"  name="ruc" style="width: 138px; margin-left: 70px;" class="form-control" id="ruc">
 	  					</div>
-	  					
+
 						<div class="form-group">
 			                <label for="movil" style="margin-left: 2px;">Fecha de Inicio</label>
 			                <div class='input-group date' id='datetimepicker1'>
-			                	
-			                    <input type='text' name="movil" style="width: 115px; margin-left: 19px;" class="form-control" />
-			                    <span class="input-group-addon">
-			                        <span class="glyphicon glyphicon-calendar"></span>
-			                    </span>
+
+			                    <input type='date' name="movil" style="width: 155px; padding-right: 5px; margin-left: 19px;" class="form-control" />
+
 			                </div>
             			</div>
-            			
+
 						<br><br>
 	  					<div class="form-group">
 						    <label for="domicilio">Domicilio</label>
@@ -1121,51 +1123,51 @@
 						    <input type="email" name="email" style="width: 165px; margin-left: 66px;" class="form-control" id="email">
 						</div>
 					</form>
-                    
+
                     <form class="__formulario">
-                    
-                   <!-- <div class="group">      
+
+                   <!-- <div class="group">
                         <input type="text" required name="nombre">
                         <span class="highlight"></span>
                         <span class="bar"></span>
                         <label>Nombre</label>
-                    </div> 
+                    </div>
 
-                    <div class="group">      
+                    <div class="group">
                         <input type="text" required name="ruc">
                         <span class="highlight"></span>
                         <span class="bar"></span>
                         <label>RUC</label>
-                    </div> 
+                    </div>
 
-                    <div class="group">      
+                    <div class="group">
                         <input type="text" required name="domicilio">
                         <span class="highlight"></span>
                         <span class="bar"></span>
                         <label>Domicilio</label>
-                    </div> 
+                    </div>
 
-                    <div class="group">      
+                    <div class="group">
                         <input type="text" required name="representante">
                         <span class="highlight"></span>
                         <span class="bar"></span>
                         <label>Representante</label>
-                    </div> 
+                    </div>
 
-                    <div class="group">      
+                    <div class="group">
                         <input type="text" required name="telefono">
                         <span class="highlight"></span>
                         <span class="bar"></span>
                         <label>Teléfono</label>
-                    </div> 
+                    </div>
 
-                    <div class="group">      
+                    <div class="group">
                         <input type="email" required name="email">
                         <span class="highlight"></span>
                         <span class="bar"></span>
                         <label>Email</label>
                     </div>  -->
-                   
+
                     <button type="submit" class="__button">
                         Agregar
                     </button>
@@ -1194,50 +1196,50 @@
 
                 <div class="modal-body">
 				{{#with empresa}}
-                	
+
 					<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="nombre" value="{{this.nombre}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Nombre</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" class="form-control" maxlength = "13"  required name="ruc" value="{{this.ruc}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>RUC</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="domicilio" value="{{this.domicilio}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Domicilio</label>
 		                    </div>
-		                    <div class="group">      
+		                    <div class="group">
 		                        <input type="text" required name="representante" value="{{this.representante}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Representante Legal</label>
 		                    </div>
-		                    <div class="group">      
+		                    <div class="group">
 		                        <input  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" class="form-control" maxlength = "9"  required name="telefono" value="{{this.telefono}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Teléfono</label>
 		                    </div>
-		                    <div class="group">      
+		                    <div class="group">
 		                        <input type="email" required name="email" value="{{this.email}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Email</label>
 		                    </div>
-                		</form>				
-				
+                		</form>
+
 				{{/with}}
-			
+
                 </div>
 
                 <div class="modal-footer">
@@ -1262,110 +1264,110 @@
                 <div class="modal-body">
                 	<br>
 					{{#with cobrador}}
-                	
+
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#1{{this._id}}">Detalles</a></li>
 						<li><a data-toggle="tab" href="#p1{{this._id}}">CEV</a></li>
 						<li><a data-toggle="tab" href="#tec1{{this._id}}">Credencial</a></li>
 					</ul>
-				
+
 				<div class="tab-content">
 					<div id="1{{this._id}}" class="tab-pane fade in active">
 						<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="nombre" value="{{this.datos.nombre}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Nombres</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="apellidos" value="{{this.datos.apellido}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Apellidos</label>
-		                    </div> 
-		                     <div class="group">      
+		                    </div>
+		                     <div class="group">
 		                        <input type="text" required name="dni" value="{{this.datos.dni}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>DNI</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="domicilio" value="{{this.datos.domicilio}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Domicilio</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="distrito" value="{{this.datos.distrito}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Distrito</label>
-		                    </div> 
-                    	
+		                    </div>
+
                 		</form>
-					    
+
 					</div>
 					<div id="p1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="codigocev" value="{{this.CEV.codigo}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Código de CEV</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="emisioncev" value="{{this.CEV.emision}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Emisión CEV</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="caducidadcev" value="{{this.CEV.caducidad}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Caducidad de CEV</label>
-		                    </div> 
-              
+		                    </div>
+
                 		</form>
 					</div>
 					<div id="tec1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="numerocredencial" value="{{this.credencial.numero}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Número de Credencial</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="emisioncredencial" value="{{this.credencial.emision}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Emisión de Credencial</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="caducidadcredencial" value="{{this.credencial.caducidad}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Caducidad de Credencial</label>
 		                    </div>
-                    	
+
                 		</form>
 					</div>
-					
+
 				</div>
 				{{/with}}
-			
-                    
-                    
+
+
+
 
                 </div>
 
@@ -1391,158 +1393,158 @@
                 <div class="modal-body">
                 	<br>
 					{{#with conductor}}
-                	
+
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#1{{this._id}}">Detalles</a></li>
 						<li><a data-toggle="tab" href="#p1{{this._id}}">Licencia</a></li>
 						<li><a data-toggle="tab" href="#tec1{{this._id}}">CEV</a></li>
 						<li><a data-toggle="tab" href="#s1{{this._id}}">Credencial</a></li>
-						
+
 					</ul>
-				
+
 				<div class="tab-content">
 					<div id="1{{this._id}}" class="tab-pane fade in active">
 						<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="nombre" value="{{this.datos.nombre}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Nombres</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="apellido" value="{{this.datos.apellido}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Apellidos</label>
-		                    </div> 
-		                     <div class="group">      
+		                    </div>
+		                     <div class="group">
 		                        <input type="text" required name="dni" value="{{this.datos.dni}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>DNI</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="caducidaddni" value="{{this.datos.caducidad}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Caducidad</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="domicilio" value="{{this.datos.domicilio}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Domicilio</label>
-		                    </div> 
-                    		 <div class="group">      
+		                    </div>
+                    		 <div class="group">
 		                        <input type="text" required name="distrito" value="{{this.datos.distrito}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Distrito</label>
-		                    </div> 
-		                     <div class="group">      
+		                    </div>
+		                     <div class="group">
 		                        <input type="text" required name="telefono" value="{{this.datos.telefono}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Teléfono</label>
-		                    </div> 
-                    	
-                    	
+		                    </div>
+
+
                 		</form>
-					    
+
 					</div>
 					<div id="p1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="codigolicencia" value="{{this.licencia.codigo}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Código</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="categoria" value="{{this.licencia.categoria}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Categoría</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="expedicion" value="{{this.licencia.revalidacion}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha Expedición</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="revalidacion" value="{{this.licencia.revalidacion}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Revalidación</label>
 		                    </div>
-                    	
+
                 		</form>
 					</div>
 					<div id="tec1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="codigocev" value="{{this.CEV.codigo}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Código</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="emision" value="{{this.CEV.emision}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Emisión</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="caducidad" value="{{this.CEV.caducidad}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Caducidad</label>
-		                    </div> 
-		                    
+		                    </div>
+
                 		</form>
 					</div>
 					<div id="s1{{this._id}}" class="tab-pane fade">
-					    
+
 					    <br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="codigocredencial" value="{{this.credencial.numero}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Número de Credencial</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="emisionsoat" value="{{this.credencial.caducidad}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Emisión de Credencial</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="emisionsoat" value="{{this.credencial.caducidad}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Caducidad de Credencial</label>
-		                    </div> 
-                    	
+		                    </div>
+
                 		</form>
 
 					</div>
-					
+
 				</div>
 				{{/with}}
-			
-                    
-                    
+
+
+
 
                 </div>
 
@@ -1569,7 +1571,7 @@
                 <div class="modal-body">
                 	<br>
 					{{#with vehiculo}}
-                	
+
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#1{{this._id}}">Detalles</a></li>
 						<li><a data-toggle="tab" href="#p1{{this._id}}">Propietario</a></li>
@@ -1580,275 +1582,275 @@
 						<li><a data-toggle="tab" href="#rc1{{this._id}}">RC</a></li>
 						<li><a data-toggle="tab" href="#tc1{{this._id}}">TCH</a></li>
 					</ul>
-				
+
 				<div class="tab-content">
 					<div id="1{{this._id}}" class="tab-pane fade in active">
 						<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="placa" value="{{this.placa}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Placa</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="compania" value="{{this.compania}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Compañia</label>
-		                    </div> 
-		                     <div class="group">      
+		                    </div>
+		                     <div class="group">
 		                        <input type="text" required name="aseguradora" value="{{this.aseguradora}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Aseguradora</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="codigoDeRuta" value="{{this.codigoDeRuta}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Código de Ruta</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="fechaDePermanenciaEnLaEmpresa" value="{{this.fechaDePermanenciaEnLaEmpresa}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Permanencia en la Empresa</label>
-		                    </div> 
-                    	
+		                    </div>
+
                 		</form>
-					    
+
 					</div>
 					<div id="p1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="propietario" value="{{this.propietario.nombre}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Nombre del Propietario</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="dni" value="{{this.propietario.dni}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>DNI</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="domicilio" value="{{this.propietario.domicilio}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Domicilio del Propietario</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="distrito" value="{{this.propietario.distrito}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Distrito</label>
 		                    </div>
 
-		                    <div class="group">      
+		                    <div class="group">
 		                        <input type="text" required name="telefono" value="{{this.propietario.telefono}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Teléfono</label>
-		                    </div> 
-                    	
+		                    </div>
+
                 		</form>
 					</div>
 					<div id="tec1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="marca" value="{{this.propietario.nombre}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Marca</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="modelo" value="{{this.tecnico.modelo}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Modelo</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="serie" value="{{this.tecnico.serie}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Serie</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="combustible" value="{{this.tecnico.combustible}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Combustible</label>
 		                    </div>
 
-		                    <div class="group">      
+		                    <div class="group">
 		                        <input type="number" required name="anioDeFabricacion" value="{{this.tecnico.anioDeFabricacion}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Año de Fabricación</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="number" required name="longitud" value="{{this.tecnico.longitud}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Longitud</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="number" required name="asientos" value="{{this.tecnico.asientos}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Asientos</label>
-		                    </div> 
-                    	
+		                    </div>
+
                 		</form>
 					</div>
 					<div id="s1{{this._id}}" class="tab-pane fade">
-					    
+
 					    <br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="soat" value="{{this.SOAT.numero}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Número de SOAT</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="emisionsoat" value="{{this.SOAT.inicio}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Emisión de SOAT</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="caducidadsoat" value="{{this.SOAT.fin}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Caducidad de SOAT</label>
-		                    </div> 
-                    	
+		                    </div>
+
                 		</form>
 
 					</div>
 					<div id="t1{{this._id}}" class="tab-pane fade">
 						<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="tc" value="{{this.TC.numero}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Número de Tarjeta de Circulación</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="emisiontc" value="{{this.TC.emision}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Emisión de Tarjeta de Circulación</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="caducidadtc" value="{{this.TC.caducidad}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Caducidad de Tarjeta de Circulación</label>
-		                    </div> 
-                    	
+		                    </div>
+
                 		</form>
 
 					</div>
 					<div id="r1{{this._id}}" class="tab-pane fade">
-					    
+
 					    <br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="rt" value="{{this.CITV.numero}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Número de Revisión Tecnica</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="emisionrt" value="{{this.CITV.inicio}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Emisión de Revisión Tecnica</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="caducidadrt" value="{{this.CITV.fin}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Caducidad de Revisión Tecnica</label>
-		                    </div> 
-                    	
+		                    </div>
+
                 		</form>
 
 					</div>
 					<div id="rc1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="rc" value="{{this.RC.numero}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Número</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="emisionrc" value="{{this.RC.inicio}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Emisión</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="caducidadrc" value="{{this.RC.fin}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Caducidad</label>
-		                    </div> 
-                    	
+		                    </div>
+
                 		</form>
 
 					</div>
 					<div id="tc1{{this._id}}" class="tab-pane fade">
-					    
+
 					    <br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="tch" value="{{this.TCH.numero}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Número</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="emisiontch" value="{{this.TCH.emision}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Emisión</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="caducidadtch" value="{{this.TCH.caducidad}}">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Fecha de Caducidad</label>
-		                    </div> 
-                    	
+		                    </div>
+
                 		</form>
 
 					</div>
 				</div>
 				{{/with}}
-			
-                    
-                    
+
+
+
 
                 </div>
 
@@ -1872,7 +1874,7 @@
 							<table class="table">
 								<thead>
 									<tr>
-									
+
 										<th>Placa</th>
 										<th>Propietario</th>
 										<th>DNI</th>
@@ -1914,7 +1916,7 @@
 						</table>
 					</div>
 				</div>
-			</div>	
+			</div>
 		</div>
 	</div>
 </template>
@@ -1931,34 +1933,35 @@
                 <div class="modal-body">
                     <br>
 						<form class="__formulario">
-	                    
-		                    <div class="group">      
+
+		                    <div class="group">
 		                        <input type="text" required name="nombre">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Nombre Completo</label>
-		                    </div> 
-		                    <div class="group">      
+		                    </div>
+		                    <div class="group">
 		                        <input type="text" required name="email">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Email</label>
-		                    </div> 
-		                     <div class="group">      
+		                    </div>
+		                     <div class="group">
 		                        <input type="password" required name="password">
 		                        <span class="highlight"></span>
 		                        <span class="bar"></span>
 		                        <label>Contraseña</label>
-		                    </div> 
+		                    </div>
 		                    <div class="group">
 		                    	<select id="rol">
-								  	<option value="1">Director</option>
-								  	<option value="2">Operador Despacho</option>
-								  	<option value="3">Operador Monitoreo</option>
-								</select>
-		                    </div> 
-		                    
-                    	
+												  	<option value="1">Director</option>
+												  	<option value="2">Operador Despacho</option>
+												  	<option value="3">Operador Monitoreo</option>
+														<option value="4">Operador Asistente</option>
+													</select>
+		                    </div>
+
+
                 		</form>
                 </div>
 

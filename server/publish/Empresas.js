@@ -16,6 +16,42 @@ Meteor.publish('Vehiculos', function () {
   }
 });
 
+Meteor.publish('Administradores', function () {
+  if (this.userId) {
+    return Administradores.find();
+  } else {
+    this.stop();
+    return;
+  }
+});
+
+Meteor.publish('VehiculosLista', function (empresaId, borrador) {
+  if (this.userId) {
+    return Vehiculos.find({empresaId: empresaId, borrador: borrador});
+  } else {
+    this.stop();
+    return;
+  }
+});
+
+Meteor.publish('ConductoresLista', function (empresaId, borrador) {
+  if (this.userId) {
+    return Conductores.find({empresaId: empresaId, borrador: borrador});
+  } else {
+    this.stop();
+    return;
+  }
+});
+
+Meteor.publish('CobradoresLista', function (empresaId, borrador) {
+  if (this.userId) {
+    return Cobradores.find({empresaId: empresaId, borrador: borrador});
+  } else {
+    this.stop();
+    return;
+  }
+});
+
 Meteor.publish('Conductores', function () {
   if (this.userId) {
     return Conductores.find();
@@ -117,7 +153,7 @@ Meteor.publish( 'VehiculosPorEmpresa', function(empresaId, search ) {
 
   if ( search ) {
     let regex = new RegExp( search, 'i' );
-    
+
     query = {
       $or: [
         { placa: regex },
@@ -135,7 +171,7 @@ Meteor.publish( 'VehiculosPorEmpresa', function(empresaId, search ) {
 
 Meteor.publish( 'ConductoresPorEmpresa', function(empresaId, search ) {
   let query      = {},
-      projection = { limit: 1, sort: { placa: 1 } };
+      projection = { limit: 4, sort: { placa: 1 } };
 
    	console.log(empresaId);
    	console.log(search);
@@ -157,7 +193,7 @@ Meteor.publish( 'ConductoresPorEmpresa', function(empresaId, search ) {
 
 Meteor.publish( 'CobradoresPorEmpresa', function(empresaId, search ) {
   let query      = {},
-      projection = { limit: 1, sort: { placa: 1 } };
+      projection = { limit: 4, sort: { placa: 1 } };
 
    	console.log(empresaId);
    	console.log(search);

@@ -1,0 +1,561 @@
+<template name="Borradores">
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+            <h4>Bandeja de Borradores de Datos</h4>
+            <br><br>
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#home">Vehiculos</a></li>
+              <li><a data-toggle="tab" href="#menu1">Conductores</a></li>
+              <li><a data-toggle="tab" href="#menu2">Cobradores</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <div id="home" class="tab-pane fade in active">
+              {{#each vehiculos}}
+              <div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 40vh;">
+        				<ul class="nav nav-tabs">
+        					<li class="active"><a data-toggle="tab" href="#{{this._id}}">Detalles</a></li>
+        					<li><a data-toggle="tab" href="#p{{this._id}}">Propietario</a></li>
+        					<li><a data-toggle="tab" href="#s{{this._id}}">SOAT</a></li>
+        					<li><a data-toggle="tab" href="#t{{this._id}}">Tarjeta de Circulación</a></li>
+        					<li><a data-toggle="tab" href="#r{{this._id}}">Revisión Tecnica</a></li>
+        					<li><a data-toggle="tab" href="#rc{{this._id}}">RC</a></li>
+        					<li><a data-toggle="tab" href="#tc{{this._id}}">TCH</a></li>
+
+        				</ul>
+
+        				<div class="tab-content">
+        					<div id="{{this._id}}" class="tab-pane fade in active">
+        						<br>
+        						<div class="pull-left" style="margin-bottom: 20px;">
+        	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+        	      					<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+        	    				</div>
+        						<br>
+
+        					    <table class="table">
+        							<tbody>
+            							<tr>
+        							        <td>Padrón:</td>
+        							        <td>{{this.padron}}</td>
+              							</tr>
+              							<tr>
+              								<td>Placa:</td>
+              								<td>{{this.placa}}</td>
+              							</tr>
+              							<tr>
+        							        <td>Compañia:</td>
+        							        <td>{{this.compania}}</td>
+              							</tr>
+              							<tr>
+        							        <td>Código de Ruta:</td>
+        							        <td>{{this.codigoDeRuta}}</td>
+              							</tr>
+              							<tr>
+              								<td>Aseguradora:</td>
+              								<td>{{this.aseguradora}}</td>
+              							</tr>
+              							<tr>
+              								<td>Fecha de Permanencia en la Empresa:</td>
+              								<td>{{this.fechaDePermanenciaEnLaEmpresa}}</td>
+              							</tr>
+
+            						</tbody>
+        						</table>
+        						<div class="row">
+        							<div class="col-md-2">
+        								<p>Aprobar</p>
+        								<br>
+        								<label class="switch">
+        										<input type="checkbox" id="sw{{this._id}}" {{checked}} class="vehiculo-activo">
+        										<div class="slider round"></div>
+        								</label>
+        							</div>
+        						</div>
+        						<br>
+        					    <h3>Fotos</h3>
+        					    <br>
+        						<label class="btn btn-success btn-file">
+        			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo" style="display: none;" accept="image/*">
+        						</label>
+        						<br><br>
+        						{{>FotosDeVehiculos}}
+
+        					</div>
+        					<div id="p{{this._id}}" class="tab-pane fade">
+        					    <br>
+        					    <table class="table">
+        							<tbody>
+            							<tr>
+        							        <td>Nombre del Propietario:</td>
+        							        <td>{{this.propietario.nombre}}</td>
+              							</tr>
+              							<tr>
+              								<td>DNI:</td>
+              								<td>{{this.propietario.dni}}</td>
+              							</tr>
+              							<tr>
+        							        <td>Domicilio del Propietario:</td>
+        							        <td>{{this.propietario.domicilio}}</td>
+              							</tr>
+              							<tr>
+        							        <td>Distrito:</td>
+        							        <td>{{this.propietario.distrito}}</td>
+              							</tr>
+              							<tr>
+              								<td>Teléfono:</td>
+              								<td>{{this.propietario.telefono}}</td>
+              							</tr>
+            						</tbody>
+        						</table>
+
+        						<br>
+        					    <h3>Fotos</h3>
+        					    <br>
+        						<label class="btn btn-success btn-file">
+        			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo2" style="display: none;" accept="image/*">
+        						</label>
+        						<br><br>
+        						{{>FotosDeVehiculos2}}
+        					</div>
+        					<div id="s{{this._id}}" class="tab-pane fade">
+        					    <br>
+
+        					    <table class="table">
+        							<tbody>
+            							<tr>
+        							        <td>Número:</td>
+        							        <td>{{this.SOAT.numero}}</td>
+              							</tr>
+              							<tr>
+              								<td>Fecha de Emisión: </td>
+              								<td>{{this.SOAT.inicio}}</td>
+              							</tr>
+              							<tr>
+        							        <td>Fecha de Caducidad:</td>
+        							        <td>{{this.SOAT.fin}}</td>
+              							</tr>
+
+            						</tbody>
+        						</table>
+        					    <br>
+        					    <h3>Fotos</h3>
+        					    <br>
+        						<label class="btn btn-success btn-file">
+        			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo3" style="display: none;" accept="image/*">
+        						</label>
+        						<br><br>
+        						{{>FotosDeVehiculos3}}
+        					</div>
+        					<div id="t{{this._id}}" class="tab-pane fade">
+        					   	<br>
+        					   	<table class="table">
+        							<tbody>
+            							<tr>
+        							        <td>Número: </td>
+        							        <td>{{this.TC.numero}}</td>
+              							</tr>
+              							<tr>
+              								<td>Fecha de Emisión: </td>
+              								<td>{{this.TC.emision}}</td>
+              							</tr>
+              							<tr>
+        							        <td>Fecha de Caducidad:</td>
+        							        <td>{{this.TC.caducidad}}</td>
+              							</tr>
+
+            						</tbody>
+        						</table>
+
+        						<br>
+        					    <h3>Fotos</h3>
+        					    <br>
+        						<label class="btn btn-success btn-file">
+        			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo4" style="display: none;" accept="image/*">
+        						</label>
+        						<br><br>
+        						{{>FotosDeVehiculos4}}
+        					</div>
+        					<div id="r{{this._id}}" class="tab-pane fade">
+        					    <br>
+        					    <table class="table">
+        							<tbody>
+            							<tr>
+        							        <td>Número de Revisión Tecnica:</td>
+        							        <td>{{this.CITV.numero}}</td>
+              							</tr>
+              							<tr>
+              								<td>Fecha de Emisión: </td>
+              								<td>{{this.CITV.inicio}}</td>
+              							</tr>
+              							<tr>
+        							        <td>Fecha de Caducidad:</td>
+        							        <td> {{this.CITV.fin}}</td>
+              							</tr>
+
+            						</tbody>
+        						</table>
+
+        						<br>
+        					    <h3>Fotos</h3>
+        					    <br>
+        						<label class="btn btn-success btn-file">
+        			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo5" style="display: none;" accept="image/*">
+        						</label>
+        						<br><br>
+        						{{>FotosDeVehiculos5}}
+        					</div>
+        					<div id="rc{{this._id}}" class="tab-pane fade">
+        						<br>
+
+        					    <table class="table">
+        							<tbody>
+            							<tr>
+        							        <td>Número:</td>
+        							        <td>{{this.RC.numero}}</td>
+              							</tr>
+              							<tr>
+              								<td>Fecha de Emisión: </td>
+              								<td>{{this.RC.inicio}}</td>
+              							</tr>
+              							<tr>
+        							        <td>Fecha de Caducidad:</td>
+        							        <td>{{this.RC.fin}}</td>
+              							</tr>
+
+            						</tbody>
+        						</table>
+        						<br>
+        					    <h3>Fotos</h3>
+        					    <br>
+        						<label class="btn btn-success btn-file">
+        			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo6" style="display: none;" accept="image/*">
+        						</label>
+        						<br><br>
+        						{{>FotosDeVehiculos6}}
+        					</div>
+        					<div id="tc{{this._id}}" class="tab-pane fade">
+        					    <br>
+        					    <table class="table">
+        							<tbody>
+            							<tr>
+        							        <td>Número:</td>
+        							        <td>{{this.TCH.numero}}</td>
+              							</tr>
+              							<tr>
+              								<td>Fecha de Emisión: </td>
+              								<td>{{this.TCH.emision}}</td>
+              							</tr>
+              							<tr>
+        							        <td>Fecha de Caducidad:</td>
+        							        <td>{{this.TCH.caducidad}}</td>
+              							</tr>
+
+            						</tbody>
+        						</table>
+        					</div>
+
+        				</div>
+        			</div>
+              {{/each}}
+              </div>
+              <div id="menu1" class="tab-pane fade">
+                {{#each conductores}}
+            			<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 35vh;">
+            				<ul class="nav nav-tabs">
+            					<li class="active"><a data-toggle="tab" href="#con3{{this._id}}">Detalles</a></li>
+            					<li><a data-toggle="tab" href="#p3{{this._id}}">Licencia</a></li>
+            					<li><a data-toggle="tab" href="#s3{{this._id}}">CEV</a></li>
+            					<li><a data-toggle="tab" href="#t3{{this._id}}">Credencial</a></li>
+
+            				</ul>
+
+            				<div class="tab-content">
+            					<div id="con3{{this._id}}" class="tab-pane fade in active">
+            						<br>
+            						<div class="pull-left" style="margin-bottom: 20px;">
+            	      					<button class="btn btn-success edit2"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+            	      					<button class="btn btn-danger remove2"><i class="fa fa-trash" aria-hidden="true"></i></button>
+            	    				</div>
+
+            						<br>
+            					    <table class="table">
+            							<tbody>
+                							<tr>
+            							        <td>Nombres:</td>
+            							        <td>{{this.datos.nombre}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Apellidos:</td>
+            							        <td>{{this.datos.apellido}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>DNI:</td>
+            							        <td>{{this.datos.dni}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Caducidad:</td>
+            							        <td>{{this.datos.caducidad}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Distrito:</td>
+            							        <td>{{this.datos.distrito}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Domicilio: </td>
+            							        <td>{{this.datos.domicilio}}</td>
+                  							</tr>
+                  							<tr>
+                  								<td>Teléfono:</td>
+                  								<td>{{this.datos.telefono}}</td>
+                  							</tr>
+                						</tbody>
+            						</table>
+            						<br>
+                        <div class="row">
+            							<div class="col-md-2">
+            								<p>Aprobar</p>
+            								<br>
+            								<label class="switch">
+            										<input type="checkbox" id="sw{{this._id}}" {{checked}} class="conductor-activo">
+            										<div class="slider round"></div>
+            								</label>
+            							</div>
+            						</div>
+            						<br>
+            						<label class="btn btn-success btn-file">
+            			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor1" style="display: none;" accept="image/*">
+            						</label>
+            						<br><br>
+            						{{>FotosDeConductores1}}
+            					</div>
+            					<div id="p3{{this._id}}" class="tab-pane fade">
+            					    <br>
+
+
+            					     <table class="table">
+            							<tbody>
+                							<tr>
+            							        <td>Código:</td>
+            							        <td>{{this.licencia.codigo}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Categoría:</td>
+            							        <td>{{this.licencia.categoria}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Fecha de Expedición:</td>
+            							        <td>{{this.licencia.expedicion}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Fecha de Revalidación:</td>
+            							        <td>{{this.licencia.revalidacion}}</td>
+                  							</tr>
+
+                						</tbody>
+            						</table>
+            						<br>
+            						<label class="btn btn-success btn-file">
+            			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor2" style="display: none;" accept="image/*">
+            						</label>
+            						<br><br>
+            					    {{>FotosDeConductores2}}
+            					</div>
+            					<div id="s3{{this._id}}" class="tab-pane fade">
+            					    <br>
+
+            					    <table class="table">
+            							<tbody>
+                							<tr>
+            							        <td>Código:</td>
+            							        <td>{{this.CEV.codigo}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Fecha de Emisión:</td>
+            							        <td>{{this.CEV.emision}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Fecha de Caducidad:</td>
+            							        <td>{{this.CEV.caducidad}}</td>
+                  							</tr>
+
+                						</tbody>
+            						</table>
+            						<br>
+            					    <label class="btn btn-success btn-file">
+            			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor3" style="display: none;" accept="image/*">
+            						</label>
+            						<br><br>
+            						{{>FotosDeConductores3}}
+            					</div>
+            					<div id="t3{{this._id}}" class="tab-pane fade">
+            					   	<br>
+
+
+            					   	 <table class="table">
+            							<tbody>
+                							<tr>
+            							        <td>Número de Credencial:</td>
+            							        <td>{{this.credencial.numero}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Fecha de Emisión:</td>
+            							        <td>{{this.credencial.emision}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Fecha de Caducidad:</td>
+            							        <td>{{this.credencial.caducidad}}</td>
+                  							</tr>
+
+                						</tbody>
+            						</table>
+            						<br>
+            						<label class="btn btn-success btn-file">
+            			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor4" style="display: none;" accept="image/*">
+            						</label>
+            						<br><br>
+            						{{>FotosDeConductores4}}
+            					</div>
+
+
+            				</div>
+            			</div>
+          		{{/each}}
+              </div>
+              <div id="menu2" class="tab-pane fade">
+                {{#each cobradores}}
+            			<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 35vh;">
+            				<ul class="nav nav-tabs">
+            					<li class="active"><a data-toggle="tab" href="#co2{{this._id}}">Detalles</a></li>
+            					<li><a data-toggle="tab" href="#p2{{this._id}}">CEV</a></li>
+            					<li><a data-toggle="tab" href="#s2{{this._id}}">Credenciales</a></li>
+
+            				</ul>
+
+            				<div class="tab-content">
+            					<div id="co2{{this._id}}" class="tab-pane fade in active">
+            						<br>
+            						<div class="pull-left" style="margin-bottom: 20px">
+            	      					<button class="btn btn-success edit3"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+            	      					<button class="btn btn-danger remove3"><i class="fa fa-trash" aria-hidden="true"></i></button>
+            	    				</div>
+            						<br>
+
+            					    <table class="table">
+            							<tbody>
+                							<tr>
+            							        <td>Nombres:</td>
+            							        <td>{{this.datos.nombre}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Apellidos:</td>
+            							        <td>{{this.datos.apellido}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>DNI:</td>
+            							        <td>{{this.datos.dni}}</td>
+                  							</tr>
+
+                  							<tr>
+            							        <td>Domicilio: </td>
+            							        <td>{{this.datos.domicilio}}</td>
+                  							</tr>
+
+                  							<tr>
+            							        <td>Distrito:</td>
+            							        <td>{{this.datos.distrito}}</td>
+                  							</tr>
+
+
+                						</tbody>
+            						</table>
+                        <br>
+                        <div class="row">
+            							<div class="col-md-2">
+            								<p>Aprobar</p>
+            								<br>
+            								<label class="switch">
+            										<input type="checkbox" id="sw{{this._id}}" {{checked}} class="cobrador-activo">
+            										<div class="slider round"></div>
+            								</label>
+            							</div>
+            						</div>
+            						<br>
+            						<label class="btn btn-success btn-file">
+            			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotocobrador1" style="display: none;" accept="image/*">
+
+            						</label>
+            						<br><br>
+            						{{>FotosDeCobradores1}}
+            					</div>
+            					<div id="p2{{this._id}}" class="tab-pane fade">
+            					    <br>
+
+            					    <table class="table">
+            							<tbody>
+                							<tr>
+            							        <td>Código:</td>
+            							        <td>{{this.CEV.codigo}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Fecha de Emisión:</td>
+            							        <td>{{this.CEV.emision}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Fecha de Caducidad:</td>
+            							        <td>{{this.CEV.caducidad}}</td>
+                  							</tr>
+
+                						</tbody>
+            						</table>
+            					    <br>
+            						<label class="btn btn-success btn-file">
+            			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotocobrador2" style="display: none;" accept="image/*">
+            						</label>
+            						<br><br>
+            						{{>FotosDeCobradores2}}
+            					</div>
+            					<div id="s2{{this._id}}" class="tab-pane fade">
+            					    <br>
+            					    <table class="table">
+            							<tbody>
+                							<tr>
+            							        <td>Número:</td>
+            							        <td>{{this.credencial.numero}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Fecha de Emisión:</td>
+            							        <td>{{this.credencial.emision}}</td>
+                  							</tr>
+                  							<tr>
+            							        <td>Fecha de Caducidad:</td>
+            							        <td>{{this.credencial.caducidad}}</td>
+                  							</tr>
+
+                						</tbody>
+            						</table>
+            					    <br>
+            						<label class="btn btn-success btn-file">
+            			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotocobrador3" style="display: none;" accept="image/*">
+            						</label>
+            						<br><br>
+            						{{>FotosDeCobradores3}}
+            					</div>
+
+
+
+            				</div>
+            			</div>
+
+            		{{/each}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

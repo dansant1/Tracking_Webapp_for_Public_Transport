@@ -7,7 +7,7 @@ Template.Empresas.onCreated( () => {
   	template.searching   = new ReactiveVar( false );
 
   	template.autorun( () => {
-    	
+
     	template.subscribe( 'BuscaadorDeEmpresas', template.searchQuery.get(), () => {
       		setTimeout( () => {
         		template.searching.set( false );
@@ -52,7 +52,7 @@ Template.Empresas.helpers({
 
 Template.Empresas.events({
 	'keyup [name="search"]' ( event, template ) {
-  	
+
     	let value = event.target.value.trim();
 
     	console.log(value);
@@ -67,7 +67,29 @@ Template.Empresas.events({
 	    if ( value === '' ) {
 	      template.searchQuery.set( value );
 	    }
-  	}
+  	},
+		'click .eliminar-empresa'() {
+			swal({
+			  title: "Estas seguro?",
+			  text: "Se eliminaran todos los datos de la empresa",
+			  type: "warning",
+			  showCancelButton: true,
+			  confirmButtonColor: "#DD6B55",
+			  confirmButtonText: "Si, Eliminar Empresa",
+			  closeOnConfirm: false
+			},
+			() => {
+				Meteor.call('eliminarEmpresa', this._id, (err) => {
+					if (err) {
+						alert(err);
+					} else {
+						Bert.alert('Empresa Eliminada', 'danger')
+					}
+				});
+			});
+
+		},
+
 });
 
 Template.ListaDeVehiculosPorEmpresas.onCreated( () => {
@@ -98,10 +120,13 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
   	vehiculo: function () {
   		let vehiculos = Vehiculos.find();
 
-  		if (vehiculos) {		
+  		if (vehiculos) {
   			let empresaId = FlowRouter.getParam('empresaId');
-  			return Vehiculos.find({empresaId: empresaId});
-  		} 	
+				console.log(Session.get('filtroRuta'));
+				let numero = Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta')}).fetch().length
+				console.log(numero)
+				return Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta') });
+  		}
 	},
 	fotos() {
 		return FotosDeVehiculos.find();
@@ -117,7 +142,7 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
 
 Template.ListaDeVehiculosPorEmpresas.events({
   	'keyup [name="search"]' ( event, template ) {
-  	
+
     	let value = event.target.value.trim();
 
 	    //if ( value !== '' && event.keyCode === 13 ) {
@@ -225,17 +250,17 @@ Template.ListaDeConductoresPorEmpresa.helpers({
   	conductores: function () {
   		let vehiculos = Conductores.find();
 
-  		if (vehiculos) {		
+  		if (vehiculos) {
   			let empresaId = FlowRouter.getParam('empresaId');
   			return Conductores.find({empresaId: empresaId});
-  		} 
-		
+  		}
+
 	}
 });
 
 Template.ListaDeConductoresPorEmpresa.events({
   	'keyup [name="search"]' ( event, template ) {
-  	
+
     	let value = event.target.value.trim();
 
 	    //if ( value !== '' && event.keyCode === 13 ) {
@@ -316,17 +341,17 @@ Template.ListaDeCobradoresPorEmpresa.helpers({
   	cobradores: function () {
   		let vehiculos = Cobradores.find();
 
-  		if (vehiculos) {		
+  		if (vehiculos) {
   			let empresaId = FlowRouter.getParam('empresaId');
   			return Cobradores.find({empresaId: empresaId});
-  		} 
-		
+  		}
+
 	}
 });
 
 Template.ListaDeCobradoresPorEmpresa.events({
   	'keyup [name="search"]' ( event, template ) {
-  	
+
     	let value = event.target.value.trim();
 
 	    //if ( value !== '' && event.keyCode === 13 ) {
@@ -380,15 +405,15 @@ Template.ListaDeCobradoresPorEmpresa.events({
 });
 
 Template.EditarVehiculo.onCreated( () => {
-	
+
 	let template = Template.instance();
 
   	template.autorun( () => {
-    	
+
     	let vehiculo = Session.get('editarVehiculo');
 
     	template.subscribe( 'DetalleDeVehiculos', vehiculo);
-  	
+
   	});
 
 });
@@ -408,7 +433,7 @@ Template.Opciones.events({
 		Modal.show('AgregarConductor');
 	},
 	'click .agregar-cobrador'() {
-		Modal.show('AgregarCobrador');	
+		Modal.show('AgregarCobrador');
 	}
 });
 
@@ -439,7 +464,7 @@ Template.EditarVehiculo.events({
 			TC: {
 				numero: t.find("[name='tc']").value,
 				emision: t.find("[name='emisiontc']").value,
-				caducidad: t.find("[name='caducidadtc']").value 
+				caducidad: t.find("[name='caducidadtc']").value
 			},
 			SOAT: {
 				numero: t.find("[name='soat']").value,
@@ -455,7 +480,7 @@ Template.EditarVehiculo.events({
 			RC: {
 				numero: t.find("[name='rc']").value,
 				inicio: t.find("[name='emisionrc']").value,
-				fin: t.find("[name='caducidadrc']").value	
+				fin: t.find("[name='caducidadrc']").value
 			},
 			TCH: {
 				numero: t.find("[name='tch']").value,
@@ -474,20 +499,20 @@ Template.EditarVehiculo.events({
 				}
 			});
 		}
-	
+
 	}
 });
 
 Template.EditarEmpresa.onCreated( () => {
-	
+
 	let template = Template.instance();
 
   	template.autorun( () => {
-    	
+
     	let empresaId = FlowRouter.getParam('empresaId');
 
     	template.subscribe( 'DetalleDeEmpresa', empresaId);
-  	
+
   	});
 
 });
@@ -508,7 +533,7 @@ Template.EditarEmpresa.events({
 			domicilio: t.find("[name='domicilio']").value,
 			representante: t.find("[name='representante']").value,
 			telefono: t.find("[name='telefono']").value,
-			email:t.find("[name='email']").value 
+			email:t.find("[name='email']").value
 		}
 
 		let empresaId = FlowRouter.getParam('empresaId');
@@ -529,15 +554,15 @@ Template.EditarEmpresa.events({
 });
 
 Template.EditarConductor.onCreated( () => {
-	
+
 	let template = Template.instance();
 
   	template.autorun( () => {
-    	
+
     	let vehiculo = Session.get('editarConductor');
 
     	template.subscribe( 'DetalleDeConductores', vehiculo);
-  	
+
   	});
 
 });
@@ -571,7 +596,7 @@ Template.EditarConductor.events({
 			CEV: {
 				codigo: t.find("[name='codigocev']").value,
 				emision: t.find("[name='emision']").value,
-				caducidad: t.find("[name='caducidad']").value 
+				caducidad: t.find("[name='caducidad']").value
 			},
 			credencial: {
 				codigo: t.find("[name='codigocredencial']").value,
@@ -590,20 +615,20 @@ Template.EditarConductor.events({
 				}
 			});
 		}
-	
+
 	}
 });
 
 Template.EditarCobrador.onCreated( () => {
-	
+
 	let template = Template.instance();
 
   	template.autorun( () => {
-    	
+
     	let vehiculo = Session.get('editarCobrador');
 
     	template.subscribe( 'DetalleDeCobradores', vehiculo);
-  	
+
   	});
 
 });
@@ -619,7 +644,7 @@ Template.EditarCobrador.events({
 	'click .guardar'(e, t) {
 
 		let datos = {
-			
+
 			datos: {
 				nombre: t.find("[name='nombre']").value,
 				apellido: t.find("[name='apellidos']").value,
@@ -649,25 +674,29 @@ Template.EditarCobrador.events({
 				}
 			});
 		}
-	
+
 	}
 });
 
 Template.Empresas.events({
-	'click .agregar-empresa'() {	
+	'click .agregar-empresa'() {
 		Modal.show('agregarEmpresa');
 	},
 	'change #subirFlota'(e, t) {
 		let id = this._id;
 		let rutaId = $("#listarutas").val();
+		Session.set('filtroRuta', rutaId);
 		console.log(rutaId);
-    	handleFile(e, id, rutaId);	
+    	handleFile(e, id, rutaId);
+	},
+	'change #listarutas'() {
+		let rutaId = $("#listarutas").val();
+		Session.set('filtroRuta', rutaId);
 	}
 });
 
 Template.agregarEmpresa.onRendered( function () {
-	$('#datetimepicker1').datetimepicker({
-	});
+
 
 
 });
@@ -683,9 +712,9 @@ Template.agregarEmpresa.events({
 			telefono: t.find("[name='telefono']").value,
 			email: t.find("[name='email']").value
 		}
-	
-		if (datos.nombre !== "" && datos.ruc !== "" && datos.domicilio !== "" && datos.representante !== "" && datos.telefono !== "") {	
-			
+
+		if (datos.nombre !== "" && datos.ruc !== "" && datos.domicilio !== "" && datos.representante !== "" && datos.telefono !== "") {
+
 			if (datos.ruc.length === 11 ) {
 				Meteor.call('agregarEmpresa', datos, (err) => {
 					if (err) {
@@ -693,12 +722,12 @@ Template.agregarEmpresa.events({
 					} else {
 						Modal.hide('agregarEmpresa');
 					}
-				});	
+				});
 			} else {
 				Bert.alert('ingrese correctamente el RUC', 'warning', 'growl-top-right');
 			}
 
-			
+
 		} else {
 
 			alert('Ingrese datos validos');
@@ -779,21 +808,23 @@ Template.nuevoUsuario.events({
 			password: t.find("[name='password']").value,
 			profile: {
 				nombre: t.find("[name='nombre']").value,
-				empresaId: FlowRouter.getParam('empresaId') 
+				empresaId: FlowRouter.getParam('empresaId')
 			}
 		}
 
 		let r = $("#rol").val();
-		
+
 		let rol;
 
 		if (r === "1") {
 			rol = 1;
  		} else if (r === "2") {
  			rol = 2;
- 		} else {
+ 		} else if (r === "3") {
  			rol = 3;
- 		}
+ 		} else {
+			rol = 4;
+		}
 
 		if (datos.email !== "" && datos.password !== "" && datos.profile.nombre !== "") {
 			Meteor.call('agregarUsuario', datos, rol,(err) => {
@@ -801,7 +832,7 @@ Template.nuevoUsuario.events({
 					sweetAlert("Oops...", "Hubo un error, vuelva a intentarlo", "error");
 				} else {
 					Modal.hide('nuevoUsuario');
-					Bert.alert( 'Agregó un Usuario.', 'success', 'growl-top-right' ); 
+					Bert.alert( 'Agregó un Usuario.', 'success', 'growl-top-right' );
 				}
 			});
 		} else {
@@ -827,6 +858,9 @@ Template.ListaDeDirectoresPorEmpresa.helpers({
 });
 
 Template.ListaDeDirectoresPorEmpresa.events({
+	'click .edit2'() {
+		Modal.show('EditarDirector')
+	},
 	'click .remove'() {
 
 		swal({
@@ -843,14 +877,14 @@ Template.ListaDeDirectoresPorEmpresa.events({
 					if (err) {
 						sweetAlert("Oops...", "Hubo un error, vuelva a intentarlo", "error");
 					} else {
-					
-						Bert.alert( 'Eliminó al Director.', 'success', 'growl-top-right' ); 
+
+						Bert.alert( 'Eliminó al Director.', 'success', 'growl-top-right' );
 					}
 				});
 
 			});
 
-		
+
 	}
 });
 
@@ -860,7 +894,7 @@ Template.ListaDeOperadoresPorEmpresa.onCreated( () => {
   	template.autorun( () => {
   		let empresaId = FlowRouter.getParam('empresaId');
   		template.subscribe( 'OperadoresPorEmpresa', empresaId);
-    	
+
   	});
 });
 
@@ -871,6 +905,9 @@ Template.ListaDeOperadoresPorEmpresa.helpers({
 });
 
 Template.ListaDeOperadoresPorEmpresa.events({
+	'click .edit3'() {
+		Modal.show('EditarOperador')
+	},
 	'click .remove'() {
 
 		swal({
@@ -887,8 +924,8 @@ Template.ListaDeOperadoresPorEmpresa.events({
 					if (err) {
 						sweetAlert("Oops...", "Hubo un error, vuelva a intentarlo", "error");
 					} else {
-					
-						Bert.alert( 'Eliminó al Operador.', 'success', 'growl-top-right' ); 
+
+						Bert.alert( 'Eliminó al Operador.', 'success', 'growl-top-right' );
 					}
 				});
 
@@ -903,13 +940,13 @@ Template.FotosDeCobradores.onCreated( () => {
   	template.autorun( () => {
   		//let empresaId = FlowRouter.getParam('empresaId');
   		template.subscribe( 'FotosDeCobradoresPorEmpresa');
-    	
+
   	});
 });
 
 Template.FotosDeCobradores.helpers({
 	fotos() {
-		return FotosDeCobradores.find({'metadata.cobradorId': this._id}); 
+		return FotosDeCobradores.find({'metadata.cobradorId': this._id});
 	}
 });
 
@@ -925,13 +962,13 @@ Template.FotosDeCobradores1.onCreated( () => {
   	template.autorun( () => {
   		//let empresaId = FlowRouter.getParam('empresaId');
   		template.subscribe( 'FotosDeCobradoresPorEmpresa');
-    	
+
   	});
 });
 
 Template.FotosDeCobradores1.helpers({
 	fotos() {
-		return FotosDeCobradores.find({'metadata.cobradorId': this._id, 'metadata.tipo': 1}); 
+		return FotosDeCobradores.find({'metadata.cobradorId': this._id, 'metadata.tipo': 1});
 	}
 });
 
@@ -947,13 +984,13 @@ Template.FotosDeCobradores2.onCreated( () => {
   	template.autorun( () => {
   		//let empresaId = FlowRouter.getParam('empresaId');
   		template.subscribe( 'FotosDeCobradoresPorEmpresa');
-    	
+
   	});
 });
 
 Template.FotosDeCobradores2.helpers({
 	fotos() {
-		return FotosDeCobradores.find({'metadata.cobradorId': this._id, 'metadata.tipo': 2}); 
+		return FotosDeCobradores.find({'metadata.cobradorId': this._id, 'metadata.tipo': 2});
 	}
 });
 
@@ -969,13 +1006,13 @@ Template.FotosDeCobradores3.onCreated( () => {
   	template.autorun( () => {
   		//let empresaId = FlowRouter.getParam('empresaId');
   		template.subscribe( 'FotosDeCobradoresPorEmpresa');
-    	
+
   	});
 });
 
 Template.FotosDeCobradores3.helpers({
 	fotos() {
-		return FotosDeCobradores.find({'metadata.cobradorId': this._id, 'metadata.tipo': 3}); 
+		return FotosDeCobradores.find({'metadata.cobradorId': this._id, 'metadata.tipo': 3});
 	}
 });
 
@@ -989,13 +1026,13 @@ Template.FotosDeConductores.onCreated( () => {
 	let template = Template.instance();
 
   	template.autorun( () => {
-  		template.subscribe( 'FotosDeConductoresPorEmpresa');	
+  		template.subscribe( 'FotosDeConductoresPorEmpresa');
   	});
 });
 
 Template.FotosDeConductores.helpers({
 	fotos() {
-		return FotosDeConductores.find({'metadata.conductorId': this._id}); 
+		return FotosDeConductores.find({'metadata.conductorId': this._id});
 	}
 });
 
@@ -1009,13 +1046,13 @@ Template.FotosDeConductores1.onCreated( () => {
 	let template = Template.instance();
 
   	template.autorun( () => {
-  		template.subscribe( 'FotosDeConductoresPorEmpresa');	
+  		template.subscribe( 'FotosDeConductoresPorEmpresa');
   	});
 });
 
 Template.FotosDeConductores1.helpers({
 	fotos() {
-		return FotosDeConductores.find({'metadata.conductorId': this._id, 'metadata.tipo': 1}); 
+		return FotosDeConductores.find({'metadata.conductorId': this._id, 'metadata.tipo': 1});
 	}
 });
 
@@ -1029,13 +1066,13 @@ Template.FotosDeConductores2.onCreated( () => {
 	let template = Template.instance();
 
   	template.autorun( () => {
-  		template.subscribe( 'FotosDeConductoresPorEmpresa');	
+  		template.subscribe( 'FotosDeConductoresPorEmpresa');
   	});
 });
 
 Template.FotosDeConductores2.helpers({
 	fotos() {
-		return FotosDeConductores.find({'metadata.conductorId': this._id, 'metadata.tipo': 2}); 
+		return FotosDeConductores.find({'metadata.conductorId': this._id, 'metadata.tipo': 2});
 	}
 });
 
@@ -1049,13 +1086,13 @@ Template.FotosDeConductores3.onCreated( () => {
 	let template = Template.instance();
 
   	template.autorun( () => {
-  		template.subscribe( 'FotosDeConductoresPorEmpresa');	
+  		template.subscribe( 'FotosDeConductoresPorEmpresa');
   	});
 });
 
 Template.FotosDeConductores3.helpers({
 	fotos() {
-		return FotosDeConductores.find({'metadata.conductorId': this._id, 'metadata.tipo': 3}); 
+		return FotosDeConductores.find({'metadata.conductorId': this._id, 'metadata.tipo': 3});
 	}
 });
 
@@ -1069,13 +1106,13 @@ Template.FotosDeConductores4.onCreated( () => {
 	let template = Template.instance();
 
   	template.autorun( () => {
-  		template.subscribe( 'FotosDeConductoresPorEmpresa');	
+  		template.subscribe( 'FotosDeConductoresPorEmpresa');
   	});
 });
 
 Template.FotosDeConductores4.helpers({
 	fotos() {
-		return FotosDeConductores.find({'metadata.conductorId': this._id, 'metadata.tipo': 4}); 
+		return FotosDeConductores.find({'metadata.conductorId': this._id, 'metadata.tipo': 4});
 	}
 });
 
@@ -1091,13 +1128,13 @@ Template.FotosDeVehiculos.onCreated( () => {
   	template.autorun( () => {
   		//let empresaId = FlowRouter.getParam('empresaId');
   		template.subscribe( 'FotosDeVehiculosPorEmpresa');
-    	
+
   	});
 });
 
 Template.FotosDeVehiculos.helpers({
 	fotos() {
-		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto'}); 
+		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto'});
 	}
 });
 
@@ -1113,13 +1150,13 @@ Template.FotosDeVehiculos2.onCreated( () => {
   	template.autorun( () => {
   		//let empresaId = FlowRouter.getParam('empresaId');
   		template.subscribe( 'FotosDeVehiculosPorEmpresa');
-    	
+
   	});
 });
 
 Template.FotosDeVehiculos2.helpers({
 	fotos() {
-		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto2'}); 
+		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto2'});
 	}
 });
 
@@ -1135,13 +1172,13 @@ Template.FotosDeVehiculos3.onCreated( () => {
   	template.autorun( () => {
   		//let empresaId = FlowRouter.getParam('empresaId');
   		template.subscribe( 'FotosDeVehiculosPorEmpresa');
-    	
+
   	});
 });
 
 Template.FotosDeVehiculos3.helpers({
 	fotos() {
-		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto3'}); 
+		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto3'});
 	}
 });
 
@@ -1157,13 +1194,13 @@ Template.FotosDeVehiculos4.onCreated( () => {
   	template.autorun( () => {
   		//let empresaId = FlowRouter.getParam('empresaId');
   		template.subscribe( 'FotosDeVehiculosPorEmpresa');
-    	
+
   	});
 });
 
 Template.FotosDeVehiculos4.helpers({
 	fotos() {
-		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto4'}); 
+		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto4'});
 	}
 });
 
@@ -1179,13 +1216,13 @@ Template.FotosDeVehiculos5.onCreated( () => {
   	template.autorun( () => {
   		//let empresaId = FlowRouter.getParam('empresaId');
   		template.subscribe( 'FotosDeVehiculosPorEmpresa');
-    	
+
   	});
 });
 
 Template.FotosDeVehiculos5.helpers({
 	fotos() {
-		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto5'}); 
+		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto5'});
 	}
 });
 
@@ -1201,13 +1238,13 @@ Template.FotosDeVehiculos6.onCreated( () => {
   	template.autorun( () => {
   		//let empresaId = FlowRouter.getParam('empresaId');
   		template.subscribe( 'FotosDeVehiculosPorEmpresa');
-    	
+
   	});
 });
 
 Template.FotosDeVehiculos6.helpers({
 	fotos() {
-		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto6'}); 
+		return FotosDeVehiculos.find({'metadata.vehiculoId': this._id, 'metadata.tipo': 'foto6'});
 	}
 });
 

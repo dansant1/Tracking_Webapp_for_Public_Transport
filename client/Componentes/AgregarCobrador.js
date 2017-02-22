@@ -2,7 +2,7 @@ Template.AgregarCobrador.events({
 	'click .guardar'(e, t) {
 
 		let datos = {
-			
+
 			datos: {
 				nombre: t.find("[name='nombre']").value,
 				apellido: t.find("[name='apellidos']").value,
@@ -35,7 +35,7 @@ Template.AgregarCobrador.events({
 				}
 			});
 		}
-	
+
 	}
 });
 
@@ -43,7 +43,7 @@ Template.AgregarCobrador1.events({
 	'click .guardar'(e, t) {
 
 		let datos = {
-			
+
 			datos: {
 				nombre: t.find("[name='nombre']").value,
 				apellido: t.find("[name='apellidos']").value,
@@ -76,6 +76,47 @@ Template.AgregarCobrador1.events({
 				}
 			});
 		}
-	
+
+	}
+});
+
+Template.AgregarCobradorBorrador.events({
+	'click .guardar'(e, t) {
+
+		let datos = {
+
+			datos: {
+				nombre: t.find("[name='nombre']").value,
+				apellido: t.find("[name='apellidos']").value,
+				dni: t.find("[name='dni']").value,
+				domicilio: t.find("[name='domicilio']").value,
+				distrito: t.find("[name='distrito']").value
+			},
+			CEV: {
+				codigo: t.find("[name='codigocev']").value,
+				emision: t.find("[name='emisioncev']").value,
+				caducidad: t.find("[name='caducidadcev']").value
+			},
+			credencial: {
+				numero: t.find("[name='numerocredencial']").value,
+				emision: t.find("[name='emisioncredencial']").value,
+				caducidad: t.find("[name='caducidadcredencial']").value,
+			},
+			createdAt: new Date(),
+			empresaId: Meteor.user().profile.empresaId
+
+		}
+
+		if (datos) {
+			Meteor.call('agregarCobradorBorrador', datos, function (err) {
+				if (err) {
+					alert(err);
+				} else {
+					Modal.hide('AgregarCobradorBorrador');
+					swal("¡Listo!", "El cobrador ha sido agregado para la aprobacion del director", "success");
+				}
+			});
+		}
+
 	}
 });

@@ -20,7 +20,7 @@ Template.AgregarConductor.events({
 			CEV: {
 				codigo: t.find("[name='codigocev']").value,
 				emision: t.find("[name='emision']").value,
-				caducidad: t.find("[name='caducidad']").value 
+				caducidad: t.find("[name='caducidad']").value
 			},
 			credencial: {
 				codigo: t.find("[name='codigocredencial']").value,
@@ -41,7 +41,7 @@ Template.AgregarConductor.events({
 				}
 			});
 		}
-	
+
 	}
 });
 
@@ -67,7 +67,7 @@ Template.AgregarConductor1.events({
 			CEV: {
 				codigo: t.find("[name='codigocev']").value,
 				emision: t.find("[name='emision']").value,
-				caducidad: t.find("[name='caducidad']").value 
+				caducidad: t.find("[name='caducidad']").value
 			},
 			credencial: {
 				codigo: t.find("[name='codigocredencial']").value,
@@ -88,6 +88,53 @@ Template.AgregarConductor1.events({
 				}
 			});
 		}
-	
+
+	}
+});
+
+Template.AgregarConductorBorrador.events({
+	'click .guardar'(e, t) {
+
+		let datos = {
+			datos: {
+				nombre: t.find("[name='nombre']").value,
+				apellido: t.find("[name='apellido']").value,
+				caducidad: t.find("[name='caducidaddni']").value,
+				dni: t.find("[name='dni']").value,
+				domicilio: t.find("[name='domicilio']").value,
+				distrito: t.find("[name='distrito']").value,
+				telefono: t.find("[name='telefono']").value
+			},
+			licencia: {
+				codigo: t.find("[name='codigolicencia']").value,
+				categoria: t.find("[name='categoria']").value,
+				expedicion: t.find("[name='expedicion']").value,
+				revalidacion: t.find("[name='revalidacion']").value
+			},
+			CEV: {
+				codigo: t.find("[name='codigocev']").value,
+				emision: t.find("[name='emision']").value,
+				caducidad: t.find("[name='caducidad']").value
+			},
+			credencial: {
+				codigo: t.find("[name='codigocredencial']").value,
+				emision: t.find("[name='emisionsoat']").value,
+				caducidad: t.find("[name='caducidadsoat']").value
+			},
+			createdAt: new Date(),
+			empresaId: Meteor.user().profile.empresaId
+		}
+
+		if (datos) {
+			Meteor.call('agregarConductorBorrador', datos, function (err) {
+				if (err) {
+					alert(err);
+				} else {
+					Modal.hide('AgregarConductorBorrador');
+					swal("¡Listo!", "El conductor ha sido agregado para ser aprobado por el director", "success");
+				}
+			});
+		}
+
 	}
 });
