@@ -33,26 +33,27 @@ Template.AgregarVehiculo.events({
 				longitud: t.find("[name='longitud']").value,
 				asientos: t.find("[name='asientos']").value
 			},
-			compania: t.find("[name='compania']").value,
 			rutaId: $('#listaruta').val(),
 			codigoDeRuta: Rutas.find({_id: $('#listaruta').val()}).nombre,
 			fechaDePermanenciaEnLaEmpresa: t.find("[name='fechaDePermanenciaEnLaEmpresa']").value,
 			TC: {
 				numero: t.find("[name='tc']").value,
 				emision: t.find("[name='emisiontc']").value,
-				caducidad: t.find("[name='caducidadtc']").value
+				caducidad: t.find("[name='caducidadtc']").value,
+				entidad: t.find("[name='entidadtc']").value
 			},
 			SOAT: {
 				numero: t.find("[name='soat']").value,
 				inicio: t.find("[name='emisionsoat']").value,
-				fin: t.find("[name='caducidadsoat']").value
+				fin: t.find("[name='caducidadsoat']").value,
+				aseguradora: t.find("[name='aseguradorasoat']").value
 			},
 			CITV: {
 				numero: t.find("[name='rt']").value,
 				inicio: t.find("[name='emisionrt']").value,
-				fin: t.find("[name='caducidadrt']").value
+                fin: t.find("[name='caducidadrt']").value,
+                entidad: t.find("[name='entidadrt']").value
 			},
-			aseguradora: t.find("[name='aseguradora']").value,
 			RC: {
 				numero: t.find("[name='rc']").value,
 				inicio: t.find("[name='emisionrc']").value,
