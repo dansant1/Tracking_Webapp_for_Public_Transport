@@ -3,7 +3,7 @@ Template.AgregarVehiculo.onCreated(() => {
 
     template.autorun(() => {
         template.subscribe('rutas');
-        template.subscribe('entidades');
+        template.subscribe('Entidades');
     });
 });
 

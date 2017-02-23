@@ -299,3 +299,13 @@ Meteor.publish( 'BuscadorEntidades', function( search ) {
 
     return Entidades.find(query, projection );
 });
+
+Meteor.publish( 'Entidades', function() {
+
+	if (this.userId) {
+		return Entidades.find();
+	} else {
+		this.stop()
+	}
+
+});
