@@ -32,7 +32,6 @@ Template.Empresas.helpers({
       	let search = Template.instance().searchQuery.get();
 	  	if ( search ) {
 		    let regex = new RegExp( search, 'i' );
-		    console.log(regex);
 		    query = {
 		      $or: [
 		        { nombre: regex },
@@ -55,13 +54,9 @@ Template.Empresas.events({
 
     	let value = event.target.value.trim();
 
-    	console.log(value);
-
 	    //if ( value !== '' && event.keyCode === 13 ) {
 	    	template.searchQuery.set( value );
 	    	template.searching.set( true );
-
-	    	console.log(template.searchQuery.get());
 	    //}
 
 	    if ( value === '' ) {
@@ -83,7 +78,7 @@ Template.Empresas.events({
 					if (err) {
 						alert(err);
 					} else {
-						Bert.alert('Empresa Eliminada', 'danger')
+						swal("Eliminado!", "", "success");
 					}
 				});
 			});
@@ -699,13 +694,6 @@ Template.agregarEmpresa.onRendered( function () {
 
 
 
-});
-
-Template.agregarEmpresa.helpers({
-    validateEmail(email) {
-        let re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-        return re.test(email);
-    }
 });
 
 Template.agregarEmpresa.events({

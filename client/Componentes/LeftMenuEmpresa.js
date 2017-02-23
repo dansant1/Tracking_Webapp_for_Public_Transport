@@ -24,5 +24,8 @@ Template.LeftMenuEmpresa.events({
 Template.LeftMenuAdministrador.events({
 	'click .ae'() {
 		Modal.show('agregarEmpresa');
+	},
+	'click .add__entity'() {
+		Modal.show('agregarEntidad');
 	}
 });

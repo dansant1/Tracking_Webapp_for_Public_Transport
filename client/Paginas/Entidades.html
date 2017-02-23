@@ -1,0 +1,82 @@
+<template name="Entidades">
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-sm-18 col-xs-18">
+                    <div class="box">
+                        <h3>Entidades</h3>
+                        <br>
+                        <div class="page-header clearfix" style="margin-top: 0px;">
+                            <h4 class="pull-left">
+                                <input type="text" style="position: relative; top: 5px; width: 275px" name="search"
+                                       class="form-control" width="250px" placeholder="Buscar por nombre">
+                            </h4>
+
+                            <h4 class="pull-right">
+						    	<span class="action-btn add__entity">
+									<a style="width: 220px; margin-left: 0px; font-weight: 300; background-color: #3498db;"
+                                       class="top-nav-btn blue">Agregar Entidad</a>
+								</span>
+                            </h4>
+
+                        </div>
+
+                        <ul class="list-group">
+                            {{#if searching}}
+                                <h3>Cargando...</h3>
+                            {{else}}
+                                {{#each entidades}}
+                                    <li class="list-group-item clearfix">
+                                        <span class="pull-left">{{nombre}}</span>
+                                        <span class="pull-right" style="width: 35px">
+                                            <button type="button" class="btn btn-danger delete__entity">x</button>
+                                        </span>
+                                    </li>
+
+                                {{else}}
+                                    <h3>Lo sentimos no tenemos resultados para {{query}}</h3>
+                                {{/each}}
+
+                            {{/if}}
+
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="agregarEntidad">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Agregar Entidad</h4>
+                </div>
+
+                <div class="modal-body">
+                    <br>
+
+                    <form class="form-inline form__add__entity">
+
+                        <div class="form-group">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" name="nombre" style="margin-left: 48px; width: 432px;"
+                                   class="form-control" id="nombre">
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary send__entity__data">Agregar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>

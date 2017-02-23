@@ -259,23 +259,43 @@ Meteor.publish('FotosDeCobradoresPorEmpresa', function () {
 });
 
 Meteor.publish( 'BuscaadorDeEmpresas', function( search ) {
-  let query      = {},
-      projection = { limit: 40, sort: { nombre: 1 } };
+    let query      = {},
+        projection = { limit: 40, sort: { nombre: 1 } };
 
-   	console.log(search);
+    console.log(search);
 
-  if ( search ) {
-    let regex = new RegExp( search, 'i' );
-    console.log(regex);
-    query = {
-      $or: [
-        { nombre: regex },
-        { ruc: regex }
-      ]
-    };
+    if ( search ) {
+        let regex = new RegExp( search, 'i' );
+        console.log(regex);
+        query = {
+            $or: [
+                { nombre: regex },
+                { ruc: regex }
+            ]
+        };
 
-    projection.limit = 200;
-  }
+        projection.limit = 200;
+    }
 
-  return Empresas.find(query, projection );
+    return Empresas.find(query, projection );
+});
+
+//ENTIDADES
+
+Meteor.publish( 'BuscadorEntidades', function( search ) {
+    let query      = {},
+        projection = { limit: 40, sort: { nombre: 1 } };
+
+    if ( search ) {
+        let regex = new RegExp( search, 'i' );
+        query = {
+            $or: [
+                { nombre: regex }
+            ]
+        };
+
+        projection.limit = 200;
+    }
+
+    return Entidades.find(query, projection );
 });

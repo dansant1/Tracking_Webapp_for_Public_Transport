@@ -4,7 +4,6 @@ import ROLES from '../../Both/Roles'
 
 Meteor.methods({
 	agregarEmpresa(datos) {
-
 		Empresas.insert({
 			nombre: datos.nombre,
 			createdAt: new Date(),
@@ -14,10 +13,17 @@ Meteor.methods({
 			telefono: datos.telefono,
 			email: datos.email
 		});
-
 	},
 	eliminarEmpresa(id) {
 		Empresas.remove({_id: id});
+	},
+	agregarEntidad(datos) {
+		Entidades.insert({
+			nombre: datos.nombre
+		});
+	},
+	eliminarEntidad(id) {
+		Entidades.remove({_id: id});
 	},
 	agregarUsuario(datos, rol) {
 		id = Accounts.createUser(datos);
