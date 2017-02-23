@@ -1,3 +1,12 @@
+Meteor.publish('Requisitos', function () {
+	if (this.userId) {
+		return Requisitos.find();
+	} else {
+		this.stop();
+		return;
+	}
+});
+
 Meteor.publish('Empresas', function () {
 	if (this.userId) {
 		return Empresas.find();
