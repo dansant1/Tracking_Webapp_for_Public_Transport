@@ -14,6 +14,13 @@ FlowRouter.route('/rastreo', {
     }
 });
 
+FlowRouter.route('/mantenimiento', {
+    name: 'Mantenimiento',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'Mantenimiento'});
+    }
+});
+
 FlowRouter.route('/borradores', {
     name: 'Borradores',
     action() {

@@ -27,5 +27,8 @@ Template.LeftMenuAdministrador.events({
 	},
 	'click .add__entity'() {
 		Modal.show('agregarEntidad');
+	},
+	'click .add__mantenimiento'() {
+		Modal.show('agregarRequisitoVehicular');
 	}
 });
