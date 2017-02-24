@@ -639,5 +639,23 @@ Meteor.methods({
         } else {
             return;
         }
+    },
+    despachar({vehiculoId, hora}){
+        let vehiculo = Vehiculos.findOne({_id: vehiculoId});
+        let totalRequisitosVehiculo = Requisitos.find({_id: {$in: vehiculo.idRequisitos}}).count();
+        let totalRequisitos = Requisitos.find().count();
+        if (!vehiculo.despachado && totalRequisitosVehiculo === totalRequisitos) {
+            Despachos.insert({
+                deliveredAt: new Date(),
+                vehiculoId,
+                hora,
+                returnedAt: null
+            });
+            Vehiculos.update({_id: vehiculoId}, {
+                $set: {
+                    despachado: true
+                }
+            });
+        }
     }
 });
