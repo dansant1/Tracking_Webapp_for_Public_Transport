@@ -23,86 +23,36 @@
 
   <ul class="list-group">
 
-      <!--{{#each albums}} -->
+      {{#each horario}}
 			<li class="list-group-item clearfix">
-				<span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
+				<span class="pull-left" style="width: 15%; margin-left: 10px">{{hora}}
+					<div class="form-group">
+						<br>
+
+						<select class="js-example-basic form-control">
+
+							{{#each vehiculos}}
+								<option value="{{this._id}}">{{this.placa}} - {{this.padron}}</option>
+							{{else}}
+							<option value="0">Cargando...</option>
+							{{/each}}
+						</select>
+
+					</div>
+
+				</span>
 				<span class="pull-right" style="width: 27%">
-					<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
-						<option value="0">1</option>
-						<option value="0">2</option>
-					</select>
+
 					<button disabled type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
 				</span>
 			</li>
 
-				<li class="list-group-item clearfix">
-          <span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
-          <span class="pull-right" style="width: 27%">
-						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
-							<option value="0">1</option>
-							<option value="0">2</option>
-						</select>
-						<button type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
-					</span>
-        </li>
 
-				<li class="list-group-item clearfix">
-					<span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
-					<span class="pull-right" style="width: 27%">
-						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
-							<option value="0">1</option>
-							<option value="0">2</option>
-						</select>
-						<button type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
-					</span>
-				</li>
-
-				<li class="list-group-item clearfix">
-					<span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
-					<span class="pull-right" style="width: 27%">
-						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
-							<option value="0">1</option>
-							<option value="0">2</option>
-						</select>
-						<button disabled type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
-					</span>
-				</li>
-
-				<li class="list-group-item clearfix">
-					<span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
-					<span class="pull-right" style="width: 27%">
-						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
-							<option value="0">1</option>
-							<option value="0">2</option>
-						</select>
-						<button type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
-					</span>
-				</li>
-
-				<li class="list-group-item clearfix">
-          <span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
-          <span class="pull-right" style="width: 27%">
-						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
-							<option value="0">1</option>
-							<option value="0">2</option>
-						</select>
-						<button type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
-					</span>
-        </li>
-
-				<li class="list-group-item clearfix">
-          <span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
-          <span class="pull-right" style="width: 27%">
-						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
-							<option value="0">1</option>
-							<option value="0">2</option>
-						</select>
-						<button type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
-					</span>
-        </li>
-      <!-- {{else}} -->
-        <!--<p class="alert alert-warning">Nothing found for {{query}}. Sorry, bub.</p> -->
-      <!-- {{/each}} -->
+    	{{else}}
+    		<div class="loader"></div>
+				<br>
+				<p style="width: 80%; margin: 10px auto; text-align: center">Cargando Planeamiento</p>
+      {{/each}}
 
   </ul>
 </template>

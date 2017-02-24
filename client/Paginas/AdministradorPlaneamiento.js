@@ -5,7 +5,7 @@ Template.AdministradorRutas.onCreated( () => {
     template.searching   = new ReactiveVar( false );
 
     template.autorun( () => {
-        
+
         template.subscribe( 'BuscaadorDeEmpresas', template.searchQuery.get(), () => {
             setTimeout( () => {
                 template.searching.set( false );
@@ -47,7 +47,7 @@ Template.AdministradorRutas.helpers({
 
 Template.AdministradorRutas.events({
     'keyup [name="search"]' ( event, template ) {
-    
+
         let value = event.target.value.trim();
 
         //if ( value !== '' && event.keyCode === 13 ) {
@@ -69,8 +69,8 @@ Template.AdministradorRutas.onCreated(function() {
     GoogleMaps.ready('map', function(map) {
 
         self.autorun(function() {
-            
-            
+
+
             /*var drawingManager = new google.maps.drawing.DrawingManager({
                 drawingMode: google.maps.drawing.OverlayType.MARKER,
                 drawingControl: true,
@@ -97,7 +97,7 @@ Template.AdministradorRutas.onCreated(function() {
 
             map.instance.setZoom(15);*/
                 console.log('gola');
-                
+
 
             });
 
@@ -115,7 +115,7 @@ Template.AdministradorAgregarPlaneamiento.onCreated( () => {
 
 Template.AdministradorAgregarPlaneamiento.helpers({
     rutas() {
-        
+
         return Rutas.find({});
     }
 });
@@ -123,27 +123,27 @@ Template.AdministradorAgregarPlaneamiento.helpers({
 Template.AdministradorAgregarPlaneamiento.onRendered( () => {
 
     $("#horarios tr td").find("#hora").each( function () {
-        
+
         $(this).datetimepicker({
             format: 'LT'
-        });    
+        });
     });
-   
+
 });
 
 Template.AdministradorAgregarPlaneamiento.events({
     'click .plus'(e, t) {
-        $('#horarios').append("<tr id='h'><td><div class='input-group date' id='hora'><input type='text' class='form-control l' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control m' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control mi' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control j' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control v' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control s' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control d' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td style='text-align: center;''></td></tr>");  
-        
+        $('#horarios').append("<tr id='h'><td><div class='input-group date' id='hora'><input type='text' class='form-control l' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control m' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control mi' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control j' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control v' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control s' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control d' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td style='text-align: center;''></td></tr>");
+
         $("#horarios tr td").find("#hora").each( function () {
-        
+
             $(this).datetimepicker({
                 format: 'LT'
-            });    
+            });
         });
     },
     'click .guardar'(e, t) {
-        
+
             let datos = {
                 rutaId: $('#rutasPorEmpresa').val()
             }
@@ -159,13 +159,13 @@ Template.AdministradorAgregarPlaneamiento.events({
             };
 
             $('td #hora input.l').each( function () {
-                
+
                 datos.horas.lunes.push({
                     lunes: $(this).val()
                 });
             });
 
-        
+
             $('td #hora input.m').each( function () {
                 datos.horas.martes.push({
                     martes: $(this).val()
@@ -174,14 +174,14 @@ Template.AdministradorAgregarPlaneamiento.events({
 
 
             $('td #hora input.mi').each( function () {
-                
+
                 datos.horas.miercoles.push({
                     miercoles: $(this).val()
                 });
             });
 
             $('td #hora input.j').each( function () {
-               
+
                 datos.horas.jueves.push({
                     jueves: $(this).val()
                 });
@@ -189,16 +189,16 @@ Template.AdministradorAgregarPlaneamiento.events({
 
 
             $('td #hora input.v').each( function () {
-                
+
                 datos.horas.viernes.push({
                     viernes: $(this).val()
                 });
             });
 
-            
+
 
             $('td #hora input.s').each( function () {
-                
+
                 datos.horas.sabado.push({
                     sabado: $(this).val()
                 });
@@ -206,7 +206,7 @@ Template.AdministradorAgregarPlaneamiento.events({
 
 
             $('td #hora input.d').each( function () {
-                
+
                 datos.horas.domingo.push({
                     domingo: $(this).val()
                 });
@@ -239,7 +239,7 @@ Template.AdministradorAgregarPlaneamiento.events({
                     let i,f;
 
                     for (i = 0, f = files[i]; i != files.length; ++i) {
-                        
+
                         let reader = new FileReader();
                         let name = f.name;
 
@@ -258,15 +258,16 @@ Template.AdministradorAgregarPlaneamiento.events({
                                     if (result) {
                                         Bert.alert(result, 'success');
                                     } else {
+                                        FlowRouter.go('/admin/planeamiento');
                                         Bert.alert('Planeamiento agregado', 'success');
                                     }
-                                    
-                                } 
+
+                                }
                             });
                         };
 
                         reader.readAsBinaryString(f);
-      
+
                     }
                 }
 
@@ -281,7 +282,7 @@ Template.selectEmpresas.onCreated( () => {
     let template = Template.instance();
 
     template.autorun( () => {
-        template.subscribe( 'Empresas');    
+        template.subscribe( 'Empresas');
     });
 });
 
@@ -299,7 +300,7 @@ Template.AdministradorPlaneamiento.onCreated( () => {
     template.searching   = new ReactiveVar( false );
 
     template.autorun( () => {
-        
+
         template.subscribe( 'BuscaadorDeEmpresas', template.searchQuery.get(), () => {
             setTimeout( () => {
                 template.searching.set( false );
@@ -341,7 +342,7 @@ Template.AdministradorPlaneamiento.helpers({
 
 Template.AdministradorPlaneamiento.events({
     'keyup [name="search"]' ( event, template ) {
-    
+
         let value = event.target.value.trim();
 
         //if ( value !== '' && event.keyCode === 13 ) {
@@ -360,7 +361,7 @@ Template.AdministradorPlaneamientoPorEmpresa.onCreated( () => {
 
     template.autorun( () => {
         let empresaId = FlowRouter.getParam('empresaId');
-        
+
         template.subscribe( 'DetalleDeEmpresaPlaneamiento', empresaId);
         template.subscribe( 'DetalleDeEmpresa', empresaId);
         template.subscribe( 'Rutas');
@@ -369,7 +370,7 @@ Template.AdministradorPlaneamientoPorEmpresa.onCreated( () => {
 
 Template.AdministradorPlaneamientoPorEmpresa.onRendered( () => {
     $('select#ruta').on('change', function () {
-        
+
         Session.set('r1', this.value);
     });
 });
@@ -392,7 +393,7 @@ Template.AdministradorPlaneamientoPorEmpresa.helpers({
 });
 
 function hasEmptyArrays(obj) {
-  var emptyArrayMembers = _.filter(obj, function(member) { 
+  var emptyArrayMembers = _.filter(obj, function(member) {
     return _.isArray(member) && _.isEmpty(member)
   });
 
@@ -400,11 +401,11 @@ function hasEmptyArrays(obj) {
 }
 
 function getPathVariableCode(line) {
-    
+
     var codeStr = '  var linePath = [\n';
-    
+
     var pathArr = line.getPath();
-    
+
     for (var i = 0; i < pathArr.length; i++) {
         codeStr += '    {lat: ' + pathArr.getAt(i).lat() + ', lng: ' + pathArr.getAt(i).lng() + '}' ;
         if (i !== pathArr.length-1) {
@@ -434,7 +435,7 @@ Template.AdministradorAgregarRuta.onCreated( function () {
                 $(".js-example-basic-multiple").select2({
                     placeholder: "Asigna a una o más empresas a esta ruta",
                 });
-                
+
             }
         });
     });
@@ -448,7 +449,7 @@ Template.AdministradorAgregarRuta.helpers({
 
 Template.AdministradorAgregarRuta.onRendered( function () {
 
-    
+
 
     var self = this;
 
@@ -462,18 +463,18 @@ Template.AdministradorAgregarRuta.onRendered( function () {
         paraderos: []
     };
 
-    
+
     GoogleMaps.ready('map', function(map) {
-        
+
         let drawingManager;
 
         self.autorun(function() {
-                
+
                 drawingManager = new google.maps.drawing.DrawingManager({
                     drawingControlOptions: {
                         position: google.maps.ControlPosition.TOP_CENTER,
                         drawingModes: [
-                       
+
                         google.maps.drawing.OverlayType.MARKER,
                         google.maps.drawing.OverlayType.POLYLINE,
                        ]
@@ -482,7 +483,7 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                 });
 
 
-               
+
 
                 google.maps.event.addListener(drawingManager, 'polylinecomplete', function (polyline) {
                     var position = polyline.getPath();
@@ -511,7 +512,7 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                             });
                         }
                     });
-                    
+
                 });
 
                 google.maps.event.addListener(drawingManager, 'markercomplete', function (marker) {
@@ -530,8 +531,8 @@ Template.AdministradorAgregarRuta.onRendered( function () {
         });
 
 
-                
-        
+
+
     });
 
 
@@ -547,22 +548,22 @@ Template.AdministradorAgregarRuta.onRendered( function () {
           labelActive.removeClass('active');
         }
     });
-    
+
 });
 
 Template.AdministradorAgregarRuta.events({
     'click .save'(e, t) {
-       
+
         t.ruta.empresasId = $(".js-example-basic-multiple").val();;
-        t.ruta.nombre =  t.find("[name='nombre']").value;   
-            
+        t.ruta.nombre =  t.find("[name='nombre']").value;
+
         //console.log(t.ruta);
 
 
         if (t.ruta.nombre !== "") {
 
             Meteor.call('AgregarRuta', t.ruta, (err) => {
-                
+
                 if (err) {
                     Bert.alert( 'Hubo un error, vuelva a intentarlo.', 'danger', 'growl-top-right' );
                 } else {
@@ -571,7 +572,7 @@ Template.AdministradorAgregarRuta.events({
                 }
 
             });
-        
+
         } else {
             Bert.alert( 'Complete los datos, vuelva a intentarlo.', 'warning', 'growl-top-right' );
         }
@@ -581,7 +582,7 @@ Template.AdministradorAgregarRuta.events({
 
         let id = $('input[name="optradio"]:checked').attr('id');
         console.log(id);
-        
+
         if (id === "ida") {
             Session.set('ruta', 'ida');
         } else if (id === "vuelta") {
@@ -601,23 +602,23 @@ Template.AdministradorReportes.onCreated( () => {
         template.subscribe('Cobradores');
     });
 
-    
+
 
 });
 
 Template.AdministradorReportes.onRendered( () => {
-    
+
     Session.setDefault('empresa', null);
 });
 
 Template.AdministradorReportes.helpers({
     conductores() {
         if (Session.get('empresa') === null) {
-            return Conductores.find();  
+            return Conductores.find();
         } else {
-            return Conductores.find({empresaId: Session.get('empresa')});    
+            return Conductores.find({empresaId: Session.get('empresa')});
         }
-        
+
     },
     placa() {
         return Vehiculos.findOne({_id: this.vehiculoId}).placa;
@@ -627,7 +628,7 @@ Template.AdministradorReportes.helpers({
         if (Session.get('empresa') === null) {
             return Cobradores.find();
         } else {
-            return Cobradores.find({empresaId: Session.get('empresa')});    
+            return Cobradores.find({empresaId: Session.get('empresa')});
         }
     },
     ruta() {
@@ -638,9 +639,9 @@ Template.AdministradorReportes.helpers({
         if (Session.get('empresa') === null) {
             return Vehiculos.find();
         } else {
-            return Vehiculos.find({empresaId: Session.get('empresa')});    
+            return Vehiculos.find({empresaId: Session.get('empresa')});
         }
-        
+
     }
 });
 
@@ -651,9 +652,9 @@ Template.AdministradorReportes.events({
         console.log($(e.target).val());
 
         if (e.target.val === 1) {
-            Session.set('empresa', null);            
+            Session.set('empresa', null);
         } else {
-            Session.set('empresa', $(e.target).val());    
+            Session.set('empresa', $(e.target).val());
         }
     },
     'click #test'() {
@@ -667,16 +668,16 @@ Template.AdministradorReportes.events({
             tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 
             tab_text = tab_text + "<table border='1px'>";
-            
+
             tab_text = tab_text + $('#reporte01').html();
-            
+
             tab_text = tab_text + '</table></body></html>';
 
             var data_type = 'data:application/vnd.ms-excel';
-            
+
             var ua = window.navigator.userAgent;
             var msie = ua.indexOf("MSIE ");
-            
+
             if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
                 if (window.navigator.msSaveBlob) {
                     var blob = new Blob([tab_text], {
@@ -685,13 +686,13 @@ Template.AdministradorReportes.events({
                     navigator.msSaveBlob(blob, 'Reporte.xls');
                 }
             } else {
-               
+
                 $('#test').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
                 $('#test').attr('download', 'Reporte.xls');
             }
     },
     'click #reporte1PDF'() {
-       
+
 
             $("td:hidden,th:hidden","#reporte01").show();
             var pdf = new jsPDF('l', 'pt', 'a4');
@@ -705,9 +706,9 @@ Template.AdministradorReportes.events({
                      pdf.cell(10, 50, width, 100, txt, i);
                 });
             });
-            
+
             pdf.save('Reporte.pdf');
-        
+
     },
     'click #test2'() {
         var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
@@ -719,16 +720,16 @@ Template.AdministradorReportes.events({
             tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 
             tab_text = tab_text + "<table border='1px'>";
-            
+
             tab_text = tab_text + $('#reporte02').html();
-            
+
             tab_text = tab_text + '</table></body></html>';
 
             var data_type = 'data:application/vnd.ms-excel';
-            
+
             var ua = window.navigator.userAgent;
             var msie = ua.indexOf("MSIE ");
-            
+
             if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
                 if (window.navigator.msSaveBlob) {
                     var blob = new Blob([tab_text], {
@@ -737,12 +738,12 @@ Template.AdministradorReportes.events({
                     navigator.msSaveBlob(blob, 'Reporte.xls');
                 }
             } else {
-               
+
                 $('#test2').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
                 $('#test2').attr('download', 'Reporte.xls');
             }
     },
-    'click #reporte2PDF'() {    
+    'click #reporte2PDF'() {
         $("td:hidden,th:hidden","#reporte02").show();
             var pdf = new jsPDF('l', 'pt', 'a4');
             pdf.cellInitialize();
@@ -755,7 +756,7 @@ Template.AdministradorReportes.events({
                      pdf.cell(10, 50, width, 50, txt, i);
                 });
             });
-            
+
             pdf.save('Reporte.pdf');
     },
     'click #test3'() {
@@ -768,16 +769,16 @@ Template.AdministradorReportes.events({
             tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 
             tab_text = tab_text + "<table border='1px'>";
-            
+
             tab_text = tab_text + $('#reporte03').html();
-            
+
             tab_text = tab_text + '</table></body></html>';
 
             var data_type = 'data:application/vnd.ms-excel';
-            
+
             var ua = window.navigator.userAgent;
             var msie = ua.indexOf("MSIE ");
-            
+
             if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
                 if (window.navigator.msSaveBlob) {
                     var blob = new Blob([tab_text], {
@@ -786,7 +787,7 @@ Template.AdministradorReportes.events({
                     navigator.msSaveBlob(blob, 'Reporte.xls');
                 }
             } else {
-               
+
                 $('#test3').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
                 $('#test3').attr('download', 'Reporte.xls');
             }
@@ -804,7 +805,7 @@ Template.AdministradorReportes.events({
                      pdf.cell(10, 50, width, 100, txt, i);
                 });
             });
-            
+
             pdf.save('Reporte.pdf');
     },
     'click #test4'() {
@@ -817,16 +818,16 @@ Template.AdministradorReportes.events({
             tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 
             tab_text = tab_text + "<table border='1px'>";
-            
+
             tab_text = tab_text + $('#reporte04').html();
-            
+
             tab_text = tab_text + '</table></body></html>';
 
             var data_type = 'data:application/vnd.ms-excel';
-            
+
             var ua = window.navigator.userAgent;
             var msie = ua.indexOf("MSIE ");
-            
+
             if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
                 if (window.navigator.msSaveBlob) {
                     var blob = new Blob([tab_text], {
@@ -835,7 +836,7 @@ Template.AdministradorReportes.events({
                     navigator.msSaveBlob(blob, 'Reporte.xls');
                 }
             } else {
-               
+
                 $('#test4').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
                 $('#test4').attr('download', 'Reporte.xls');
             }
@@ -853,7 +854,7 @@ Template.AdministradorReportes.events({
                      pdf.cell(10, 50, width, 27, txt, i);
                 });
             });
-            
+
             pdf.save('Reporte.pdf');
     },
     'click #test5'() {
@@ -866,16 +867,16 @@ Template.AdministradorReportes.events({
             tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 
             tab_text = tab_text + "<table border='1px'>";
-            
+
             tab_text = tab_text + $('#reporte05').html();
-            
+
             tab_text = tab_text + '</table></body></html>';
 
             var data_type = 'data:application/vnd.ms-excel';
-            
+
             var ua = window.navigator.userAgent;
             var msie = ua.indexOf("MSIE ");
-            
+
             if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
                 if (window.navigator.msSaveBlob) {
                     var blob = new Blob([tab_text], {
@@ -884,7 +885,7 @@ Template.AdministradorReportes.events({
                     navigator.msSaveBlob(blob, 'Reporte.xls');
                 }
             } else {
-               
+
                 $('#test5').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
                 $('#test5').attr('download', 'Reporte.xls');
             }
@@ -902,7 +903,7 @@ Template.AdministradorReportes.events({
                      pdf.cell(10, 50, width, 45, txt, i);
                 });
             });
-            
+
             pdf.save('Reporte.pdf');
     },
     'click #test6'() {
@@ -915,16 +916,16 @@ Template.AdministradorReportes.events({
             tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 
             tab_text = tab_text + "<table border='1px'>";
-            
+
             tab_text = tab_text + $('#reporte06').html();
-            
+
             tab_text = tab_text + '</table></body></html>';
 
             var data_type = 'data:application/vnd.ms-excel';
-            
+
             var ua = window.navigator.userAgent;
             var msie = ua.indexOf("MSIE ");
-            
+
             if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
                 if (window.navigator.msSaveBlob) {
                     var blob = new Blob([tab_text], {
@@ -933,12 +934,12 @@ Template.AdministradorReportes.events({
                     navigator.msSaveBlob(blob, 'Reporte.xls');
                 }
             } else {
-               
+
                 $('#test6').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
                 $('#test6').attr('download', 'Reporte.xls');
             }
 
-    },  
+    },
     'click #reporte6PDF'() {
         $("td:hidden,th:hidden","#reporte06").show();
             var pdf = new jsPDF('l', 'pt', 'a4');
@@ -952,14 +953,14 @@ Template.AdministradorReportes.events({
                      pdf.cell(10, 50, width, 100, txt, i);
                 });
             });
-            
+
             pdf.save('Reporte.pdf');
     }
-}); 
+});
 
 Template.AdministradorAgregarRuta.helpers({
     mapOptions: function() {
-        
+
         var styles = [
             {
                 stylers: [
@@ -1006,11 +1007,11 @@ Template.AdministradorAgregarRuta.helpers({
 Template.AdministradorAgregarRuta.events({
     'click .plus'(e, t) {
         $('#horarios').append("<tr id='h1'><td><div class='input-group date' id='la'><input type='number' class='form-control la' /></div></td><td><div class='input-group date' id='lo'><input type='number' class='form-control lo' /></div></td></tr>");
-        
+
     },
     'click .plus2'(e, t) {
         $('#horarios2').append("<tr id='h2'><td><div class='input-group date' id='la'><input type='number' class='form-control la' /></div></td><td><div class='input-group date' id='lo'><input type='number' class='form-control lo' /></div></td></tr>");
-        
+
     },
     'click .guardar'(e, t) {
         let data = {
@@ -1021,7 +1022,7 @@ Template.AdministradorAgregarRuta.events({
         }
 
         $('tr#h1').each( function () {
-                
+
                 data.ida.push({
                     lat: parseFloat($(this).find('td #la input.la').val()),
                     lng: parseFloat($(this).find('td #lo input.lo').val())
@@ -1041,7 +1042,7 @@ Template.AdministradorAgregarRuta.events({
             console.log(data.ida);
             console.log(data.vuelta);
             Meteor.call('AgregarRuta', data, (err) => {
-                
+
                 if (err) {
                     Bert.alert( 'Hubo un error, vuelva a intentarlo.', 'danger', 'growl-top-right' );
                 } else {
@@ -1050,7 +1051,7 @@ Template.AdministradorAgregarRuta.events({
                 }
 
             });
-        
+
         } else {
             Bert.alert( 'Complete los datos, vuelva a intentarlo.', 'warning', 'growl-top-right' );
         }
@@ -1103,7 +1104,7 @@ Template.RutaPorEmpresa.events({
 
 
 Template.AdministradorRutasPorEmpresa.onCreated(function() {
- 
+
 });
 
 Template.AdministradorRutasPorEmpresa.onRendered( () => {
@@ -1112,7 +1113,7 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
 
     let mapa = Template.instance();
 
-    
+
 
     GoogleMaps.ready('map', function(map) {
 
@@ -1125,12 +1126,12 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
             let empresaId = FlowRouter.getParam('empresaId');
 
 
-               
-                   
+
+
                         mapa.subscribe('RutasPorEmpresa', () => {
 
-                    
-                        
+
+
                         let numero = 0;
 
                         mapa.defaultRuta = new ReactiveVar(Rutas.findOne()._id)
@@ -1153,13 +1154,13 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
                         }
 
                         function setMapOnAll(map, p, feature) {
-                            
+
 
                             marker = new google.maps.Marker({
                                         animation: google.maps.Animation.DROP,
                                         position: new google.maps.LatLng(p.lat, p.lng),
                                         icon: '/paradero.png', //*'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
-                                        map: map,                                 
+                                        map: map,
                                         id: ruta._id
                             });
                         }
@@ -1181,35 +1182,35 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
                         }
 
 
-                        
+
 
                         $('select#ruta').on('change', function () {
-                            
-                            Rutas.find({_id: this.value }).forEach( function (ruta) {    
-                                ida = ruta.ida;
-                                vuelta = ruta.vuelta;    
 
-                                
+                            Rutas.find({_id: this.value }).forEach( function (ruta) {
+                                ida = ruta.ida;
+                                vuelta = ruta.vuelta;
+
+
 
                                 ruta.paraderos.forEach( function (p) {
-                                    
+
                                     setMapOnAll(map.instance, p, 'parking')
-                                       
-                                }); 
+
+                                });
                             });
 
                             if (mapa.idaPath) {
-                                
+
                                removeLine();
                                //clearMarkers()
-                            } 
+                            }
                                 mapa.idaPath = new google.maps.Polyline({
                                     path: ida,
                                     geodesic: true,
                                     strokeColor: '#3498db',
                                     strokeOpacity: 1.0,
                                     strokeWeight: 2
-                                });    
+                                });
 
                                 mapa.vueltaPath = new google.maps.Polyline({
                                         path: vuelta,
@@ -1220,24 +1221,24 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
                                 })
 
 
-                                    
+
                                 addLine();
-                             
+
                         });
-       
-                
+
+
                 });
-               
-                
-                  
-                    
-           
-             
+
+
+
+
+
+
         });
 
         //
 
-        map.instance.setZoom(14);    
+        map.instance.setZoom(14);
 
 
     });
@@ -1250,7 +1251,7 @@ Template.AdministradorRutasPorEmpresa.helpers({
     mapOptions: function() {
         var latLng = {lat: -12.0917633 , lng: -77.0279025}
 
-        
+
         var styles = [
             {
                 stylers: [

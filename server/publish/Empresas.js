@@ -309,6 +309,16 @@ Meteor.publish( 'BuscadorEntidades', function( search ) {
     return Entidades.find(query, projection );
 });
 
+Meteor.publish( 'VehiculosEmpresa', function(empresaId) {
+
+	if (this.userId) {
+		return Vehiculos.find();
+	} else {
+		this.stop()
+	}
+
+});
+
 Meteor.publish( 'Entidades', function() {
 
 	if (this.userId) {
