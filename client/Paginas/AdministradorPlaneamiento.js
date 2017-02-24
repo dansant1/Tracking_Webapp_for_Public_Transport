@@ -108,7 +108,6 @@ Template.AdministradorAgregarPlaneamiento.onCreated( () => {
     let template = Template.instance();
 
     template.autorun( () => {
-        console.log('holaaaas');
         template.subscribe('Rutas');
     });
 });
@@ -464,6 +463,7 @@ Template.AdministradorAgregarRuta.onRendered( function () {
     };
 
 
+
     GoogleMaps.ready('map', function(map) {
 
         let drawingManager;
@@ -482,38 +482,134 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                     markerOptions: {icon: '/paradero.png'}
                 });
 
+                let idaPath;
+                function updatePath(){
+
+                  if (typeof idaPath !== 'undefined'){
+                    idaPath.setMap( null );
+                  }
+
+                  idaPath = new google.maps.Polyline({
+                    path: template.ruta.ida,
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
+                  });
+
+                  idaPath.setMap( map.instance );
+                  console.log("pathUpdated");
+                  console.log( template.ruta.ida );
+                }
+
+                function updateRuta(location, type ){
+
+                  if ( type === 'add' ){
+
+                    let latLng = {
+                        lat: location.lat(),
+                        lng: location.lng()
+                    };
+
+                    if ( Session.get('ruta') === "ida" || Session.get('ruta') === 'misma' ){
+                      template.ruta.ida.push( latLng );
+                    }
+
+                    if ( Session.get('ruta') === "vuelta" || Session.get('ruta') === 'misma' ){
+                      template.ruta.vuelta.push( latLng );
+                    }
+
+                  }
 
 
+                  if ( type === 'remove'){
 
-                google.maps.event.addListener(drawingManager, 'polylinecomplete', function (polyline) {
-                    var position = polyline.getPath();
-                    position.getArray().forEach( (p) => {
+                    let latLng = {
+                        lat: location.lat,
+                        lng: location.lng
+                    };
 
-                        if (Session.get('ruta') === 'ida') {
-                            template.ruta.ida.push({
-                                lat: p.lat(),
-                                lng: p.lng()
-                            });
-                        } else if (Session.get('ruta') === 'vuelta') {
-                            template.ruta.vuelta.push({
-                                lat: p.lat(),
-                                lng: p.lng()
-                            });
-                        } else if (Session.get('ruta') === 'misma') {
+                    for ( let i=0; i<template.ruta.ida.length; i++){
+                      if ( _.isEqual( template.ruta.ida[i], latLng ) ){
+                        let removed = template.ruta.ida.splice( i, 1 );
+                        console.log("ida-removed", i , removed );
+                        break;
+                      }
+                    }
+                    for ( let j=0; j<template.ruta.vuelta.length; j++){
+                      if ( _.isEqual( template.ruta.vuelta[j], latLng ) ){
+                        let removed = template.ruta.vuelta.splice( j, 1 );
+                        console.log("vuelta-removed", j , removed );
+                        break;
+                      }
+                    }
 
-                            template.ruta.ida.push({
-                                lat: p.lat(),
-                                lng: p.lng()
-                            });
+                  }
 
-                            template.ruta.vuelta.push({
-                                lat: p.lat(),
-                                lng: p.lng()
-                            });
-                        }
+                  updatePath();
+                }
+
+
+                function removeMarker( marker, location ){
+                  marker.setMap(null);
+                  updateRuta( location, 'remove' );
+                }
+
+
+                function placeMarker(location) {
+                    let marker = new google.maps.Marker({
+                        position: location,
+                        map: map.instance
                     });
 
+                    updateRuta( location, 'add' );
+
+                    marker.addListener("dblclick", function( event ) {
+
+                      let location = {
+                          lat: event.latLng.lat(),
+                          lng: event.latLng.lng()
+                      };
+
+                      removeMarker( marker, location );
+
+                    });
+                }
+
+
+                map.instance.addListener( 'click', function(event) {
+                   placeMarker(event.latLng);
                 });
+
+                // google.maps.event.addListener(drawingManager, 'polylinecomplete', function (polyline) {
+                //     var position = polyline.getPath();
+                //     position.getArray().forEach( (p) => {
+                //
+                //         if (Session.get('ruta') === 'ida') {
+                //             template.ruta.ida.push({
+                //                 lat: p.lat(),
+                //                 lng: p.lng()
+                //             });
+                //         } else if (Session.get('ruta') === 'vuelta') {
+                //             template.ruta.vuelta.push({
+                //                 lat: p.lat(),
+                //                 lng: p.lng()
+                //             });
+                //         } else if (Session.get('ruta') === 'misma') {
+                //
+                //             template.ruta.ida.push({
+                //                 lat: p.lat(),
+                //                 lng: p.lng()
+                //             });
+                //
+                //             template.ruta.vuelta.push({
+                //                 lat: p.lat(),
+                //                 lng: p.lng()
+                //             });
+                //         }
+                //     });
+                //
+                // });
 
                 google.maps.event.addListener(drawingManager, 'markercomplete', function (marker) {
                     var positionLat = marker.getPosition().lat();
@@ -991,7 +1087,8 @@ Template.AdministradorAgregarRuta.helpers({
                 center: new google.maps.LatLng(-12.0917633, -77.0279025),
                 zoom: 12,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
-                styles: styles
+                styles: styles,
+                clickableIcons: false
             };
         }
     },
