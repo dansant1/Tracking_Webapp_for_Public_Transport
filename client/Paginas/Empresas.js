@@ -733,29 +733,10 @@ Template.DetalleDeEmpresa.onCreated( () => {
 });
 
 Template.DetalleDeEmpresa.helpers({
-	nombre() {
+	empresa(){
 		let empresaId = FlowRouter.getParam('empresaId');
-		return Empresas.findOne({_id: empresaId}).nombre
-	},
-	ruc() {
-		let empresaId = FlowRouter.getParam('empresaId');
-		return Empresas.findOne({_id: empresaId}).ruc
-	},
-	domicilio() {
-		let empresaId = FlowRouter.getParam('empresaId');
-		return Empresas.findOne({_id: empresaId}).domicilio
-	},
-	representante() {
-		let empresaId = FlowRouter.getParam('empresaId');
-		return Empresas.findOne({_id: empresaId}).representante
-	},
-	telefono() {
-		let empresaId = FlowRouter.getParam('empresaId');
-		return Empresas.findOne({_id: empresaId}).telefono
-	},
-	email() {
-		let empresaId = FlowRouter.getParam('empresaId');
-		return Empresas.findOne({_id: empresaId}).email
+		let empresa = Empresas.findOne({_id: empresaId});
+		return empresa;
 	}
 });
 
