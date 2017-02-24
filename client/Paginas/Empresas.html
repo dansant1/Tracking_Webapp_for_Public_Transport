@@ -831,31 +831,31 @@
                     <div id="t{{this._id}}" class="tab-pane fade">
                         <br>
                         <div class="List__tab__entity">
-                            {{#each this.TC}}
+                            <!-- {{#each this.TC}} -->
                                 <table class="table">
                                     <tbody>
                                     <tr class="entity">
                                         <td>Entidad:</td>
-                                        <td>{{this.entidad}}</td>
+                                        <td>{{this.TC.entidad}}</td>
                                     </tr>
                                     <tr>
                                         <td>Número:</td>
-                                        <td>{{this.numero}}</td>
+                                        <td>{{this.TC.numero}}</td>
                                     </tr>
                                     <tr>
                                         <td>Fecha de Emisión:</td>
-                                        <td>{{this.emision}}</td>
+                                        <td>{{this.TC.emision}}</td>
                                     </tr>
                                     <tr>
                                         <td>Fecha de Caducidad:</td>
-                                        <td>{{this.caducidad}}</td>
+                                        <td>{{this.TC.caducidad}}</td>
                                     </tr>
 
                                     </tbody>
                                 </table>
-                            {{else}}
+                            <!-- {{else}}
                                 <p>No hay Entidades para mostrar</p>
-                            {{/each}}
+                            {{/each}} -->
                         </div>
 
                         <br>
