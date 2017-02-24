@@ -358,33 +358,36 @@ Meteor.methods({
                 return acc;
             }, {});
 
-            plan.horas.lunes.push({
-                lunes: hora['0']
-            });
+            if (hora['0'] !== undefined) {
+              plan.horas.lunes.push({
+                  lunes: hora['0']
+              });
 
-            plan.horas.martes.push({
-                martes: hora['0']
-            });
+              plan.horas.martes.push({
+                  martes: hora['0']
+              });
 
-            plan.horas.miercoles.push({
-                miercoles: hora['0']
-            });
+              plan.horas.miercoles.push({
+                  miercoles: hora['0']
+              });
 
-            plan.horas.jueves.push({
-                jueves: hora['0']
-            });
+              plan.horas.jueves.push({
+                  jueves: hora['0']
+              });
 
-            plan.horas.viernes.push({
-                viernes: hora['0']
-            });
+              plan.horas.viernes.push({
+                  viernes: hora['0']
+              });
 
-            plan.horas.sabado.push({
-                sabado: hora['1']
-            });
+              plan.horas.sabado.push({
+                  sabado: hora['1']
+              });
 
-            plan.horas.domingo.push({
-                domingo: hora['2']
-            });
+              plan.horas.domingo.push({
+                  domingo: hora['2']
+              });
+
+            }
 
         });
 
