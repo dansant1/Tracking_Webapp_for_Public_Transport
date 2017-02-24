@@ -233,10 +233,19 @@ Template.AgregarVehiculoInterno.events({
 
 Template.Despacho.events({
 	'click .despachar'(event, template) {
-        let $btn = $(event.target);
-		let $li = $btn.parent().parent();
+		let $li = $(event.target).parent().parent();
+		let hora = $li.find(".time").html();
 		let vehiculoId = $li.find(".vehicle").val();
-		//Modal.show('CheckList')
+		let $btn = $li.find(".despachar");
+		Meteor.call('despachar',{vehiculoId, hora},function (err) {
+			if (err) {
+				alert(err);
+			} else {
+				swal("¡Listo!", "Vehíulo despachado!", "success");
+				$btn.attr("disabled", "disabled");
+				$btn.addClass("btn-disabled");
+			}
+		});
 	},
     'change .vehicle'(event, template){
         let vehiculo = Vehiculos.findOne({_id:event.target.value});
