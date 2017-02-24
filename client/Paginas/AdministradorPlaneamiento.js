@@ -96,7 +96,7 @@ Template.AdministradorRutas.onCreated(function() {
             }).setMap(map.instance);
 
             map.instance.setZoom(15);*/
-                console.log('gola');
+                // console.log('gola');
 
 
             });
@@ -476,7 +476,7 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                         drawingModes: [
 
                         google.maps.drawing.OverlayType.MARKER,
-                        google.maps.drawing.OverlayType.POLYLINE,
+                        // google.maps.drawing.OverlayType.POLYLINE,
                        ]
                     },
                     markerOptions: {icon: '/paradero.png'}
