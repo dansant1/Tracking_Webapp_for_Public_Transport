@@ -21,12 +21,6 @@ Template.ListaDeVehiculosInterno.onCreated( () => {
   	});
 });
 
-Template.Despacho.events({
-	'click .despachar'() {
-		Modal.show('CheckList')
-	}
-})
-
 Template.ListaDeVehiculosInterno.helpers({
   	searching() {
     	return Template.instance().searching.get();
@@ -235,3 +229,96 @@ Template.AgregarVehiculoInterno.events({
 
   }
 });
+
+
+Template.Despacho.events({
+	'click .despachar'() {
+		Modal.show('CheckList')
+	}
+});
+
+Template.Despacho.onCreated( () => {
+	let template = Template.instance();
+
+	template.autorun( () => {
+		let empresaId = Meteor.user().profile.empresaId;
+		//let rutaId = Session.get('r')
+		template.subscribe('DetalleDeEmpresaPlaneamiento', empresaId);
+	})
+})
+
+Template.Despacho.onRendered(() => {
+	let template = Template.instance();
+
+	template.autorun( () => {
+		let empresaId = Meteor.user().profile.empresaId;
+		template.subscribe('VehiculosEmpresa', empresaId, () => {
+
+			if (Vehiculos.find().fetch().length > 0) {
+				console.log('ff');
+				$(".js-example-basic").select2({
+						placeholder: "Asigna a una o más empresas a esta ruta",
+				});
+				console.log('fffgf');
+			}
+
+		})
+	})
+
+})
+
+Template.Despacho.onRendered( function () {
+
+})
+
+Template.Despacho.helpers({
+	vehiculos() {
+		return Vehiculos.find();
+	},
+	horario() {
+
+		let fecha = new Date();
+		let hoyEs = fecha.getDay();
+
+		if (hoyEs === 1) {
+			return Planeamiento.find().fetch()[0].plan.horas.lunes;
+		} else if (hoyEs === 2) {
+			return Planeamiento.find().fetch()[0].plan.horas.martes;
+		} else if (hoyEs === 3) {
+			return Planeamiento.find().fetch()[0].plan.horas.miercoles;
+		} else if (hoyEs === 4) {
+			return Planeamiento.find().fetch()[0].plan.horas.jueves;
+		} else if (hoyEs === 5) {
+			return Planeamiento.find().fetch()[0].plan.horas.viernes;
+		} else if (hoyEs === 6) {
+			return Planeamiento.find().fetch()[0].plan.horas.sabado;
+		} else if (hoyEs === 7) {
+			return Planeamiento.find().fetch()[0].plan.horas.domingo;
+		} else {
+			return [];
+		}
+
+	},
+	hora() {
+		let fecha = new Date();
+		let hoyEs = fecha.getDay();
+
+		if (hoyEs === 1) {
+			return this.lunes;
+		} else if (hoyEs === 2) {
+			return this.martes;
+		} else if (hoyEs === 3) {
+			return this.miercoles;
+		} else if (hoyEs === 4) {
+			return this.jueves;
+		} else if (hoyEs === 5) {
+			return this.viernes;
+		} else if (hoyEs === 6) {
+			return this.sabado;
+		} else if (hoyEs === 7) {
+			return this.domingo;
+		} else {
+			return;
+		}
+	}
+})

@@ -18,9 +18,7 @@ Template.PlaneamientoInterno.onRendered( () => {
 
 Template.PlaneamientoInterno.helpers({
     empresas() {
-
-
-        return Empresas.find({_id: Meteor.user().profile.empresaId }).fetch()[0].rutas;
+        return Empresas.findOne({_id: Meteor.user().profile.empresaId });
     },
     ruta(id) {
         return Rutas.findOne({_id: id}).nombre;
@@ -35,29 +33,32 @@ Template.AgregarPlaneamiento.onCreated( () => {
     let template = Template.instance();
 
     //arreglo dinamico para guardar las horas
-    template.horas = new ReactiveVar([{
-      'lunes': true,
-      'martes': true,
-      'miercoles': true,
-      'jueves': true,
-      'viernes': true,
-      'sabado': true,
-      'domingo': true
-    }]);
+    template.frecuencias = new ReactiveVar({
+      'lunes': 1,
+      'martes': 1,
+      'miercoles': 1,
+      'jueves': 1,
+      'viernes': 1,
+      'sabado': 1,
+      'domingo': 1
+    });
+
     template.frecuenciaMayor = new ReactiveVar(1);
+
 
     template.autorun( () => {
         let empresaId = Meteor.user().profile.empresaId;
         template.subscribe( 'Empresas');
         template.subscribe('Rutas');
+
+        //obtenemos la frecuencia mayor
+        template.frecuenciaMayor.set( Math.max.apply( null, _.values( template.frecuencias.get() ) ) );
     });
 });
 
 Template.AgregarPlaneamiento.helpers({
-	empresas() {
-        console.log(Empresas.find({_id: Meteor.user().profile.empresaId }).fetch()[0].rutas);
-
-        return Empresas.find({_id: Meteor.user().profile.empresaId }).fetch()[0].rutas;
+	  empresas() {
+        return Empresas.findOne({_id: Meteor.user().profile.empresaId });
     },
     rutas() {
         return Rutas.find({});
@@ -65,9 +66,12 @@ Template.AgregarPlaneamiento.helpers({
     ruta(id) {
         return Rutas.findOne({_id: id}).nombre;
     },
-    horas(){
-      return Template.instance().horas.get();
+    frecuencias(){
+      return Template.instance().frecuencias.get();
     },
+    numerodefilas(){
+      return _.range( Template.instance().frecuenciaMayor.get() );
+    }
 
 });
 
@@ -76,49 +80,43 @@ Template.AgregarPlaneamiento.onRendered( () => {
 });
 
 Template.AgregarPlaneamiento.events({
-    'click .frecuencia input[type=checkbox]'(e,t){
+    'click .frecuencia input[type=checkbox]'(e,t) {
       let target = $(e.currentTarget);
       let dia = target.closest('.input-group').data('dia');
       let frecuencia = parseInt( target.closest('.input-group').find('input[type=number]')[0].value );
-      let frecuenciaMayor = Template.instance().frecuenciaMayor.get();
 
-      let horas = Template.instance().horas.get();
-      let horasNuevaFila = {'lunes': false,'martes': false,'miercoles': false,'jueves': false,'viernes': false,'sabado': false,'domingo': false };
-
-      if ( frecuencia > frecuenciaMayor ){
-        Template.instance().frecuenciaMayor.set( frecuencia );
-        frecuenciaMayor = frecuencia;
-      }
+      let frecuencias = Template.instance().frecuencias.get();
+      frecuencias[dia] = frecuencia;
 
       if ( target.is(':checked') && frecuencia >= 0) {
-
-        for ( let i=0; i<frecuenciaMayor; i++ ){
-          if (i < frecuencia ){
-            if ( typeof horas[i] === 'undefined' ){
-              horas.push( horasNuevaFila );
-            }
-
-            if ( ! horas[i][dia] ){
-              horas[i][dia] = true;
-            }
-          } else {
-            horas[i][dia] = false;
-          }
-
-        }
-        Template.instance().horas.set( horas );
+        Template.instance().frecuencias.set( frecuencias );
       }
+
     },
     'click .plus'(e, t) {
-      let horas = Template.instance().horas.get();
-      let horasNuevaFila = {'lunes': true,'martes': true,'miercoles': true,'jueves': true,'viernes': true,'sabado': true,'domingo': true };
+      let newFrecuencias = Template.instance().frecuencias.get();
 
-      horas.push( horasNuevaFila );
-      Template.instance().horas.set( horas );
+      Object.keys(newFrecuencias).forEach(function(key) {
+          ++newFrecuencias[key];
+      });
+
+      Template.instance().frecuencias.set( newFrecuencias );
     },
+
     'click .delete'(e,t){
-      let target = $(e.currentTarget);
-      target.closest("tr").remove();
+
+      let newFrecuencias = Template.instance().frecuencias.get();
+      let frecuenciaMayor = Template.instance().frecuenciaMayor.get();
+
+      Object.keys(newFrecuencias).forEach(function(key) {
+
+        if ( newFrecuencias[key] > 1 && newFrecuencias[key] === frecuenciaMayor ){
+          --newFrecuencias[key];
+        }
+
+      });
+
+      Template.instance().frecuencias.set( newFrecuencias );
     },
     'click .guardar'(e, t) {
 
@@ -136,64 +134,63 @@ Template.AgregarPlaneamiento.events({
                 domingo: []
             };
 
-            $('td #hora input.l').each( function () {
+            $('td input.l').each( function () {
 
                 datos.horas.lunes.push({
-                    lunes: $(this).val()
+                    lunes : $(this).val()
                 });
             });
 
 
-            $('td #hora input.m').each( function () {
+            $('td input.m').each( function () {
                 datos.horas.martes.push({
-                    martes: $(this).val()
+                    martes : $(this).val()
                 });
             });
 
 
-            $('td #hora input.mi').each( function () {
+            $('td input.mi').each( function () {
 
                 datos.horas.miercoles.push({
-                    miercoles: $(this).val()
+                    miercoles : $(this).val()
                 });
             });
 
-            $('td #hora input.j').each( function () {
+
+            $('td input.j').each( function () {
 
                 datos.horas.jueves.push({
-                    jueves: $(this).val()
+                    jueves : $(this).val()
                 });
             });
 
 
-            $('td #hora input.v').each( function () {
+            $('td input.v').each( function () {
 
                 datos.horas.viernes.push({
-                    viernes: $(this).val()
+                    viernes : $(this).val()
                 });
             });
 
 
-
-            $('td #hora input.s').each( function () {
+            $('td input.s').each( function () {
 
                 datos.horas.sabado.push({
-                    sabado: $(this).val()
+                    sabado : $(this).val()
                 });
             });
 
 
-            $('td #hora input.d').each( function () {
+            $('td input.d').each( function () {
 
                 datos.horas.domingo.push({
-                    domingo: $(this).val()
+                    domingo : $(this).val()
                 });
             });
 
         let empresaId = Meteor.user().profile.empresaId;
 
 
-        // console.log( datos );
         if (datos.rutaId !== '1') {
 
             let archivo = document.getElementById('excelplan');
