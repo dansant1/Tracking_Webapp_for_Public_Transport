@@ -483,10 +483,16 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                 });
 
                 let idaPath;
+                let vueltaPath;
+
                 function updatePath(){
 
                   if (typeof idaPath !== 'undefined'){
                     idaPath.setMap( null );
+                  }
+
+                  if (typeof vueltaPath !== 'undefined'){
+                    vueltaPath.setMap( null );
                   }
 
                   idaPath = new google.maps.Polyline({
@@ -498,8 +504,16 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                   });
 
                   idaPath.setMap( map.instance );
-                  console.log("pathUpdated");
-                  console.log( template.ruta.ida );
+
+                  vueltaPath = new google.maps.Polyline({
+                    path: template.ruta.vuelta,
+                    geodesic: true,
+                    strokeColor: '#000CFF',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
+                  });
+
+                  vueltaPath.setMap( map.instance );
                 }
 
                 function updateRuta(location, type ){
