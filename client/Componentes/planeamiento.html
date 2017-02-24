@@ -11,11 +11,11 @@
 									<select id="ruta" class="form-control">
 										<option value="1">--Seleccione una ruta--</option>
 										{{#each empresas}}
-										<option value="{{this}}">{{ruta this}}</option>	
+										<option value="{{this}}">{{ruta this}}</option>
 										{{/each}}
-									</select>				
+									</select>
 								</div>
-							</div> 
+							</div>
 							<br>
 							<div class="row">
 				<div class="col-md-12 col-sm-18 col-xs-18">
@@ -32,18 +32,18 @@
 							        <th style="text-align: center;">Jueves</th>
 							        <th style="text-align: center;">Viernes</th>
 							        <th style="text-align: center;">Sabado</th>
-							        <th style="text-align: center;">Domingo</th>						        
+							        <th style="text-align: center;">Domingo</th>
 						    	</tr>
     						</thead>
     						{{#with planeamiento}}
 						    <tbody id="horarios">
-								
+
 						    	<tr id="h">
-									
+
 							        <td>
-							        {{#each plan.horas.lunes}}	
+							        {{#each plan.horas.lunes}}
 							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control l" value="{{this.lunes}}" />
+						                    <input disabled type='time' class="form-control l" value="{{this.lunes}}" />
 						                    <span class="input-group-addon">
 						                        <span class="glyphicon glyphicon-time"></span>
 						                    </span>
@@ -51,13 +51,13 @@
                 						<br>
 							        {{/each}}
 							        </td>
-							       	
 
-							       	
+
+
 							        <td>
 							        {{#each plan.horas.martes}}
 							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control m" value="{{this.martes}}"  />
+						                    <input disabled type='time' class="form-control m" value="{{this.martes}}"  />
 						                    <span class="input-group-addon">
 						                        <span class="glyphicon glyphicon-time"></span>
 						                    </span>
@@ -65,13 +65,13 @@
                 						<br>
 							       	{{/each}}
 							        </td>
-							       
 
-							       
+
+
 							        <td>
 							        	{{#each plan.horas.miercoles}}
 							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control mi" value="{{this.miercoles}}"  />
+						                    <input disabled type='time' class="form-control mi" value="{{this.miercoles}}"  />
 						                    <span class="input-group-addon">
 						                        <span class="glyphicon glyphicon-time"></span>
 						                    </span>
@@ -79,13 +79,13 @@
                 						<br>
 							        	{{/each}}
 							        </td>
-							        
 
-							        
+
+
 							        <td>
 							        {{#each plan.horas.jueves}}
 							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control j" value="{{this.jueves}}" />
+						                    <input disabled type='time' class="form-control j" value="{{this.jueves}}" />
 						                    <span class="input-group-addon">
 						                        <span class="glyphicon glyphicon-time"></span>
 						                    </span>
@@ -93,13 +93,13 @@
                 						<br>
 							        {{/each}}
 							        </td>
-							        
+
 
 
 							        <td>
 							        	{{#each plan.horas.viernes}}
 							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control v" value="{{this.viernes}}" />
+						                    <input disabled type='time' class="form-control v" value="{{this.viernes}}" />
 						                    <span class="input-group-addon">
 						                        <span class="glyphicon glyphicon-time"></span>
 						                    </span>
@@ -107,12 +107,12 @@
                 						<br>
 							       		{{/each}}
 							        </td>
-							       
+
 
 							        <td>
 							       		{{#each plan.horas.sabado}}
 							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control s" value="{{this.sabado}}" />
+						                    <input disabled type='time' class="form-control s" value="{{this.sabado}}" />
 						                    <span class="input-group-addon">
 						                        <span class="glyphicon glyphicon-time"></span>
 						                    </span>
@@ -120,27 +120,27 @@
                 						<br>
 							        	{{/each}}
 							        </td>
-							        
 
-							        
+
+
 							        <td>
 							        	{{#each plan.horas.domingo}}
 							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control d" value="{{this.domingo}}" />
+						                    <input disabled type='time' class="form-control d" value="{{this.domingo}}" />
 						                    <span class="input-group-addon">
 						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span> 
+						                    </span>
                 						</div>
 										<br>
 							        	{{/each}}
 							        </td>
-									
+
 						    	</tr>
-						      	
+
 						    </tbody>
 						    {{/with}}
 						</table>
-						
+
 					</div>
 				</div>
 			</div>
@@ -158,15 +158,15 @@
 			<div class="row">
 				<div class="col-md-12 col-sm-18 col-xs-18">
 					<div class="box">
-						
+
 						<br>
 						<div class="row">
 							<div class="col-md-3">
-								
+
 								<select id="ruta" class="form-control">
 									<option value="1">--Seleccione una ruta--</option>
 									{{#each empresas}}
-									<option value="{{this}}">{{ruta this}}</option>	
+									<option value="{{this}}">{{ruta this}}</option>
 									{{/each}}
 								</select>
 							</div>
@@ -176,7 +176,7 @@
 							<div class="col-md-3">
 								<label class="btn btn-success btn-file">
 						    			<i style="display: inline-block; margin-right: 6px;" class="fa fa-file-excel-o" aria-hidden="true"></i> Subir Excel  <input type="file" id="excelplan" style="display: none;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-								</label> 
+								</label>
 							</div>
 						</div>
 						<br>
@@ -198,7 +198,7 @@
 
 							        <td>
 							        	<div class='input-group date' id='hora'>
-						                    <input type='text' class="form-control l" />
+						                    <input type='text' class="form-control l" pattern="([01]?[0-9]{1}|2[0-3]{1}):[0-5]{1}[0-9]{1}"/>
 						                    <span class="input-group-addon">
 						                        <span class="glyphicon glyphicon-time"></span>
 						                    </span>
@@ -249,7 +249,7 @@
 						                    <input type='text' class="form-control d" />
 						                    <span class="input-group-addon">
 						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span> 
+						                    </span>
                 						</div>
 							        </td>
 
@@ -257,14 +257,14 @@
 							        	<button class="btn btn-primary plus"><i class="fa fa-plus" aria-hidden="true"></i></button>
 							        </td>
 						    	</tr>
-						      
+
 						    </tbody>
 						</table>
 						<div class="row">
 							<div class="col-md-2">
 								<button class="btn btn-success guardar">Guardar</button>
 							</div>
-						</div>	
+						</div>
 					</div>
 				</div>
 			</div>

@@ -577,6 +577,7 @@ Meteor.methods({
             return;
         }
     },
+  
     agregarPlaneamientoEmpresa(datos, empresaId) {
 
         if (this.userId) {
