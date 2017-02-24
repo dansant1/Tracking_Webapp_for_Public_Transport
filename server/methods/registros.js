@@ -20,6 +20,13 @@ Meteor.methods({
             }
         })
     },
+    actualizarRequisitosDeVehiculo(idVehiculo, idRequisitos){
+        Vehiculos.update({_id: idVehiculo}, {
+            $set: {
+                idRequisitos: idRequisitos
+            }
+        })
+    },
     agregarEmpresa(datos) {
 
         Empresas.insert({
