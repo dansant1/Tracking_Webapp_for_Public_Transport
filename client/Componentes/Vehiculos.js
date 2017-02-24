@@ -21,6 +21,12 @@ Template.ListaDeVehiculosInterno.onCreated( () => {
   	});
 });
 
+Template.Despacho.events({
+	'click .despachar'() {
+		Modal.show('CheckList')
+	}
+})
+
 Template.ListaDeVehiculosInterno.helpers({
   	searching() {
     	return Template.instance().searching.get();
@@ -31,10 +37,10 @@ Template.ListaDeVehiculosInterno.helpers({
   	vehiculo: function () {
   		let vehiculos = Vehiculos.find();
 
-  		if (vehiculos) {		
+  		if (vehiculos) {
   			let empresaId = Meteor.user().profile.empresaId;
   			return Vehiculos.find({empresaId: empresaId});
-  		} 	
+  		}
 	},
 	fotos() {
 		return FotosDeVehiculos.find();
@@ -60,7 +66,7 @@ Template.ListaDeVehiculosInterno.helpers({
 
 Template.ListaDeVehiculosInterno.events({
   	'keyup [name="search"]' ( event, template ) {
-  	
+
     	let value = event.target.value.trim();
 
 	    //if ( value !== '' && event.keyCode === 13 ) {
@@ -140,8 +146,8 @@ Template.ListaDeVehiculosInterno.events({
   'change #subirFlota'(e, t) {
     let id = this._id;
     let rutaId = $("#listarutas").val();
-    
-    handleFile(e, id, rutaId);  
+
+    handleFile(e, id, rutaId);
   }
 });
 
@@ -187,7 +193,7 @@ Template.AgregarVehiculoInterno.events({
       TC: {
         numero: t.find("[name='tc']").value,
         emision: t.find("[name='emisiontc']").value,
-        caducidad: t.find("[name='caducidadtc']").value 
+        caducidad: t.find("[name='caducidadtc']").value
       },
       SOAT: {
         numero: t.find("[name='soat']").value,
@@ -203,7 +209,7 @@ Template.AgregarVehiculoInterno.events({
       RC: {
         numero: t.find("[name='rc']").value,
         inicio: t.find("[name='emisionrc']").value,
-        fin: t.find("[name='caducidadrc']").value 
+        fin: t.find("[name='caducidadrc']").value
       },
       TCH: {
         numero: t.find("[name='tch']").value,
@@ -212,7 +218,7 @@ Template.AgregarVehiculoInterno.events({
       },
       padron: t.find("[name='padron']").value,
       createdAt: new Date(),
-      
+
       empresaId: Meteor.user().profile.empresaId
     }
 
@@ -226,6 +232,6 @@ Template.AgregarVehiculoInterno.events({
         }
       });
     }
-  
+
   }
 });

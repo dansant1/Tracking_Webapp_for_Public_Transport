@@ -20,6 +20,14 @@ Meteor.methods({
             }
         })
     },
+    agregarEntidad(datos) {
+		Entidades.insert({
+		nombre: datos.nombre
+		});
+	},
+eliminarEntidad(id) {
+		Entidades.remove({_id: id});
+	},
     agregarEmpresa(datos) {
 
         Empresas.insert({

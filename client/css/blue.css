@@ -11,9 +11,13 @@
 	background-color: #1784c7;
 }
 
+.req {
+	font-size: 28px;
+}
+
 @media only screen and (min-width: 768px) {
 	.cd-top-nav .has-children {
-		background-color: #1784c7; 
+		background-color: #1784c7;
 	}
 	.cd-search input {
 		background-color: #1A93DE;

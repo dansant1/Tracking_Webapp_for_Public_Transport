@@ -175,9 +175,9 @@ Template.ListaDeVehiculosPorEmpresas.events({
   		Modal.show('EditarVehiculo');
   		console.log(Session.get('editarVehiculo'));
   	},
-  	'change #fotovehiculo'(e, t) {
+  	'change [name="fotosubir"]'(e, t) {
 
-  		SubirFotoVehiculo(e, t, this._id, 'foto', 'fotovehiculo');
+  		SubirFotoVehiculo(e, t, this._id, 'foto', 'fotovehiculo' + this._id);
   	},
   	'change #fotovehiculo2'(e, t) {
   		SubirFotoVehiculo(e, t, this._id, 'foto2', 'fotovehiculo2');
@@ -453,7 +453,6 @@ Template.EditarVehiculo.events({
 				longitud: t.find("[name='longitud']").value,
 				asientos: t.find("[name='asientos']").value
 			},
-			compania: t.find("[name='compania']").value,
 			codigoDeRuta: t.find("[name='codigoDeRuta']").value,
 			fechaDePermanenciaEnLaEmpresa: t.find("[name='fechaDePermanenciaEnLaEmpresa']").value,
 			TC: {
@@ -471,16 +470,10 @@ Template.EditarVehiculo.events({
 				inicio: t.find("[name='emisionrt']").value,
 				fin: t.find("[name='caducidadrt']").value
 			},
-			aseguradora: t.find("[name='aseguradora']").value,
 			RC: {
 				numero: t.find("[name='rc']").value,
 				inicio: t.find("[name='emisionrc']").value,
 				fin: t.find("[name='caducidadrc']").value
-			},
-			TCH: {
-				numero: t.find("[name='tch']").value,
-				emision: t.find("[name='emisiontch']").value,
-				caducidad: t.find("[name='caducidadtch']").value
 			}
 		}
 

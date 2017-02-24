@@ -4,12 +4,140 @@
 			<div class="row">
 				<div class="col-md-12 col-sm-18 col-xs-18">
 					<div class="box">
-						{{>ListaDeVehiculosInterno}}
+						{{>Despacho}}
+					<!--	{{>ListaDeVehiculosInterno}} -->
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</template>
+
+<template name="Despacho">
+	<div class="page-header clearfix">
+    <h4 class="pull-left">Depacho de Vehículos</h4>
+    <!-- <div class="pull-right">
+      <input type="text" name="search" class="form-control" width="250px" placeholder="Find an album...">
+    </div> -->
+  </div>
+
+  <ul class="list-group">
+
+      <!--{{#each albums}} -->
+			<li class="list-group-item clearfix">
+				<span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
+				<span class="pull-right" style="width: 27%">
+					<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
+						<option value="0">1</option>
+						<option value="0">2</option>
+					</select>
+					<button disabled type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
+				</span>
+			</li>
+
+				<li class="list-group-item clearfix">
+          <span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
+          <span class="pull-right" style="width: 27%">
+						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
+							<option value="0">1</option>
+							<option value="0">2</option>
+						</select>
+						<button type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
+					</span>
+        </li>
+
+				<li class="list-group-item clearfix">
+					<span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
+					<span class="pull-right" style="width: 27%">
+						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
+							<option value="0">1</option>
+							<option value="0">2</option>
+						</select>
+						<button type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
+					</span>
+				</li>
+
+				<li class="list-group-item clearfix">
+					<span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
+					<span class="pull-right" style="width: 27%">
+						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
+							<option value="0">1</option>
+							<option value="0">2</option>
+						</select>
+						<button disabled type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
+					</span>
+				</li>
+
+				<li class="list-group-item clearfix">
+					<span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
+					<span class="pull-right" style="width: 27%">
+						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
+							<option value="0">1</option>
+							<option value="0">2</option>
+						</select>
+						<button type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
+					</span>
+				</li>
+
+				<li class="list-group-item clearfix">
+          <span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
+          <span class="pull-right" style="width: 27%">
+						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
+							<option value="0">1</option>
+							<option value="0">2</option>
+						</select>
+						<button type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
+					</span>
+        </li>
+
+				<li class="list-group-item clearfix">
+          <span class="pull-left">4:30 <strong>Vehiculo placa: BK23 - Padron: 7</strong></span>
+          <span class="pull-right" style="width: 27%">
+						<select class="form-control"  style="width: 50%; display: inline-block;" name="cambio">
+							<option value="0">1</option>
+							<option value="0">2</option>
+						</select>
+						<button type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
+					</span>
+        </li>
+      <!-- {{else}} -->
+        <!--<p class="alert alert-warning">Nothing found for {{query}}. Sorry, bub.</p> -->
+      <!-- {{/each}} -->
+
+  </ul>
+</template>
+
+<template name="CheckList">
+	<div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Cumplimiento de Requisitos</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <input type="checkbox" id="req" name="req">
+										<label style="font-size: 18px" for="req">Req 1</label>
+										<br><br>
+										<input type="checkbox" id="req" name="req">
+										<label style="font-size: 18px" for="req">Req 2</label>
+										<br><br>
+										<input type="checkbox" id="req" name="req">
+										<label style="font-size: 18px" for="req">Req 3</label>
+										<br><br>
+										<input type="checkbox" id="req" name="req">
+										<label style="font-size: 18px" for="req">Req 4</label>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </template>
 
 <template name="ListaDeVehiculosInterno">
@@ -25,7 +153,7 @@
 		<i class="fa fa-upload" aria-hidden="true"></i> <input type="file" id="subirFlota" style="display: none;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 		Subir Matriz Excel
 	</label>
-	
+
 	{{else}}
 		{{#if isInRole 'director' 'Empresa'}}
 			<br>
@@ -44,12 +172,12 @@
 	<br>
 	<br>
 	<div class="page-header clearfix" style="margin-top: 0;">
-	    
+
 	    <div class="pull-left">
 	      <input type="text" name="search" class="form-control" style="width: 350px;" placeholder="Buscar vehículo por placa o padron">
 	    </div>
   	</div>
-	
+
 	{{#if searching}}
       	<h3>Cargando...</h3>
     {{else}}
@@ -62,8 +190,8 @@
 					<li><a data-toggle="tab" href="#t{{this._id}}">Tarjeta de Circulación</a></li>
 					<li><a data-toggle="tab" href="#r{{this._id}}">Revisión Tecnica</a></li>
 					<li><a data-toggle="tab" href="#rc{{this._id}}">RC</a></li>
-					<li><a data-toggle="tab" href="#tc{{this._id}}">TCH</a></li>
-					
+
+
 				</ul>
 
 				<div class="tab-content">
@@ -79,12 +207,12 @@
 							<br>
 								<div class="pull-left" style="margin-bottom: 20px;">
 			      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-			      					
+
 			    				</div>
 	    				{{/if}}
 					{{/if}}
 						<br>
-					
+
 					    <table class="table">
 							<tbody>
     							<tr>
@@ -141,8 +269,8 @@
 						<br>
 							{{/if}}
 						{{/if}}
-						
-					    
+
+
 					    <br>
 					    {{#if isInRole 'operador' 'Empresa'}}
 						<label class="btn btn-success btn-file">
@@ -157,9 +285,9 @@
 						<br><br>
 							{{/if}}
 						{{/if}}
-						
+
 						{{>FotosDeVehiculos}}
-					    
+
 					</div>
 					<div id="p{{this._id}}" class="tab-pane fade">
 					    <br>
@@ -199,7 +327,7 @@
 					</div>
 					<div id="s{{this._id}}" class="tab-pane fade">
 					    <br>
-					 
+
 					    <table class="table">
 							<tbody>
     							<tr>
@@ -214,7 +342,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.SOAT.fin}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 					    <br>
@@ -242,7 +370,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.TC.caducidad}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 
@@ -271,7 +399,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td> {{this.CITV.fin}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 
@@ -286,7 +414,7 @@
 					</div>
 					<div id="rc{{this._id}}" class="tab-pane fade">
 						<br>
-					  
+
 					    <table class="table">
 							<tbody>
     							<tr>
@@ -301,7 +429,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.RC.fin}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 						<br>
@@ -313,27 +441,8 @@
 						<br><br>
 						{{>FotosDeVehiculos6}}
 					</div>
-					<div id="tc{{this._id}}" class="tab-pane fade">
-					    <br>
-					    <table class="table">
-							<tbody>
-    							<tr>
-							        <td>Número:</td>
-							        <td>{{this.TCH.numero}}</td>
-      							</tr>
-      							<tr>
-      								<td>Fecha de Emisión: </td>
-      								<td>{{this.TCH.emision}}</td>
-      							</tr>
-      							<tr>
-							        <td>Fecha de Caducidad:</td>
-							        <td>{{this.TCH.caducidad}}</td>
-      							</tr>
-      							
-    						</tbody>
-						</table>
-					</div>
-					
+
+
 				</div>
 			</div>
 		{{else}}
@@ -341,7 +450,7 @@
 		{{/each}}
 
 	{{/if}}
-							
+
 </template>
 
 <template name="AgregarVehiculoInterno">
@@ -366,7 +475,7 @@
 						<li><a data-toggle="tab" href="#rc1{{this._id}}">RC</a></li>
 						<li><a data-toggle="tab" href="#tc1{{this._id}}">TCH</a></li>
 					</ul>
-				
+
 				<div class="tab-content">
 					<div id="1{{this._id}}" class="tab-pane fade in active">
 						<br>
@@ -409,7 +518,7 @@
 						</div>
 					</div>
 					<div id="p1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<div class="row">
 							<div class="col-md-6">
@@ -429,7 +538,7 @@
 								</div>
 							</div>
 							<div class="col-md-6">
-								
+
 								<div class="form-group">
 									<label for="dni">DNI</label>
 								  	<input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" class="form-control" maxlength = "8" required name="dni" id="dni">
@@ -441,10 +550,10 @@
 								</div>
 							</div>
 						</div>
-                    	
+
 					</div>
 					<div id="tec1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 						<div class="row">
 							<div class="col-md-6">
@@ -480,13 +589,13 @@
 								</div>
 							</div>
 						</div>
-	                    
-		                    
-                    	
-                		
+
+
+
+
 					</div>
 					<div id="s1{{this._id}}" class="tab-pane fade">
-					    
+
 					    <br>
 						<div class="row">
 							<div class="col-md-6">
@@ -506,11 +615,11 @@
 								</div>
 							</div>
 						</div>
-		                    
+
 					</div>
 					<div id="t1{{this._id}}" class="tab-pane fade">
 						<br>
-						
+
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
@@ -530,11 +639,11 @@
 							</div>
 						</div>
 
-						
+
 
 					</div>
 					<div id="r1{{this._id}}" class="tab-pane fade">
-					    
+
 					    <br>
 
 					    <div class="row">
@@ -555,10 +664,10 @@
 								</div>
 							</div>
 						</div>
-						
+
 					</div>
 					<div id="rc1{{this._id}}" class="tab-pane fade">
-						
+
 						<br>
 
 						<div class="row">
@@ -579,11 +688,11 @@
 								</div>
 							</div>
 						</div>
-						
+
 
 					</div>
 					<div id="tc1{{this._id}}" class="tab-pane fade">
-					    
+
 					    <br>
 
 					    <div class="row">
@@ -604,14 +713,14 @@
 								</div>
 							</div>
 						</div>
-					
+
 
 					</div>
 				</div>
-		
-			
-                    
-                    
+
+
+
+
 
                 </div>
 

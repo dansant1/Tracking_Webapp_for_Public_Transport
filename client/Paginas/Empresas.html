@@ -30,7 +30,7 @@
                             {{else}}
                                 {{#each empresas}}
                                     <li class="list-group-item clearfix">
-                                        <span class="pull-left">{{nombre}}</span>
+                                        <span class="pull-left">{{this.ruc}} - {{nombre}}</span>
                                         <span class="pull-right" style="width: 255px">
 					          		<select id="listarutas"
                                             style="width: 88px; display: inline-block; position: relative; top: 1px; margin-right: 5px;"
@@ -695,7 +695,7 @@
 
 
                         <div class="row">
-                          <div class="col-md-7">
+                          <div class="col-md-7" style="margin-top: 10px">
                             <table class="table">
                                 <tbody>
                                 <tr>
@@ -706,7 +706,7 @@
                                     <td>Placa:</td>
                                     <td>{{this.placa}}</td>
                                 </tr>
-                                
+
                                 <tr>
                                     <td>Código de Ruta:</td>
                                     <td>{{this.codigoDeRuta}}</td>
@@ -721,16 +721,19 @@
                             </table>
                           </div>
                           <div class="col-md-5">
+                            <div class="lista-photos">
+                            {{>FotosDeVehiculos}}
 
-                            <h3>Fotos</h3>
-                            <br>
                             <label class="btn btn-success btn-file">
-                                <i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotovehiculo"
+                                <i class="fa fa-camera" aria-hidden="true"></i> <input name="fotosubir" type="file" id="fotovehiculo{{this._id}}"
                                                                                        style="display: none;"
                                                                                        accept="image/*">
                             </label>
+                            <button class="btn btn-primary imprimir"><i class="fa fa-print" aria-hidden="true"></i>
 
-                            {{>FotosDeVehiculos}}
+                            </button>
+                          </div>
+
                           </div>
                         </div>
                         <div class="row">
@@ -1048,18 +1051,19 @@
 
 <template name="FotosDeVehiculos">
 
-    <div class="lista-photos">
+
         {{#each fotos}}
 
             {{#if isImage}}
                 <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-                <button style="position: relative; top: -16px" class="btn btn-danger remove"><i class="fa fa-trash"
+                <br><br>
+                <button style="position: relative;" class="btn btn-danger remove"><i class="fa fa-trash"
                                                                                                 aria-hidden="true"></i>
                 </button>
             {{/if}}
 
         {{/each}}
-    </div>
+
 
 </template>
 
@@ -1693,7 +1697,7 @@
                             <li><a data-toggle="tab" href="#t1{{this._id}}">Tarjeta de Circulación</a></li>
                             <li><a data-toggle="tab" href="#r1{{this._id}}">Revisión Tecnica</a></li>
                             <li><a data-toggle="tab" href="#rc1{{this._id}}">RC</a></li>
-                            <li><a data-toggle="tab" href="#tc1{{this._id}}">TCH</a></li>
+
                         </ul>
 
                         <div class="tab-content">
@@ -1707,7 +1711,7 @@
                                         <span class="bar"></span>
                                         <label>Placa</label>
                                     </div>
-                                    <div class="group">
+                                    <!--<div class="group">
                                         <input type="text" required name="compania" value="{{this.compania}}">
                                         <span class="highlight"></span>
                                         <span class="bar"></span>
@@ -1718,7 +1722,7 @@
                                         <span class="highlight"></span>
                                         <span class="bar"></span>
                                         <label>Aseguradora</label>
-                                    </div>
+                                    </div> -->
                                     <div class="group">
                                         <input type="text" required name="codigoDeRuta" value="{{this.codigoDeRuta}}">
                                         <span class="highlight"></span>
@@ -1939,33 +1943,7 @@
                                 </form>
 
                             </div>
-                            <div id="tc1{{this._id}}" class="tab-pane fade">
 
-                                <br>
-                                <form class="__formulario">
-
-                                    <div class="group">
-                                        <input type="text" required name="tch" value="{{this.TCH.numero}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Número</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="emisiontch" value="{{this.TCH.emision}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Fecha de Emisión</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="caducidadtch" value="{{this.TCH.caducidad}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Fecha de Caducidad</label>
-                                    </div>
-
-                                </form>
-
-                            </div>
                         </div>
                     {{/with}}
 

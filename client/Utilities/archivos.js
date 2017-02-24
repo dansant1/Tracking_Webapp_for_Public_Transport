@@ -89,7 +89,7 @@
     ];
 
     let diacriticsMap = {};
-    
+
     for (var i=0; i < defaultDiacriticsRemovalMap .length; i++){
         var letters = defaultDiacriticsRemovalMap [i].letters;
         for (var j=0; j < letters.length ; j++){
@@ -105,12 +105,12 @@ function removeDiacritics (str) {
 
 
 export function handleFile (e, id, rutaId) {
-    
+
     let files = e.target.files;
     let i,f;
     console.log(rutaId);
     for (i = 0, f = files[i]; i != files.length; ++i) {
-        
+
         let reader = new FileReader();
         let name = f.name;
 
@@ -127,7 +127,7 @@ export function handleFile (e, id, rutaId) {
                     alert(err);
                 } else {
                     Modal.hide('CargandoExcel');
-                    Bert.alert( 'Datos cargados', 'success', 'growl-top-right' ); 
+                    Bert.alert( 'Datos cargados', 'success', 'growl-top-right' );
                 }
             });
         };
@@ -162,18 +162,29 @@ export function SubirFotoVehiculo (event, template, vehiculoId, tipo, id) {
               vehiculoId: vehiculoId,
               tipo: tipo
             };
-            
-            console.log('llego');
 
-            FotosDeVehiculos.insert(doc, function (err, fileObj) {
-              if (err) {
-                alert('Hubo un problema', 'warning');
-              } else {
-                console.log('Listo!');
-              }
-            });
+            if (FotosDeVehiculos.find({'metadata.vehiculoId': vehiculoId}).fetch().length > 0) {
+                  let _Id= FotosDeVehiculos.find({'metadata.vehiculoId': vehiculoId}).fetch()[0]._id;
+                  FotosDeVehiculos.remove({_id: _Id})
+                  console.log(_Id)
+                  FotosDeVehiculos.insert(doc, function (err, fileObj) {
+                    if (err) {
+                      alert('Hubo un problema', 'warning');
+                    } else {
+                      console.log('Listo!');
+                    }
+                  });
+            } else {
+              FotosDeVehiculos.insert(doc, function (err, fileObj) {
+                if (err) {
+                  alert('Hubo un problema', 'warning');
+                } else {
+                  console.log('Listo!');
+                }
+              });
 
-            console.log('lego 2');
+            }
+
           }
         }
     }
@@ -205,7 +216,7 @@ export function SubirFotoConductor (event, template, conductorId, elemento, tipo
               conductorId: conductorId,
               tipo: tipo
             };
-            
+
             console.log('llego');
 
             FotosDeConductores.insert(doc, function (err, fileObj) {
@@ -248,7 +259,7 @@ export function SubirFotoCobrador (event, template, cobradorId, elemento, tipo) 
               cobradorId: cobradorId,
               tipo: tipo
             };
-            
+
             console.log('llego');
 
             FotosDeCobradores.insert(doc, function (err, fileObj) {
