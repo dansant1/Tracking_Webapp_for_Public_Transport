@@ -117,9 +117,7 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
 
   		if (vehiculos) {
   			let empresaId = FlowRouter.getParam('empresaId');
-				console.log(Session.get('filtroRuta'));
-				let numero = Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta')}).fetch().length
-				console.log(numero)
+				let numero = Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta')}).fetch().length;
 				return Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta') });
   		}
 	},
@@ -173,10 +171,8 @@ Template.ListaDeVehiculosPorEmpresas.events({
   	'click .edit': function () {
   		Session.set('editarVehiculo', this._id);
   		Modal.show('EditarVehiculo');
-  		console.log(Session.get('editarVehiculo'));
   	},
   	'change [name="fotosubir"]'(e, t) {
-
   		SubirFotoVehiculo(e, t, this._id, 'foto', 'fotovehiculo' + this._id);
   	},
   	'change #fotovehiculo2'(e, t) {

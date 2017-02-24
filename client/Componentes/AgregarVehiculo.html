@@ -163,36 +163,41 @@
 
 						<div class="row">
 							<div class="panel-group" id="accordion">
-	<div class="panel panel-default">
+	<div class="panel panel-default Entity__list">
 		{{#each entidades}}
-		<div class="panel-heading">
-			<h4 class="panel-title">
-				<a style="color: black;" data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}">
-				{{this.nombre}} </a>
-			</h4>
-		</div>
-		<div id="{{this._id}}" class="panel-collapse collapse ">
-			<div class="panel-body">
-				<div class="row">
-						<div class="col-md-6">
-								<div class="form-group">
-										<label for="domicilio">Número de Tarjeta de Circulación</label>
-										<input type="text"  class="form-control" name="tc">
-								</div>
-						</div>
-						<div class="col-md-6">
-								<div class="form-group">
-										<label for="domicilio">Fecha de Emisión</label>
-										<input type="date"  class="form-control" name="emisiontc">
-								</div>
-								<div class="form-group">
-										<label for="domicilio">Fecha de Caducidad</label>
-										<input type="date"  class="form-control" name="caducidadtc">
-								</div>
-						</div>
-				</div>
-			</div>
-		</div>
+            <div class="Entity__toggle">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a style="color: black;" data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}">
+                            {{this.nombre}} </a>
+                        <div class="Entity__active">
+                            <input class="select__entity" type="checkbox" value="{{this._id}}">
+                        </div>
+                    </h4>
+                </div>
+                <div id="{{this._id}}" class="panel-collapse collapse ">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="domicilio">Número de Tarjeta de Circulación</label>
+                                    <input type="text"  class="form-control" name="tc">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="domicilio">Fecha de Emisión</label>
+                                    <input type="date"  class="form-control" name="emisiontc">
+                                </div>
+                                <div class="form-group">
+                                    <label for="domicilio">Fecha de Caducidad</label>
+                                    <input type="date"  class="form-control" name="caducidadtc">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 		{{else}}
 			<p>No hay Entidades para mostrar</p>
 		{{/each}}
@@ -214,8 +219,8 @@
 								  	<input type="text"  class="form-control" id="domicilio" name="rt">
 								</div>
                                 <div class="form-group">
-                                    <label for="entidad">Entidad</label>
-                                    <select class="form-control" name="entidadrt"></select>
+                                    <label for="entidad">Compañía</label>
+                                    <input type="text"  class="form-control" id="domicilio" name="entidadrt">
                                 </div>
 							</div>
 							<div class="col-md-6">
@@ -237,10 +242,14 @@
 
 						<div class="row">
 							<div class="col-md-6">
-								<div class="form-group">
-									<label for="domicilio">Número</label>
-								  	<input type="text"  class="form-control" id="domicilio" name="rc">
-								</div>
+                                <div class="form-group">
+                                    <label for="domicilio">Número</label>
+                                    <input type="text"  class="form-control" id="domicilio" name="rc">
+                                </div>
+                                <div class="form-group">
+                                    <label for="domicilio">Aseguradora</label>
+                                    <input type="text"  class="form-control" id="domicilio" name="aseguradorarc">
+                                </div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">

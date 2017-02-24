@@ -237,39 +237,32 @@
     box-shadow: 0px 1px 3px 0px rgba(50, 50, 93, 0.2);
 }
 
+.Entity__list {
+    border: none;
+}
+
 .Entity__list .Entity__toggle {
     margin-bottom: 10px;
+    border: 1px solid rgb(220, 220, 220);
+}
+
+.Entity__toggle .panel-heading {
+    cursor: pointer;
+    background-color: rgb(240, 240, 240);
+}
+
+.Entity__toggle .panel-heading .panel-title .Entity__active {
+    float: right;
 }
 
 .Entity__list .Entity__toggle:last-child {
     margin-bottom: 0;
 }
 
-.Entity__toggle {
+.List__tab__entity .table {
     border: 1px solid rgb(220, 220, 220);
 }
 
-.Entity__toggle .Toggle__head {
-    cursor: pointer;
-    overflow: hidden;
-    padding: 12px 15px;
-    background-color: rgb(240,240,240);
-}
-
-.Entity__toggle .Toggle__head h3 {
-    float: left;
-    font-size: 14px;
-    font-weight: 700;
-    color: rgb(100,100,100);
-}
-
-.Entity__toggle .Toggle__head .Head__icon {
-    float: right;
-    color: rgb(120, 120, 120);
-}
-
-.Entity__toggle .Toggle__body {
-    display: none;
-    padding: 18px;
-    border-top: 1px solid rgb(220, 220, 220);
+.List__tab__entity .table .entity {
+    background-color: rgb(240, 240, 240);
 }

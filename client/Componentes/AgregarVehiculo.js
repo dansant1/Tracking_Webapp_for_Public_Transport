@@ -9,22 +9,18 @@ Template.AgregarVehiculo.onCreated(() => {
 
 Template.AgregarVehiculo.helpers({
     entidades() {
-        console.log(Entidades.find({}), 'Entidades.find()')
         return Entidades.find({});
     },
     rutas() {
-        console.log(Rutas.find(), 'Rutas.find()')
         return Rutas.find();
     }
 });
 
 Template.AgregarVehiculo.events({
-    'click .Toggle__head'(e, t) {
-        console.log(e, 'eeee')
-        console.log(t, 'tttt')
-    },
     'click .guardar'(e, t) {
 
+        var entidades = Entidades.find();
+        var entityArray = [];
         let datos = {
             placa: t.find("[name='placa']").value,
             propietario: {
@@ -46,12 +42,7 @@ Template.AgregarVehiculo.events({
             rutaId: $('#listaruta').val(),
             codigoDeRuta: Rutas.find({_id: $('#listaruta').val()}).nombre,
             fechaDePermanenciaEnLaEmpresa: t.find("[name='fechaDePermanenciaEnLaEmpresa']").value,
-            TC: {
-                numero: t.find("[name='tc']").value,
-                emision: t.find("[name='emisiontc']").value,
-                caducidad: t.find("[name='caducidadtc']").value,
-                entidad: t.find("[name='entidadtc']").value
-            },
+            TC: [],
             SOAT: {
                 numero: t.find("[name='soat']").value,
                 inicio: t.find("[name='emisionsoat']").value,
@@ -67,18 +58,33 @@ Template.AgregarVehiculo.events({
             RC: {
                 numero: t.find("[name='rc']").value,
                 inicio: t.find("[name='emisionrc']").value,
-                fin: t.find("[name='caducidadrc']").value
-            },
-            TCH: {
-                numero: t.find("[name='tch']").value,
-                emision: t.find("[name='emisiontch']").value,
-                caducidad: t.find("[name='caducidadtch']").value
+                fin: t.find("[name='caducidadrc']").value,
+                aseguradora: t.find("[name='aseguradorarc']").value
             },
             padron: t.find("[name='padron']").value,
             createdAt: new Date(),
 
             empresaId: FlowRouter.getParam('empresaId')
+        };
+
+        for (var i = 0; i < $('.select__entity').length; i++) {
+            if ($('.select__entity')[i].checked == true) {
+                var entityId = $('.select__entity')[i].value;
+                var block = $('#'+entityId)[0];
+                var data = {
+                    numero: $(block).find("input[name='tc']")[0].value,
+                    emision: $(block).find("input[name='emisiontc']")[0].value,
+                    caducidad: $(block).find("input[name='caducidadtc']")[0].value
+                };
+                entidades.forEach(entidad=> {
+                    if(entidad._id == entityId) {
+                        data.entidad = entidad.nombre;
+                    }
+                });
+                entityArray.push(data);
+            }
         }
+        datos.TC = entityArray;
 
         if (datos.placa !== "") {
             Meteor.call('agregarVehiculo', datos, function (err) {
