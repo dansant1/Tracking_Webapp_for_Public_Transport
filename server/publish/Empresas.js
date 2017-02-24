@@ -318,3 +318,8 @@ Meteor.publish( 'Entidades', function() {
 	}
 
 });
+
+Meteor.publish('RequisitosPorVehiculo', function(vehiculoId) {
+    let vehiculo = Vehiculos.findOne({_id: vehiculoId});
+    return Requisitos.find({_id: {$in: vehiculo.idRequisitos}});
+});
