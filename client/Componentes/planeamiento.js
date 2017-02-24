@@ -34,8 +34,19 @@ Template.PlaneamientoInterno.helpers({
 Template.AgregarPlaneamiento.onCreated( () => {
     let template = Template.instance();
 
+    //arreglo dinamico para guardar las horas
+    template.horas = new ReactiveVar([{
+      'lunes': true,
+      'martes': true,
+      'miercoles': true,
+      'jueves': true,
+      'viernes': true,
+      'sabado': true,
+      'domingo': true
+    }]);
+    template.frecuenciaMayor = new ReactiveVar(1);
+
     template.autorun( () => {
-        console.log('holaaaas');
         let empresaId = Meteor.user().profile.empresaId;
         template.subscribe( 'Empresas');
         template.subscribe('Rutas');
@@ -53,38 +64,57 @@ Template.AgregarPlaneamiento.helpers({
     },
     ruta(id) {
         return Rutas.findOne({_id: id}).nombre;
-    }
+    },
+    horas(){
+      return Template.instance().horas.get();
+    },
+
 });
 
 Template.AgregarPlaneamiento.onRendered( () => {
 
-    $("#horarios tr td").find("#hora").each( function () {
-
-        $(this).datetimepicker({
-            format: 'LT'
-        });
-    });
-
 });
 
 Template.AgregarPlaneamiento.events({
-  'keydown .input-group.date .form-control'(e,t){
-    // if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
-    //   return true;
-    // } else {
-      e.preventDefault;
-      return false;
-    // }
-  },
+    'click .frecuencia input[type=checkbox]'(e,t){
+      let target = $(e.currentTarget);
+      let dia = target.closest('.input-group').data('dia');
+      let frecuencia = parseInt( target.closest('.input-group').find('input[type=number]')[0].value );
+      let frecuenciaMayor = Template.instance().frecuenciaMayor.get();
+
+      let horas = Template.instance().horas.get();
+      let horasNuevaFila = {'lunes': false,'martes': false,'miercoles': false,'jueves': false,'viernes': false,'sabado': false,'domingo': false };
+
+      if ( frecuencia > frecuenciaMayor ){
+        Template.instance().frecuenciaMayor.set( frecuencia );
+        frecuenciaMayor = frecuencia;
+      }
+
+      if ( target.is(':checked') && frecuencia >= 0) {
+
+        for ( let i=0; i<frecuenciaMayor; i++ ){
+          if (i < frecuencia ){
+            if ( typeof horas[i] === 'undefined' ){
+              horas.push( horasNuevaFila );
+            }
+
+            if ( ! horas[i][dia] ){
+              horas[i][dia] = true;
+            }
+          } else {
+            horas[i][dia] = false;
+          }
+
+        }
+        Template.instance().horas.set( horas );
+      }
+    },
     'click .plus'(e, t) {
-        $('#horarios').append("<tr id='h'><td><div class='input-group date' id='hora'><input type='text' class='form-control l' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control m' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control mi' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control j' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control v' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control s' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control d' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td style='text-align: center;''> <button class='btn btn-danger delete'><i class='fa fa-minus' aria-hidden='true'></i></button> </td></tr>");
+      let horas = Template.instance().horas.get();
+      let horasNuevaFila = {'lunes': true,'martes': true,'miercoles': true,'jueves': true,'viernes': true,'sabado': true,'domingo': true };
 
-        $("#horarios tr td").find("#hora").each( function () {
-
-            $(this).datetimepicker({
-                format: 'LT'
-            });
-        });
+      horas.push( horasNuevaFila );
+      Template.instance().horas.set( horas );
     },
     'click .delete'(e,t){
       let target = $(e.currentTarget);

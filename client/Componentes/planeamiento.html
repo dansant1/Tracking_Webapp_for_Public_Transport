@@ -182,6 +182,64 @@
 						<br>
 						<table class="table">
 							<thead>
+								  <tr>
+										<td>
+											<div class="input-group frecuencia" data-dia="lunes">
+									      <input type="number" min='0' step='1' class="form-control">
+												<span class="input-group-addon">
+									        <input type="checkbox">
+									      </span>
+									    </div>
+										</td>
+										<td>
+											<div class="input-group frecuencia" data-dia='martes'>
+									      <input type="number" min='0' step='1' class="form-control">
+												<span class="input-group-addon">
+									        <input type="checkbox">
+									      </span>
+									    </div>
+										</td>
+										<td>
+											<div class="input-group frecuencia" data-dia='miercoles'>
+									      <input type="number" min='0' step='1' class="form-control">
+												<span class="input-group-addon">
+									        <input type="checkbox">
+									      </span>
+									    </div>
+										</td>
+										<td>
+											<div class="input-group frecuencia" data-dia="jueves">
+									      <input type="number" min='0' step='1' class="form-control">
+												<span class="input-group-addon">
+									        <input type="checkbox">
+									      </span>
+									    </div>
+										</td>
+										<td>
+											<div class="input-group frecuencia" data-dida="viernes">
+									      <input type="number" min='0' step='1' class="form-control">
+												<span class="input-group-addon">
+									        <input type="checkbox">
+									      </span>
+									    </div>
+										</td>
+										<td>
+											<div class="input-group frecuencia" data-dia="sabado">
+									      <input type="number" min='0' step='1' class="form-control">
+												<span class="input-group-addon">
+									        <input type="checkbox">
+									      </span>
+									    </div>
+										</td>
+										<td>
+											<div class="input-group frecuencia" data-dia="domingo">
+									      <input type="number" min='0' step='1' class="form-control">
+												<span class="input-group-addon">
+									        <input type="checkbox">
+									      </span>
+									    </div>
+										</td>
+								  </tr>
 						    	<tr>
 							        <th style="text-align: center;">Lunes</th>
 							        <th style="text-align: center;">Martes</th>
@@ -194,70 +252,53 @@
 						    	</tr>
     						</thead>
 						    <tbody id="horarios">
+									{{#each hora in horas }}
 						    	<tr id="h">
-
 							        <td>
-							        	<div class='input-group date' id='hora'>
-						                    <input type='text' class="form-control l" pattern="([01]?[0-9]{1}|2[0-3]{1}):[0-5]{1}[0-9]{1}"/>
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
+												{{#if hora.lunes }}
+														<input type='time' class="form-control l" data-active='{{hora.lunes}}'/>
+												{{/if}}
 							        </td>
 							        <td>
-							        	<div class='input-group date' id='hora'>
-						                    <input type='text' class="form-control m" />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
+													{{#if hora.martes }}
+														<input type='time' class="form-control m" data-active='{{hora.martes}}'/>
+													{{/if}}
 							        </td>
 							        <td>
-							        	<div class='input-group date' id='hora'>
-						                    <input type='text' class="form-control mi" />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
+													{{#if hora.miercoles}}
+						             		<input type='time' class="form-control mi" data-active='{{hora.miercoles}}'/>
+													{{/if}}
 							        </td>
 							        <td>
-							        	<div class='input-group date' id='hora'>
-						                    <input type='text' class="form-control j" />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
+													{{#if hora.jueves}}
+						                <input type='time' class="form-control j" data-active='{{hora.jueves}}'/>
+													{{/if}}
 							        </td>
 							        <td>
-							        	<div class='input-group date' id='hora'>
-						                    <input type='text' class="form-control v" />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
+													{{#if hora.viernes}}
+						                <input type='time' class="form-control v" data-active='{{hora.viernes}}'/>
+													{{/if}}
 							        </td>
 							        <td>
-							        	<div class='input-group date' id='hora'>
-						                    <input type='text' class="form-control s" />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
+													{{#if hora.sabado }}
+						                <input type='time' class="form-control s" data-active='{{hora.sabado}}'/>
+													{{/if}}
 							        </td>
 							        <td>
-							        	<div class='input-group date' id='hora'>
-						                    <input type='text' class="form-control d" />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
+													{{#if hora.domingo}}
+						                <input type='time' class="form-control d" data-active='{{hora.domingo}}'/>
+													{{/if}}
 							        </td>
 
 							        <td style="text-align: center;">
-							        	<button class="btn btn-primary plus"><i class="fa fa-plus" aria-hidden="true"></i></button>
+												{{#if $eq @index 0 }}
+							        		<button class="btn btn-primary plus"><i class="fa fa-plus" aria-hidden="true"></i></button>
+												{{else}}
+													<button class="btn btn-danger delete"><i class="fa fa-minus" aria-hidden="true"></i></button>
+												{{/if}}
 							        </td>
 						    	</tr>
-
+									{{/each}}
 						    </tbody>
 						</table>
 						<div class="row">
