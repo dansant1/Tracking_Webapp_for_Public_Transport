@@ -266,3 +266,8 @@
 .List__tab__entity .table .entity {
     background-color: rgb(240, 240, 240);
 }
+
+.btn-disabled {
+    cursor: not-allowed;
+    background: gray;
+}

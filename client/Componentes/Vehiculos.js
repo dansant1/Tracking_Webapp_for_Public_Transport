@@ -232,9 +232,25 @@ Template.AgregarVehiculoInterno.events({
 
 
 Template.Despacho.events({
-	'click .despachar'() {
-		Modal.show('CheckList')
-	}
+	'click .despachar'(event, template) {
+        let $btn = $(event.target);
+		let $li = $btn.parent().parent();
+		let vehiculoId = $li.find(".vehicle").val();
+		//Modal.show('CheckList')
+	},
+    'change .vehicle'(event, template){
+        let vehiculo = Vehiculos.findOne({_id:event.target.value});
+        let totalRequisitosVehiculo = Requisitos.find({_id: {$in: vehiculo.idRequisitos || []}}).count();
+        let totalRequisitos = Requisitos.find().count();
+        let $btn = $(event.target).parent().parent().parent().find(".despachar");
+        if(!vehiculo.despachado && totalRequisitosVehiculo === totalRequisitos){
+            $btn.removeAttr("disabled");
+            $btn.removeClass("btn-disabled");
+        } else {
+            $btn.attr("disabled", "disabled");
+            $btn.addClass("btn-disabled");
+        }
+    }
 });
 
 Template.Despacho.onCreated( () => {
@@ -244,8 +260,9 @@ Template.Despacho.onCreated( () => {
 		let empresaId = Meteor.user().profile.empresaId;
 		//let rutaId = Session.get('r')
 		template.subscribe('DetalleDeEmpresaPlaneamiento', empresaId);
+		template.subscribe('Requisitos');
 	})
-})
+});
 
 Template.Despacho.onRendered(() => {
 	let template = Template.instance();
@@ -275,10 +292,16 @@ Template.Despacho.helpers({
 	vehiculos() {
 		return Vehiculos.find();
 	},
+    habilitadoDespacho(vehiculoId){
+        let vechiulo = Vehiculos.findOne({_id:vehiculoId});
+    },
 	horario() {
 
 		let fecha = new Date();
 		let hoyEs = fecha.getDay();
+
+        let planeamientos = Planeamiento.find().fetch();
+
 
 		if (hoyEs === 1) {
 			return Planeamiento.find().fetch()[0].plan.horas.lunes;

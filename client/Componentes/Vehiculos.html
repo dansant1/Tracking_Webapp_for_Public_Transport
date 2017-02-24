@@ -24,13 +24,13 @@
   <ul class="list-group">
 
       {{#each horario}}
-			<li class="list-group-item clearfix">
+			<li class="list-group-item clearfix horario">
 				<span class="pull-left" style="width: 15%; margin-left: 10px">{{hora}}
 					<div class="form-group">
 						<br>
 
-						<select class="js-example-basic form-control">
-
+						<select class="js-example-basic form-control vehicle">
+                            <option value="?" disabled selected>Elegir vehículo</option>
 							{{#each vehiculos}}
 								<option value="{{this._id}}">{{this.placa}} - {{this.padron}}</option>
 							{{else}}
@@ -42,8 +42,7 @@
 
 				</span>
 				<span class="pull-right" style="width: 27%">
-
-					<button disabled type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar">Despachar</button>
+					<button disabled type="button" style="width: 45%; display: inline-block;" class="btn btn-success despachar btn-disabled">Despachar</button>
 				</span>
 			</li>
 
