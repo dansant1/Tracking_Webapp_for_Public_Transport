@@ -404,6 +404,14 @@ Meteor.methods({
 
 
     },
+    agregarEntidad(datos) {
+      Entidades.insert({
+			    nombre: datos.nombre
+		 });
+	},
+	eliminarEntidad(id) {
+		Entidades.remove({_id: id});
+	},
     agregarVehiculo(datos) {
         if (this.userId) {
             datos.activo = true;

@@ -87,6 +87,7 @@ Template.AgregarVehiculo.events({
         datos.TC = entityArray;
 
         if (datos.placa !== "") {
+          console.log('funccco')
             Meteor.call('agregarVehiculo', datos, function (err) {
                 if (err) {
                     alert(err);

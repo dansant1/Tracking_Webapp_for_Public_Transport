@@ -138,7 +138,7 @@ Template.ListaDeVehiculosInterno.events({
   		}
   	},
   'change #subirFlota'(e, t) {
-    let id = this._id;
+    let id = Meteor.user().profile.empresaId;
     let rutaId = $("#listarutas").val();
 
     handleFile(e, id, rutaId);

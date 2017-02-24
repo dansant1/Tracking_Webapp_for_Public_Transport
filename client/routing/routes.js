@@ -31,7 +31,7 @@ FlowRouter.route('/borradores', {
 FlowRouter.route('/vehiculos', {
     name: 'Vehiculos',
     action() {
-        BlazeLayout.render('LayoutCliente', {cliente: 'ListaDeVehiculos1'});
+        BlazeLayout.render('LayoutCliente', {cliente: 'ListaDeVehiculos2'});
     }
 });
 
