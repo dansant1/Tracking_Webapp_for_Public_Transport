@@ -22,6 +22,8 @@ Template.mapaCliente.onRendered( () => {
 
     let mapa = Template.instance();
 
+    mapa.subscribe('Vehiculos');
+
 
 
     GoogleMaps.ready('map', function(map) {
@@ -155,6 +157,16 @@ Template.mapaCliente.onRendered( () => {
 
 });
 
+
+Template.mapaCliente.events({
+
+    'change #ruta'(e,t) {
+        let target = e.currentTarget;
+        let mapId = target.options[ target.selectedIndex ].value;
+        console.log(mapId,'ruta cambiada');
+    },
+
+});
 
 Template.mapaCliente.helpers({
     mapOptions: function() {

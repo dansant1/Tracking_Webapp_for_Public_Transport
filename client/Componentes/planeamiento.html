@@ -184,7 +184,7 @@
 							<thead>
 								  <tr>
 										<td>
-											<div class="input-group frecuencia" data-dia="lunes">
+											<div class="input-group frecuencia" data-dia="l">
 									      <input type="number" min='1' step='1' class="form-control">
 												<span class="input-group-addon">
 									        <input type="checkbox">
@@ -192,7 +192,7 @@
 									    </div>
 										</td>
 										<td>
-											<div class="input-group frecuencia" data-dia='martes'>
+											<div class="input-group frecuencia" data-dia='m'>
 									      <input type="number" min='1' step='1' class="form-control">
 												<span class="input-group-addon">
 									        <input type="checkbox">
@@ -200,7 +200,7 @@
 									    </div>
 										</td>
 										<td>
-											<div class="input-group frecuencia" data-dia='miercoles'>
+											<div class="input-group frecuencia" data-dia='mi'>
 									      <input type="number" min='1' step='1' class="form-control">
 												<span class="input-group-addon">
 									        <input type="checkbox">
@@ -208,7 +208,7 @@
 									    </div>
 										</td>
 										<td>
-											<div class="input-group frecuencia" data-dia="jueves">
+											<div class="input-group frecuencia" data-dia="j">
 									      <input type="number" min='1' step='1' class="form-control">
 												<span class="input-group-addon">
 									        <input type="checkbox">
@@ -216,7 +216,7 @@
 									    </div>
 										</td>
 										<td>
-											<div class="input-group frecuencia" data-dida="viernes">
+											<div class="input-group frecuencia" data-dida="v">
 									      <input type="number" min='1' step='1' class="form-control">
 												<span class="input-group-addon">
 									        <input type="checkbox">
@@ -224,7 +224,7 @@
 									    </div>
 										</td>
 										<td>
-											<div class="input-group frecuencia" data-dia="sabado">
+											<div class="input-group frecuencia" data-dia="s">
 									      <input type="number" min='1' step='1' class="form-control">
 												<span class="input-group-addon">
 									        <input type="checkbox">
@@ -232,7 +232,7 @@
 									    </div>
 										</td>
 										<td>
-											<div class="input-group frecuencia" data-dia="domingo">
+											<div class="input-group frecuencia" data-dia="d">
 									      <input type="number" min='1' step='1' class="form-control">
 												<span class="input-group-addon">
 									        <input type="checkbox">
@@ -252,53 +252,57 @@
 						    	</tr>
     					</thead>
 					    <tbody id="horarios">
-								{{#each fila in numerodefilas }}
 					    	<tr id="h">
 						        <td>
-											{{#if $lt @index frecuencias.lunes }}
-													<input type='time' class="form-control l"/>
-											{{/if}}
+											{{#each horas.l }}
+													<input type='time' class="form-control l" value="{{this}}"/>
+													<br>
+											{{/each}}
 						        </td>
-						        <td>
-												{{#if $lt @index frecuencias.martes }}
-													<input type='time' class="form-control m"/>
-												{{/if}}
-						        </td>
-						        <td>
-												{{#if $lt @index frecuencias.miercoles}}
-					             		<input type='time' class="form-control mi"/>
-												{{/if}}
-						        </td>
-						        <td>
-												{{#if $lt @index frecuencias.jueves}}
-					                <input type='time' class="form-control j"/>
-												{{/if}}
-						        </td>
-						        <td>
-												{{#if $lt @index frecuencias.viernes}}
-					                <input type='time' class="form-control v"/>
-												{{/if}}
-						        </td>
-						        <td>
-												{{#if $lt @index frecuencias.sabado}}
-					                <input type='time' class="form-control s"/>
-												{{/if}}
-						        </td>
-						        <td>
-												{{#if $lt @index frecuencias.domingo}}
-					                <input type='time' class="form-control d"/>
-												{{/if}}
+										<td>
+											{{#each horas.m }}
+													<input type='time' class="form-control m" value="{{this}}"/>
+													<br>
+											{{/each}}
+						        </td><td>
+											{{#each horas.mi }}
+													<input type='time' class="form-control mi" value="{{this}}"/>
+													<br>
+											{{/each}}
+						        </td><td>
+											{{#each horas.j }}
+													<input type='time' class="form-control j" value="{{this}}"/>
+													<br>
+											{{/each}}
+						        </td><td>
+											{{#each horas.v }}
+													<input type='time' class="form-control v" value="{{this}}"/>
+													<br>
+											{{/each}}
+						        </td><td>
+											{{#each horas.s }}
+													<input type='time' class="form-control s" value="{{this}}"/>
+													<br>
+											{{/each}}
+						        </td><td>
+											{{#each horas.d }}
+													<input type='time' class="form-control d" value="{{this}}"/>
+													<br>
+											{{/each}}
 						        </td>
 
 						        <td style="text-align: center;">
-											{{#if $eq @index 0 }}
+											{{#each numerodefilas }}
+
+												{{#if $eq @index 0 }}
 						        		<button class="btn btn-primary plus"><i class="fa fa-plus" aria-hidden="true"></i></button>
-											{{else}}
+												{{else}}
 												<button class="btn btn-danger delete"><i class="fa fa-minus" aria-hidden="true"></i></button>
-											{{/if}}
+												{{/if}}
+
+											{{/each}}
 						        </td>
 					    	</tr>
-								{{/each}}
 					    </tbody>
 						</table>
 						<div class="row">

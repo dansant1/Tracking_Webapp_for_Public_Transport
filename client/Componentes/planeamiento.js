@@ -34,13 +34,23 @@ Template.AgregarPlaneamiento.onCreated( () => {
 
     //arreglo dinamico para guardar las horas
     template.frecuencias = new ReactiveVar({
-      'lunes': 1,
-      'martes': 1,
-      'miercoles': 1,
-      'jueves': 1,
-      'viernes': 1,
-      'sabado': 1,
-      'domingo': 1
+      'l': 1,
+      'm': 1,
+      'mi': 1,
+      'j': 1,
+      'v': 1,
+      's': 1,
+      'd': 1
+    });
+
+    template.horas = new ReactiveVar({
+      'l': [true],
+      'm': [true],
+      'mi': [true],
+      'j': [true],
+      'v': [true],
+      's': [true],
+      'd': [true]
     });
 
     template.frecuenciaMayor = new ReactiveVar(1);
@@ -66,6 +76,9 @@ Template.AgregarPlaneamiento.helpers({
     ruta(id) {
         return Rutas.findOne({_id: id}).nombre;
     },
+    horas(){
+      return Template.instance().horas.get();
+    },
     frecuencias(){
       return Template.instance().frecuencias.get();
     },
@@ -79,6 +92,20 @@ Template.AgregarPlaneamiento.onRendered( () => {
 
 });
 
+function addMinutes(time/*"hh:mm"*/, minsToAdd/*"N"*/) {
+  function z(n){
+    return (n<10? '0':'') + n;
+  }
+  let bits = time.split(':');
+  let mins = bits[0]*60 + (+bits[1]) + (+minsToAdd);
+
+  return z(mins%(24*60)/60 | 0) + ':' + z(mins%60);
+}
+
+function converToMinutes(time/*"hh:mm"*/){
+  return  parseInt( time.split(":")[0] ) * 60 + parseInt( time.split(":")[1] );
+}
+
 Template.AgregarPlaneamiento.events({
     'click .frecuencia input[type=checkbox]'(e,t) {
       let target = $(e.currentTarget);
@@ -86,37 +113,58 @@ Template.AgregarPlaneamiento.events({
       let frecuencia = parseInt( target.closest('.input-group').find('input[type=number]')[0].value );
 
       let frecuencias = Template.instance().frecuencias.get();
+      let horas = Template.instance().horas.get();
       frecuencias[dia] = frecuencia;
 
-      if ( target.is(':checked') && frecuencia >= 0) {
-        Template.instance().frecuencias.set( frecuencias );
+      let horaInicial = $("tbody td input." + dia)[0].value;
+
+      if (!horaInicial){
+        e.preventDefault();
+        Bert.alert( 'Debe colocar la hora inicial', 'danger', 'growl-top-right' );
+        return;
       }
+
+      if ( target.is(':checked') && frecuencia >= 0) {
+
+        let minutes = converToMinutes( horaInicial );
+        let nuevaHora = horaInicial;
+        horas.dia = [ horaInicial ];
+
+        while ( minutes < ( 1439 - frecuencia ) ) {
+          nuevaHora = addMinutes( nuevaHora, frecuencia );
+          horas[dia].push( nuevaHora );
+          minutes += frecuencia;
+        }
+
+      }
+
+      Template.instance().horas.set( horas );
 
     },
     'click .plus'(e, t) {
-      let newFrecuencias = Template.instance().frecuencias.get();
-
-      Object.keys(newFrecuencias).forEach(function(key) {
-          ++newFrecuencias[key];
+      let newHoras = Template.instance().horas.get();
+      console.log('newHoras', newHoras );
+      Object.keys( newHoras ).forEach( (dia) => {
+        newHoras[dia].push( true );
       });
 
-      Template.instance().frecuencias.set( newFrecuencias );
+      Template.instance().horas.set( newHoras );
     },
 
     'click .delete'(e,t){
 
-      let newFrecuencias = Template.instance().frecuencias.get();
-      let frecuenciaMayor = Template.instance().frecuenciaMayor.get();
+      // let newFrecuencias = Template.instance().frecuencias.get();
+      // let frecuenciaMayor = Template.instance().frecuenciaMayor.get();
+      //
+      // Object.keys(newFrecuencias).forEach(function(key) {
+      //
+      //   if ( newFrecuencias[key] > 1 && newFrecuencias[key] === frecuenciaMayor ){
+      //     --newFrecuencias[key];
+      //   }
+      //
+      // });
 
-      Object.keys(newFrecuencias).forEach(function(key) {
-
-        if ( newFrecuencias[key] > 1 && newFrecuencias[key] === frecuenciaMayor ){
-          --newFrecuencias[key];
-        }
-
-      });
-
-      Template.instance().frecuencias.set( newFrecuencias );
+      // Template.instance().frecuencias.set( newFrecuencias );
     },
     'click .guardar'(e, t) {
 
