@@ -404,19 +404,15 @@ Meteor.methods({
 
 
     },
-    agregarEntidad(datos) {
-      Entidades.insert({
-			    nombre: datos.nombre
-		 });
-	},
-	eliminarEntidad(id) {
-		Entidades.remove({_id: id});
-	},
     agregarVehiculo(datos) {
         if (this.userId) {
             datos.activo = true;
             datos.borrador = false;
             Vehiculos.insert(datos);
+            //agregar posicion de prueba
+            // let ruta = Rutas.findOne( datos.rutaId );
+            // vehiculo.posicion
+            // 
         } else {
             return;
         }

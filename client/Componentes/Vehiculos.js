@@ -35,6 +35,7 @@ Template.ListaDeVehiculosInterno.helpers({
   			let empresaId = Meteor.user().profile.empresaId;
   			return Vehiculos.find({empresaId: empresaId});
   		}
+			return;
 	},
 	fotos() {
 		return FotosDeVehiculos.find();
@@ -47,9 +48,7 @@ Template.ListaDeVehiculosInterno.helpers({
 		}
 	},
   empresas() {
-        console.log(Empresas.find({_id: Meteor.user().profile.empresaId }).fetch()[0].rutas);
-        console.log('si funciona :/');
-        return Empresas.find({_id: Meteor.user().profile.empresaId }).fetch()[0].rutas;
+        return Empresas.findOne({_id: Meteor.user().profile.empresaId });
   },
   ruta(id) {
         console.log(Rutas.findOne({_id: id}).nombre)
