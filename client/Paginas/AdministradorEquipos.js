@@ -16,6 +16,12 @@ Template.AdministradorEquipo2.events({
   'click .ad'() {
     Modal.show('AgregarAdministrador')
   },
+  'click .as'() {
+    Modal.show('AgregarSoporte')
+  },
+  'click .am'() {
+    Modal.show('AgregarMonitoreo')
+  },
   'click .eliminar'() {
     Meteor.call('eliminarUsuario', this._id, function (err) {
       if (err) {

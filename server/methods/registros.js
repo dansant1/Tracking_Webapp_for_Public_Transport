@@ -137,6 +137,8 @@ Meteor.methods({
             cobradores.shift();
 
             if (Rutas.findOne({_id: rutaId}).nombre !== undefined) {
+              if (typeof datos !== 'undefined' && datos.length > 0 && typeof conductores !== 'undefined' && conductores.length > 0 && typeof cobradres !== 'undefined' && cobradores.length > 0) {
+
                 // Parsear los Vehiculos e insertar en la BD
                 datos.forEach(d => {
 
@@ -207,119 +209,118 @@ Meteor.methods({
                     }
 
                 });
-            }
+
+                let vehiculoId;
+                let placa;
+                // Parsear los conductores e insertar en la BD
+                conductores.forEach(c => {
+
+                    let conductor = c.reduce((acc, cur, i) => {
+                        acc[i] = cur;
+                        return acc;
+                    }, {});
+
+                    placa = conductor['1'];
+                    //console.log(placa);
+                    if (placa !== undefined) {
+
+                        if (Vehiculos.find({placa: placa}).fetch()[0]._id === undefined) {
+                            vehiculoId = "";
+                        } else {
+                            vehiculoId = Vehiculos.find({placa: placa}).fetch()[0]._id;
+                        }
+
+                    }
+
+                    if (conductor['2'] !== undefined) {
+                        Conductores.insert({
+                            empresaId: id,
+                            vehiculoId: vehiculoId,
+                            borrador: false,
+                            datos: {
+                                nombre: conductor['3'],
+                                apellido: conductor['2'],
+                                dni: conductor['4'],
+                                caducidad: conductor['5'],
+                                domicilio: conductor['6'],
+                                distrito: conductor['7'],
+                                telefono: conductor['8']
+                            },
+                            licencia: {
+                                codigo: conductor['9'],
+                                categoria: conductor['10'],
+                                expedicion: conductor['11'],
+                                revalidacion: conductor['12']
+                            },
+                            CEV: {
+                                codigo: conductor['13'],
+                                entidad: conductor['14'],
+                                emision: conductor['15'],
+                                caducidad: conductor['16']
+                            },
+                            credencial: {
+                                numero: conductor['17'],
+                                emision: conductor['18'],
+                                caducidad: conductor['19']
+                            },
+                            chc: conductor['20'],
+                            fotocheck: conductor['21']
+                        });
+                    }
 
 
-            let vehiculoId;
-            let placa;
+                });
 
-            // Parsear los conductores e insertar en la BD
-            conductores.forEach(c => {
+                // Parsear los cobradores e insertar en la BD
+                cobradores.forEach(co => {
 
-                let conductor = c.reduce((acc, cur, i) => {
-                    acc[i] = cur;
-                    return acc;
-                }, {});
+                    let cobrador = co.reduce((acc, cur, i) => {
+                        acc[i] = cur;
+                        return acc;
+                    }, {});
 
-                placa = conductor['1'];
-                //console.log(placa);
-                if (placa !== undefined) {
 
-                    if (Vehiculos.find({placa: placa}).fetch()[0]._id === undefined) {
-                        vehiculoId = "";
-                    } else {
+                    placa = cobrador['1'];
+
+                    if (placa !== undefined) {
+
                         vehiculoId = Vehiculos.find({placa: placa}).fetch()[0]._id;
                     }
 
-                }
 
-                if (conductor['2'] !== undefined) {
-                    Conductores.insert({
-                        empresaId: id,
-                        vehiculoId: vehiculoId,
-                        borrador: false,
-                        datos: {
-                            nombre: conductor['3'],
-                            apellido: conductor['2'],
-                            dni: conductor['4'],
-                            caducidad: conductor['5'],
-                            domicilio: conductor['6'],
-                            distrito: conductor['7'],
-                            telefono: conductor['8']
-                        },
-                        licencia: {
-                            codigo: conductor['9'],
-                            categoria: conductor['10'],
-                            expedicion: conductor['11'],
-                            revalidacion: conductor['12']
-                        },
-                        CEV: {
-                            codigo: conductor['13'],
-                            entidad: conductor['14'],
-                            emision: conductor['15'],
-                            caducidad: conductor['16']
-                        },
-                        credencial: {
-                            numero: conductor['17'],
-                            emision: conductor['18'],
-                            caducidad: conductor['19']
-                        },
-                        chc: conductor['20'],
-                        fotocheck: conductor['21']
-                    });
-                }
+                    if (cobrador['2'] !== undefined) {
+                        Cobradores.insert({
+                            empresaId: id,
+                            vehiculoId: vehiculoId,
+                            borrador: false,
+                            datos: {
+                                nombre: cobrador['3'],
+                                apellido: cobrador['2'],
+                                dni: cobrador['4'],
+                                domicilio: cobrador['5'],
+                                distrito: cobrador['6'],
+                                telefono: cobrador['7']
+                            },
+                            CEV: {
+                                codigo: cobrador['8'],
+                                emision: cobrador['9'],
+                                caducidad: cobrador['10']
+                            },
+                            credencial: {
+                                numero: cobrador['11'],
+                                emision: cobrador['12'],
+                                caducidad: cobrador['13']
+                            },
+                            chc: cobrador['14'],
+                            fotocheck: cobrador['15']
+                        });
+                    }
 
 
-            });
+                });
+              }
 
-
-            // Parsear los cobradores e insertar en la BD
-            cobradores.forEach(co => {
-
-                let cobrador = co.reduce((acc, cur, i) => {
-                    acc[i] = cur;
-                    return acc;
-                }, {});
-
-
-                placa = cobrador['1'];
-
-                if (placa !== undefined) {
-
-                    vehiculoId = Vehiculos.find({placa: placa}).fetch()[0]._id;
-                }
-
-
-                if (cobrador['2'] !== undefined) {
-                    Cobradores.insert({
-                        empresaId: id,
-                        vehiculoId: vehiculoId,
-                        borrador: false,
-                        datos: {
-                            nombre: cobrador['3'],
-                            apellido: cobrador['2'],
-                            dni: cobrador['4'],
-                            domicilio: cobrador['5'],
-                            distrito: cobrador['6'],
-                            telefono: cobrador['7']
-                        },
-                        CEV: {
-                            codigo: cobrador['8'],
-                            emision: cobrador['9'],
-                            caducidad: cobrador['10']
-                        },
-                        credencial: {
-                            numero: cobrador['11'],
-                            emision: cobrador['12'],
-                            caducidad: cobrador['13']
-                        },
-                        chc: cobrador['14'],
-                        fotocheck: cobrador['15']
-                    });
-                }
-
-
-            });
+            }
 
         } else {
             return;
@@ -412,7 +413,7 @@ Meteor.methods({
             //agregar posicion de prueba
             // let ruta = Rutas.findOne( datos.rutaId );
             // vehiculo.posicion
-            // 
+            //
         } else {
             return;
         }

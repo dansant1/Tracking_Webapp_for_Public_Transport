@@ -117,8 +117,9 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
 
   		if (vehiculos) {
   			let empresaId = FlowRouter.getParam('empresaId');
+				console.log(Session.get('filtroRuta'));
 				let numero = Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta')}).fetch().length;
-				console.log(Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta') }));
+				//console.log(Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta') }));
 				return Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta') });
   		}
 	},
@@ -669,10 +670,16 @@ Template.Empresas.events({
 	},
 	'change #subirFlota'(e, t) {
 		let id = this._id;
-		let rutaId = $("#listarutas").val();
+		let rutaId = $("#listarutas" + this._id).val();
 		Session.set('filtroRuta', rutaId);
-		console.log(rutaId);
-    	handleFile(e, id, rutaId);
+
+		if (rutaId === '1') {
+			Bert.alert('Seleccione una ruta', 'success');
+		} else {
+				handleFile(e, id, rutaId);
+
+		}
+
 	},
 	'change #listarutas'() {
 		let rutaId = $("#listarutas").val();
@@ -680,11 +687,6 @@ Template.Empresas.events({
 	}
 });
 
-Template.agregarEmpresa.onRendered( function () {
-
-
-
-});
 
 Template.agregarEmpresa.events({
 	'submit form'(e, t) {
@@ -735,6 +737,7 @@ Template.DetalleDeEmpresa.onCreated( () => {
 Template.DetalleDeEmpresa.helpers({
 	empresa(){
 		let empresaId = FlowRouter.getParam('empresaId');
+
 		let empresa = Empresas.findOne({_id: empresaId});
 		return empresa;
 	}

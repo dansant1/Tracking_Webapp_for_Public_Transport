@@ -155,7 +155,7 @@ Meteor.publish('DetalleDeCobradores', function (vehiculoId) {
 
 Meteor.publish( 'VehiculosPorEmpresa', function(empresaId, search ) {
   let query      = {},
-      projection = { limit: 1, sort: { placa: 1 } };
+      projection = { limit: 2, sort: { placa: 1 } };
 
    	console.log(empresaId);
    	console.log(search);

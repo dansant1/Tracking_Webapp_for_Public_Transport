@@ -595,36 +595,6 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                    placeMarker(event.latLng);
                 });
 
-                // google.maps.event.addListener(drawingManager, 'polylinecomplete', function (polyline) {
-                //     var position = polyline.getPath();
-                //     position.getArray().forEach( (p) => {
-                //
-                //         if (Session.get('ruta') === 'ida') {
-                //             template.ruta.ida.push({
-                //                 lat: p.lat(),
-                //                 lng: p.lng()
-                //             });
-                //         } else if (Session.get('ruta') === 'vuelta') {
-                //             template.ruta.vuelta.push({
-                //                 lat: p.lat(),
-                //                 lng: p.lng()
-                //             });
-                //         } else if (Session.get('ruta') === 'misma') {
-                //
-                //             template.ruta.ida.push({
-                //                 lat: p.lat(),
-                //                 lng: p.lng()
-                //             });
-                //
-                //             template.ruta.vuelta.push({
-                //                 lat: p.lat(),
-                //                 lng: p.lng()
-                //             });
-                //         }
-                //     });
-                //
-                // });
-
                 google.maps.event.addListener(drawingManager, 'markercomplete', function (marker) {
                     var positionLat = marker.getPosition().lat();
                     var positionLng = marker.getPosition().lng();
@@ -671,17 +641,25 @@ Template.AdministradorAgregarRuta.events({
 
 
         if (t.ruta.nombre !== "") {
+          if (typeof t.ruta.ida !== 'undefined' && t.ruta.ida.length > 0) {
+            if (typeof t.ruta.vuelta !== 'undefined' && t.ruta.vuelta.length > 0) {
+              Meteor.call('AgregarRuta', t.ruta, (err) => {
 
-            Meteor.call('AgregarRuta', t.ruta, (err) => {
+                  if (err) {
+                      Bert.alert( 'Hubo un error, vuelva a intentarlo.', 'danger', 'growl-top-right' );
+                  } else {
+                      FlowRouter.go('/admin/rutas');
+                      Bert.alert( 'Ruta agregada.', 'success', 'growl-top-right' );
+                  }
+              });
+            } else {
+              Bert.alert('Agrega la ruta de vuelta correctamente', 'warning')
+            }
+          } else {
+            Bert.alert('Agrega la ruta de ida correctamente', 'warning')
+          }
 
-                if (err) {
-                    Bert.alert( 'Hubo un error, vuelva a intentarlo.', 'danger', 'growl-top-right' );
-                } else {
-                    FlowRouter.go('/admin/rutas');
-                    Bert.alert( 'Ruta agregada.', 'success', 'growl-top-right' );
-                }
 
-            });
 
         } else {
             Bert.alert( 'Complete los datos, vuelva a intentarlo.', 'warning', 'growl-top-right' );
@@ -1349,7 +1327,7 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
 
         //
 
-        map.instance.setZoom(14);
+        map.instance.setZoom(12);
 
 
     });
@@ -1390,7 +1368,7 @@ Template.AdministradorRutasPorEmpresa.helpers({
 
             return {
                 center: new google.maps.LatLng(latLng.lat, latLng.lng),
-                zoom: 14,
+                zoom: 12,
                 styles: styles
             };
         }

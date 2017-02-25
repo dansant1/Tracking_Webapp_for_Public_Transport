@@ -108,7 +108,7 @@ export function handleFile (e, id, rutaId) {
 
     let files = e.target.files;
     let i,f;
-    console.log(rutaId);
+
     for (i = 0, f = files[i]; i != files.length; ++i) {
 
         let reader = new FileReader();
@@ -125,6 +125,7 @@ export function handleFile (e, id, rutaId) {
             Meteor.call('leerExcel', data, id, rutaId, function (err) {
                 if (err) {
                     alert(err);
+                    Modal.hide('CargandoExcel');
                 } else {
                     Modal.hide('CargandoExcel');
                     Bert.alert( 'Datos cargados', 'success', 'growl-top-right' );
@@ -174,6 +175,8 @@ export function SubirFotoVehiculo (event, template, vehiculoId, tipo, id) {
                       console.log('Listo!');
                     }
                   });
+                  archivo.files = undefined;
+                  console.log(archivo.files)
             } else {
               FotosDeVehiculos.insert(doc, function (err, fileObj) {
                 if (err) {
@@ -182,7 +185,8 @@ export function SubirFotoVehiculo (event, template, vehiculoId, tipo, id) {
                   console.log('Listo!');
                 }
               });
-
+              archivo.files = undefined;
+              console.log(archivo.files)
             }
 
           }

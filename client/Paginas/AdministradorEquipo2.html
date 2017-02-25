@@ -5,6 +5,8 @@
 				<div class="col-md-12 col-sm-18 col-xs-18">
 					<div class="box">
             <button type="button" class="btn btn-primary ad">Agregar Administrador</button>
+            <button type="button" class="btn btn-success as">Agregar Soporte</button>
+            <button type="button" class="btn btn-warning am">Agregar Monitoreo</button>
             <br><br>
             <table class="table">
               <thead>
@@ -36,6 +38,74 @@
 
                 <div class="modal-header">
                     <h4 class="modal-title">Agregar Administrador</h4>
+                </div>
+
+                <div class="modal-body">
+
+                  <form>
+                    <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="email" class="form-control" name="email" id="email">
+                    </div>
+                    <div class="form-group">
+                      <label for="pwd">Contraseña</label>
+                      <input type="password" name="password" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-default">Guardar</button>
+                  </form>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="AgregarSoporte">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Agregar Soporte</h4>
+                </div>
+
+                <div class="modal-body">
+
+                  <form>
+                    <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="email" class="form-control" name="email" id="email">
+                    </div>
+                    <div class="form-group">
+                      <label for="pwd">Contraseña</label>
+                      <input type="password" name="password" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-default">Guardar</button>
+                  </form>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="AgregarMonitoreo">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Agregar Monitoreo</h4>
                 </div>
 
                 <div class="modal-body">
