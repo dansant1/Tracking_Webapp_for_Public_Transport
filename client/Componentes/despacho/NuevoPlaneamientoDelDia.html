@@ -1,0 +1,55 @@
+<template name="NuevoPlaneamientoDelDia">
+  <div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+            <div class="page-header clearfix" style="margin-top: 0">
+              <h4 class="pull-left">Nuevo Planeamiento de Hoy</h4>
+              <br><br>
+              <button type="button" class="btn btn-success guardar">Guardar</button>
+            </div>
+            <ul class="list-group">
+
+                {{#each horario}}
+          			<li class="list-group-item clearfix horario planeamiento">
+          				  <span class="pull-left" style="width: 75%; margin-left: 10px">
+                          <i class="fa fa-clock-o" aria-hidden="true"></i>
+                          <span class="time hour">{{hora}}</span>
+                					<div class="form-group" style="display: inline-block; margin-left: 20px">
+
+
+                						<select class="js-example-basic form-control vehicle">
+                                            <option value="?" disabled selected>Elegir vehículo</option>
+                							{{#each vehiculos}}
+                								<option value="{{this._id}}">{{this.placa}} - {{this.padron}}</option>
+                							{{else}}
+                							<option value="0">Cargando...</option>
+                							{{/each}}
+                						</select>
+                            <span style="display: inline-block; margin-left: 20px;">IDA / VUELTA</span>
+                            <label style="display: inline-block; top: 9px; margin-left: 10px" class="switch">
+                                <input type="checkbox" id="ida" class="vehiculo-activo">
+                                <div class="slider round"></div>
+                            </label>
+
+                					</div>
+
+          				  </span>
+
+          			</li>
+              	{{else}}
+              		<div class="loader"></div>
+          				<br>
+          				<p style="width: 80%; margin: 10px auto; text-align: center">Cargando Planeamiento</p>
+                {{/each}}
+
+            </ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</template>

@@ -49,6 +49,13 @@ FlowRouter.route('/planeamiento', {
     }
 });
 
+FlowRouter.route('/planeamiento/nuevo', {
+    name: 'Planeamiento.Nuevo',
+    action() {
+        BlazeLayout.render('LayoutCliente', {cliente: 'NuevoPlaneamientoDelDia'});
+    }
+});
+
 FlowRouter.route('/rutas', {
     name: 'Rutas',
     action() {

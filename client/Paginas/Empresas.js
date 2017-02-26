@@ -117,10 +117,8 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
 
   		if (vehiculos) {
   			let empresaId = FlowRouter.getParam('empresaId');
-				console.log(Session.get('filtroRuta'));
-				let numero = Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta')}).fetch().length;
-				//console.log(Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta') }));
-				return Vehiculos.find({empresaId: empresaId, rutaId: Session.get('filtroRuta') });
+
+				return Vehiculos.find({empresaId: empresaId, /*rutaId: Session.get('filtroRuta')*/ });
   		}
 	},
 	fotos() {

@@ -2,6 +2,13 @@ import {Meteor} from 'meteor/meteor';
 import {Excel} from 'meteor/netanelgilad:excel'
 import ROLES from '../../Both/Roles'
 
+let process = function (date) {
+   var parts = date.split("/");
+   let fecha = new Date(parts[2], parts[1] - 1, parts[0]);
+   console.log(fecha);
+   return fecha
+}
+
 Meteor.methods({
     agregarRequisito({nombre, activo = true}){
         Requisitos.insert({
@@ -10,6 +17,15 @@ Meteor.methods({
             activo: activo
         });
     },
+    agregarEntidad(datos) {
+	     Entidades.insert({
+			      nombre: datos.nombre
+		   });
+    },
+	  eliminarEntidad(id) {
+		    Entidades.remove({_id: id});
+    },
+
     eliminarRequisito(id){
         Requisitos.remove({_id: id});
     },
@@ -19,6 +35,285 @@ Meteor.methods({
                 activo: activo
             }
         })
+    },
+    guardarPlaneamientoDeHoy(datos) {
+      if (this.userId) {
+        if (typeof datos !== 'undefined' && datos.length > 0) {
+          datos.forEach( (d) => {
+              RegistroDeDespachoDeVehiculos.insert(d);
+          })
+        }
+
+      } else {
+        return;
+      }
+    },
+    AgregarPlaneamientoDelDiaAutomatico() {
+      if (this.userId) {
+        let v = [];
+        let empresaId = Meteor.users.findOne({_id: this.userId}).profile.empresaId;
+        let vehiculos = Vehiculos.find({empresaId: empresaId});
+
+        vehiculos.forEach( (vid) => {
+          v.push(vid._id)
+        })
+
+        let fecha = new Date();
+    		let hoyEs = fecha.getDay();
+
+        let hoy = new Date();
+        let dd = hoy.getDate();
+        var mm = hoy.getMonth() + 1;
+
+        let yyyy = hoy.getFullYear();
+
+        if ( dd < 10 ) {
+            dd='0'+dd;
+        }
+
+        if ( mm < 10 ) {
+            mm='0'+mm;
+        }
+        var today = dd+'/'+mm+'/'+yyyy;
+
+        let planeamiento;
+        let d;
+    		if (hoyEs === 1) {
+          d = 'lunes'
+    			planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.lunes;
+    		} else if (hoyEs === 2) {
+          d = 'martes'
+    			planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.martes;
+    		} else if (hoyEs === 3) {
+          d = 'miercoles'
+    			planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.miercoles;
+    		} else if (hoyEs === 4) {
+          d = 'jueves'
+    			planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.jueves;
+    		} else if (hoyEs === 5) {
+          d = 'viernes'
+    			planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.viernes;
+    		} else if (hoyEs === 6) {
+          d = 'sabado'
+    			planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.sabado;
+    		} else if (hoyEs === 0) {
+          d = 'domingo'
+    			planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.domingo;
+    		}
+
+        planeamiento.forEach( (plan) => {
+          console.log(plan[d]);
+          if (plan[d] !== null) {
+            RegistroDeDespachoDeVehiculos.insert({
+              vehiculoId: _.sample(v),
+              empresaId: empresaId,
+              despachado: false,
+              hora: plan[d],
+              ida: true,
+              dia: today,
+              createdAt: new Date()
+            });
+          }
+
+
+        })
+
+
+
+      } else {
+        return;
+      }
+    },
+    verificarConductorEsAptoParaSalirARuta(conductorId) {
+      if (this.userId) {
+
+        let hoy = new Date();
+        let dd = hoy.getDate();
+        var mm = hoy.getMonth() + 1;
+
+        let yyyy = hoy.getFullYear();
+
+        if ( dd < 10 ) {
+            dd='0'+dd;
+        }
+
+        if ( mm < 10 ) {
+            mm='0'+mm;
+        }
+        var today = dd + '/' + mm + '/' + yyyy;
+
+
+
+        let venceLicencia = Conductores.findOne({_id: conductorId}).licencia.revalidacion;
+        let venceCEV = Conductores.findOne({_id: conductorId}).CEV.caducidad;
+        let credencial = Conductores.findOne({_id: conductorId}).credencial.caducidad;
+
+        let licencia;
+        let cev;
+        let cred;
+
+        if (venceLicencia !== undefined && venceLicencia !== null) {
+          if (process(today) < process(venceLicencia)) {
+            console.log(today);
+            console.log(venceLicencia);
+            licencia = true;
+          } else {
+            licencia = false;
+          }
+        }
+
+        if (venceCEV !== undefined && venceCEV !== null) {
+          if (process(today) < process(venceCEV)) {
+            console.log(today);
+            console.log(venceCEV);
+            cev = true;
+          } else {
+            cev = false;
+          }
+        }
+
+        if (credencial !== undefined && credencial !== null) {
+          console.log(credencial);
+          if (process(today) < process(credencial)) {
+            console.log(today);
+            console.log(credencial);
+            cred = true;
+          } else {
+            cred = false;
+          }
+        }
+
+        let res = {}
+        if (licencia && cev && cred) {
+          res.valido = true;
+          res.razon = 'El conductor cumple con los requisitos'
+        } else {
+          res.valido = false;
+          if (licencia !== true) {
+            res.razon = 'La licencia esta vencido.'
+          } else if (licencia !== true && cev !== true) {
+            res.razon = 'La licencia y el CEV estan vencidos.'
+          } else if (licencia !== true && cev !== true && cred !== true) {
+            res.razon = 'La licencia, el CEV y la credencial del conductor estan vencidos.'
+          } else {
+            res.razon = 'Los documentos del conductor estan vencidos'
+          }
+        }
+
+        return res;
+
+      } else {
+        return;
+      }
+    },
+    verificarCobradorEsAptoParaSalirARuta(cobradorId) {
+      if (this.userId) {
+
+        let hoy = new Date();
+        let dd = hoy.getDate();
+        var mm = hoy.getMonth() + 1;
+
+        let yyyy = hoy.getFullYear();
+
+        if ( dd < 10 ) {
+            dd='0'+dd;
+        }
+
+        if ( mm < 10 ) {
+            mm='0'+mm;
+        }
+        var today = dd + '/' + mm + '/' + yyyy;
+
+        console.log('holaaa');
+
+        let venceCEV = Cobradores.findOne({_id: cobradorId}).CEV.caducidad;
+        console.log(venceCEV);
+        let credencial = Cobradores.findOne({_id: cobradorId}).credencial.caducidad;
+
+        let cev;
+        let cred;
+
+        if (venceCEV !== undefined && venceCEV !== null) {
+          if (process(today) < process(venceCEV)) {
+            console.log(today);
+            console.log(venceCEV);
+            cev = true;
+          } else {
+            cev = false;
+          }
+        }
+
+        if (credencial !== undefined && credencial !== null) {
+          console.log(credencial);
+          if (process(today) < process(credencial)) {
+            console.log(today);
+            console.log(credencial);
+            cred = true;
+          } else {
+            cred = false;
+          }
+        }
+
+        let res = {}
+        if (cev && cred) {
+          res.valido = true;
+          res.razon = 'El cobrador cumple con los requisitos'
+        } else {
+          res.valido = false;
+          if (cred !== true) {
+            res.razon = 'La licencia esta vencido.'
+          } else if (cred !== true && cev !== true) {
+            res.razon = 'La licencia y el CEV estan vencidos.'
+          } else {
+            res.razon = 'Los documentos del cobrador estan vencidos'
+          }
+        }
+
+        return res;
+
+      } else {
+        return;
+      }
+    },
+
+    RegistrarVehiculoParaDespachar(registroId, vehiculoId, conductorId, cobradorId) {
+
+      if (this.userId) {
+
+          RegistroDeDespachoDeVehiculos.update({_id: registroId}, {
+            $set: {
+              despachado: true,
+              despachadoHora: new Date(),
+              conductorId: conductorId,
+              cobradorId: cobradorId
+            }
+          })
+
+          Vehiculos.update({_id: vehiculoId}, {
+            $set: {
+              despachado: true,
+              despachadoHora: new Date(),
+              conductorId: conductorId,
+              cobradorId: cobradorId
+            }
+          })
+
+          Conductores.update({_id: conductorId}, {
+            $set: {
+              despachado: true
+            }
+          })
+
+          Cobradores.update({_id: cobradorId}, {
+            $set: {
+              despachado: true
+            }
+          })
+
+      } else {
+        return;
+      }
+
     },
     agregarEmpresa(datos) {
 
@@ -136,8 +431,10 @@ Meteor.methods({
             let cobradores = excel.utils.sheet_to_json(hojaDeCobradores, {header: 1});
             cobradores.shift();
 
+
+
             if (Rutas.findOne({_id: rutaId}).nombre !== undefined) {
-              if (typeof datos !== 'undefined' && datos.length > 0 && typeof conductores !== 'undefined' && conductores.length > 0 && typeof cobradres !== 'undefined' && cobradores.length > 0) {
+              if (typeof datos !== 'undefined' && datos.length > 0 && typeof conductores !== 'undefined' && conductores.length > 0 && typeof cobradores !== 'undefined' && cobradores.length > 0) {
 
                 // Parsear los Vehiculos e insertar en la BD
                 datos.forEach(d => {
@@ -155,6 +452,7 @@ Meteor.methods({
                             activo: true,
                             rutaId: rutaId,
                             borrador: false,
+                            despachado: false,
                             padron: obj['0'],
                             placa: obj['1'],
                             propietario: {
@@ -237,6 +535,7 @@ Meteor.methods({
                             empresaId: id,
                             vehiculoId: vehiculoId,
                             borrador: false,
+                            despachado: false,
                             datos: {
                                 nombre: conductor['3'],
                                 apellido: conductor['2'],
@@ -293,6 +592,7 @@ Meteor.methods({
                             empresaId: id,
                             vehiculoId: vehiculoId,
                             borrador: false,
+                            despachado: false,
                             datos: {
                                 nombre: cobrador['3'],
                                 apellido: cobrador['2'],
@@ -318,8 +618,9 @@ Meteor.methods({
 
 
                 });
+              } else {
+                console.log('no cumple')
               }
-
             }
 
         } else {
@@ -409,6 +710,7 @@ Meteor.methods({
         if (this.userId) {
             datos.activo = true;
             datos.borrador = false;
+            datos.despachado = false;
             Vehiculos.insert(datos);
             //agregar posicion de prueba
             // let ruta = Rutas.findOne( datos.rutaId );
@@ -422,6 +724,7 @@ Meteor.methods({
         if (this.userId) {
             datos.activo = true;
             datos.borrador = true;
+            datos.despachado = false;
             Vehiculos.insert(datos);
         } else {
             return;
@@ -453,6 +756,7 @@ Meteor.methods({
     },
     agregarConductor(datos) {
         if (this.userId) {
+            datos.despachado = false;
             datos.borrador = false;
             Conductores.insert(datos);
         } else {
@@ -473,6 +777,7 @@ Meteor.methods({
     agregarConductorBorrador(datos) {
         if (this.userId) {
             datos.borrador = true;
+            datos.despachado = false;
             Conductores.insert(datos);
         } else {
             return;
@@ -481,6 +786,7 @@ Meteor.methods({
     agregarCobrador(datos) {
         if (this.userId) {
             datos.borrador = false;
+            datos.despachado = false;
             Cobradores.insert(datos);
         } else {
             return;
@@ -500,6 +806,7 @@ Meteor.methods({
     agregarCobradorBorrador(datos) {
         if (this.userId) {
             datos.borrador = true;
+            datos.despachado = false;
             Cobradores.insert(datos);
         } else {
             return;

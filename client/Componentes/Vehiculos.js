@@ -289,20 +289,16 @@ Template.Despacho.onRendered(() => {
 
 		})
 	})
-
 })
 
-Template.Despacho.onRendered( function () {
-
-})
 
 Template.Despacho.helpers({
 	vehiculos() {
 		return Vehiculos.find();
 	},
-    habilitadoDespacho(vehiculoId){
-        let vechiulo = Vehiculos.findOne({_id:vehiculoId});
-    },
+  habilitadoDespacho(vehiculoId){
+    let vechiulo = Vehiculos.findOne({_id:vehiculoId});
+  },
 	horario() {
 
 		let fecha = new Date();
