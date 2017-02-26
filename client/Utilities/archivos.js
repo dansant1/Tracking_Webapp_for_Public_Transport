@@ -164,10 +164,9 @@ export function SubirFotoVehiculo (event, template, vehiculoId, tipo, id) {
               tipo: tipo
             };
 
-            if (FotosDeVehiculos.find({'metadata.vehiculoId': vehiculoId}).fetch().length > 0) {
-                  let _Id= FotosDeVehiculos.find({'metadata.vehiculoId': vehiculoId}).fetch()[0]._id;
-                  FotosDeVehiculos.remove({_id: _Id})
-                  console.log(_Id)
+            if (FotosDeVehiculos.find({'metadata.vehiculoId': vehiculoId, 'metadata.tipo': tipo}).fetch().length > 0) {
+                  let _Id= FotosDeVehiculos.find({'metadata.vehiculoId': vehiculoId, 'metadata.tipo': tipo}).fetch()[0]._id;
+                  FotosDeVehiculos.remove({_id: _Id});
                   FotosDeVehiculos.insert(doc, function (err, fileObj) {
                     if (err) {
                       alert('Hubo un problema', 'warning');
@@ -195,7 +194,6 @@ export function SubirFotoVehiculo (event, template, vehiculoId, tipo, id) {
 }
 
 export function SubirFotoConductor (event, template, conductorId, elemento, tipo) {
-    console.log(elemento);
     let archivo = document.getElementById(elemento);
 
     if ('files' in archivo) {

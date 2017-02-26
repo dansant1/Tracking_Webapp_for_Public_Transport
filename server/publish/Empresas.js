@@ -154,28 +154,27 @@ Meteor.publish('DetalleDeCobradores', function (vehiculoId) {
 });
 
 Meteor.publish( 'VehiculosPorEmpresa', function(empresaId, search ) {
-  let query      = {},
-      projection = { limit: 2, sort: { placa: 1 } };
+    let query      = {},
+        projection = { sort: { placa: 1 } };
 
-   	console.log(empresaId);
-   	console.log(search);
+    if ( search ) {
+        let regex = new RegExp( search, 'i' );
 
-  if ( search ) {
-    let regex = new RegExp( search, 'i' );
+        query = {
+            $or: [
+                { placa: regex },
+                { padron: regex}
+            ]
+        };
 
-    query = {
-      $or: [
-        { placa: regex },
-        { padron: regex}
-      ]
-    };
+        projection.limit = 200;
+    }
 
-    projection.limit = 200;
-  }
+    return Vehiculos.find(query, projection );
+});
 
-  console.log(Vehiculos.find(query, projection ).fetch().length);
-
-  return Vehiculos.find(query, projection );
+Meteor.publish( 'RutasEmpresa', function(empresaId ) {
+    return Rutas.find({empresaId: empresaId});
 });
 
 Meteor.publish( 'ConductoresPorEmpresa', function(empresaId, search ) {
