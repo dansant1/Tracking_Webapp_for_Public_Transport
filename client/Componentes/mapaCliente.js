@@ -1,5 +1,3 @@
-
-
 Template.mapaCliente.onCreated( () => {
     let template = Template.instance();
 
@@ -7,12 +5,16 @@ Template.mapaCliente.onCreated( () => {
         let empresaId = Meteor.user().profile.empresaId;
 
         template.subscribe( 'DetalleDeEmpresa', empresaId);
+        template.subscribe('VehiculosEmpresaId', empresaId)
     });
 });
 
 Template.mapaCliente.helpers({
     empresa() {
         return Empresas.find({_id: Meteor.user().profile.empresaId}).fetch()[0].nombre;
+    },
+    vehiculos() {
+      return Vehiculos.find();
     }
 });
 
@@ -31,19 +33,48 @@ Template.mapaCliente.onRendered( () => {
         var marker;
 
         mapa.autorun( () => {
-
-            mapa.subscribe('Empresas');
-
             let empresaId = Meteor.user().profile.empresaId;
+            mapa.subscribe('Empresas');
+            mapa.subscribe('vehiculosGPS', empresaId)
+
+
+            let vehicle;
+
+            var contentString = 'Info';
+
+            var infowindow = new google.maps.InfoWindow({
+                                //content: contentString,
+                                maxWidth: 200
+                              });
+
+            Vehiculos.find(/*{despachado: true}*/).forEach( function (v) {
+              vehicle = new google.maps.Marker({
+                          animation: google.maps.Animation.DROP,
+                          position: new google.maps.LatLng(v.posicion.lat, v.posicion.lng),
+                          icon: '/bus2.png', //*'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
+                          map: map.instance,
+                          info: 'Placa ' + v.placa + '<br> Padron ' + v.padron,
+                          id: v._id,
+                          title: 'Datos'
+              });
+
+              google.maps.event.addListener(vehicle, 'click', function () {
+                infowindow.setContent(this.info);
+                infowindow.open(map.instance, this);
+              });
+            });
+
+            /*vehicle.addListener('click', function() {
+                  infowindow.open(map.instance, vehicle);
+            });*/
 
 
 
 
-                        mapa.subscribe('RutasPorEmpresa', () => {
 
 
-
-                        let numero = 0;
+            mapa.subscribe('RutasPorEmpresa', () => {
+            let numero = 0;
 
                         mapa.defaultRuta = new ReactiveVar(Rutas.findOne()._id)
 
@@ -103,37 +134,39 @@ Template.mapaCliente.onRendered( () => {
 
 
 
-                                ruta.paraderos.forEach( function (p) {
+                                /*ruta.paraderos.forEach( function (p) {
 
                                     setMapOnAll(map.instance, p, 'parking')
 
-                                });
+
+                                });*/
                             });
 
                             if (mapa.idaPath) {
 
                                removeLine();
-                               //clearMarkers()
+                               //deleteMarkers()
                             }
                                 mapa.idaPath = new google.maps.Polyline({
                                     path: ida,
                                     geodesic: true,
                                     strokeColor: '#3498db',
                                     strokeOpacity: 1.0,
-                                    strokeWeight: 2
+                                    strokeWeight: 4
                                 });
 
                                 mapa.vueltaPath = new google.maps.Polyline({
                                         path: vuelta,
                                         geodesic: true,
-                                        strokeColor: '#2ecc71',
+                                        strokeColor: '#e67e22',
                                         strokeOpacity: 1.0,
-                                        strokeWeight: 2
+                                        strokeWeight: 4
                                 })
 
 
 
                                 addLine();
+                                //setMapOnAll(map.instance)
 
                         });
 
@@ -147,7 +180,18 @@ Template.mapaCliente.onRendered( () => {
 
         });
 
-        //
+        var trafficLayer = new google.maps.TrafficLayer();
+        mapa.modoTrafico = new ReactiveVar(false);
+        $('.trafico').on('click', function () {
+          if (mapa.modoTrafico.get() !== false) {
+            trafficLayer.setMap(null);
+            mapa.modoTrafico.set(false)
+          } else {
+            mapa.modoTrafico.set(true)
+            trafficLayer.setMap(map.instance);
+          }
+        })
+
 
         map.instance.setZoom(13);
 

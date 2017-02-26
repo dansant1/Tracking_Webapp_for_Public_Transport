@@ -1,5 +1,15 @@
 import { handleFile, SubirFotoVehiculo, SubirFotoConductor, SubirFotoCobrador } from '../Utilities/archivos'
 
+Template.LeftMenuEmpresa.helpers({
+	monitor() {
+    if (Roles.userIsInRole(Meteor.userId(), ['monitoreo'], 'Empresa')) {
+      return 'modo-monitor'
+    } else {
+      return ''
+    }
+  }
+})
+
 Template.LeftMenuEmpresa.events({
 	'click .avd'() {
 		Modal.show('AgregarVehiculo1');

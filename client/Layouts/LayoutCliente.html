@@ -1,41 +1,41 @@
 <template name="LayoutCliente">
-	
-	{{#if currentUser}} 
+
+	{{#if currentUser}}
 
 		{{#if isInRole 'gerente' 'Administracion'}}
 
 				{{#if Template.subscriptionsReady}}
-				
+
 				{{>Administrador}}
-				
+
 				{{else}}
 					{{>Loader}}
 				{{/if}}
 		{{else}}
-				
+
 			{{#if Template.subscriptionsReady}}
 
 				{{>Cliente}}
 			{{else}}
 				{{>Loader}}
 			{{/if}}
-				
-		
+
+
 		{{/if}}
 
-		
+
 	{{else}}
 		{{>Login}}
 	{{/if}}
 
-	 
+
 </template>
 
 <template name="Cliente">
 	{{>TopMenuUsuario}}
-	<main class="cd-main-content">
+	<main class="cd-main-content" id="{{monitor}}">
 		{{>LeftMenuEmpresa}}
-		{{>Template.dynamic template=cliente}}	
+		{{>Template.dynamic template=cliente}}
 	</main>
 </template>
 
@@ -43,8 +43,6 @@
 	{{>TopMenuUsuario}}
 	<main class="cd-main-content">
 		{{>LeftMenuAdministrador}}
-		{{> Template.dynamic template=administrador}}	
+		{{> Template.dynamic template=administrador}}
 	</main>
 </template>
-
-

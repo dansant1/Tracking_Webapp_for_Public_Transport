@@ -391,3 +391,12 @@ Meteor.publish('reqs', function () {
 		return;
 	}
 })
+
+Meteor.publish('vehiculosGPS', function (empresaId) {
+	if (this.userId) {
+		return Vehiculos.find({empresaId: empresaId, borrador: false});
+	} else {
+		this.stop();
+		return;
+	}
+})

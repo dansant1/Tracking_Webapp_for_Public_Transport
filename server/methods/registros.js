@@ -444,12 +444,15 @@ Meteor.methods({
                         return acc;
                     }, {});
 
-                    console.log(rutaId);
+                    let arregloRutas = Rutas.findOne({_id: rutaId}).ida;
+                    let p = _.sample(arregloRutas);
+                    let posicion = p
 
                     if (obj['1'] !== undefined) {
                         Vehiculos.insert({
                             empresaId: id,
                             activo: true,
+                            posicion: posicion,
                             rutaId: rutaId,
                             borrador: false,
                             despachado: false,
@@ -709,6 +712,10 @@ Meteor.methods({
     agregarVehiculo(datos) {
         if (this.userId) {
             datos.activo = true;
+            let arregloRutas = Rutas.findOne({_id: rutaId}).ida;
+            let p = _.sample(arregloRutas);
+            let posicion = p
+            datos.posicion = posicion;
             datos.borrador = false;
             datos.despachado = false;
             Vehiculos.insert(datos);
@@ -722,6 +729,10 @@ Meteor.methods({
     },
     agregarVehiculoBorrador(datos) {
         if (this.userId) {
+            let arregloRutas = Rutas.findOne({_id: rutaId}).ida;
+            let p = _.sample(arregloRutas);
+            let posicion = p
+            datos.posicion = posicion;
             datos.activo = true;
             datos.borrador = true;
             datos.despachado = false;

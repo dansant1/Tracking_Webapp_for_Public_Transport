@@ -586,3 +586,82 @@ td .form-control {
 	width: 200px;
 	display: inline-block;
 }
+
+.btn-primary {
+	border-color: #3498db;
+	background: #3498db;
+}
+
+.btn-primary:hover {
+	border-color: #2980b9;
+	background: #2980b9;
+}
+
+.map-canvas {
+	top: -3px;
+}
+
+#modo-monitor {
+	position: relative;
+  float: left;
+  top: auto;
+  width: 110px;
+  min-height: 100vh;
+  padding-top: 55px;
+  visibility: visible;
+  opacity: 1;
+  overflow: visible;
+  max-height: none;
+}
+
+#modo-monitor .cd-label {
+    display: none;
+}
+
+#modo-monitor .has-children {
+    position: relative;
+}
+
+#modo-monitor > ul > li > a {
+    padding: calc(2.2em + 24px) 0 2.4em;
+}
+
+#modo-monitor a {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+#modo.cd-main-content .content-wrapper {
+    margin-left: 110px;
+		margin-top: 0px
+}
+
+#modo-monitor > ul > li > a::before {
+    left: 50%;
+    right: auto;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+    top: 2.4em;
+}
+
+#modo-monitor .count {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    top: 2em;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+    left: calc(50% + 5px);
+    right: auto;
+    color: transparent;
+}
