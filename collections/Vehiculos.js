@@ -17,3 +17,16 @@ Vehiculos.deny({
 	remove: () => {return true}
 });
 
+RegistroDeDespachoDeVehiculos = new Mongo.Collection('registrodedespachodevehiculos');
+
+RegistroDeDespachoDeVehiculos.allow({
+	insert: () => {return false},
+	update: () => {return false},
+	remove: () => {return false}
+});
+
+RegistroDeDespachoDeVehiculos.deny({
+	insert: () => {return true},
+	update: () => {return true},
+	remove: () => {return true}
+});

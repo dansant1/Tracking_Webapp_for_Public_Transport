@@ -40,7 +40,7 @@ Template.AgregarVehiculo.events({
                 asientos: t.find("[name='asientos']").value
             },
             rutaId: $('#listaruta').val(),
-            codigoDeRuta: Rutas.find({_id: $('#listaruta').val()}).nombre,
+            codigoDeRuta: Rutas.findOne({_id: $('#listaruta').val()}).nombre,
             fechaDePermanenciaEnLaEmpresa: t.find("[name='fechaDePermanenciaEnLaEmpresa']").value,
             TC: [],
             SOAT: {

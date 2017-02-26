@@ -1,0 +1,177 @@
+<template name="VistaDespacho">
+  <div class="page-header clearfix" style="margin-top: 0px">
+    <h4 class="pull-left">Despacho de Vehículos</h4>
+  </div>
+
+  <a href="/planeamiento/nuevo" class="btn btn-success">Agregar Planeamiento de hoy</a>
+  <br><br>
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">Despacho</a></li>
+    <li><a data-toggle="tab" href="#menu1">Vehiculos Despachados</a></li>
+    <li><a data-toggle="tab" href="#menu2">Vehiculos en Cola</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+      <h3>Lista de Vehiculos a Despachar</h3>
+      <br>
+      <ul>
+      {{#each despacho}}
+      <li class="list-group-item clearfix horario planeamiento">
+          <span class="pull-left" style="width: 75%; margin-left: 10px">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span class="time hour">{{this.hora}}</span>
+                <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{placa}} - Padron {{padron}}</span>
+
+
+          </span>
+          <span class="pull-right">
+            <div class="form-group" style="display: inline-block; margin-left: 10px; margin-right: 15px">
+              {{#if this.ida}}
+              <span style="display: inline-block; margin-left: 0px; color: blue;">IDA</span>
+              {{else}}
+              <span style="display: inline-block; margin-left: 0px; color: red">VUELTA</span>
+              {{/if}}
+            </div>
+            {{#if this.despachado}}
+            <button type="button" class="btn btn-warning">Despachado</button>
+            {{else}}
+            <button type="button" class="despachar btn btn-success">Asignar Personal</button>
+            {{/if}}
+          </span>
+      </li>
+      {{/each}}
+      </ul>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+      <h3>Vehiculos Despachados</h3>
+      <br><br>
+      {{#each despachados}}
+      <li class="list-group-item clearfix horario planeamiento">
+          <span class="pull-left" style="width: 75%; margin-left: 10px">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span class="time hour">{{this.hora}}</span>
+                <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{placa}} - Padron {{padron}}</span>
+
+
+          </span>
+
+          <span class="pull-right">
+            <div class="form-group" style="display: inline-block; margin-left: 10px">
+              {{#if this.ida}}
+              <span style="display: inline-block; margin-left: 0px; color: blue">IDA</span>
+              {{else}}
+              <span style="display: inline-block; margin-left: 0px; color: red">VUELTA</span>
+              {{/if}}
+            </div></span>
+      </li>
+      {{/each}}
+    </div>
+    <div id="menu2" class="tab-pane fade">
+      <h3>Vehiculos en Cola</h3>
+      <br><br>
+      {{#each despachocola}}
+      <li class="list-group-item clearfix horario planeamiento">
+          <span class="pull-left" style="width: 75%; margin-left: 10px">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span class="time hour">{{this.hora}}</span>
+                <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{placa}} - Padron {{padron}}</span>
+
+
+          </span>
+
+          <span class="pull-right">
+            <div class="form-group" style="display: inline-block; margin-left: 10px">
+              {{#if this.ida}}
+              <span style="display: inline-block; margin-left: 0px; color: blue">IDA</span>
+              {{else}}
+              <span style="display: inline-block; margin-left: 0px; color: red">VUELTA</span>
+              {{/if}}
+            </div>
+          </span>
+      </li>
+      {{/each}}
+    </div>
+  </div>
+</template>
+
+<template name="Asignar">
+  <div class="modal fade" data-keyboard="false" data-backdrop="static">
+       <div class="modal-dialog modal-lg">
+           <div class="modal-content">
+
+               <div class="modal-header">
+                   <h4 class="modal-title">Asignar Cobrador / Conductor</h4>
+               </div>
+
+               <div class="modal-body">
+                 <ul class="nav nav-tabs">
+                   <li class="active"><a data-toggle="tab" href="#home">Conductor</a></li>
+                   <li><a data-toggle="tab" href="#selectcobrador">Cobrador</a></li>
+                   <li><a data-toggle="tab" href="#selectreq">Requisitos</a></li>
+                 </ul>
+
+                 <div class="tab-content">
+                   <div id="home" class="tab-pane fade in active">
+                     <h3>Selecciona a Conductor</h3>
+                     <br>
+                     <ul>
+                     {{#each conductores}}
+                     <li class="list-group-item clearfix horario planeamiento">
+                         <span class="pull-left" style="width: 75%; margin-left: 10px">
+                               <i class="fa fa-user" aria-hidden="true"></i>
+                               <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">{{this.datos.nombre}} {{this.datos.apellido}}</span>
+                         </span>
+                         <span class="pull-right">
+
+                           <a href="#selectcobrador" class="despachar a{{this._id}} btn btn-success asignar-conductor">Asignar</a>
+
+                         </span>
+                     </li>
+                     {{/each}}
+                     </ul>
+                   </div>
+                   <div id="selectcobrador" class="tab-pane fade">
+                     <h3>Selecciona un Cobrador</h3>
+                     <br>
+                     {{#each cobradores}}
+                     <li class="list-group-item clearfix horario planeamiento">
+                         <span class="pull-left" style="width: 75%; margin-left: 10px">
+                               <i class="fa fa-user" aria-hidden="true"></i>
+                               <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">{{this.datos.nombre}} {{this.datos.apellido}}</span>
+                         </span>
+                         <span class="pull-right">
+                           <a href="#selectreq" class="despachar c{{this._id}} btn btn-success asignar-cobrador">Asignar</a>
+
+                         </span>
+                     </li>
+                     {{/each}}
+                   </div>
+                   <div id="selectreq" class="tab-pane fade">
+                     <h3>Requisitos</h3>
+                     <br>
+                     <ul>
+                      {{#each requisitos}}
+                       <li class="list-group-item clearfix reqs">
+                         <span style="display: inline-block; margin-left: 20px;">{{this.nombre}}</span>
+                         <label style="display: inline-block; top: 9px; margin-left: 10px" class="switch">
+                             <input type="checkbox" id="req{{this._id}}" class="requisito">
+                             <div class="slider round"></div>
+                         </label>
+                       </li>
+                      {{/each}}
+                     </ul>
+                     <br>
+                     <button type="button" class="btn btn-primary cumple" {{despachar}}>Despachar</button>
+                   </div>
+                 </div>
+               </div>
+
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+               </div>
+
+           </div>
+       </div>
+   </div>
+</template>

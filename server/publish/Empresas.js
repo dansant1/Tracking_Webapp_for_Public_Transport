@@ -318,6 +318,16 @@ Meteor.publish( 'VehiculosEmpresa', function(empresaId) {
 
 });
 
+Meteor.publish( 'VehiculosEmpresaId', function(empresaId) {
+
+	if (this.userId) {
+		return Vehiculos.find({empresaId: empresaId});
+	} else {
+		this.stop()
+	}
+
+});
+
 Meteor.publish( 'Entidades', function() {
 
 	if (this.userId) {
@@ -332,3 +342,51 @@ Meteor.publish('RequisitosPorVehiculo', function(vehiculoId) {
     let vehiculo = Vehiculos.findOne({_id: vehiculoId});
     return Requisitos.find({_id: {$in: vehiculo.idRequisitos}});
 });
+
+Meteor.publish('RegistroDeDespachoDeVehiculos', function (empresaId) {
+	if (this.userId) {
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+
+		var yyyy = today.getFullYear();
+		if(dd<10){
+		    dd='0'+dd;
+		}
+		if(mm<10){
+		    mm='0'+mm;
+		}
+		var hoy = dd+'/'+mm+'/'+yyyy;
+		return RegistroDeDespachoDeVehiculos.find({empresaId: empresaId, dia: hoy});
+	} else {
+		this.stop()
+		return;
+	}
+})
+
+Meteor.publish('cobradoresEmpresa', function (empresaId) {
+	if (this.userId) {
+		return Cobradores.find({empresaId: empresaId})
+	} else {
+		this.stop();
+		return;
+	}
+})
+
+Meteor.publish('conductoresEmpresa', function (empresaId) {
+	if (this.userId) {
+		return Conductores.find({empresaId: empresaId})
+	} else {
+		this.stop();
+		return;
+	}
+})
+
+Meteor.publish('reqs', function () {
+	if (this.userId) {
+		return Requisitos.find();
+	} else {
+		this.stop();
+		return;
+	}
+})
