@@ -46,13 +46,13 @@ Template.mapaCliente.onRendered( () => {
 
     let mapa = Template.instance();
 
-    mapa.subscribe('Vehiculos');
     mapa.subscribe('rutas');
 
     let empresaId = Meteor.user().profile.empresaId;
 
     mapa.subscribe('Empresas');
     mapa.subscribe('vehiculosGPS', empresaId );
+    mapa.subscribe('VehiculosPorEmpresaId', empresaId );
 
 
 
@@ -458,16 +458,6 @@ Template.mapaCliente.helpers({
 
       let mapa = Template.instance();
 
-      mapa.subscribe('Vehiculos');
-      mapa.subscribe('rutas');
-
-      let empresaId = Meteor.user().profile.empresaId;
-
-      mapa.subscribe('Empresas');
-      mapa.subscribe('vehiculosGPS', empresaId );
-
-
-
       GoogleMaps.ready('map', function(map) {
 
           let marker;
@@ -477,6 +467,14 @@ Template.mapaCliente.helpers({
           let puntosdecontrolMaker = [];
 
           mapa.autorun( () => {
+
+              let empresaId = mapa.empresaId.get();
+
+              mapa.subscribe('Empresas');
+              mapa.subscribe('vehiculosGPS', empresaId );
+              mapa.subscribe('VehiculosPorEmpresaId', empresaId );
+
+              let subRutasPorEmp = mapa.subscribe( 'RutasPorEmpresa', empresaId );
 
               let vehicle;
               let listadevehiculos;
@@ -539,9 +537,13 @@ Template.mapaCliente.helpers({
 
 
               // mapa.subscribe('RutasPorEmpresa', () => {
+
+
               let numero = 0;
 
-                          mapa.defaultRuta = new ReactiveVar(Rutas.findOne()._id)
+              if ( subRutasPorEmp.ready() && mapa.ruta.get() ){
+
+                          mapa.defaultRuta = mapa.ruta.get();
 
                           mapa.idaPath;
                           mapa.vueltaPath;
@@ -638,21 +640,25 @@ Template.mapaCliente.helpers({
                                   ida = ruta.ida;
                                   vuelta = ruta.vuelta;
 
+                                  if ( _.has( ruta, "paraderos") ){
+
+                                    ruta.paraderos.forEach( function (p) {
+
+                                        setMapOnAll(map.instance, p, 'parking')
 
 
-                                  ruta.paraderos.forEach( function (p) {
+                                    });
+                                  }
 
-                                      setMapOnAll(map.instance, p, 'parking')
+                                  if ( _.has( ruta, "puntosdecontrol") ){
 
+                                    ruta.puntosdecontrol.forEach( function (p) {
 
-                                  });
-
-                                  ruta.puntosdecontrol.forEach( function (p) {
-
-                                      setMapOnAll(map.instance, p, 'puntodecontrol')
+                                        setMapOnAll(map.instance, p, 'puntodecontrol')
 
 
-                                  });
+                                    });
+                                }
                               });
 
                               if (mapa.idaPath) {
@@ -686,7 +692,7 @@ Template.mapaCliente.helpers({
 
                   // });
 
-
+                }
 
 
 
@@ -716,6 +722,13 @@ Template.mapaCliente.helpers({
 
 
   Template.adminMapaCliente.events({
+
+    'change #empresa'(e,t) {
+        let target = e.currentTarget;
+        let empresaId = target.options[ target.selectedIndex ].value;
+
+        Template.instance().empresaId.set( empresaId === "0" ? false : empresaId );
+    },
 
       'change #ruta'(e,t) {
           let target = e.currentTarget;
@@ -791,7 +804,9 @@ Template.mapaCliente.helpers({
           }
       },
       empresa() {
-          return Empresas.findOne({_id: Meteor.user().profile.empresaId});
+        let empresa = Empresas.findOne({_id: Template.instance().empresaId.get() });
+        console.log( empresa );
+        return empresa;
       },
       ruta(id) {
           let ruta = Rutas.findOne({_id: id}) || { nombre: "" };

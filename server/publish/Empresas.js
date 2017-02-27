@@ -99,9 +99,18 @@ Meteor.publish('DetalleDeEmpresa', function (empresaId) {
 
 
 
-Meteor.publish('RutasPorEmpresa', function () {
+Meteor.publish('RutasPorEmpresa', function ( empresaId ) {
   if (this.userId) {
-    return Rutas.find({});
+		console.log( "-----" , empresaId, "-----" );
+		let query = Rutas.find({
+			$or: [
+				 { "empresasId.0": empresaId },
+				 { empresaId: empresaId }
+			 ]
+		});
+		console.log( query.fetch() );
+
+    return query;
   } else {
     this.stop();
     return
@@ -172,6 +181,10 @@ Meteor.publish( 'VehiculosPorEmpresa', function(empresaId, search ) {
     }
 
     return Vehiculos.find(query, projection );
+});
+
+Meteor.publish( 'VehiculosPorEmpresaId', function(empresaId) {
+    return Vehiculos.find({ 'empresaId': empresaId });
 });
 
 Meteor.publish( 'RutasEmpresa', function(empresaId ) {
