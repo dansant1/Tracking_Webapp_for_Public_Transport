@@ -64,6 +64,14 @@ FlowRouter.route('/rutas', {
     }
 });
 
+FlowRouter.route('/rutas/puntosdecontrol', {
+    name: 'RutasPuntosDeControl',
+    action() {
+        console.log('haa');
+        BlazeLayout.render('LayoutCliente', {cliente: 'RutasPuntosDeControl'});
+    }
+});
+
 FlowRouter.route('/agregarplaneamiento', {
     name: 'Planeamiento',
     action() {

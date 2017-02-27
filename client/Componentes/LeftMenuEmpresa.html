@@ -39,6 +39,14 @@
 
 				<li class="has-children users top-nav-btn">
 					<a href="/rutas">Rutas</a>
+
+					<ul>
+						<li><a href="/rutas">Lista de Rutas</a></li>
+						{{#if isInRole 'operador' 'Empresa'}}
+						<li><a href="/rutas/puntosdecontrol">Agregar Puntos de Control</a></li>
+						{{/if}}
+					</ul>
+
 				</li>
 
 
