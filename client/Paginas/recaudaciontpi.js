@@ -72,6 +72,7 @@ Template.RecaudacionTPIvehiculos.onCreated( () => {
             template.searching.set(false);
         }, 300);
     })
+    template.subscribe('RecaudacionTPI')
   })
 })
 
@@ -91,14 +92,24 @@ Template.RecaudacionTPIvehiculos.events({
     },
     'change .vehiculo-activo'(e, t) {
       if (e.target.checked) {
-        Meteor.call('vehiculoCobrado', this._id, (err) => {
+        Meteor.call('vehiculoCobrado', e.target.checked, this._id, (err) => {
           if (err) {
             Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
           } else {
-            Bert.alert('Vehiculo Cobrador', 'success')
+            Bert.alert('Vehiculo Cobrado', 'success')
+          }
+        })
+      } else {
+        Meteor.call('vehiculoNoCobrado', this._id, (err) => {
+          if (err) {
+            Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
+          } else {
+            Bert.alert('Vehiculo No Cobrado', 'success')
           }
         })
       }
+
+
     }
 });
 
@@ -106,5 +117,49 @@ Template.RecaudacionTPIvehiculos.helpers({
   vehiculos() {
     let empresaId = FlowRouter.getParam('empresaId');
     return Vehiculos.find({empresaId: empresaId})
+  },
+  checked(vehiculoId) {
+    let pagado = RecaudacionTPI.find({vehiculoId: vehiculoId}).fetch()[0].pagado;
+    console.log(pagado);
+    if (pagado) {
+      return 'checked'
+    } else {
+      return ''
+    }
+
+  },
+  hoy() {
+    let hoy = new Date();
+    let dd = hoy.getDate();
+    var mm = hoy.getMonth() + 1;
+
+    let yyyy = hoy.getFullYear();
+
+    if ( dd < 10 ) {
+        dd='0'+dd;
+    }
+
+    if ( mm < 10 ) {
+        mm='0'+mm;
+    }
+    var today = dd+'/'+mm+'/'+yyyy;
+
+    return today;
+  },
+  recaudo() {
+    let total = 0;
+    let empresaId = FlowRouter.getParam('empresaId')
+    let pagos = RecaudacionTPI.find({empresaId: empresaId, pagado: true});
+
+    pagos.forEach( (p) => {
+      if (p.plan === 1) {
+        total = total + 5
+      } else {
+        total = total + 8;
+      }
+
+    })
+
+    return 'S/ ' + total
   }
 })

@@ -3,7 +3,7 @@
     <h4 class="pull-left">Despacho de Vehículos</h4>
   </div>
 
-  <a href="/planeamiento/nuevo" class="btn btn-success">Agregar Planeamiento de Hoy</a>
+  <a href="/planeamiento/{{rutaId}}/nuevo" class="btn btn-success">Agregar Planeamiento de Hoy</a>
   <br><br>
   <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#home">Despacho</a></li>
@@ -28,9 +28,9 @@
           <span class="pull-right">
             <div class="form-group" style="display: inline-block; margin-left: 10px; margin-right: 15px">
               {{#if this.ida}}
-              <span style="display: inline-block; margin-left: 0px; color: blue;">IDA</span>
+              <span style="display: inline-block; margin-left: 0px; color: blue;">VUELTA</span>
               {{else}}
-              <span style="display: inline-block; margin-left: 0px; color: red">VUELTA</span>
+              <span style="display: inline-block; margin-left: 0px; color: red">IDA</span>
               {{/if}}
             </div>
             {{#if this.despachado}}
@@ -92,6 +92,36 @@
       </li>
       {{/each}}
     </div>
+  </div>
+</template>
+
+<template name="SeleccionarRutaPlaneamiento">
+  <div class="box">
+      <h3>Seleccione una Ruta segun el Planeamiento de La Empresa {{empresa}}</h3>
+
+      <br>
+      <ul class="list-group">
+
+              {{#each rutas}}
+                  <li class="list-group-item clearfix">
+                      <span class="pull-left">{{this.nombre}} </span>
+                      <span class="pull-right" style="width: 255px">
+
+                          <a href="/despacho/d/{{this._id}}" class="btn btn-primary">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                          </a>
+
+                      </span>
+                  </li>
+
+              {{else}}
+                  <h3>Lo sentimos no tenemos resultados de rutas para esta empresa</h3>
+              {{/each}}
+
+
+
+      </ul>
+
   </div>
 </template>
 
@@ -163,6 +193,7 @@
                      </ul>
                      <br>
                      <button type="button" class="btn btn-primary cumple" {{despachar}}>Despachar</button>
+                     <button type="button" class="btn btn-warning reasignar">Reasignar</button>
                    </div>
                  </div>
                </div>

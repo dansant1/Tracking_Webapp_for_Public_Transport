@@ -379,7 +379,7 @@ Meteor.publish('RequisitosPorVehiculo', function(vehiculoId) {
     return Requisitos.find({_id: {$in: vehiculo.idRequisitos}});
 });
 
-Meteor.publish('RegistroDeDespachoDeVehiculos', function (empresaId) {
+Meteor.publish('RegistroDeDespachoDeVehiculos', function (empresaId, rutaId) {
 	if (this.userId) {
 		var today = new Date();
 		var dd = today.getDate();
@@ -393,7 +393,7 @@ Meteor.publish('RegistroDeDespachoDeVehiculos', function (empresaId) {
 		    mm='0'+mm;
 		}
 		var hoy = dd+'/'+mm+'/'+yyyy;
-		return RegistroDeDespachoDeVehiculos.find({empresaId: empresaId, dia: hoy});
+		return RegistroDeDespachoDeVehiculos.find({empresaId: empresaId, dia: hoy, rutaId: rutaId});
 	} else {
 		this.stop()
 		return;
@@ -430,6 +430,29 @@ Meteor.publish('reqs', function () {
 Meteor.publish('vehiculosGPS', function (empresaId) {
 	if (this.userId) {
 		return Vehiculos.find({empresaId: empresaId, borrador: false});
+	} else {
+		this.stop();
+		return;
+	}
+})
+
+Meteor.publish('RecaudacionTPI', function () {
+	if (this.userId) {
+		let hoy = new Date();
+    let dd = hoy.getDate();
+    var mm = hoy.getMonth() + 1;
+
+    let yyyy = hoy.getFullYear();
+
+    if ( dd < 10 ) {
+        dd='0'+dd;
+    }
+
+    if ( mm < 10 ) {
+        mm='0'+mm;
+    }
+    var today = dd+'/'+mm+'/'+yyyy;
+		return RecaudacionTPI.find({dia: today});
 	} else {
 		this.stop();
 		return;

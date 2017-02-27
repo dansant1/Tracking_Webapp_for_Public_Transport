@@ -54,7 +54,7 @@
           <div class="row">
               <div class="col-md-12 col-sm-18 col-xs-18">
                   <div class="box">
-                      <h3>Vehiculos a Cobrar</h3>
+                      <h3>Vehiculos a Cobrar hoy {{hoy}}</h3>
                       <br>
                       <div class="page-header clearfix" style="margin-top: 0px;">
                           <h4 class="pull-left">
@@ -63,7 +63,11 @@
 
                           </h4>
                       </div>
-
+                      
+                      <br>
+                      <h2>Total Recaudado Hoy: {{recaudo}}</h2>
+                      <br>
+                      <br>
                       <ul class="list-group">
                           {{#if searching}}
                               <h3>Cargando...</h3>
@@ -74,7 +78,7 @@
                                       <span class="pull-right" style="width: 255px">
 
                                         <label style="display: inline-block; top: 10px;" class="switch">
-                                            <input type="checkbox" id="cobrar{{this._id}}" {{checked}} class="vehiculo-activo">
+                                            <input type="checkbox" id="cobrar{{this._id}}" {{checked this._id}} class="vehiculo-activo">
                                             <div class="slider round"></div>
                                         </label>
 

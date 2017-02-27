@@ -28,6 +28,20 @@ FlowRouter.route('/gestiontpi', {
     }
 });
 
+FlowRouter.route('/planes/:empresaId', {
+    name: 'PlaneamientoPorEmpresa',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'ListaDeRutasPlan'});
+    }
+});
+
+FlowRouter.route('/plan/:empresaId/r/:rutaId', {
+    name: 'PlaneamientoPorEmpresa',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'AdministradorPlaneamientoPorEmpresa'});
+    }
+});
+
 FlowRouter.route('/recaudaciontpi/:empresaId', {
     name: 'RecaudacionTPIpersonalizado',
     action() {
@@ -59,11 +73,25 @@ FlowRouter.route('/colaboradores', {
 FlowRouter.route('/planeamiento', {
     name: 'Planeamiento',
     action() {
+        BlazeLayout.render('LayoutCliente', {cliente: 'RutasDeLaEmpresa'});
+    }
+});
+
+FlowRouter.route('/plan/ruta/:rutaId', {
+    name: 'Planeamiento',
+    action() {
         BlazeLayout.render('LayoutCliente', {cliente: 'PlaneamientoInterno'});
     }
 });
 
-FlowRouter.route('/planeamiento/nuevo', {
+FlowRouter.route('/despacho/d/:rutaId', {
+    name: 'Planeamiento',
+    action() {
+        BlazeLayout.render('LayoutCliente', {cliente: 'FuncionDespachar'});
+    }
+});
+
+FlowRouter.route('/planeamiento/:rutaId/nuevo', {
     name: 'Planeamiento.Nuevo',
     action() {
         BlazeLayout.render('LayoutCliente', {cliente: 'NuevoPlaneamientoDelDia'});

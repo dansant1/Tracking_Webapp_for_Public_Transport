@@ -377,8 +377,12 @@ Template.AdministradorPlaneamientoPorEmpresa.onRendered( () => {
 
 Template.AdministradorPlaneamientoPorEmpresa.helpers({
     planeamiento() {
-        return Planeamiento.findOne({rutaId: Session.get('r1')});
-        //return Planeamiento.findOne();
+        let rutaId = FlowRouter.getParam('rutaId')
+        let empresaId = FlowRouter.getParam('empresaId');
+        console.log(rutaId);
+        console.log(Planeamiento.findOne({empresaId: empresaId, rutaId: rutaId}).plan);
+        return Planeamiento.findOne({rutaId: rutaId});
+
     },
     ruta(id) {
         return Rutas.findOne({_id: id}).nombre;

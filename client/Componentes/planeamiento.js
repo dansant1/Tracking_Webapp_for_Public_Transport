@@ -10,21 +10,19 @@ Template.PlaneamientoInterno.onCreated( () => {
 });
 
 Template.PlaneamientoInterno.onRendered( () => {
-	$('select#ruta').on('change', function () {
 
-		Session.set('r', this.value);
-	});
 });
 
 Template.PlaneamientoInterno.helpers({
     empresas() {
-        return Empresas.findOne({_id: Meteor.user().profile.empresaId });
+        return Empresas.findOne({_id: Meteor.user().profile.empresaId }).nombre;
     },
     ruta(id) {
         return Rutas.findOne({_id: id}).nombre;
     },
     planeamiento() {
-    	return Planeamiento.findOne({rutaId: Session.get('r')});
+      let rutaId = FlowRouter.getParam('rutaId')
+    	return Planeamiento.findOne({rutaId: rutaId});
     }
 });
 
@@ -305,3 +303,24 @@ Template.AgregarPlaneamiento.events({
         }
     }
 });
+
+Template.RutasDeLaEmpresa.onCreated( () => {
+  let template = Template.instance();
+
+  template.autorun( () => {
+    let empresaId = Meteor.user().profile.empresaId
+    template.subscribe('DetalleDeEmpresa', empresaId);
+    template.subscribe('rutas')
+  })
+})
+
+Template.RutasDeLaEmpresa.helpers({
+    empresa() {
+      let empresaId = Meteor.user().profile.empresaId
+      return Empresas.findOne({_id: empresaId}).nombre;
+    },
+     rutas() {
+      let empresaId = Meteor.user().profile.empresaId
+      return Rutas.find({empresasId: empresaId})
+    }
+})
