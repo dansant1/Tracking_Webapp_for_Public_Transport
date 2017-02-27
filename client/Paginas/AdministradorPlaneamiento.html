@@ -30,7 +30,7 @@
 							        <li class="list-group-item clearfix">
 							          	<span class="pull-left">{{nombre}}</span>
 							          	<span class="pull-right">
-								          	<a href="/admin/planeamientos/{{this._id}}" class="btn btn-primary">
+								          	<a href="/planes/{{this._id}}" class="btn btn-primary">
 												<i class="fa fa-eye" aria-hidden="true"></i>
 											</a>
 							          	</span>
@@ -418,12 +418,7 @@
 						<div class="row">
 								<div class="col-md-4">
 
-									<select id="ruta" class="form-control">
-										<option value="1">--Seleccione una ruta--</option>
-										{{#each empresas}}
-										<option value="{{this}}">{{ruta this}}</option>
-										{{/each}}
-									</select>
+
 								</div>
 						</div>
 						<br>
@@ -543,6 +538,8 @@
 						    	</tr>
 
 						    </tbody>
+								{{else}}
+								<h3>Cargando Planeamiento...</h3>
 						    {{/with}}
 						</table>
 

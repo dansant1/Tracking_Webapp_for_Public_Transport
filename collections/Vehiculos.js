@@ -30,3 +30,17 @@ RegistroDeDespachoDeVehiculos.deny({
 	update: () => {return true},
 	remove: () => {return true}
 });
+
+RecaudacionTPI = new Mongo.Collection('recaudaciontpi');
+
+RecaudacionTPI.allow({
+	insert: () => {return false},
+	update: () => {return false},
+	remove: () => {return false}
+});
+
+RecaudacionTPI.deny({
+	insert: () => {return true},
+	update: () => {return true},
+	remove: () => {return true}
+});

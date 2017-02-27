@@ -2,10 +2,11 @@ Template.VistaDespacho.onCreated( () => {
   let template = Template.instance()
 
   template.autorun( () => {
-    let empresaId = Meteor.user().profile.empresaId
-    template.subscribe('RegistroDeDespachoDeVehiculos', empresaId, () => {
+    let empresaId = Meteor.user().profile.empresaId;
+    let rutaId = FlowRouter.getParam('rutaId');
+    template.subscribe('RegistroDeDespachoDeVehiculos', empresaId, rutaId, () => {
       if (RegistroDeDespachoDeVehiculos.find().fetch().length === 0) {
-        Meteor.call('AgregarPlaneamientoDelDiaAutomatico', (err) => {
+        Meteor.call('AgregarPlaneamientoDelDiaAutomatico', rutaId, (err) => {
           if (err) {
             Bert.alert('Hubo un error al crear el planeamiento de hoy, intentelo manualmente', 'warning')
           } else {
@@ -33,6 +34,9 @@ Template.VistaDespacho.helpers({
   },
   padron() {
     return Vehiculos.findOne({_id: this.vehiculoId}).padron
+  },
+  rutaId() {
+    return FlowRouter.getParam('rutaId')
   }
 })
 
@@ -127,6 +131,17 @@ Template.Asignar.events({
         Bert.alert('Vehiculo Despachado', 'success')
       }
     })
+  },
+  'click .reasignar'() {
+    let rutaId = FlowRouter.getParam('rutaId');
+    console.log(rutaId);
+    Meteor.call('ReasignarVehiculos', rutaId, (err) => {
+      if (err) {
+        Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
+      } else {
+        Bert.alert('Vehiculos Reasignados', 'success')
+      }
+    })
   }
 })
 
@@ -147,4 +162,26 @@ Template.Asignar.helpers({
   requisitos() {
     return Requisitos.find();
   }
+})
+
+
+Template.SeleccionarRutaPlaneamiento.onCreated( () => {
+  let template = Template.instance();
+
+  template.autorun( () => {
+    let empresaId = Meteor.user().profile.empresaId
+    template.subscribe('DetalleDeEmpresa', empresaId);
+    template.subscribe('rutas')
+  })
+})
+
+Template.SeleccionarRutaPlaneamiento.helpers({
+    empresa() {
+      let empresaId = Meteor.user().profile.empresaId
+      return Empresas.findOne({_id: empresaId}).nombre;
+    },
+     rutas() {
+      let empresaId = Meteor.user().profile.empresaId
+      return Rutas.find({empresasId: empresaId})
+    }
 })

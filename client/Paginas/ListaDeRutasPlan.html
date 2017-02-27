@@ -1,0 +1,39 @@
+<template name="ListaDeRutasPlan">
+  <div class="content-wrapper">
+      <div class="container-fluid">
+
+
+          <div class="row">
+              <div class="col-md-12 col-sm-18 col-xs-18">
+                  <div class="box">
+                      <h3>Rutas de la empresa {{empresa}}</h3>
+
+                      <br>
+                      <ul class="list-group">
+
+                              {{#each rutas}}
+                                  <li class="list-group-item clearfix">
+                                      <span class="pull-left">{{this.nombre}} </span>
+                                      <span class="pull-right" style="width: 255px">
+
+              								          	<a href="/plan/{{this.empresasId}}/r/{{this._id}}" class="btn btn-primary">
+              												      <i class="fa fa-eye" aria-hidden="true"></i>
+              											      </a>
+
+                                      </span>
+                                  </li>
+
+                              {{else}}
+                                  <h3>Lo sentimos no tenemos resultados de rutas para esta empresa</h3>
+                              {{/each}}
+
+
+
+                      </ul>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</template>

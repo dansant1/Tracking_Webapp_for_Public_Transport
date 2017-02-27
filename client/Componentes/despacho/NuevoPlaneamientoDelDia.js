@@ -107,6 +107,7 @@ Template.NuevoPlaneamientoDelDia.events({
             let registro = {
               vehiculoId: vehiculo,
               empresaId: Meteor.user().profile.empresaId,
+							rutaId: FlowRouter.getParam('rutaId'),
               despachado: false,
               hora: hora,
               ida: ida,

@@ -32,7 +32,7 @@ function formarJSON(date) {
 }
 
 Meteor.methods({
-  guardarPlaneamientoDeHoy(datos) {
+      guardarPlaneamientoDeHoy(datos) {
         if (this.userId) {
           if (typeof datos !== 'undefined' && datos.length > 0) {
             datos.forEach( (d) => {
@@ -44,7 +44,39 @@ Meteor.methods({
           return;
         }
       },
-      AgregarPlaneamientoDelDiaAutomatico() {
+      ReasignarVehiculos(rutaId) {
+          let hoy = new Date();
+          let dd = hoy.getDate();
+          var mm = hoy.getMonth() + 1;
+
+          let yyyy = hoy.getFullYear();
+
+          if ( dd < 10 ) {
+              dd='0'+dd;
+          }
+
+          if ( mm < 10 ) {
+              mm='0'+mm;
+          }
+          var today = dd+'/'+mm+'/'+yyyy;
+          let i = 0
+          RegistroDeDespachoDeVehiculos.find({rutaId: rutaId, despachado: false, dia: today}).forEach( (d) => {
+              if (i !== 0) {
+                //let next = RegistroDeDespachoDeVehiculos.find({rutaId: rutaId, despachado: false, dia: today}).fetch()[i + 1]._id;
+                //console.log(RegistroDeDespachoDeVehiculos.findOne({_id: next})).vehiculoId;
+                /*RegistroDeDespachoDeVehiculos.update({_id: next}, {
+                  $set: {
+                    vehiculoId: d.vehiculoId
+                  }
+                })*/
+
+                //console.log(RegistroDeDespachoDeVehiculos.findOne({_id: next})).vehiculoId;
+              }
+
+              i++;
+          })
+      },
+      AgregarPlaneamientoDelDiaAutomatico(rutaId) {
         if (this.userId) {
           let v = [];
           let empresaId = Meteor.users.findOne({_id: this.userId}).profile.empresaId;
@@ -102,6 +134,7 @@ Meteor.methods({
             if (plan[d] !== null) {
               RegistroDeDespachoDeVehiculos.insert({
                 vehiculoId: _.sample(v),
+                rutaId: rutaId,
                 empresaId: empresaId,
                 despachado: false,
                 hora: plan[d],

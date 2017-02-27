@@ -6,17 +6,18 @@
 				<li class="has-children overview top-nav-btn">
 					<a href="/rastreo">Monitoreo</a>
 				</li>
-				<li class="has-children comments app top-nav-btn">
-					<a href="#0">Control</a>
-				</li>
+
 
 				<li class="has-children  notifications top-nav-btn">
-					<a href="#0">Alarmas <span class="count">3</span></a>
+					<a href="#">Alarmas <span class="count">3</span></a>
 				</li>
 			</ul>
 
 			<ul>
 				<li class="cd-label">Despacho</li>
+				<li class="has-children comments app top-nav-btn">
+					<a href="/">Control</a>
+				</li>
 				{{#if isInRole 'director' 'Empresa'}}
 				<li class="has-children images top-nav-btn">
 					<a href="/borradores">Borradores</a>

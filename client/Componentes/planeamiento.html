@@ -8,12 +8,12 @@
 							<div class="row">
 								<div class="col-md-4">
 
-									<select id="ruta" class="form-control">
-										<option value="1">--Seleccione una ruta--</option>
+									<!--<select id="ruta" class="form-control">
+										<option value="1">Seleccione una ruta</option>
 										{{#each empresas.rutas}}
 										<option value="{{this}}">{{ruta this}}</option>
 										{{/each}}
-									</select>
+									</select> -->
 								</div>
 							</div>
 							<br>
@@ -21,7 +21,7 @@
 				<div class="col-md-12 col-sm-18 col-xs-18">
 					<div class="box">
 						<br>
-						<h1 style="margin: 5px; padding: 0px; font-size: 1.5em">Planeamiento actual de la empresa {{empresa}}</h1>
+						<h1 style="margin: 5px; padding: 0px; font-size: 1.5em">Planeamiento actual de la empresa {{empresas}}</h1>
 						<br>
 						<table class="table-responsive">
 							<thead style="border-bottom: 2px solid #ddd;">
@@ -138,6 +138,8 @@
 						    	</tr>
 
 						    </tbody>
+								{{else}}
+								<h3>Cargando Planeamiento...</h3>
 						    {{/with}}
 						</table>
 
@@ -150,6 +152,46 @@
 			</div>
 		</div>
 	</div>
+</template>
+
+<template name="RutasDeLaEmpresa">
+	<div class="content-wrapper">
+      <div class="container-fluid">
+
+
+          <div class="row">
+              <div class="col-md-12 col-sm-18 col-xs-18">
+                  <div class="box">
+                      <h3>Rutas de la empresa {{empresa}}</h3>
+
+                      <br>
+                      <ul class="list-group">
+
+                              {{#each rutas}}
+                                  <li class="list-group-item clearfix">
+                                      <span class="pull-left">{{this.nombre}} </span>
+                                      <span class="pull-right" style="width: 255px">
+
+              								          	<a href="/plan/ruta/{{this._id}}" class="btn btn-primary">
+              												      <i class="fa fa-eye" aria-hidden="true"></i>
+              											      </a>
+
+                                      </span>
+                                  </li>
+
+                              {{else}}
+                                  <h3>Lo sentimos no tenemos resultados de rutas para esta empresa</h3>
+                              {{/each}}
+
+
+
+                      </ul>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 </template>
 
 <template name="AgregarPlaneamiento">
