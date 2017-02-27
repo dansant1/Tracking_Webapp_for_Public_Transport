@@ -424,7 +424,6 @@ function getPathVariableCode(line) {
 
 Template.AdministradorAgregarRuta.onCreated( function () {
     Session.setDefault('ruta', 'ida');
-    console.log(Session.get('ruta'));
 
     var self = this;
 
@@ -459,7 +458,8 @@ Template.AdministradorAgregarRuta.onRendered( function () {
         nombre: '',
         ida: [],
         vuelta: [],
-        paraderos: []
+        paraderos: [],
+        puntosdecontrol: [],
     };
 
 
@@ -500,20 +500,68 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                     geodesic: true,
                     strokeColor: '#FF0000',
                     strokeOpacity: 1.0,
-                    strokeWeight: 2
+                    strokeWeight: 3
                   });
 
                   idaPath.setMap( map.instance );
+                  puntodecontrolListener( idaPath );
 
                   vueltaPath = new google.maps.Polyline({
                     path: template.ruta.vuelta,
                     geodesic: true,
                     strokeColor: '#000CFF',
                     strokeOpacity: 1.0,
-                    strokeWeight: 2
+                    strokeWeight: 3
                   });
 
                   vueltaPath.setMap( map.instance );
+                  puntodecontrolListener( vueltaPath );
+
+                }
+
+                function puntodecontrolListener( path ){
+                  //create punto de control
+                  path.addListener( 'click', function(e){
+
+                    let icon = {
+                        url: '/check-point.png', // url
+                        scaledSize: new google.maps.Size(30, 30), // scaled size
+                        origin: new google.maps.Point(0,0), // origin
+                        anchor: new google.maps.Point(15, 15) // anchor
+                    };
+
+                    let latLng = {
+                      lat: e.latLng.lat(),
+                      lng: e.latLng.lng()
+                    };
+
+                    let marker = new google.maps.Marker({
+                        position: latLng,
+                        map: map.instance,
+                        icon: icon,
+                    });
+                    template.ruta.puntosdecontrol.push( latLng );
+
+                    google.maps.event.addListener( marker, 'dblclick', function (e) {
+                        let latLng = {
+                          lat: marker.position.lat(),
+                          lng: marker.position.lng()
+                        };
+                        for( let i=0; i<template.ruta.puntosdecontrol.length; i++){
+
+                          if ( _.isEqual( template.ruta.puntosdecontrol[i], latLng
+                            ) ){
+                              template.ruta.puntosdecontrol.splice( i, 1 );
+                              break;
+                          }
+
+                        }
+                        // map.instance.removeOverlay( marker );
+                        marker.setMap( null );
+                    });
+
+                  });
+
                 }
 
                 function updateRuta(location, type ){
@@ -546,14 +594,12 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                     for ( let i=0; i<template.ruta.ida.length; i++){
                       if ( _.isEqual( template.ruta.ida[i], latLng ) ){
                         let removed = template.ruta.ida.splice( i, 1 );
-                        console.log("ida-removed", i , removed );
                         break;
                       }
                     }
                     for ( let j=0; j<template.ruta.vuelta.length; j++){
                       if ( _.isEqual( template.ruta.vuelta[j], latLng ) ){
                         let removed = template.ruta.vuelta.splice( j, 1 );
-                        console.log("vuelta-removed", j , removed );
                         break;
                       }
                     }
