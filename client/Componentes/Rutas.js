@@ -75,12 +75,20 @@ Template.Rutas.onRendered( () => {
 
                         let markers = [];
                         function setMapOnAll(map, p, feature) {
+                          let checkPointIcon = {
+                            url: '/check-point.png', // url
+                            scaledSize: new google.maps.Size(30, 30), // scaled size
+                            origin: new google.maps.Point(0,0), // origin
+                            anchor: new google.maps.Point(15, 15) // anchor
+                          };
+
+                          let paraderoIcon = '/paradero.png';
 
 
                             marker = new google.maps.Marker({
                                         animation: google.maps.Animation.DROP,
                                         position: new google.maps.LatLng(p.lat, p.lng),
-                                        icon: '/paradero.png', //*'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
+                                        icon: feature === 'parking' ? paraderoIcon : checkPointIcon, //*'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
                                         map: map,
                                         id: ruta._id
                             });
@@ -120,6 +128,12 @@ Template.Rutas.onRendered( () => {
                                 ruta.paraderos.forEach( function (p) {
 
                                     setMapOnAll(map.instance, p, 'parking')
+
+                                });
+
+                                ruta.puntosdecontrol.forEach( function (p) {
+
+                                    setMapOnAll(map.instance, p, 'puntodecontrol')
 
                                 });
                             });
