@@ -1,1 +1,6 @@
 
+Meteor.methods({
+  vehiculoCobrado() {
+    
+  }
+})

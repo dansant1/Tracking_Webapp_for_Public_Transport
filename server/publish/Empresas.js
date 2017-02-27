@@ -183,6 +183,27 @@ Meteor.publish( 'VehiculosPorEmpresa', function(empresaId, search ) {
     return Vehiculos.find(query, projection );
 });
 
+Meteor.publish( 'VehiculosPorEmpresa2', function(empresaId, search ) {
+    let query      = {},
+        projection = { sort: { placa: 1 } };
+
+    if ( search ) {
+        let regex = new RegExp( search, 'i' );
+
+        query = {
+            $or: [
+                { placa: regex },
+                { padron: regex},
+								{ codigoDeRuta: regex}
+            ]
+        };
+
+        projection.limit = 200;
+    }
+
+    return Vehiculos.find(query, projection );
+});
+
 Meteor.publish( 'VehiculosPorEmpresaId', function(empresaId) {
     return Vehiculos.find({ 'empresaId': empresaId });
 });

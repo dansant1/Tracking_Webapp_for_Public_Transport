@@ -51,9 +51,60 @@ Template.RecaudacionTPI.events({
         template.searchQuery.set(value);
         template.searching.set(true);
         //}
-
+        console.log(value);
         if (value === '') {
             template.searchQuery.set(value);
         }
     }
 });
+
+Template.RecaudacionTPIvehiculos.onCreated( () => {
+  let template = Template.instance();
+
+  template.searchQuery = new ReactiveVar();
+  template.searching = new ReactiveVar(false);
+
+
+  template.autorun( () => {
+    let empresaId = FlowRouter.getParam('empresaId');
+    template.subscribe('VehiculosPorEmpresa2', empresaId, template.searchQuery.get(), () => {
+        setTimeout(() => {
+            template.searching.set(false);
+        }, 300);
+    })
+  })
+})
+
+Template.RecaudacionTPIvehiculos.events({
+    'keyup [name="search"]' (event, template) {
+
+        let value = event.target.value.trim();
+
+        //if ( value !== '' && event.keyCode === 13 ) {
+        template.searchQuery.set(value);
+        template.searching.set(true);
+        //}
+
+        if (value === '') {
+            template.searchQuery.set(value);
+        }
+    },
+    'change .vehiculo-activo'(e, t) {
+      if (e.target.checked) {
+        Meteor.call('vehiculoCobrado', this._id, (err) => {
+          if (err) {
+            Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
+          } else {
+            Bert.alert('Vehiculo Cobrador', 'success')
+          }
+        })
+      }
+    }
+});
+
+Template.RecaudacionTPIvehiculos.helpers({
+  vehiculos() {
+    let empresaId = FlowRouter.getParam('empresaId');
+    return Vehiculos.find({empresaId: empresaId})
+  }
+})
