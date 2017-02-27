@@ -101,7 +101,6 @@ Meteor.publish('DetalleDeEmpresa', function (empresaId) {
 
 Meteor.publish('RutasPorEmpresa', function ( empresaId ) {
   if (this.userId) {
-		console.log( "-----" , empresaId, "-----" );
 		let query = Rutas.find({
 			$or: [
 				 { "empresasId.0": empresaId },
@@ -109,7 +108,6 @@ Meteor.publish('RutasPorEmpresa', function ( empresaId ) {
 				 { empresasId: empresaId }
 			 ]
 		});
-		console.log( query.fetch() );
 
     return query;
   } else {
