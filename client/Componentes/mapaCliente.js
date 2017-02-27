@@ -805,7 +805,6 @@ Template.mapaCliente.helpers({
       },
       empresa() {
         let empresa = Empresas.findOne({_id: Template.instance().empresaId.get() });
-        console.log( empresa );
         return empresa;
       },
       ruta(id) {
