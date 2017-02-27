@@ -102,9 +102,7 @@ Template.ListaDeVehiculosPorEmpresas.onCreated(() => {
                 template.searching.set(false);
             }, 300);
         });
-        template.subscribe('RutasEmpresa', empresaId, ()=> {
-
-        });
+        template.subscribe('rutas');
     });
 });
 
@@ -115,13 +113,12 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
     query() {
         return Template.instance().searchQuery.get();
     },
+    rutas() {
+        return Rutas.find();
+    },
     vehiculo: function () {
-
-
-            let empresaId = FlowRouter.getParam('empresaId');
-            return Vehiculos.find({empresaId: empresaId});
-
-
+        let empresaId = FlowRouter.getParam('empresaId');
+        return Vehiculos.find({empresaId: empresaId});
     },
     fotos() {
         return FotosDeVehiculos.find();
@@ -174,22 +171,22 @@ Template.ListaDeVehiculosPorEmpresas.events({
         Session.set('editarVehiculo', this._id);
         Modal.show('EditarVehiculo');
     },
-    'change [name="fotosubir"]'(e, t) {
-        SubirFotoVehiculo(e, t, this._id, 'foto', 'fotovehiculo' + this._id);
+    'change .fotovehiculo1'(e, t) {
+        SubirFotoVehiculo(e, t, this._id, 'foto', 'fotovehiculo1');
     },
-    'change #fotovehiculo2'(e, t) {
+    'change .fotovehiculo2'(e, t) {
         SubirFotoVehiculo(e, t, this._id, 'foto2', 'fotovehiculo2');
     },
-    'change #fotovehiculo3'(e, t) {
+    'change .fotovehiculo3'(e, t) {
         SubirFotoVehiculo(e, t, this._id, 'foto3', 'fotovehiculo3');
     },
-    'change #fotovehiculo4'(e, t) {
+    'change .fotovehiculo4'(e, t) {
         SubirFotoVehiculo(e, t, this._id, 'foto4', 'fotovehiculo4');
     },
-    'change #fotovehiculo5'(e, t) {
+    'change .fotovehiculo5'(e, t) {
         SubirFotoVehiculo(e, t, this._id, 'foto5', 'fotovehiculo5');
     },
-    'change #fotovehiculo6'(e, t) {
+    'change .fotovehiculo6'(e, t) {
         SubirFotoVehiculo(e, t, this._id, 'foto6', 'fotovehiculo6');
     },
     'change .vehiculo-activo'(e, t) {
@@ -291,17 +288,17 @@ Template.ListaDeConductoresPorEmpresa.events({
         Modal.show('EditarConductor');
         console.log(Session.get('editarConductor'));
     },
-    'change #fotoconductor1'(e, t) {
+    'change .fotoconductor1'(e, t) {
         console.log('hola');
         SubirFotoConductor(e, t, this._id, 'fotoconductor1', 1);
     },
-    'change #fotoconductor2'(e, t) {
+    'change .fotoconductor2'(e, t) {
         SubirFotoConductor(e, t, this._id, 'fotoconductor2', 2);
     },
-    'change #fotoconductor3'(e, t) {
+    'change .fotoconductor3'(e, t) {
         SubirFotoConductor(e, t, this._id, 'fotoconductor3', 3);
     },
-    'change #fotoconductor4'(e, t) {
+    'change .fotoconductor4'(e, t) {
         SubirFotoConductor(e, t, this._id, 'fotoconductor4', 4);
     }
 });
@@ -382,17 +379,17 @@ Template.ListaDeCobradoresPorEmpresa.events({
         Modal.show('EditarCobrador');
         console.log(Session.get('editarCobrador'));
     },
-    'change #fotocobrador1'(e, t) {
+    'change .fotocobrador1'(e, t) {
         console.log('holaaadsdr443');
         SubirFotoCobrador(e, t, this._id, 'fotocobrador1', 1);
     },
-    'change #fotocobrador2'(e, t) {
+    'change .fotocobrador2'(e, t) {
         SubirFotoCobrador(e, t, this._id, 'fotocobrador2', 2);
     },
-    'change #fotocobrador3'(e, t) {
+    'change .fotocobrador3'(e, t) {
         SubirFotoCobrador(e, t, this._id, 'fotocobrador3', 3);
     },
-    'change #fotocobrador4'(e, t) {
+    'change .fotocobrador4'(e, t) {
         SubirFotoCobrador(e, t, this._id, 'fotocobrador4', 4);
     }
 });
