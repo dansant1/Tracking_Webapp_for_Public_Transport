@@ -359,7 +359,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" id="fotoconductor1"
+                                        <input type="file" class="fotoconductor1"
                                                style="display: none;" name="fotosubir"
                                                accept="image/*">
                                     </label>
@@ -404,7 +404,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" id="fotoconductor2" name="fotosubir" style="display: none;"
+                                        <input type="file" class="fotoconductor2" name="fotosubir" style="display: none;"
                                                accept="image/*">
                                     </label>
                                     <button class="btn btn-primary imprimir">
@@ -444,7 +444,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" name="fotosubir" id="fotoconductor3" style="display: none;"
+                                        <input type="file" name="fotosubir" class="fotoconductor3" style="display: none;"
                                                accept="image/*">
                                     </label>
                                     <button class="btn btn-primary imprimir">
@@ -484,7 +484,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" id="fotoconductor4"
+                                        <input type="file" class="fotoconductor4"
                                                style="display: none;"
                                                name="fotosubir"
                                                accept="image/*">
@@ -630,7 +630,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" id="fotocobrador1"
+                                        <input type="file" class="fotocobrador1"
                                                style="display: none;"
                                                name="fotosubir"
                                                accept="image/*">
@@ -674,7 +674,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" id="fotocobrador2"
+                                        <input type="file" class="fotocobrador2"
                                                style="display: none;"
                                                name="fotosubir"
                                                accept="image/*">
@@ -716,7 +716,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" id="fotocobrador3" style="display: none;"
+                                        <input type="file" class="fotocobrador3" style="display: none;"
                                                name="fotosubir"
                                                accept="image/*">
                                     </label>
@@ -747,9 +747,8 @@
 
         <div class="pull-left">
 
-
             <input type="text" name="search" class="form-control" style="width: 350px;"
-                   placeholder="Buscar vehículo por placa, padron o ruta">
+                   placeholder="Buscar vehículo por placa o padron">
         </div>
     </div>
 
@@ -805,7 +804,8 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input name="fotosubir" type="file" id="fotovehiculo{{this._id}}"
+                                        <input name="fotosubir" type="file"
+                                               class="fotovehiculo1"
                                                style="display: none;" accept="image/*">
                                     </label>
                                     <button class="btn btn-primary imprimir">
@@ -876,7 +876,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" name="fotosubir" id="fotovehiculo2" style="display: none;"
+                                        <input type="file" name="fotosubir" class="fotovehiculo2" style="display: none;"
                                                accept="image/*">
                                     </label>
                                     <button class="btn btn-primary imprimir">
@@ -919,7 +919,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" id="fotovehiculo3" name="fotosubir" style="display: none;"
+                                        <input type="file" class="fotovehiculo3" name="fotosubir" style="display: none;"
                                                accept="image/*">
                                     </label>
                                     <button class="btn btn-primary imprimir">
@@ -935,31 +935,31 @@
                         <div class="row">
                             <div class="col-md-7" style="margin-top: 10px">
                                 <div class="List__tab__entity">
-                                 {{#each this.TC}}
+                                <!-- {{#each this.TC}} -->
                                     <table class="table">
                                         <tbody>
                                         <tr class="entity">
                                             <td>Entidad:</td>
-                                            <td>{{this.entidad}}</td>
+                                            <td>{{this.TC.entidad}}</td>
                                         </tr>
                                         <tr>
                                             <td>Número:</td>
-                                            <td>{{this.numero}}</td>
+                                            <td>{{this.TC.numero}}</td>
                                         </tr>
                                         <tr>
                                             <td>Fecha de Emisión:</td>
-                                            <td>{{this.emision}}</td>
+                                            <td>{{this.TC.emision}}</td>
                                         </tr>
                                         <tr>
                                             <td>Fecha de Caducidad:</td>
-                                            <td>{{this.caducidad}}</td>
+                                            <td>{{this.TC.caducidad}}</td>
                                         </tr>
 
                                         </tbody>
                                     </table>
-                                        {{else}}
+                                        <!-- {{else}}
                                 <p>No hay Entidades para mostrar</p>
-                            {{/each}}
+                            {{/each}} -->
                                 </div>
                             </div>
                             <div class="col-md-5">
@@ -968,7 +968,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" id="fotovehiculo4" name="fotosubir" style="display: none;"
+                                        <input type="file" class="fotovehiculo4" name="fotosubir" style="display: none;"
                                                accept="image/*">
                                     </label>
                                     <button class="btn btn-primary imprimir">
@@ -1007,7 +1007,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" id="fotovehiculo5" name="fotosubir" style="display: none;"
+                                        <input type="file" class="fotovehiculo5" name="fotosubir" style="display: none;"
                                                accept="image/*">
                                     </label>
                                     <button class="btn btn-primary imprimir">
@@ -1046,7 +1046,7 @@
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
-                                        <input type="file" id="fotovehiculo6" name="fotosubir" style="display: none;"
+                                        <input type="file" class="fotovehiculo6" name="fotosubir" style="display: none;"
                                                accept="image/*">
                                     </label>
                                     <button class="btn btn-primary imprimir">
@@ -1057,26 +1057,6 @@
                             </div>
                         </div>
                     </div>
-                    <!--<div id="tc{{this._id}}" class="tab-pane fade">-->
-                    <!--<br>-->
-                    <!--<table class="table">-->
-                    <!--<tbody>-->
-                    <!--<tr>-->
-                    <!--<td>Número:</td>-->
-                    <!--<td>{{this.TCH.numero}}</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td>Fecha de Emisión:</td>-->
-                    <!--<td>{{this.TCH.emision}}</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td>Fecha de Caducidad:</td>-->
-                    <!--<td>{{this.TCH.caducidad}}</td>-->
-                    <!--</tr>-->
-
-                    <!--</tbody>-->
-                    <!--</table>-->
-                    <!--</div>-->
 
                 </div>
             </div>
@@ -1095,7 +1075,7 @@
             <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
             <br><br>
             <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                                                            aria-hidden="true"></i>
+                                                     aria-hidden="true"></i>
             </button>
         {{/if}}
 
@@ -1110,7 +1090,7 @@
             <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
             <br><br>
             <button  class="btn btn-danger remove"><i class="fa fa-trash"
-                                                                                            aria-hidden="true"></i>
+                                                      aria-hidden="true"></i>
             </button>
         {{/if}}
 
@@ -1125,7 +1105,7 @@
             <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
             <br><br>
             <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                                                            aria-hidden="true"></i>
+                                                     aria-hidden="true"></i>
             </button>
         {{/if}}
 
@@ -1140,7 +1120,7 @@
             <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
             <br><br>
             <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                                                            aria-hidden="true"></i>
+                                                     aria-hidden="true"></i>
             </button>
         {{/if}}
 
@@ -1155,7 +1135,7 @@
             <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
             <br><br>
             <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                                                            aria-hidden="true"></i>
+                                                     aria-hidden="true"></i>
             </button>
         {{/if}}
 

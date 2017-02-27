@@ -139,62 +139,62 @@ export function handleFile (e, id, rutaId) {
 
 export function SubirFotoVehiculo (event, template, vehiculoId, tipo, id) {
 
-    let archivo = document.getElementById(id);
+    let archivo = $(event.currentTarget)[0];
 
     if ('files' in archivo) {
 
         if (archivo.files.length == 0) {
-           alert('Selecciona un archivo, vuelve a intentarlo', 'warning');
+            alert('Selecciona un archivo, vuelve a intentarlo', 'warning');
         } else if (archivo.files.length > 1) {
-           alert('Selecciona solo un archivo, vuelve a intentarlo', 'warning');
+            alert('Selecciona solo un archivo, vuelve a intentarlo', 'warning');
         } else {
 
 
-          for (var i = 0; i < archivo.files.length; i++) {
+            for (var i = 0; i < archivo.files.length; i++) {
 
-            var filei = archivo.files[i];
+                var filei = archivo.files[i];
 
-            var doc = new FS.File(filei);
+                var doc = new FS.File(filei);
 
-            var nuevoNombre = removeDiacritics(doc.name());
-            doc.name(nuevoNombre);
+                var nuevoNombre = removeDiacritics(doc.name());
+                doc.name(nuevoNombre);
 
-            doc.metadata = {
-              vehiculoId: vehiculoId,
-              tipo: tipo
-            };
+                doc.metadata = {
+                    vehiculoId: vehiculoId,
+                    tipo: tipo
+                };
 
-            if (FotosDeVehiculos.find({'metadata.vehiculoId': vehiculoId, 'metadata.tipo': tipo}).fetch().length > 0) {
-                  let _Id= FotosDeVehiculos.find({'metadata.vehiculoId': vehiculoId, 'metadata.tipo': tipo}).fetch()[0]._id;
-                  FotosDeVehiculos.remove({_id: _Id});
-                  FotosDeVehiculos.insert(doc, function (err, fileObj) {
-                    if (err) {
-                      alert('Hubo un problema', 'warning');
-                    } else {
-                      console.log('Listo!');
-                    }
-                  });
-                  archivo.files = undefined;
-                  console.log(archivo.files)
-            } else {
-              FotosDeVehiculos.insert(doc, function (err, fileObj) {
-                if (err) {
-                  alert('Hubo un problema', 'warning');
+                if (FotosDeVehiculos.find({'metadata.vehiculoId': vehiculoId, 'metadata.tipo': tipo}).fetch().length > 0) {
+                    let _Id= FotosDeVehiculos.find({'metadata.vehiculoId': vehiculoId, 'metadata.tipo': tipo}).fetch()[0]._id;
+                    FotosDeVehiculos.remove({_id: _Id});
+                    FotosDeVehiculos.insert(doc, function (err, fileObj) {
+                        if (err) {
+                            alert('Hubo un problema', 'warning');
+                        } else {
+                            console.log('Listo!');
+                        }
+                    });
+                    archivo.files = undefined;
+                    console.log(archivo.files)
                 } else {
-                  console.log('Listo!');
+                    FotosDeVehiculos.insert(doc, function (err, fileObj) {
+                        if (err) {
+                            alert('Hubo un problema', 'warning');
+                        } else {
+                            console.log('Listo!');
+                        }
+                    });
+                    archivo.files = undefined;
                 }
-              });
-              archivo.files = undefined;
-              console.log(archivo.files)
-            }
 
-          }
+            }
         }
     }
 }
 
 export function SubirFotoConductor (event, template, conductorId, elemento, tipo) {
-    let archivo = document.getElementById(elemento);
+
+    let archivo = $(event.currentTarget)[0];
 
     if ('files' in archivo) {
 
@@ -236,8 +236,8 @@ export function SubirFotoConductor (event, template, conductorId, elemento, tipo
 }
 
 export function SubirFotoCobrador (event, template, cobradorId, elemento, tipo) {
-    console.log(elemento);
-    let archivo = document.getElementById(elemento);
+
+    let archivo = $(event.currentTarget)[0];
 
     if ('files' in archivo) {
 

@@ -11,6 +11,14 @@ Template.Login.events({
 				if (err) {
 					alert('Hubo un error');
 				}
+				var currentUser = Meteor.users.findOne({_id:Meteor.userId()});
+				if(currentUser.roles.Empresa) {
+					currentUser.roles.Empresa.forEach(rol=> {
+						if(rol == 'Operador Asistente') {
+							FlowRouter.go('/vehiculos');
+						}
+					});
+				}
 			});
 		} else {
 			alert('Complete los datos');
