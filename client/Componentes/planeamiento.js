@@ -127,7 +127,7 @@ Template.AgregarPlaneamiento.events({
 
         let minutes = converToMinutes( horaInicial );
         let nuevaHora = horaInicial;
-        horas.dia = [ horaInicial ];
+        horas[dia] = [ horaInicial ];
 
         while ( minutes < ( 1439 - frecuencia ) ) {
           nuevaHora = addMinutes( nuevaHora, frecuencia );
@@ -143,7 +143,6 @@ Template.AgregarPlaneamiento.events({
     },
     'click .plus'(e, t) {
       let newHoras = Template.instance().horas.get();
-      console.log('newHoras', newHoras );
       Object.keys( newHoras ).forEach( (dia) => {
         newHoras[dia].push( true );
       });
