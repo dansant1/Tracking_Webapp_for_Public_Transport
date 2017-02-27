@@ -1,4 +1,4 @@
-/* -------------------------------- 
+/* --------------------------------
 
 Primary style
 
@@ -24,7 +24,7 @@ body::after {
 }
 
 a {
-  
+
   text-decoration: none;
 }
 
@@ -40,7 +40,7 @@ input[type="search"]::-webkit-search-results-decoration {
   display: none;
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 Main Page Content
 
@@ -82,7 +82,7 @@ Main Page Content
   }
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 Header
 
@@ -94,7 +94,7 @@ Header
   left: 0;
   height: 45px;
   width: 100%;
-  background: #3498db; 
+  background: #3498db;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -314,17 +314,17 @@ Header
     color: white;
   }
   .cd-search input[type="search"]::-moz-placeholder { /* Firefox 18- */
-    color: white;  
+    color: white;
   }
   .cd-search input[type="search"]::-moz-placeholder {  /* Firefox 19+ */
-    color: white;  
+    color: white;
   }
-  .cd-search input[type="search"]::-ms-input-placeholder {  
-    color: white;  
+  .cd-search input[type="search"]::-ms-input-placeholder {
+    color: white;
   }
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 Top Navigation
 
@@ -395,7 +395,7 @@ Top Navigation
   }
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 Sidebar
 
@@ -461,7 +461,7 @@ Sidebar
 }
 .cd-side-nav > ul > li > a {
   padding-left: calc(5% + 24px);
-  
+
 }
 .cd-side-nav > ul > li > a::before {
   /* icon before item name */
@@ -604,9 +604,8 @@ Sidebar
     padding: 0.6em 0;
   }
   .cd-side-nav > ul > li:not(.action-btn):hover > a {
-    background: #D31027;
-    background: -webkit-linear-gradient(to left, #D31027 , #EA384D);
-    background: linear-gradient(to left, #D31027 , #EA384D);
+    background: #3498db;
+
   }
   .cd-side-nav > ul > li > a {
     padding: 1em 1em 1em 42px;
@@ -633,7 +632,7 @@ Sidebar
   .cd-side-nav .action-btn a {
     margin: 10px 18px;
   }
-  
+
   .cd-side-nav .count {
     /* reset style */
     color: #ffffff;
@@ -725,7 +724,7 @@ Sidebar
     background: linear-gradient(to left, #D31027 , #EA384D);
     color: white;
   }
-  
+
   .cd-top-nav .has-children {
     position: relative;
     background: #3498db; /* fallback for old browsers */
@@ -739,7 +738,7 @@ Sidebar
     display: block;
     right: 1.8em;
   }
-  .cd-top-nav .has-children ul {  
+  .cd-top-nav .has-children ul {
     width: 200px;
     top: 100%;
     right: 10px;

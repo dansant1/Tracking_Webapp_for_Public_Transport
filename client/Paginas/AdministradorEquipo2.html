@@ -8,22 +8,74 @@
             <button type="button" class="btn btn-success as">Agregar Soporte</button>
             <button type="button" class="btn btn-warning am">Agregar Monitoreo</button>
             <br><br>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Email</th>
-                  <th>Opciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{#each Administradores}}
-                <tr>
-                  <td>{{this.email}}</td>
-                  <td><button type="button" class="btn btn-danger eliminar">x</button></td>
-                </tr>
-                {{/each}}
-              </tbody>
-            </table>
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#home">Administradores</a></li>
+              <li><a data-toggle="tab" href="#menu1">Soporte</a></li>
+              <li><a data-toggle="tab" href="#menu2">Monitoreo</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <div id="home" class="tab-pane fade in active">
+                <h3>Lista de Administradores</h3>
+                <p>
+                  <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Email</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each Administradores}}
+                    <tr>
+                      <td>{{this.email}}</td>
+                      <td><button type="button" class="btn btn-danger eliminar">x</button></td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </p>
+              </div>
+              <div id="menu1" class="tab-pane fade">
+                <h3>Soporte</h3>
+                <p><table class="table">
+                <thead>
+                  <tr>
+                    <th>Email</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each soportes}}
+                  <tr>
+                    <td>{{this.email}}</td>
+                    <td><button type="button" class="btn btn-danger es">x</button></td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table></p>
+              </div>
+              <div id="menu2" class="tab-pane fade">
+                <h3>Monitoreo</h3>
+                <p><table class="table">
+                <thead>
+                  <tr>
+                    <th>Email</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each monitores}}
+                  <tr>
+                    <td>{{this.email}}</td>
+                    <td><button type="button" class="btn btn-danger em">x</button></td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table></p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -85,7 +137,7 @@
                       <label for="pwd">Contraseña</label>
                       <input type="password" name="password" class="form-control">
                     </div>
-                    <button type="submit" class="btn btn-default">Guardar</button>
+                    <button type="submit" class="btn btn-default as">Guardar</button>
                   </form>
 
                 </div>
@@ -119,7 +171,7 @@
                       <label for="pwd">Contraseña</label>
                       <input type="password" name="password" class="form-control">
                     </div>
-                    <button type="submit" class="btn btn-default">Guardar</button>
+                    <button type="submit" class="btn btn-default am">Guardar</button>
                   </form>
 
                 </div>

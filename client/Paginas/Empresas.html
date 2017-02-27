@@ -748,7 +748,7 @@
         <div class="pull-left">
 
             <input type="text" name="search" class="form-control" style="width: 350px;"
-                   placeholder="Buscar vehículo por placa o padron">
+                   placeholder="Buscar vehículo por placa, padron o ruta">
         </div>
     </div>
 
@@ -935,31 +935,31 @@
                         <div class="row">
                             <div class="col-md-7" style="margin-top: 10px">
                                 <div class="List__tab__entity">
-                                <!-- {{#each this.TC}} -->
+                                {{#each this.TC}}
                                     <table class="table">
                                         <tbody>
                                         <tr class="entity">
                                             <td>Entidad:</td>
-                                            <td>{{this.TC.entidad}}</td>
+                                            <td>{{this.entidad}}</td>
                                         </tr>
                                         <tr>
                                             <td>Número:</td>
-                                            <td>{{this.TC.numero}}</td>
+                                            <td>{{this.numero}}</td>
                                         </tr>
                                         <tr>
                                             <td>Fecha de Emisión:</td>
-                                            <td>{{this.TC.emision}}</td>
+                                            <td>{{this.emision}}</td>
                                         </tr>
                                         <tr>
                                             <td>Fecha de Caducidad:</td>
-                                            <td>{{this.TC.caducidad}}</td>
+                                            <td>{{this.caducidad}}</td>
                                         </tr>
 
                                         </tbody>
                                     </table>
-                                        <!-- {{else}}
+                                        {{else}}
                                 <p>No hay Entidades para mostrar</p>
-                            {{/each}} -->
+                            {{/each}}
                                 </div>
                             </div>
                             <div class="col-md-5">
@@ -1332,8 +1332,8 @@
                                    class="form-control" id="email">
                         </div>
                         <div class="form-group">
-                            <label for="plan" style="    margin-left: 80px;">Plan</label>
-                            <select class="form-control" style="margin-left: 27px;width: 115px;" id="plan">
+                            <label for="plan" style="    margin-left: 70px;">Checklist</label>
+                            <select class="form-control" style="margin-left: 4px;width: 115px;" id="plan">
                               <option value="1">Basico</option>
                               <option value="2">Avanzado</option>
                             </select>
@@ -1342,49 +1342,9 @@
 
                     <form class="__formulario">
 
-                        <!-- <div class="group">
-                             <input type="text" required name="nombre">
-                             <span class="highlight"></span>
-                             <span class="bar"></span>
-                             <label>Nombre</label>
-                         </div>
 
-                         <div class="group">
-                             <input type="text" required name="ruc">
-                             <span class="highlight"></span>
-                             <span class="bar"></span>
-                             <label>RUC</label>
-                         </div>
 
-                         <div class="group">
-                             <input type="text" required name="domicilio">
-                             <span class="highlight"></span>
-                             <span class="bar"></span>
-                             <label>Domicilio</label>
-                         </div>
-
-                         <div class="group">
-                             <input type="text" required name="representante">
-                             <span class="highlight"></span>
-                             <span class="bar"></span>
-                             <label>Representante</label>
-                         </div>
-
-                         <div class="group">
-                             <input type="text" required name="telefono">
-                             <span class="highlight"></span>
-                             <span class="bar"></span>
-                             <label>Teléfono</label>
-                         </div>
-
-                         <div class="group">
-                             <input type="email" required name="email">
-                             <span class="highlight"></span>
-                             <span class="bar"></span>
-                             <label>Email</label>
-                         </div>  -->
-
-                        <button type="submit" class="__button">
+                        <button type="submit" class="__button" style="background-color: #3498db">
                             Agregar
                         </button>
                     </form>

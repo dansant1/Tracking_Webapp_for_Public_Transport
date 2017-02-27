@@ -1,6 +1,7 @@
 <template name="LeftMenuEmpresa">
 
 		<nav class="cd-side-nav" id="{{monitor}}">
+			{{#if isInRole 'monitoreo' 'Empresa'}}
 			<ul>
 				<li class="cd-label">Rastreo</li>
 				<li class="has-children overview top-nav-btn">
@@ -12,12 +13,37 @@
 					<a href="#">Alarmas <span class="count">3</span></a>
 				</li>
 			</ul>
+			{{else}}
+				{{#if isInRole 'director' 'Empresa'}}
+				<ul>
+					<li class="cd-label">Rastreo</li>
+					<li class="has-children overview top-nav-btn">
+						<a href="/rastreo">Monitoreo</a>
+					</li>
 
+
+					<li class="has-children  notifications top-nav-btn">
+						<a href="#">Alarmas <span class="count">3</span></a>
+					</li>
+				</ul>
+				{{/if}}
+			{{/if}}
 			<ul>
+				{{#if isInRole 'director' 'Empresa'}}
 				<li class="cd-label">Despacho</li>
 				<li class="has-children comments app top-nav-btn">
 					<a href="/">Despacho</a>
+
 				</li>
+				{{else}}
+					{{#if isInRole 'operador' 'Empresa'}}
+					<li class="cd-label">Despacho</li>
+					<li class="has-children comments app top-nav-btn">
+						<a href="/">Despacho</a>
+
+					</li>
+					{{/if}}
+				{{/if}}
 				{{#if isInRole 'director' 'Empresa'}}
 				<li class="has-children images top-nav-btn">
 					<a href="/borradores">Borradores</a>
@@ -28,21 +54,44 @@
 
 					<ul>
 						<li><a href="/vehiculos">Lista de Vehículos</a></li>
-						{{#if isInRole 'operador' 'Empresa'}}
-						<li class="avo"><a href="#">Agregar Vehículos</a></li>
-						{{else}}
+
 							{{#if isInRole 'director' 'Empresa'}}
 								<li class="avd"><a href="#">Agregar Vehículos</a></li>
+
+							{{else}}
+									{{#if isInRole 'Operador Asistente' 'Empresa'}}
+									<li class="avd"><a href="#">Agregar Vehículos</a></li>
+									{{/if}}
 							{{/if}}
-						{{/if}}
+
 					</ul>
 				</li>
-
+				{{#if isInRole 'monitoreo' 'Empresa'}}
 				<li class="has-children users top-nav-btn">
 					<a href="/rutas">Rutas</a>
 				</li>
 
+				{{else}}
 
+					{{#if isInRole 'director' 'Empresa'}}
+					<li class="has-children users top-nav-btn">
+						<a href="/rutas">Rutas</a>
+					</li>
+
+					{{else}}
+
+						{{#if isInRole 'Operador Asistente' 'Empresa'}}
+						<li class="has-children users top-nav-btn">
+							<a href="/rutas">Rutas</a>
+						</li>
+						{{/if}}
+					{{/if}}
+
+				{{/if}}
+
+
+
+				{{#if isInRole 'director' 'Empresa'}}
 				<li class="has-children users top-nav-btn">
 					<a href="/planeamiento">Planeamiento</a>
 					<ul>
@@ -56,25 +105,54 @@
 						{{/if}}
 					</ul>
 				</li>
-
+				{{else}}
+					{{#if isInRole 'Operador Asistente' 'Empresa'}}
+					<li class="has-children users top-nav-btn">
+						<a href="/planeamiento">Planeamiento</a>
+						<ul>
+							<li><a href="/planeamiento"> Visualizar Planeamiento</a></li>
+						</ul>
+					</li>
+					{{/if}}
+				{{/if}}
 
 				<li class="has-children users top-nav-btn">
-					<a href="/colaboradores">Colaboradores</a>
+					<a href="/colaboradores">Operadores</a>
 
 					<ul>
 						<li><a href="/colaboradores">Lista de Colaboradores</a></li>
-						{{#if isInRole 'operador' 'Empresa'}}
-						<li class="ac1"><a href="#">Agregar Conductor</a></li>
-						<li class="aco1"><a href="#">Agregar Cobrador</a></li>
-						{{else}}
+
 							{{#if isInRole 'director' 'Empresa'}}
 								<li class="ac"><a href="#">Agregar Conductor</a></li>
 								<li class="aco"><a href="#">Agregar Cobrador</a></li>
+
+							{{else}}
+
+								{{#if isInRole 'Operador Asistente' 'Empresa'}}
+								<li class="ac"><a href="#">Agregar Conductor</a></li>
+								<li class="aco"><a href="#">Agregar Cobrador</a></li>
+
+								{{/if}}
+
 							{{/if}}
-						{{/if}}
+
 
 					</ul>
 				</li>
+
+				{{#if isInRole 'director' 'Empresa'}}
+				<li class="has-children users top-nav-btn">
+					<a href="/#">Reportes</a>
+				</li>
+
+				{{else}}
+
+					{{#if isInRole 'Operador Asistente' 'Empresa'}}
+					<li class="has-children users top-nav-btn">
+						<a href="/rutas">Reportes</a>
+					</li>
+					{{/if}}
+				{{/if}}
 
 
 			</ul>
@@ -92,6 +170,7 @@
 <template name="LeftMenuAdministrador">
 			<nav class="cd-side-nav">
 			<ul>
+					{{#if isInRole 'gerente' 'Administracion'}}
 				<li class="cd-label">Gestión</li>
 				<li class="has-children overview top-nav-btn" style="z-index: 1001 !important" >
 					<a href="/empresas">Empresas</a>
@@ -109,7 +188,27 @@
 						<li><a href="/admin/agregaruta">Agregar Ruta</a></li>
 					</ul>
 				</li>
+				{{else}}
+						{{#if isInRole 'soporte' 'Administracion'}}
+						<li class="cd-label">Gestión</li>
+						<li class="has-children overview top-nav-btn" style="z-index: 1001 !important" >
+							<a href="/empresas">Empresas</a>
+							<ul style="z-index: 1001 !important">
+								<li style="z-index: 1001 !important" > <a href="/empresas">Lista de Empresa</a></li>
 
+								<li style="z-index: 1001 !important" class="ae"><a href="#">Agregar Empresa</a></li>
+							</ul>
+						</li>
+						<li class="has-children comments top-nav-btn">
+							<a href="/admin/rutas">Rutas</a>
+							<ul>
+								<li><a href="/admin/rutas">Rutas por Empresa</a></li>
+
+								<li><a href="/admin/agregaruta">Agregar Ruta</a></li>
+							</ul>
+						</li>
+						{{/if}}
+				{{/if}}
 
 				<li class="has-children comments top-nav-btn">
 					<a href="/admin/rastreo">Monitoreo</a>
@@ -117,7 +216,7 @@
 
 
 
-
+							{{#if isInRole 'gerente' 'Administracion'}}
 
                 <li class="has-children comments top-nav-btn">
                     <a href="/admin/planeamiento">Planeamiento</a>
@@ -150,10 +249,42 @@
 									</ul>
 								</li>
 
+								{{else}}
+
+									{{#if isInRole 'soporte' 'Administracion'}}
+									<li class="has-children comments top-nav-btn">
+	                    <a href="/admin/planeamiento">Planeamiento</a>
+	                    <ul>
+	                        <li><a href="/admin/planeamiento">Planeamientos por Empresa</a></li>
+	                        <li><a href="/admin/agregarplan">Agregar Planeamiento</a></li>
+	                    </ul>
+	                </li>
+	                <li class="has-children comments top-nav-btn">
+	                    <a href="/admin/entidades">Entidades</a>
+	                    <ul>
+	                        <li><a href="/admin/entidades">Lista de Entidades</a></li>
+	                        <li class="add__entity"><a href="#">Agregar Entidad</a></li>
+	                    </ul>
+	                </li>
+
+									<li class="has-children comments top-nav-btn">
+	                    <a href="/mantenimiento">Operaciones</a>
+	                    <ul>
+	                        <li><a href="/mantenimiento">Lista de Requisitos de Operacion</a></li>
+	                        <li class="add__mantenimiento"><a href="#">Agregar Requisito</a></li>
+	                    </ul>
+	                </li>
+
+									{{/if}}
+								{{/if}}
+
+
 			</ul>
 
 
-			<ul>
+
+				{{#if isInRole 'gerente' 'Administracion'}}
+				<ul>
 				<li class="cd-label">Recaudación</li>
 				<li class="has-children notifications app top-nav-btn">
 					<a href="/gestiontpi">Gestión</a>
@@ -163,79 +294,25 @@
 
 
 				</li>
+				</ul>
+				{{/if}}
 
 
 
-			</ul>
 
-			<ul>
 
+				{{#if isInRole 'gerente' 'Administracion'}}
+				<ul>
 				<li class="cd-label">Usuarios</li>
 				<li class="has-children notifications app top-nav-btn">
 					<a href="/admin/equipo">Equipo</a>
 				</li>
-
-			</ul>
-
-
-			<!--<ul>
-				<li class="cd-label">Despacho</li>
-
-				<li class="has-children images top-nav-btn">
-					<a href="#0">Vehículos</a>
-
-					<ul>
-						<li><a href="#0">Lista de Vehículos</a></li>
-						<li><a href="#0">Estado de Vehículos</a></li>
-						<li><a href="#0">Agregar Vehículos</a></li>
-					</ul>
-				</li>
-
-				<li class="has-children users top-nav-btn">
-					<a href="#0">Paradas</a>
-
-					<ul>
-						<li><a href="#0">Lista de Paradas</a></li>
-						<li><a href="#0">Agregar Paradas</a></li>
-					</ul>
-				</li>
-				<li class="has-children users top-nav-btn">
-					<a href="#0">Rutas</a>
-
-					<ul>
-						<li><a href="#0">Lista de Rutas</a></li>
-						<li><a href="#0">Agregar Ruta</a></li>
-					</ul>
-				</li>
-
-				<li class="has-children users top-nav-btn">
-					<a href="#0">Planeamiento</a>
-
-					<ul>
-						<li><a href="#0">Agregar Planeamiento</a></li>
-						<li><a href="#0">Visualizar Planeamiento</a></li>
-						<li><a href="#"><input type="file" id="prueba"></a></li>
-					</ul>
-				</li>
-
-
-				<li class="has-children users top-nav-btn">
-					<a href="#0">Colaboradores</a>
-
-					<ul>
-						<li><a href="#0">Lista de Colaboradores</a></li>
-						<li><a href="#0">Agregar Colaborador</a></li>
-					</ul>
-				</li>
-
-
-			</ul> -->
+				</ul>
+				{{/if}}
 
 			<ul>
 				<li class="cd-label">Soporte</li>
 				<li class="action-btn"><a style="padding: 10px;text-align: center;" href="#0" class="top-nav-btn blue">Manual</a></li>
-
-
 			</ul>
 		</nav>
 </template>

@@ -20,17 +20,17 @@
 	</ul>
 
 	<div class="tab-content">
-		
+
 		<div id="conductores" class="tab-pane fade in active">
-		 
+
 		  {{>ListaDeConductoresInterno}}
-			
+
 		</div>
-		
+
 		<div id="cobradores" class="tab-pane fade">
 		    {{>ListaDeCobradoresInterno}}
 		</div>
-		
+
 	</div>
 </template>
 
@@ -41,20 +41,20 @@
 			<input type="text" name="search" class="form-control" style="width: 350px;" placeholder="Buscar conductor por DNI">
 		</div>
   	</div>
-	
+
 	{{#if searching}}
 
       	<h3>Cargando...</h3>
-    
+
     {{else}}
-		{{#each conductores}}
+	<!--	{{#each conductores}}
 			<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 35vh;">
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#con3{{this._id}}">Detalles</a></li>
 					<li><a data-toggle="tab" href="#p3{{this._id}}">Licencia</a></li>
 					<li><a data-toggle="tab" href="#s3{{this._id}}">CEV</a></li>
 					<li><a data-toggle="tab" href="#t3{{this._id}}">Credencial</a></li>
-					
+
 				</ul>
 
 				<div class="tab-content">
@@ -71,12 +71,12 @@
 						<br>
 						<div class="pull-left" style="margin-bottom: 20px;">
 	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-	      					
+
 	    				</div>
 	    				{{/if}}
 					{{/if}}
-						
-						
+
+
 						<br>
 					    <table class="table">
 							<tbody>
@@ -115,21 +115,21 @@
 						<label class="btn btn-success btn-file">
 			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor1" style="display: none;" accept="image/*">
 						</label>
-						<br><br>	
+						<br><br>
 						{{else}}
 							{{#if isInRole 'director' 'Empresa'}}
 							<label class="btn btn-success btn-file">
 			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor1" style="display: none;" accept="image/*">
 						</label>
-						<br><br>	
+						<br><br>
 							{{/if}}
 						{{/if}}
-											
+
 						{{>FotosDeConductores1}}
 					</div>
 					<div id="p3{{this._id}}" class="tab-pane fade">
 					    <br>
-					  
+
 
 					     <table class="table">
 							<tbody>
@@ -149,7 +149,7 @@
 							        <td>Fecha de Revalidación:</td>
 							        <td>{{this.licencia.revalidacion}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 						<br>
@@ -167,12 +167,12 @@
 						<br><br>
 							{{/if}}
 						{{/if}}
-							
+
 					    {{>FotosDeConductores2}}
 					</div>
 					<div id="s3{{this._id}}" class="tab-pane fade">
 					    <br>
-					   
+
 					    <table class="table">
 							<tbody>
     							<tr>
@@ -187,7 +187,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.CEV.caducidad}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 						<br>
@@ -195,21 +195,21 @@
 						<label class="btn btn-success btn-file">
 			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor3" style="display: none;" accept="image/*">
 						</label>
-						<br><br>	
+						<br><br>
 						{{else}}
 							{{#if isInRole 'director' 'Empresa'}}
 							<label class="btn btn-success btn-file">
 			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor3" style="display: none;" accept="image/*">
 						</label>
-						<br><br>	
+						<br><br>
 							{{/if}}
 						{{/if}}
-					    
+
 						{{>FotosDeConductores3}}
 					</div>
 					<div id="t3{{this._id}}" class="tab-pane fade">
 					   	<br>
-					   
+
 
 					   	 <table class="table">
 							<tbody>
@@ -225,7 +225,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.credencial.caducidad}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 						<br>
@@ -233,7 +233,7 @@
 						<label class="btn btn-success btn-file">
 			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotoconductor4" style="display: none;" accept="image/*">
 						</label>
-						<br><br>	
+						<br><br>
 						{{else}}
 							{{#if isInRole 'director' 'Empresa'}}
 							<label class="btn btn-success btn-file">
@@ -242,16 +242,237 @@
 						<br><br>
 							{{/if}}
 						{{/if}}
-						
-						{{>FotosDeConductores4}}	
+
+						{{>FotosDeConductores4}}
 					</div>
-					
-					
+
+
 				</div>
 			</div>
 		{{else}}
 			Lo sentimos, no encontramos resultados para {{query}}
+		{{/each}} -->
+
+		{{#each conductores}}
+				<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 35vh;">
+						<ul class="nav nav-tabs">
+								<li class="active"><a data-toggle="tab" href="#con3{{this._id}}">Detalles</a></li>
+								<li><a data-toggle="tab" href="#p3{{this._id}}">Licencia</a></li>
+								<li><a data-toggle="tab" href="#s3{{this._id}}">CEV</a></li>
+								<li><a data-toggle="tab" href="#t3{{this._id}}">Credencial</a></li>
+
+						</ul>
+
+						<div class="tab-content">
+								<div id="con3{{this._id}}" class="tab-pane fade in active">
+										<br>
+										<div class="row">
+												<div class="col-md-7" style="margin-top: 10px">
+													{{#if isInRole 'director' 'Empresa'}}
+														<div class="pull-left" style="margin-bottom: 20px;">
+																<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i>
+																</button>
+																<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i>
+																</button>
+														</div>
+
+														{{else}}
+
+																{{#if isInRole 'Operador Asistente' 'Empresa'}}
+																<div class="pull-left" style="margin-bottom: 20px;">
+																		<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i>
+																		</button>
+																		<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i>
+																		</button>
+																</div>
+																{{/if}}
+														{{/if}}
+														<br>
+														<table class="table">
+																<tbody>
+																<tr>
+																		<td>Nombres:</td>
+																		<td>{{this.datos.nombre}}</td>
+																</tr>
+																<tr>
+																		<td>Apellidos:</td>
+																		<td>{{this.datos.apellido}}</td>
+																</tr>
+																<tr>
+																		<td>DNI:</td>
+																		<td>{{this.datos.dni}}</td>
+																</tr>
+																<tr>
+																		<td>Caducidad de DNI:</td>
+																		<td>{{this.datos.caducidad}}</td>
+																</tr>
+																<tr>
+																		<td>Distrito:</td>
+																		<td>{{this.datos.distrito}}</td>
+																</tr>
+																<tr>
+																		<td>Domicilio:</td>
+																		<td>{{this.datos.domicilio}}</td>
+																</tr>
+																<tr>
+																		<td>Teléfono:</td>
+																		<td>{{this.datos.telefono}}</td>
+																</tr>
+																</tbody>
+														</table>
+												</div>
+												<div class="col-md-5">
+														<div class="lista-photos">
+																{{>FotosDeConductores1}}
+
+																<label class="btn btn-success btn-file">
+																		<i class="fa fa-camera" aria-hidden="true"></i>
+																		<input type="file" id="fotoconductor1"
+																					 style="display: none;" name="fotosubir"
+																					 accept="image/*">
+																</label>
+																<button class="btn btn-primary imprimir">
+																		<i class="fa fa-print"
+																			 aria-hidden="true"></i>
+
+																</button>
+														</div>
+												</div>
+										</div>
+								</div>
+								<div id="p3{{this._id}}" class="tab-pane fade">
+										<br>
+										<div class="row">
+												<div class="col-md-7" style="margin-top: 10px">
+														<table class="table">
+																<tbody>
+																<tr>
+																		<td>Numero de Licencia:</td>
+																		<td>{{this.licencia.codigo}}</td>
+																</tr>
+																<tr>
+																		<td>Categoría:</td>
+																		<td>{{this.licencia.categoria}}</td>
+																</tr>
+																<tr>
+																		<td>Fecha de Expedición:</td>
+																		<td>{{this.licencia.expedicion}}</td>
+																</tr>
+																<tr>
+																		<td>Fecha de Revalidación:</td>
+																		<td>{{this.licencia.revalidacion}}</td>
+																</tr>
+
+																</tbody>
+														</table>
+												</div>
+												<div class="col-md-5">
+														<div class="lista-photos">
+																{{>FotosDeConductores2}}
+
+																<label class="btn btn-success btn-file">
+																		<i class="fa fa-camera" aria-hidden="true"></i>
+																		<input type="file" id="fotoconductor2" name="fotosubir" style="display: none;"
+																					 accept="image/*">
+																</label>
+																<button class="btn btn-primary imprimir">
+																		<i class="fa fa-print"
+																			 aria-hidden="true"></i>
+
+																</button>
+														</div>
+												</div>
+										</div>
+								</div>
+								<div id="s3{{this._id}}" class="tab-pane fade">
+										<br>
+										<div class="row">
+												<div class="col-md-7" style="margin-top: 10px">
+														<table class="table">
+																<tbody>
+																<tr>
+																		<td>Código:</td>
+																		<td>{{this.CEV.codigo}}</td>
+																</tr>
+																<tr>
+																		<td>Fecha de Emisión:</td>
+																		<td>{{this.CEV.emision}}</td>
+																</tr>
+																<tr>
+																		<td>Fecha de Caducidad:</td>
+																		<td>{{this.CEV.caducidad}}</td>
+																</tr>
+
+																</tbody>
+														</table>
+												</div>
+												<div class="col-md-5">
+														<div class="lista-photos">
+																{{>FotosDeConductores3}}
+
+																<label class="btn btn-success btn-file">
+																		<i class="fa fa-camera" aria-hidden="true"></i>
+																		<input type="file" name="fotosubir" id="fotoconductor3" style="display: none;"
+																					 accept="image/*">
+																</label>
+																<button class="btn btn-primary imprimir">
+																		<i class="fa fa-print"
+																			 aria-hidden="true"></i>
+
+																</button>
+														</div>
+												</div>
+										</div>
+								</div>
+								<div id="t3{{this._id}}" class="tab-pane fade">
+										<br>
+										<div class="row">
+												<div class="col-md-7" style="margin-top: 10px">
+														<table class="table">
+																<tbody>
+																<tr>
+																		<td>Número de Credencial:</td>
+																		<td>{{this.credencial.numero}}</td>
+																</tr>
+																<tr>
+																		<td>Fecha de Emisión:</td>
+																		<td>{{this.credencial.emision}}</td>
+																</tr>
+																<tr>
+																		<td>Fecha de Caducidad:</td>
+																		<td>{{this.credencial.caducidad}}</td>
+																</tr>
+
+																</tbody>
+														</table>
+												</div>
+												<div class="col-md-5">
+														<div class="lista-photos">
+																{{>FotosDeConductores4}}
+
+																<label class="btn btn-success btn-file">
+																		<i class="fa fa-camera" aria-hidden="true"></i>
+																		<input type="file" id="fotoconductor4"
+																					 style="display: none;"
+																					 name="fotosubir"
+																					 accept="image/*">
+																</label>
+																<button class="btn btn-primary imprimir">
+																		<i class="fa fa-print"
+																			 aria-hidden="true"></i>
+
+																</button>
+														</div>
+												</div>
+										</div>
+								</div>
+
+						</div>
+				</div>
+		{{else}}
+				Lo sentimos, no encontramos resultados para {{query}}
 		{{/each}}
+
 
 	{{/if}}
 </template>
@@ -267,13 +488,13 @@
   	{{#if searching}}
       	<h3>Cargando...</h3>
     {{else}}
-		{{#each cobradores}}
+		<!--{{#each cobradores}}
 			<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 35vh;">
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#co2{{this._id}}">Detalles</a></li>
 					<li><a data-toggle="tab" href="#p2{{this._id}}">CEV</a></li>
 					<li><a data-toggle="tab" href="#s2{{this._id}}">Credenciales</a></li>
-					
+
 				</ul>
 
 				<div class="tab-content">
@@ -289,13 +510,13 @@
 							<br>
 						<div class="pull-left" style="margin-bottom: 20px">
 	      					<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-	      					
+
 	    				</div>
 	    				{{/if}}
 					{{/if}}
-						
+
 						<br>
-					   
+
 					    <table class="table">
 							<tbody>
     							<tr>
@@ -310,7 +531,7 @@
 							        <td>DNI:</td>
 							        <td>{{this.datos.dni}}</td>
       							</tr>
-      							
+
       							<tr>
 							        <td>Domicilio: </td>
 							        <td>{{this.datos.domicilio}}</td>
@@ -321,20 +542,20 @@
 							        <td>{{this.datos.distrito}}</td>
       							</tr>
 
-      							
+
     						</tbody>
 						</table>
 						<br>
 						<label class="btn btn-success btn-file">
 			    			<i class="fa fa-camera" aria-hidden="true"></i> <input type="file" id="fotocobrador1" style="display: none;" accept="image/*">
-			    			
+
 						</label>
 						<br><br>
 						{{>FotosDeCobradores1}}
 					</div>
 					<div id="p2{{this._id}}" class="tab-pane fade">
 					    <br>
-					  
+
 					    <table class="table">
 							<tbody>
     							<tr>
@@ -349,7 +570,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.CEV.caducidad}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 					    <br>
@@ -375,7 +596,7 @@
 							        <td>Fecha de Caducidad:</td>
 							        <td>{{this.credencial.caducidad}}</td>
       							</tr>
-      							
+
     						</tbody>
 						</table>
 					    <br>
@@ -386,14 +607,194 @@
 						{{>FotosDeCobradores3}}
 					</div>
 
-					
-					
+
+
 				</div>
 			</div>
 		{{else}}
 			Lo sentimos, no encontramos resultados para {{query}}
+		{{/each}} -->
+
+		{{#each cobradores}}
+				<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 35vh;">
+						<ul class="nav nav-tabs">
+								<li class="active"><a data-toggle="tab" href="#co2{{this._id}}">Detalles</a></li>
+								<li><a data-toggle="tab" href="#p2{{this._id}}">CEV</a></li>
+								<li><a data-toggle="tab" href="#s2{{this._id}}">Credenciales</a></li>
+
+						</ul>
+
+						<div class="tab-content">
+								<div id="co2{{this._id}}" class="tab-pane fade in active">
+										<br>
+										<div class="row">
+												<div class="col-md-7" style="margin-top: 10px">
+													{{#if isInRole 'director' 'Empresa'}}
+														<div class="pull-left" style="margin-bottom: 20px">
+																<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i>
+																</button>
+																<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i>
+																</button>
+														</div>
+														<br>
+
+
+														{{else}}
+
+															{{#if isInRole 'Operador Asistente' 'Empresa'}}
+															<div class="pull-left" style="margin-bottom: 20px">
+																	<button class="btn btn-success edit"><i class="fa fa-pencil" aria-hidden="true"></i>
+																	</button>
+																	<button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i>
+																	</button>
+															</div>
+															<br>
+
+															{{/if}}
+
+														{{/if}}
+														<table class="table">
+																<tbody>
+																<tr>
+																		<td>Nombres:</td>
+																		<td>{{this.datos.nombre}}</td>
+																</tr>
+																<tr>
+																		<td>Apellidos:</td>
+																		<td>{{this.datos.apellido}}</td>
+																</tr>
+																<tr>
+																		<td>DNI:</td>
+																		<td>{{this.datos.dni}}</td>
+																</tr>
+
+																<tr>
+																		<td>Domicilio:</td>
+																		<td>{{this.datos.domicilio}}</td>
+																</tr>
+
+																<tr>
+																		<td>Distrito:</td>
+																		<td>{{this.datos.distrito}}</td>
+																</tr>
+
+
+																</tbody>
+														</table>
+												</div>
+												<div class="col-md-5">
+														<div class="lista-photos">
+																{{>FotosDeCobradores1}}
+
+																<label class="btn btn-success btn-file">
+																		<i class="fa fa-camera" aria-hidden="true"></i>
+																		<input type="file" id="fotocobrador1"
+																					 style="display: none;"
+																					 name="fotosubir"
+																					 accept="image/*">
+
+																</label>
+																<button class="btn btn-primary imprimir">
+																		<i class="fa fa-print"
+																			 aria-hidden="true"></i>
+
+																</button>
+														</div>
+												</div>
+										</div>
+								</div>
+								<div id="p2{{this._id}}" class="tab-pane fade">
+										<br>
+
+										<div class="row">
+												<div class="col-md-7" style="margin-top: 10px">
+														<table class="table">
+																<tbody>
+																<tr>
+																		<td>Numero de Licencia:</td>
+																		<td>{{this.CEV.codigo}}</td>
+																</tr>
+																<tr>
+																		<td>Fecha de Emisión:</td>
+																		<td>{{this.CEV.emision}}</td>
+																</tr>
+																<tr>
+																		<td>Fecha de Caducidad:</td>
+																		<td>{{this.CEV.caducidad}}</td>
+																</tr>
+
+																</tbody>
+														</table>
+												</div>
+												<div class="col-md-5">
+														<div class="lista-photos">
+																{{>FotosDeCobradores2}}
+
+																<label class="btn btn-success btn-file">
+																		<i class="fa fa-camera" aria-hidden="true"></i>
+																		<input type="file" id="fotocobrador2"
+																					 style="display: none;"
+																					 name="fotosubir"
+																					 accept="image/*">
+																</label>
+																<button class="btn btn-primary imprimir">
+																		<i class="fa fa-print"
+																			 aria-hidden="true"></i>
+
+																</button>
+														</div>
+												</div>
+										</div>
+								</div>
+								<div id="s2{{this._id}}" class="tab-pane fade">
+										<br>
+										<div class="row">
+												<div class="col-md-7" style="margin-top: 10px">
+														<table class="table">
+																<tbody>
+																<tr>
+																		<td>Número:</td>
+																		<td>{{this.credencial.numero}}</td>
+																</tr>
+																<tr>
+																		<td>Fecha de Emisión:</td>
+																		<td>{{this.credencial.emision}}</td>
+																</tr>
+																<tr>
+																		<td>Fecha de Caducidad:</td>
+																		<td>{{this.credencial.caducidad}}</td>
+																</tr>
+
+																</tbody>
+														</table>
+												</div>
+												<div class="col-md-5">
+														<div class="lista-photos">
+																{{>FotosDeCobradores3}}
+
+																<label class="btn btn-success btn-file">
+																		<i class="fa fa-camera" aria-hidden="true"></i>
+																		<input type="file" id="fotocobrador3" style="display: none;"
+																					 name="fotosubir"
+																					 accept="image/*">
+																</label>
+																<button class="btn btn-primary imprimir">
+																		<i class="fa fa-print"
+																			 aria-hidden="true"></i>
+
+																</button>
+														</div>
+												</div>
+										</div>
+								</div>
+
+
+						</div>
+				</div>
+		{{else}}
+				Lo sentimos, no encontramos resultados para {{query}}
 		{{/each}}
 
-	{{/if}}	
-</template>
 
+	{{/if}}
+</template>

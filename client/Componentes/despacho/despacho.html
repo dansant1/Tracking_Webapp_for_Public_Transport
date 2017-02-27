@@ -3,7 +3,9 @@
     <h4 class="pull-left">Despacho de Vehículos</h4>
   </div>
 
-  <a href="/planeamiento/{{rutaId}}/nuevo" class="btn btn-success">Agregar Planeamiento de Hoy</a>
+  <a href="/planeamiento/{{rutaId}}/nuevo" class="btn btn-success">Agregar Planeamiento de Hoy de Ida</a>
+  <br><br>
+  <a href="/planeamiento/{{rutaId}}/nuevo" class="btn btn-primary">Agregar Planeamiento de Hoy de Vuelta</a>
   <br><br>
   <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#home">Despacho</a></li>
@@ -105,7 +107,7 @@
               {{#each rutas}}
                   <li class="list-group-item clearfix">
                       <span class="pull-left">{{this.nombre}} </span>
-                      <span class="pull-right" style="width: 255px">
+                      <span class="pull-right">
 
                           <a href="/despacho/d/{{this._id}}" class="btn btn-primary">
                             <i class="fa fa-eye" aria-hidden="true"></i>
@@ -135,6 +137,11 @@
                </div>
 
                <div class="modal-body">
+                 <div class="page-header clearfix" style="margin-top: 0;">
+
+
+                 	</div>
+
                  <ul class="nav nav-tabs">
                    <li class="active"><a data-toggle="tab" href="#home">Conductor</a></li>
                    <li><a data-toggle="tab" href="#selectcobrador">Cobrador</a></li>
@@ -143,27 +150,44 @@
 
                  <div class="tab-content">
                    <div id="home" class="tab-pane fade in active">
-                     <h3>Selecciona a Conductor</h3>
+                     <div class="pull-left" style="width: 100%">
+                	      <input type="text" name="search" class="form-control" placeholder="Buscar conductor por nombre o DNI">
+                	    </div>
+                     <br><br>
                      <br>
-                     <ul>
-                     {{#each conductores}}
-                     <li class="list-group-item clearfix horario planeamiento">
-                         <span class="pull-left" style="width: 75%; margin-left: 10px">
-                               <i class="fa fa-user" aria-hidden="true"></i>
-                               <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">{{this.datos.nombre}} {{this.datos.apellido}}</span>
-                         </span>
-                         <span class="pull-right">
+                     {{#if searching}}
+                         	<h3>Cargando...</h3>
+                    {{else}}
+                    <ul>
+                    {{#each conductores}}
+                    <li class="list-group-item clearfix horario planeamiento">
+                        <span class="pull-left" style="width: 75%; margin-left: 10px">
+                              <i class="fa fa-user" aria-hidden="true"></i>
+                              <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">{{this.datos.nombre}} {{this.datos.apellido}}</span>
+                        </span>
+                        <span class="pull-right">
 
-                           <a href="#selectcobrador" class="despachar a{{this._id}} btn btn-success asignar-conductor">Asignar</a>
+                          <a href="#selectcobrador" class="despachar a{{this._id}} btn btn-success asignar-conductor">Asignar</a>
 
-                         </span>
-                     </li>
-                     {{/each}}
-                     </ul>
+                        </span>
+                      </li>
+                    {{/each}}
+                  </ul>
+                    {{/if}}
+
+
+
+
                    </div>
                    <div id="selectcobrador" class="tab-pane fade">
-                     <h3>Selecciona un Cobrador</h3>
+                     <div class="pull-left" style="width: 100%">
+                       <input type="text" name="search2" class="form-control" placeholder="Buscar cobrador por nombre o DNI">
+                     </div>
+                     <br><br>
                      <br>
+                    {{#if searching2}}
+                         	<h3>Cargando...</h3>
+                    {{else}}
                      {{#each cobradores}}
                      <li class="list-group-item clearfix horario planeamiento">
                          <span class="pull-left" style="width: 75%; margin-left: 10px">
@@ -175,7 +199,12 @@
 
                          </span>
                      </li>
+                     {{else}}
+                      <p>No encontramos resultados para {{query2}}</p>
                      {{/each}}
+
+
+                     {{/if}}
                    </div>
                    <div id="selectreq" class="tab-pane fade">
                      <h3>Requisitos</h3>

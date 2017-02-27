@@ -165,7 +165,7 @@ Meteor.publish('DetalleDeCobradores', function (vehiculoId) {
 
 Meteor.publish('VehiculosPorEmpresa', function (empresaId, search) {
     let query = {},
-        projection = {sort: {placa: 1}};
+        projection = { limit: 1, sort: {placa: 1}};
 
     if (search) {
         let regex = new RegExp(search, 'i');
@@ -225,7 +225,8 @@ Meteor.publish( 'ConductoresPorEmpresa', function(empresaId, search ) {
     console.log(regex);
     query = {
       $or: [
-        { 'datos.dni': regex }
+        { 'datos.dni': regex },
+				{ 'datos.nombre': regex}
       ]
     };
 
@@ -247,7 +248,9 @@ Meteor.publish( 'CobradoresPorEmpresa', function(empresaId, search ) {
     console.log(regex);
     query = {
       $or: [
-        { 'datos.dni': regex }
+        { 'datos.dni': regex },
+				{ 'datos.nombre': regex},
+				{ 'datos.apellido': regex}
       ]
     };
 
@@ -430,6 +433,33 @@ Meteor.publish('reqs', function () {
 Meteor.publish('vehiculosGPS', function (empresaId) {
 	if (this.userId) {
 		return Vehiculos.find({empresaId: empresaId, borrador: false});
+	} else {
+		this.stop();
+		return;
+	}
+})
+
+Meteor.publish('soporte', function () {
+	if (this.userId) {
+		return Soporte.find();
+	} else {
+		this.stop();
+		return;
+	}
+})
+
+Meteor.publish('monitoreo', function () {
+	if (this.userId) {
+		return Monitoreo.find();
+	} else {
+		this.stop();
+		return;
+	}
+})
+
+Meteor.publish('checklist', function () {
+	if (this.userId) {
+		return Checklist.find();
 	} else {
 		this.stop();
 		return;

@@ -30,23 +30,23 @@ Template.ListaDeConductoresInterno.helpers({
   	conductores: function () {
   		let vehiculos = Conductores.find();
 
-  		if (vehiculos) {		
+  		if (vehiculos) {
   			let empresaId = Meteor.user().profile.empresaId;
   			return Conductores.find({empresaId: empresaId});
-  		} 
-		
+  		}
+
 	}
 });
 
 Template.ListaDeConductoresInterno.events({
   	'keyup [name="search"]' ( event, template ) {
-  	
+
     	let value = event.target.value.trim();
 
-	    
+
 	    	template.searchQuery.set( value );
 	    	template.searching.set( true );
-	    
+
 
 	    if ( value === '' ) {
 	      template.searchQuery.set( value );
@@ -76,7 +76,7 @@ Template.ListaDeConductoresInterno.events({
   	'click .edit': function () {
   		Session.set('editarConductor', this._id);
   		Modal.show('EditarConductor');
-  		
+
   	},
   	'change #fotoconductor1'(e, t) {
   		console.log('hola');
@@ -121,17 +121,17 @@ Template.ListaDeCobradoresInterno.helpers({
     cobradores: function () {
       let vehiculos = Cobradores.find();
 
-      if (vehiculos) {    
+      if (vehiculos) {
         let empresaId = Meteor.user().profile.empresaId;
         return Cobradores.find({empresaId: empresaId});
-      } 
-    
+      }
+
   }
 });
 
 Template.ListaDeCobradoresInterno.events({
     'keyup [name="search"]' ( event, template ) {
-    
+
       let value = event.target.value.trim();
 
       //if ( value !== '' && event.keyCode === 13 ) {
@@ -168,10 +168,10 @@ Template.ListaDeCobradoresInterno.events({
 
       Session.set('editarCobrador', this._id);
       Modal.show('EditarCobrador');
-     
+
     },
     'change #fotocobrador1'(e, t) {
-      
+      console.log('hola');
       SubirFotoCobrador(e, t, this._id, 'fotocobrador1', 1);
 
     },

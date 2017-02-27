@@ -2,6 +2,10 @@
 
 	{{#if currentUser}}
 
+
+
+
+
 		{{#if isInRole 'gerente' 'Administracion'}}
 
 				{{#if Template.subscriptionsReady}}
@@ -11,14 +15,42 @@
 				{{else}}
 					{{>Loader}}
 				{{/if}}
+
 		{{else}}
 
+		{{#if isInRole 'soporte' 'Administracion'}}
+			{{#if Template.subscriptionsReady}}
+
+			{{>Administrador}}
+
+			{{else}}
+				{{>Loader}}
+			{{/if}}
+
+		{{else}}
+
+		{{#if isInRole 'monitoreo' 'Administracion'}}
+			{{#if Template.subscriptionsReady}}
+
+			{{>Administrador}}
+
+			{{else}}
+				{{>Loader}}
+			{{/if}}
+
+			{{else}}
 			{{#if Template.subscriptionsReady}}
 
 				{{>Cliente}}
 			{{else}}
 				{{>Loader}}
 			{{/if}}
+
+		{{/if}}
+
+		{{/if}}
+
+
 
 
 		{{/if}}
@@ -40,9 +72,20 @@
 </template>
 
 <template name="Administrador">
+
+	{{#if isInRole 'monitoreo' 'Administracion'}}
+	{{>TopMenuUsuario}}
+	<main class="cd-main-content">
+		{{>LeftMenuAdministrador}}
+	{{>adminMapaCliente}}
+	</main>
+	{{else}}
 	{{>TopMenuUsuario}}
 	<main class="cd-main-content">
 		{{>LeftMenuAdministrador}}
 		{{> Template.dynamic template=administrador}}
 	</main>
+	{{/if}}
+
+
 </template>

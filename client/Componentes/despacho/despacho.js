@@ -56,8 +56,8 @@ Template.Asignar.onCreated( () => {
 
   template.autorun( () => {
     let empresaId = Meteor.user().profile.empresaId;
-    template.subscribe('conductoresEmpresa', empresaId);
-    template.subscribe('cobradoresEmpresa', empresaId);
+    //template.subscribe('conductoresEmpresa', empresaId);
+    //template.subscribe('cobradoresEmpresa', empresaId);
     template.subscribe('reqs')
   })
 })
@@ -147,7 +147,8 @@ Template.Asignar.events({
 
 Template.Asignar.helpers({
   conductores() {
-    return Conductores.find({despachado: false});
+    let empresaId = Meteor.user().profile.empresaId;
+    return Conductores.find({empresaId: empresaId, despachado: false});
   },
   despachar() {
     if (Template.instance().despachar.get() === true) {
@@ -157,7 +158,8 @@ Template.Asignar.helpers({
     }
   },
   cobradores() {
-    return Cobradores.find({despachado: false});
+    let empresaId = Meteor.user().profile.empresaId;
+    return Cobradores.find({empresaId: empresaId, despachado: false});
   },
   requisitos() {
     return Requisitos.find();
@@ -185,3 +187,78 @@ Template.SeleccionarRutaPlaneamiento.helpers({
       return Rutas.find({empresasId: empresaId})
     }
 })
+
+
+Template.Asignar.onCreated( () => {
+	let template = Template.instance();
+
+  	template.searchQuery = new ReactiveVar();
+  	template.searching   = new ReactiveVar( false );
+
+    template.searchQuery2 = new ReactiveVar();
+  	template.searching2   = new ReactiveVar( false );
+
+
+  	template.autorun( () => {
+    	let empresaId = Meteor.user().profile.empresaId;
+
+
+
+    	template.subscribe( 'CobradoresPorEmpresa', empresaId, template.searchQuery2.get(), () => {
+      		setTimeout( () => {
+        		template.searching2.set( false );
+      		}, 300 );
+    	});
+
+      template.subscribe( 'ConductoresPorEmpresa', empresaId, template.searchQuery.get(), () => {
+      		setTimeout( () => {
+        		template.searching.set( false );
+      		}, 300 );
+    	});
+  	});
+});
+
+Template.Asignar.helpers({
+  	searching() {
+    	return Template.instance().searching.get();
+  	},
+  	query() {
+    	return Template.instance().searchQuery.get();
+  	},
+    searching2() {
+    	return Template.instance().searching2.get();
+  	},
+  	query2() {
+    	return Template.instance().searchQuery2.get();
+  	}
+});
+
+Template.Asignar.events({
+  	'keyup [name="search"]' ( event, template ) {
+
+    	let value = event.target.value.trim();
+
+	    //if ( value !== '' && event.keyCode === 13 ) {
+	    	template.searchQuery.set( value );
+	    	template.searching.set( true );
+	    //}
+
+	    if ( value === '' ) {
+	      template.searchQuery.set( value );
+	    }
+  	},
+    'keyup [name="search2"]' ( event, template ) {
+
+    	let value = event.target.value.trim();
+
+	    //if ( value !== '' && event.keyCode === 13 ) {
+	    	template.searchQuery2.set( value );
+	    	template.searching2.set( true );
+	    //}
+
+	    if ( value === '' ) {
+	      template.searchQuery2.set( value );
+	    }
+  	},
+
+});

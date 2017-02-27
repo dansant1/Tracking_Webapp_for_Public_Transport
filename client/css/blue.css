@@ -665,3 +665,7 @@ td .form-control {
     right: auto;
     color: transparent;
 }
+
+body {
+	background-color: #edf1f5 !important;
+}
