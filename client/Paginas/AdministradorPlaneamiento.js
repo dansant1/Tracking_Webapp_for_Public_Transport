@@ -1304,9 +1304,20 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
                         let ida;
                         let vuelta;
 
+                        function centerOnPath(obj1, obj2){
+                          let bounds = new google.maps.LatLngBounds();
+                          let points = _.union( obj1.getPath().getArray(), obj2.getPath().getArray() );
+
+                          for (let n = 0; n < points.length ; n++){
+                              bounds.extend(points[n]);
+                          }
+                          map.instance.fitBounds(bounds);
+                        }
+
                         function addLine() {
                             mapa.idaPath.setMap(map.instance);
                             mapa.vueltaPath.setMap(map.instance);
+                            centerOnPath( mapa.idaPath, mapa.vueltaPath );
                         }
 
                         function removeLine () {
@@ -1314,22 +1325,33 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
                             mapa.vueltaPath.setMap(null);
                         }
 
+                        let markers = [];
                         function setMapOnAll(map, p, feature) {
+
+                          let checkPointIcon = {
+                            url: '/check-point.png', // url
+                            scaledSize: new google.maps.Size(30, 30), // scaled size
+                            origin: new google.maps.Point(0,0), // origin
+                            anchor: new google.maps.Point(15, 15) // anchor
+                          };
+
+                          let paraderoIcon = '/paradero.png';
 
 
                             marker = new google.maps.Marker({
                                         animation: google.maps.Animation.DROP,
                                         position: new google.maps.LatLng(p.lat, p.lng),
-                                        icon: '/paradero.png', //*'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
+                                        icon: feature === 'parking' ? paraderoIcon : checkPointIcon, //*'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
                                         map: map,
                                         id: ruta._id
                             });
-                            // marker.addListener( 'dblclick' , ())
+
+                            markers.push(marker);
                         }
 
                         // Removes the markers from the map, but keeps them in the array.
                         function clearMarkers() {
-                            setMapOnAll(null);
+                            markers.forEach( (marker) => marker.setMap(null) );
                         }
 
                         // Shows any markers currently in the array.
@@ -1347,6 +1369,7 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
 
 
                         $('select#ruta').on('change', function () {
+                          deleteMarkers();
 
                             Rutas.find({_id: this.value }).forEach( function (ruta) {
                                 ida = ruta.ida;
@@ -1357,6 +1380,12 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
                                 ruta.paraderos.forEach( function (p) {
 
                                     setMapOnAll(map.instance, p, 'parking')
+
+                                });
+
+                                ruta.puntosdecontrol.forEach( function (p) {
+
+                                    setMapOnAll(map.instance, p, 'puntodecontrol')
 
                                 });
                             });
