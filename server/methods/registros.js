@@ -925,14 +925,13 @@ Meteor.methods({
             let rutaId = Rutas.insert(datos);
 
             if (rutaId) {
-                datos.empresasId.forEach((e) => {
-                    console.log(e);
-                    Empresas.update({_id: e}, {
+              
+                    Empresas.update({_id: datos.empresasId}, {
                         $push: {
                             rutas: rutaId
                         }
                     });
-                });
+
             }
 
 
