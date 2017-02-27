@@ -34,3 +34,49 @@
 
 
 </template>
+
+
+<template name="adminMapaCliente">
+	<div class="content-wrapper" style="padding: 0px; padding-top: 57px;">
+
+			<div class="col-md-11">
+				<select id="empresa" class="form-control" style="position: absolute; top: 7px; z-index: 1001; left: 12%; width: 180px">
+						<option value="0">--Filtrar por Empresa--</option>
+						{{#each empresas}}
+
+						<option value="{{this._id}}">{{this.nombre}}</option>
+
+						{{/each}}
+				</select>
+				<select id="ruta" class="form-control" style="position: absolute; top: 45px; z-index: 1001; left: 12%; width: 180px">
+						<option value="0">--Filtrar por Ruta--</option>
+						{{#each empresa.rutas}}
+
+						<option value="{{this}}">{{ruta this}}</option>
+
+						{{/each}}
+				</select>
+				<select id="vehiculo" class="form-control" style="position: absolute; top: 45px; z-index: 1001; left: 31%; width: 190px">
+						<option value="0">--Filtrar por Vehículo--</option>
+						{{#each vehiculos}}
+
+						<option value="{{this._id}}">{{this.placa}} - {{this.padron}}</option>
+
+						{{/each}}
+				</select>
+				<button id="verparaderos" type="button" class="btn btn-primary" style="position: absolute; top: 7px; z-index: 1001; left: 51%; "> <i class="fa fa-eye" aria-hidden="true"></i> Ver Paraderos</button>
+				<button id="verpuntosdecontrol" type="button" class="btn btn-success" style="position: absolute; top: 7px; z-index: 1001; left: 65.5%; "> <i class="fa fa-eye" aria-hidden="true"></i> Ver Puntos de Control</button>
+				<button id="modoTrafico" type="button" class="btn btn-warning trafico" style="position: absolute; top: 7px; z-index: 1001; left: 85%; "> <i class="fa fa-train" aria-hidden="true"></i> Modo Trafico</button>
+			</div>
+
+		<div class="map-container" style="height: 91.4vh">
+				   	{{#if carga}}
+				    	{{> googleMap name="map" options=mapOptions}}
+				   	{{else}}
+				   		{{>Loader}}
+				   	{{/if}}
+		</div>
+	</div>
+
+
+</template>
