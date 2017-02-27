@@ -708,10 +708,8 @@ Template.AdministradorAgregarRuta.onRendered( function () {
 Template.AdministradorAgregarRuta.events({
     'click .save'(e, t) {
 
-        t.ruta.empresasId = $(".js-example-basic-multiple").val();;
+        t.ruta.empresasId = $(".js-example-basic-multiple2").val();;
         t.ruta.nombre =  t.find("[name='nombre']").value;
-
-        //console.log(t.ruta);
 
 
         if (t.ruta.nombre !== "") {
