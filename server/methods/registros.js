@@ -2,6 +2,35 @@ import {Meteor} from 'meteor/meteor';
 import {Excel} from 'meteor/netanelgilad:excel'
 import ROLES from '../../Both/Roles'
 
+function process(date){
+    if (date === null || date === undefined ) {
+      return '';
+    } else {
+      var parts = date.split("/");
+      return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+
+}
+
+function formarJSON(date) {
+  if (date === null ||  date === undefined) {
+    
+    return ''
+  } else {
+    var parts = date.split("/");
+    if (parts[2] !== undefined) {
+      if (parts[2].length === 2) {
+
+        parts[2] = '20' + parts[2];
+      }
+    }
+
+    return parts[1] + '/' + parts[0] + '/' + parts[2]
+  }
+
+
+}
+
 Meteor.methods({
   guardarPlaneamientoDeHoy(datos) {
         if (this.userId) {
@@ -441,7 +470,26 @@ Meteor.methods({
                     let p = _.sample(arregloRutas);
                     let posicion = p
 
+                    let tc = []
+
+
+
+
                     if (obj['1'] !== undefined) {
+                        tc.push({
+                          numero: obj['32'],
+                          entidad: obj['33'],
+                          emision: formarJSON(obj['34']),
+                          caducidad:  formarJSON(obj['35'])
+                        })
+
+                        tc.push({
+                            numero: obj['16'],
+                            entidad: obj['17'],
+                            emision:formarJSON( obj['18'] ),
+                            caducidad: formarJSON( obj['19'] )
+                        })
+
                         Vehiculos.insert({
                             empresaId: id,
                             activo: true,
@@ -468,36 +516,25 @@ Meteor.methods({
                                 asientos: parseInt(obj['13'])
                             },
                             codigoDeRuta: Rutas.findOne({_id: rutaId}).nombre,
-                            fechaDePermanenciaEnLaEmpresa: obj['15'],
-                            TC: {
-                                numero: obj['16'],
-                                entidad: obj['17'],
-                                emision: obj['18'],
-                                caducidad: obj['19']
-                            },
+                            fechaDePermanenciaEnLaEmpresa: formarJSON( obj['15'] ),
+                            TC: tc,
                             SOAT: {
                                 numero: obj['20'],
                                 compnia: obj['21'],
-                                inicio: obj['22'],
-                                fin: obj['23']
+                                inicio: formarJSON( obj['22'] ),
+                                fin: formarJSON( obj['23'] )
                             },
                             CITV: {
                                 numero: obj['24'],
                                 compania: obj['25'],
-                                inicio: obj['26'],
-                                fin: obj['27']
+                                inicio: formarJSON( obj['26'] ),
+                                fin: formarJSON( obj['27'] )
                             },
                             RC: {
                                 numero: obj['28'],
                                 compania: obj['29'],
-                                inicio: obj['30'],
-                                fin: obj['31']
-                            },
-                            TCH: {
-                                numero: obj['32'],
-                                entidad: obj['33'],
-                                emision: obj['34'],
-                                caducidad: obj['35']
+                                inicio: formarJSON(obj['30']),
+                                fin: formarJSON(obj['31'])
                             }
                         });
                     }
@@ -536,7 +573,7 @@ Meteor.methods({
                                 nombre: conductor['3'],
                                 apellido: conductor['2'],
                                 dni: conductor['4'],
-                                caducidad: conductor['5'],
+                                caducidad: formarJSON(conductor['5']),
                                 domicilio: conductor['6'],
                                 distrito: conductor['7'],
                                 telefono: conductor['8']
@@ -544,19 +581,19 @@ Meteor.methods({
                             licencia: {
                                 codigo: conductor['9'],
                                 categoria: conductor['10'],
-                                expedicion: conductor['11'],
-                                revalidacion: conductor['12']
+                                expedicion: formarJSON( conductor['11'] ),
+                                revalidacion: formarJSON(conductor['12'])
                             },
                             CEV: {
                                 codigo: conductor['13'],
                                 entidad: conductor['14'],
-                                emision: conductor['15'],
-                                caducidad: conductor['16']
+                                emision: formarJSON(conductor['15']),
+                                caducidad: formarJSON(conductor['16'])
                             },
                             credencial: {
                                 numero: conductor['17'],
-                                emision: conductor['18'],
-                                caducidad: conductor['19']
+                                emision: formarJSON(conductor['18']),
+                                caducidad: formarJSON(conductor['19'])
                             },
                             chc: conductor['20'],
                             fotocheck: conductor['21']
@@ -599,13 +636,13 @@ Meteor.methods({
                             },
                             CEV: {
                                 codigo: cobrador['8'],
-                                emision: cobrador['9'],
-                                caducidad: cobrador['10']
+                                emision: formarJSON(cobrador['9']),
+                                caducidad: formarJSON(cobrador['10'])
                             },
                             credencial: {
                                 numero: cobrador['11'],
-                                emision: cobrador['12'],
-                                caducidad: cobrador['13']
+                                emision: formarJSON(cobrador['12']),
+                                caducidad: formarJSON(cobrador['13'])
                             },
                             chc: cobrador['14'],
                             fotocheck: cobrador['15']
@@ -921,11 +958,11 @@ Meteor.methods({
 
         if (this.userId) {
 
-
+            console.log(datos.empresaId);
             let rutaId = Rutas.insert(datos);
 
             if (rutaId) {
-              
+
                     Empresas.update({_id: datos.empresasId}, {
                         $push: {
                             rutas: rutaId

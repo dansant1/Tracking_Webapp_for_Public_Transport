@@ -103,7 +103,7 @@ Template.ListaDeVehiculosPorEmpresas.onCreated(() => {
             }, 300);
         });
         template.subscribe('RutasEmpresa', empresaId, ()=> {
-            console.log()
+
         });
     });
 });
@@ -115,18 +115,13 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
     query() {
         return Template.instance().searchQuery.get();
     },
-    rutas() {
-        let empresaId = FlowRouter.getParam('empresaId');
-        return Rutas.find({empresaId: empresaId});
-    },
     vehiculo: function () {
-        let vehiculos = Vehiculos.find({});
 
-        if (vehiculos) {
+
             let empresaId = FlowRouter.getParam('empresaId');
-            //return Vehiculos.find({empresaId: empresaId rutaId: Session.get('filtroRuta')});
             return Vehiculos.find({empresaId: empresaId});
-        }
+
+
     },
     fotos() {
         return FotosDeVehiculos.find();
