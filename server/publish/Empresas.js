@@ -205,8 +205,6 @@ Meteor.publish( 'VehiculosPorEmpresa2', function(empresaId, search ) {
     return Vehiculos.find(query, projection );
 });
 
-Meteor.publish( 'VehiculosPorEmpresaId', function(empresaId) {
-    return Vehiculos.find({ 'empresaId': empresaId });
 Meteor.publish('VehiculosPorEmpresaId', function (empresaId) {
     return Vehiculos.find({'empresaId': empresaId});
 });
