@@ -288,6 +288,11 @@ Template.RutasPuntosDeControl.onRendered( () => {
                         function addLine() {
                             mapa.idaPath.setMap(map.instance);
                             mapa.vueltaPath.setMap(map.instance);
+
+                            // puntos de control
+                            mapa.idaPath.addListener( 'click', (e) =>{
+                              console.log( e );
+                            });
                         }
 
                         function removeLine () {
@@ -396,6 +401,9 @@ Template.RutasPuntosDeControl.onRendered( () => {
 
         map.instance.setZoom(14);
 
+        // funcionalidad para puntos de control
+
+        // google.maps.event.addListener(routePath, 'click', function(h) {
 
     });
 

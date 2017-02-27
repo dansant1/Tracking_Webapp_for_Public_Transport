@@ -569,11 +569,16 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                   updateRuta( location, 'remove' );
                 }
 
+                let icon = {
+                    url: '/pin.png', // url
+                    scaledSize: new google.maps.Size(40, 40), // scaled size
+                };
 
                 function placeMarker(location) {
                     let marker = new google.maps.Marker({
                         position: location,
-                        map: map.instance
+                        map: map.instance,
+                        icon: icon,
                     });
 
                     updateRuta( location, 'add' );
@@ -602,8 +607,31 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                         lat: positionLat,
                         lng: positionLng
                     });
+                    deleteMakerOnDobleClick( marker );
                 });
 
+                //delete paradero marker on double click
+                function deleteMakerOnDobleClick( marker ){
+
+                  google.maps.event.addListener( marker, 'dblclick', function () {
+                      let latLng = {
+                        lat: marker.position.lat(),
+                        lng: marker.position.lng()
+                      };
+                      for( let i=0; i<template.ruta.paraderos.length; i++){
+
+                        if ( _.isEqual( template.ruta.paraderos[i], latLng
+                          ) ){
+                            template.ruta.paraderos.splice( i, 1);
+                            break;
+                        }
+
+                      }
+                      // map.instance.removeOverlay( marker );
+                      marker.setMap( null );
+                  });
+
+                }
 
 
                 drawingManager.setMap(map.instance);
@@ -1252,6 +1280,7 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
                                         map: map,
                                         id: ruta._id
                             });
+                            // marker.addListener( 'dblclick' , ())
                         }
 
                         // Removes the markers from the map, but keeps them in the array.
