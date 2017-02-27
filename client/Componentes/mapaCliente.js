@@ -257,11 +257,12 @@ Template.mapaCliente.helpers({
             return false
         }
     },
-    empresas() {
-        console.log(Empresas.find({_id: Meteor.user().profile.empresaId}).fetch()[0].rutas);
-        return Empresas.find({_id: Meteor.user().profile.empresaId}).fetch()[0].rutas;
+    empresa() {
+        return Empresas.findOne({_id: Meteor.user().profile.empresaId});
     },
     ruta(id) {
-        return Rutas.findOne({_id: id}).nombre;
+        let ruta = Rutas.findOne({_id: id}) || { nombre: "" };
+        console.log( ruta );
+        return ruta.nombre;
     }
   });

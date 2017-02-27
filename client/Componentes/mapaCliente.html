@@ -4,7 +4,7 @@
 			<div class="col-md-11">
 				<select id="ruta" class="form-control" style="position: absolute; top: 7px; z-index: 1001; left: 12%; width: 180px">
 						<option value="1">--Filtrar por Ruta--</option>
-						{{#each empresas}}
+						{{#each empresa.rutas}}
 
 						<option value="{{this}}">{{ruta this}}</option>
 
@@ -20,7 +20,7 @@
 				</select>
 				<button type="button" class="btn btn-primary" style="position: absolute; top: 7px; z-index: 1001; left: 51%; "> <i class="fa fa-eye" aria-hidden="true"></i> Ver Paraderos</button>
 				<button type="button" class="btn btn-success" style="position: absolute; top: 7px; z-index: 1001; left: 65.5%; "> <i class="fa fa-eye" aria-hidden="true"></i> Ver Puntos de Control</button>
-				<button type="button" class="btn btn-warning trafico" style="position: absolute; top: 7px; z-index: 1001; left: 85%; "> <i class="fa fa-train" aria-hidden="true"></i> Modo Trafico</button>			
+				<button type="button" class="btn btn-warning trafico" style="position: absolute; top: 7px; z-index: 1001; left: 85%; "> <i class="fa fa-train" aria-hidden="true"></i> Modo Trafico</button>
 			</div>
 
 		<div class="map-container" style="height: 91.4vh">

@@ -427,7 +427,7 @@ Meteor.methods({
     agregarVehiculo(datos) {
         if (this.userId) {
             datos.activo = true;
-            let arregloRutas = Rutas.findOne({_id: rutaId}).ida;
+            let arregloRutas = Rutas.findOne({_id: datos.rutaId}).ida;
             let p = _.sample(arregloRutas);
             let posicion = p
             datos.posicion = posicion;
