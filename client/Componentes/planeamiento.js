@@ -74,7 +74,8 @@ Template.AgregarPlaneamiento.helpers({
         return Rutas.find({});
     },
     ruta(id) {
-        return Rutas.findOne({_id: id}).nombre;
+        let ruta = Rutas.findOne({_id: id}) || { nombre: "" };
+        return ruta.nombre;
     },
     horas(){
       return Template.instance().horas.get();
@@ -139,6 +140,7 @@ Template.AgregarPlaneamiento.events({
       }
 
       Template.instance().horas.set( horas );
+      // Template.instance().frecuencias.set( frecuencias )
 
     },
     'click .plus'(e, t) {
