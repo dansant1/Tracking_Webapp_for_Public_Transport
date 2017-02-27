@@ -51,7 +51,7 @@ Template.AgregarPlaneamiento.onCreated( () => {
       'd': [true]
     });
 
-    template.frecuenciaMayor = new ReactiveVar(1);
+    template.columnaMayor = new ReactiveVar(1);
 
 
     template.autorun( () => {
@@ -59,8 +59,13 @@ Template.AgregarPlaneamiento.onCreated( () => {
         template.subscribe( 'Empresas');
         template.subscribe('Rutas');
 
+        let horasPorColumna = [];
+        _.values( template.horas.get() ).forEach( ( horasxdia ) =>{
+          horasPorColumna.push( horasxdia.length );
+        });
+
         //obtenemos la frecuencia mayor
-        template.frecuenciaMayor.set( Math.max.apply( null, _.values( template.frecuencias.get() ) ) );
+        template.columnaMayor.set( Math.max.apply( null,  horasPorColumna ) );
     });
 });
 
@@ -82,7 +87,7 @@ Template.AgregarPlaneamiento.helpers({
       return Template.instance().frecuencias.get();
     },
     numerodefilas(){
-      return _.range( Template.instance().frecuenciaMayor.get() );
+      return _.range( Template.instance().columnaMayor.get() );
     }
 
 });
@@ -151,19 +156,8 @@ Template.AgregarPlaneamiento.events({
     },
 
     'click .delete'(e,t){
+      // let target
 
-      // let newFrecuencias = Template.instance().frecuencias.get();
-      // let frecuenciaMayor = Template.instance().frecuenciaMayor.get();
-      //
-      // Object.keys(newFrecuencias).forEach(function(key) {
-      //
-      //   if ( newFrecuencias[key] > 1 && newFrecuencias[key] === frecuenciaMayor ){
-      //     --newFrecuencias[key];
-      //   }
-      //
-      // });
-
-      // Template.instance().frecuencias.set( newFrecuencias );
     },
     'click .guardar'(e, t) {
 
