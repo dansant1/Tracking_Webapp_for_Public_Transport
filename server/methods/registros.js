@@ -14,7 +14,7 @@ function process(date){
 
 function formarJSON(date) {
   if (date === null ||  date === undefined) {
-    
+
     return ''
   } else {
     var parts = date.split("/");
@@ -338,7 +338,8 @@ Meteor.methods({
             domicilio: datos.domicilio,
             representante: datos.representante,
             telefono: datos.telefono,
-            email: datos.email
+            email: datos.email,
+            plan: parseInt(datos.plan)
         });
 
     },

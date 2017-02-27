@@ -1,0 +1,51 @@
+<template name="RecaudacionTPI">
+  <div class="content-wrapper">
+      <div class="container-fluid">
+
+
+          <div class="row">
+              <div class="col-md-12 col-sm-18 col-xs-18">
+                  <div class="box">
+                      <h3>Empresas</h3>
+                      <br>
+                      <div class="page-header clearfix" style="margin-top: 0px;">
+                          <h4 class="pull-left">
+                              <input type="text" style="position: relative; top: 5px; width: 275px" name="search"
+                                     class="form-control" width="250px" placeholder="Buscar por Nombre o RUC">
+
+                          </h4>
+                      </div>
+
+                      <ul class="list-group">
+                          {{#if searching}}
+                              <h3>Cargando...</h3>
+                          {{else}}
+                              {{#each empresas}}
+                                  <li class="list-group-item clearfix">
+                                      <span class="pull-left">{{this.ruc}} - {{nombre}}</span>
+                                      <span class="pull-right" style="width: 255px">
+
+                                        <a href="/recaudaciontpi/{{this._id}}" class="btn btn-primary">
+                                          <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </a>
+                                    </span>
+                                  </li>
+
+                              {{else}}
+                                  <h3>Lo sentimos no tenemos resultados para {{query}}</h3>
+                              {{/each}}
+
+                          {{/if}}
+
+                      </ul>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</template>
+
+<template name="RecaudacionTPIvehiculos">
+
+</template>

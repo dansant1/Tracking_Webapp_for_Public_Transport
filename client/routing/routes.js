@@ -21,6 +21,20 @@ FlowRouter.route('/mantenimiento', {
     }
 });
 
+FlowRouter.route('/gestiontpi', {
+    name: 'RecaudacionTPI',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'RecaudacionTPI'});
+    }
+});
+
+FlowRouter.route('/recaudaciontpi/:empresaId', {
+    name: 'RecaudacionTPIpersonalizado',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'RecaudacionTPIvehiculos'});
+    }
+});
+
 FlowRouter.route('/borradores', {
     name: 'Borradores',
     action() {

@@ -701,7 +701,8 @@ Template.agregarEmpresa.events({
             domicilio: t.find("[name='domicilio']").value,
             representante: t.find("[name='representante']").value,
             telefono: t.find("[name='telefono']").value,
-            email: t.find("[name='email']").value
+            email: t.find("[name='email']").value,
+            plan: $('#plan').val()
         };
 
         if (datos.nombre !== "" && datos.ruc !== "" && datos.domicilio !== "" && datos.representante !== "" && datos.telefono !== "" && re.test(t.find("[name='email']").value)) {
