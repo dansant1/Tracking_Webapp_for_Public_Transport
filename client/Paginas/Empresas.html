@@ -363,7 +363,7 @@
                                                style="display: none;" name="fotosubir"
                                                accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printDriver">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
 
@@ -407,7 +407,7 @@
                                         <input type="file" class="fotoconductor2" name="fotosubir" style="display: none;"
                                                accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printDriver">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
 
@@ -447,7 +447,7 @@
                                         <input type="file" name="fotosubir" class="fotoconductor3" style="display: none;"
                                                accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printDriver">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
 
@@ -489,7 +489,7 @@
                                                name="fotosubir"
                                                accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printDriver">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
 
@@ -636,7 +636,7 @@
                                                accept="image/*">
 
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printCollector">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
 
@@ -679,7 +679,7 @@
                                                name="fotosubir"
                                                accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printCollector">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
 
@@ -720,7 +720,7 @@
                                                name="fotosubir"
                                                accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printCollector">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
 
@@ -747,6 +747,14 @@
 
         <div class="pull-left">
 
+            <p style="font-size: 14px; margin-bottom: 5px">Filtrar por ruta</p>
+            <select class="form-control" id="routeVehicle">
+                <option value="">Seleccione ruta</option>
+                {{#each ruta}}
+                    <option value="{{this.nombre}}">{{this.nombre}}</option>
+                {{/each}}
+            </select>
+            <br>
             <input type="text" name="search" class="form-control" style="width: 350px;"
                    placeholder="Buscar vehículo por placa, padron o ruta">
         </div>
@@ -808,7 +816,7 @@
                                                class="fotovehiculo1"
                                                style="display: none;" accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printVehicle">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
 
@@ -879,7 +887,7 @@
                                         <input type="file" name="fotosubir" class="fotovehiculo2" style="display: none;"
                                                accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printVehicle">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
 
@@ -922,7 +930,7 @@
                                         <input type="file" class="fotovehiculo3" name="fotosubir" style="display: none;"
                                                accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printVehicle">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
                                     </button>
@@ -971,7 +979,7 @@
                                         <input type="file" class="fotovehiculo4" name="fotosubir" style="display: none;"
                                                accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printVehicle">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
                                     </button>
@@ -1010,7 +1018,7 @@
                                         <input type="file" class="fotovehiculo5" name="fotosubir" style="display: none;"
                                                accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printVehicle">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
                                     </button>
@@ -1049,7 +1057,7 @@
                                         <input type="file" class="fotovehiculo6" name="fotosubir" style="display: none;"
                                                accept="image/*">
                                     </label>
-                                    <button class="btn btn-primary imprimir">
+                                    <button class="btn btn-primary imprimir printVehicle">
                                         <i class="fa fa-print"
                                            aria-hidden="true"></i>
                                     </button>
