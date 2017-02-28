@@ -1,3 +1,5 @@
+import { Random } from 'meteor/random';
+
 Template.AdministradorRutas.onCreated( () => {
     let template = Template.instance();
 
@@ -105,46 +107,172 @@ Template.AdministradorRutas.onCreated(function() {
 });
 
 Template.AdministradorAgregarPlaneamiento.onCreated( () => {
-    let template = Template.instance();
+    let self = Template.instance();
 
-    template.autorun( () => {
-        template.subscribe('Rutas');
+    self.planeamiento = new ReactiveVar([
+      { _id: Random.id(), dia: "", hinicio: "", hfinal: "", frecuencia: 20, horas: [] }
+    ]);
+
+    self.empresaId = new ReactiveVar( false );
+    self.rutaId = new ReactiveVar( false );
+
+    self.subscribe( 'Empresas' );
+
+    self.autorun( () => {
+      self.subscribe( 'RutasPorEmpresa', self.empresaId.get() );
     });
+
 });
 
 Template.AdministradorAgregarPlaneamiento.helpers({
+    planeamiento(){
+      return Template.instance().planeamiento.get();
+    },
+	  empresas() {
+        return Empresas.find({});
+    },
     rutas() {
-
+        let rutaId = Template.instance().rutaId.get();
+        if ( rutaId ){
+          return Rutas.find( { _id: rutaId });
+        }
         return Rutas.find({});
+    },
+    ruta(id) {
+        let ruta = Rutas.findOne({_id: id}) || { nombre: "" };
+        return ruta.nombre;
+    },
+    frecuencias(){
+      return Template.instance().frecuencias.get();
     }
+
 });
 
 Template.AdministradorAgregarPlaneamiento.onRendered( () => {
 
-    $("#horarios tr td").find("#hora").each( function () {
-
-        $(this).datetimepicker({
-            format: 'LT'
-        });
-    });
 
 });
 
 Template.AdministradorAgregarPlaneamiento.events({
-    'click .plus'(e, t) {
-        $('#horarios').append("<tr id='h'><td><div class='input-group date' id='hora'><input type='text' class='form-control l' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control m' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control mi' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control j' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control v' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control s' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td><div class='input-group date' id='hora'><input type='text' class='form-control d' /><span class='input-group-addon'><span class='glyphicon glyphicon-time'></span></span></div></td><td style='text-align: center;''></td></tr>");
+    'change #planempresa'(e,t){
+      let target = e.currentTarget;
+      let empresaId = target.options[ target.selectedIndex ].value;
 
-        $("#horarios tr td").find("#hora").each( function () {
-
-            $(this).datetimepicker({
-                format: 'LT'
-            });
-        });
+      Template.instance().empresaId.set( empresaId );
     },
+    'change #rutasPorEmpresa'(e,t){
+      let target = e.currentTarget;
+      let rutaId = target.options[ target.selectedIndex ].value;
+
+      Template.instance().rutaId.set( rutaId );
+    }
+});
+
+function addMinutes(time/*"hh:mm"*/, minsToAdd/*"N"*/) {
+  function z(n){
+    return (n<10? '0':'') + n;
+  }
+  let bits = time.split(':');
+  let mins = bits[0]*60 + (+bits[1]) + (+minsToAdd);
+
+  return z(mins%(24*60)/60 | 0) + ':' + z(mins%60);
+}
+
+function converToMinutes(time/*"hh:mm"*/){
+  return  parseInt( time.split(":")[0] ) * 60 + parseInt( time.split(":")[1] );
+}
+
+Template.AdministradorAgregarPlaneamiento.events({
+    'keyup input.frecuencia'(e,t) {
+      let target = $(e.currentTarget);
+      let planId = target.closest(".planeamiento").attr("id");
+
+    },
+    'click button.update'(e,t){
+      let target = $(e.currentTarget);
+      let planeamiento = Template.instance().planeamiento.get();
+
+      let updatedPlaneamiento = {
+        _id: target.closest(".planeamiento").attr("id"),
+        dia: target.closest(".planeamiento").find(".dia").val(),
+        hinicio: target.closest(".planeamiento").find(".hinicio").val(),
+        hfinal: target.closest(".planeamiento").find(".hfinal").val(),
+        frecuencia: parseInt( target.closest(".planeamiento").find(".frecuencia").val() ),
+      };
+
+      //Generar Horas
+      let horas = [];
+      let minutosAlInicio = converToMinutes( updatedPlaneamiento.hinicio );
+      let minutosAlFinal = converToMinutes( updatedPlaneamiento.hfinal );
+      let minutos = minutosAlInicio;
+      let hora = updatedPlaneamiento.hinicio;
+
+      // exceptions
+      if ( !updatedPlaneamiento.hinicio ){
+        Bert.alert( 'Debe ingresar la hora inicial', 'danger', 'growl-top-right' );
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      if ( !updatedPlaneamiento.hfinal ){
+        Bert.alert( 'Debe ingresar la hora final', 'danger', 'growl-top-right' );
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      if ( minutosAlInicio > minutosAlFinal ){
+        Bert.alert( 'La hora inicial debe ser mayor a la hora final', 'danger', 'growl-top-right' );
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      if ( !updatedPlaneamiento.frecuencia ){
+        Bert.alert( 'La frecuencia debe ser mayor a cero', 'danger', 'growl-top-right' );
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      //Generar Horas
+      while ( minutos + updatedPlaneamiento.frecuencia < minutosAlFinal ) {
+        hora = addMinutes( hora, updatedPlaneamiento.frecuencia );
+        horas.push( hora );
+        minutos += updatedPlaneamiento.frecuencia;
+      }
+
+      updatedPlaneamiento["horas"] = horas;
+
+      //Actualizar Planeamiento
+      for ( let i=0; i<planeamiento.length; i++){
+        if ( planeamiento[i]._id === updatedPlaneamiento._id){
+          planeamiento[i] = updatedPlaneamiento;
+          break;
+        }
+      };
+
+      Template.instance().planeamiento.set( planeamiento );
+
+    },
+
+    'click button.agregar'(e, t){
+      let planeamiento = Template.instance().planeamiento.get();
+      planeamiento.push({
+        dia: "lunes",
+        hinicio: "",
+        hfinal: "",
+        frecuencia: "",
+        horas: []
+      });
+      Template.instance().planeamiento.set( planeamiento );
+    },
+
     'click .guardar'(e, t) {
 
             let datos = {
-                rutaId: $('#rutasPorEmpresa').val()
+                rutaId: Template.instance().rutaId.get()
             }
 
             datos.horas = {
@@ -157,64 +285,36 @@ Template.AdministradorAgregarPlaneamiento.events({
                 domingo: []
             };
 
-            $('td #hora input.l').each( function () {
+            // transformando datos a estructura actual de planeamiento
 
-                datos.horas.lunes.push({
-                    lunes: $(this).val()
-                });
+            let planeamiento = Template.instance().planeamiento.get();
+            let horas = [];
+            let obj = {};
+
+            planeamiento.forEach( (plan) => {
+              for( let i=0; i<plan.horas.length; i++){
+                obj[plan.dia] = plan["horas"][i];
+                horas.push( obj );
+              }
+              _.extend( datos.horas[ plan.dia ], horas );
             });
 
 
-            $('td #hora input.m').each( function () {
-                datos.horas.martes.push({
-                    martes: $(this).val()
-                });
-            });
+        let empresaId = Template.instance().empresaId.get();
+        let rutaId = Template.instance().rutaId.get();
+
+        if ( !empresaId ){
+          Bert.alert( 'Seleccione una empresa', 'warning', 'growl-top-right' );
+          return ;
+        }
+
+        if ( !rutaId ){
+          Bert.alert( 'Seleccione una ruta', 'warning', 'growl-top-right' );
+          return ;
+        }
 
 
-            $('td #hora input.mi').each( function () {
-
-                datos.horas.miercoles.push({
-                    miercoles: $(this).val()
-                });
-            });
-
-            $('td #hora input.j').each( function () {
-
-                datos.horas.jueves.push({
-                    jueves: $(this).val()
-                });
-            });
-
-
-            $('td #hora input.v').each( function () {
-
-                datos.horas.viernes.push({
-                    viernes: $(this).val()
-                });
-            });
-
-
-
-            $('td #hora input.s').each( function () {
-
-                datos.horas.sabado.push({
-                    sabado: $(this).val()
-                });
-            });
-
-
-            $('td #hora input.d').each( function () {
-
-                datos.horas.domingo.push({
-                    domingo: $(this).val()
-                });
-            });
-
-        let empresaId = $('#planempresa').val();
-
-
-        if (empresaId) {
+        if (datos.rutaId !== '1') {
 
             let archivo = document.getElementById('excelplan');
 
@@ -257,7 +357,7 @@ Template.AdministradorAgregarPlaneamiento.events({
                                     if (result) {
                                         Bert.alert(result, 'success');
                                     } else {
-                                        FlowRouter.go('/admin/planeamiento');
+                                    	FlowRouter.go('/planeamiento');
                                         Bert.alert('Planeamiento agregado', 'success');
                                     }
 
@@ -271,8 +371,10 @@ Template.AdministradorAgregarPlaneamiento.events({
                 }
 
             } else {
-                Bert.alert( 'Complete los datos.', 'danger', 'growl-top-right' );
+                Bert.alert( 'Complete los datos.', 'warning', 'growl-top-right' );
             }
+        } else {
+        	 Bert.alert( 'Seleccione una ruta', 'warning', 'growl-top-right' );
         }
     }
 });

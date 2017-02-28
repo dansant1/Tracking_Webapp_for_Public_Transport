@@ -43,7 +43,7 @@ Template.AgregarPlaneamiento.onCreated( () => {
       { _id: Random.id(), dia: "martes", hinicio: "12:00", hfinal: "14:00", frecuencia: 20, horas: ["12:05", "12:10", "12:10", "12:30", "12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30",] }
     ]);
 
-    self.empresaId = new ReactiveVar( Meteor.user().profile.empresaId )
+    self.empresaId = new ReactiveVar( Meteor.user().profile.empresaId );
 
     self.subscribe( 'Empresas' );
     self.subscribe( 'Rutas' );
@@ -68,9 +68,6 @@ Template.AgregarPlaneamiento.helpers({
     ruta(id) {
         let ruta = Rutas.findOne({_id: id}) || { nombre: "" };
         return ruta.nombre;
-    },
-    horas(){
-      return Template.instance().horas.get();
     },
     frecuencias(){
       return Template.instance().frecuencias.get();
