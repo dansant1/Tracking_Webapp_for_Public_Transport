@@ -97,12 +97,16 @@ Template.ListaDeVehiculosPorEmpresas.onCreated(() => {
 
     template.autorun(() => {
         let empresaId = FlowRouter.getParam('empresaId');
-        template.subscribe('VehiculosPorEmpresa', empresaId, template.searchQuery.get(), () => {
+        template.subscribe('VehiculosPorEmpresa2', empresaId, template.searchQuery.get(), () => {
             setTimeout(() => {
                 template.searching.set(false);
             }, 300);
         });
-        template.subscribe('rutas');
+        template.subscribe('rutasPorEmpresa', empresaId, () => {
+            setTimeout(() => {
+                template.searching.set(false);
+            }, 300);
+        });
     });
 });
 
@@ -113,8 +117,9 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
     query() {
         return Template.instance().searchQuery.get();
     },
-    rutas() {
-        return Rutas.find();
+    ruta() {
+        let empresaId = FlowRouter.getParam('empresaId');
+        return Rutas.find({empresasId: empresaId});
     },
     vehiculo: function () {
         let empresaId = FlowRouter.getParam('empresaId');
@@ -133,6 +138,28 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
 });
 
 Template.ListaDeVehiculosPorEmpresas.events({
+    'click .printVehicle'(event, template) {
+        var windowUrl = 'MyPage.aspx';
+        var uniqueName = new Date();
+        var windowName = "MyPage" + uniqueName.getTime();
+
+        var printWindow = window.open(windowUrl, windowName, 'location=1,status=1,scrollbars=1,width=800,height=600');
+
+        printWindow.document.write("<div style='width:100%;text-align: center;'>");
+        printWindow.document.write("<img id='img' style='max-width: 100%' src='" + $(event.currentTarget).parent().find('a img')[0].src + "'/>");
+        printWindow.document.write("</div>");
+
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+        return false;
+    },
+    'change #routeVehicle' (event, template) {
+        let value = event.currentTarget.value;
+        template.searchQuery.set(value);
+        template.searching.set(true);
+    },
     'keyup [name="search"]' (event, template) {
 
         let value = event.target.value.trim();
@@ -191,7 +218,6 @@ Template.ListaDeVehiculosPorEmpresas.events({
     },
     'change .vehiculo-activo'(e, t) {
         if ($("#sw" + this._id).is(':checked')) {
-            console.log($("#sw" + this._id).is(':checked'));
             Meteor.call('estadoVehiculo', this._id, false, (err) => {
                 if (err) {
                     Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
@@ -249,6 +275,23 @@ Template.ListaDeConductoresPorEmpresa.helpers({
 });
 
 Template.ListaDeConductoresPorEmpresa.events({
+    'click .printDriver'(event, template) {
+        var windowUrl = 'MyPage.aspx';
+        var uniqueName = new Date();
+        var windowName = "MyPage" + uniqueName.getTime();
+
+        var printWindow = window.open(windowUrl, windowName, 'location=1,status=1,scrollbars=1,width=800,height=600');
+
+        printWindow.document.write("<div style='width:100%;text-align: center;'>");
+        printWindow.document.write("<img id='img' style='max-width: 100%' src='" + $(event.currentTarget).parent().find('a img')[0].src + "'/>");
+        printWindow.document.write("</div>");
+
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+        return false;
+    },
     'keyup [name="search"]' (event, template) {
 
         let value = event.target.value.trim();
@@ -318,12 +361,21 @@ Template.ListaDeCobradoresPorEmpresa.onCreated(() => {
                 template.searching.set(false);
             }, 300);
         });
+        template.subscribe('rutasPorEmpresa', empresaId, () => {
+            setTimeout(() => {
+                template.searching.set(false);
+            }, 300);
+        });
     });
 });
 
 Template.ListaDeCobradoresPorEmpresa.helpers({
     searching() {
         return Template.instance().searching.get();
+    },
+    ruta() {
+        let empresaId = FlowRouter.getParam('empresaId');
+        return Rutas.find({empresasId: empresaId});
     },
     query() {
         return Template.instance().searchQuery.get();
@@ -340,6 +392,28 @@ Template.ListaDeCobradoresPorEmpresa.helpers({
 });
 
 Template.ListaDeCobradoresPorEmpresa.events({
+    'click .printCollector'(event, template) {
+        var windowUrl = 'MyPage.aspx';
+        var uniqueName = new Date();
+        var windowName = "MyPage" + uniqueName.getTime();
+
+        var printWindow = window.open(windowUrl, windowName, 'location=1,status=1,scrollbars=1,width=800,height=600');
+
+        printWindow.document.write("<div style='width:100%;text-align: center;'>");
+        printWindow.document.write("<img id='img' style='max-width: 100%' src='" + $(event.currentTarget).parent().find('a img')[0].src + "'/>");
+        printWindow.document.write("</div>");
+
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+        return false;
+    },
+    'change #routeCollector' (event, template) {
+        let value = event.currentTarget.value;
+        template.searchQuery.set(value);
+        template.searching.set(true);
+    },
     'keyup [name="search"]' (event, template) {
 
         let value = event.target.value.trim();

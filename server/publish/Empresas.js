@@ -71,12 +71,21 @@ Meteor.publish('Conductores', function () {
 });
 
 Meteor.publish('rutas', function () {
-  if (this.userId) {
-    return Rutas.find();
-  } else {
-    this.stop();
-    return;
-  }
+	if (this.userId) {
+		return Rutas.find();
+	} else {
+		this.stop();
+		return;
+	}
+});
+
+Meteor.publish('rutasPorEmpresa', function (empresaId) {
+	if (this.userId) {
+		return Rutas.find({empresasId: empresaId});
+	} else {
+		this.stop();
+		return;
+	}
 });
 
 Meteor.publish('Cobradores', function () {
@@ -162,24 +171,24 @@ Meteor.publish('DetalleDeCobradores', function (vehiculoId) {
 });
 
 Meteor.publish('VehiculosPorEmpresa', function (empresaId, search) {
-    let query = {},
-        projection = { limit: 1, sort: {placa: 1}};
+	let query = {},
+		projection = { limit: 1, sort: {placa: 1}};
 
-    if (search) {
-        let regex = new RegExp(search, 'i');
+	if (search) {
+		let regex = new RegExp(search, 'i');
 
-        query = {
-            $or: [
-                {placa: regex},
-                {padron: regex},
-                {codigoDeRuta: regex}
-            ]
-        };
+		query = {
+			$or: [
+				{placa: regex},
+				{padron: regex},
+				{codigoDeRuta: regex}
+			]
+		};
 
-        projection.limit = 200;
-    }
+		projection.limit = 200;
+	}
 
-    return Vehiculos.find(query, projection);
+	return Vehiculos.find(query, projection);
 });
 
 Meteor.publish( 'VehiculosPorEmpresa2', function(empresaId, search ) {
@@ -193,7 +202,7 @@ Meteor.publish( 'VehiculosPorEmpresa2', function(empresaId, search ) {
             $or: [
                 { placa: regex },
                 { padron: regex},
-								{ codigoDeRuta: regex}
+				{ codigoDeRuta: regex}
             ]
         };
 
