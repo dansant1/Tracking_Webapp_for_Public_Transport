@@ -1,0 +1,12 @@
+.hour-section{
+  margin-bottom: 20px;
+}
+
+.hour-section input[type=text]{
+  width: 60px;
+  text-align: center;
+}
+
+.hour-section table tr td {
+  display: inline-block;
+}

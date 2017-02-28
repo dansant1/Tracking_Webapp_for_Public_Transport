@@ -222,137 +222,81 @@
 							</div>
 						</div>
 						<br>
-						<table class="table">
-							<thead>
-								  <tr>
-										<td>
-											<div class="input-group frecuencia" data-dia="l">
-									      <input type="number" min='1' step='1' class="form-control">
-												<span class="input-group-addon">
-									        <input type="checkbox">
-									      </span>
-									    </div>
-										</td>
-										<td>
-											<div class="input-group frecuencia" data-dia='m'>
-									      <input type="number" min='1' step='1' class="form-control">
-												<span class="input-group-addon">
-									        <input type="checkbox">
-									      </span>
-									    </div>
-										</td>
-										<td>
-											<div class="input-group frecuencia" data-dia='mi'>
-									      <input type="number" min='1' step='1' class="form-control">
-												<span class="input-group-addon">
-									        <input type="checkbox">
-									      </span>
-									    </div>
-										</td>
-										<td>
-											<div class="input-group frecuencia" data-dia="j">
-									      <input type="number" min='1' step='1' class="form-control">
-												<span class="input-group-addon">
-									        <input type="checkbox">
-									      </span>
-									    </div>
-										</td>
-										<td>
-											<div class="input-group frecuencia" data-dia="v">
-									      <input type="number" min='1' step='1' class="form-control">
-												<span class="input-group-addon">
-									        <input type="checkbox">
-									      </span>
-									    </div>
-										</td>
-										<td>
-											<div class="input-group frecuencia" data-dia="s">
-									      <input type="number" min='1' step='1' class="form-control">
-												<span class="input-group-addon">
-									        <input type="checkbox">
-									      </span>
-									    </div>
-										</td>
-										<td>
-											<div class="input-group frecuencia" data-dia="d">
-									      <input type="number" min='1' step='1' class="form-control">
-												<span class="input-group-addon">
-									        <input type="checkbox">
-									      </span>
-									    </div>
-										</td>
-								  </tr>
-						    	<tr>
-							        <th style="text-align: center;">Lunes</th>
-							        <th style="text-align: center;">Martes</th>
-							        <th style="text-align: center;">Miercoles</th>
-							        <th style="text-align: center;">Jueves</th>
-							        <th style="text-align: center;">Viernes</th>
-							        <th style="text-align: center;">Sabado</th>
-							        <th style="text-align: center;">Domingo</th>
-							        <th style="text-align: center;">Agregar</th>
-						    	</tr>
-    					</thead>
-					    <tbody id="horarios">
-					    	<tr id="h">
-						        <td>
-											{{#each horas.l }}
-													<input type='time' class="form-control l" value="{{this}}"/>
-													<br>
-											{{/each}}
-						        </td>
-										<td>
-											{{#each horas.m }}
-													<input type='time' class="form-control m" value="{{this}}"/>
-													<br>
-											{{/each}}
-						        </td><td>
-											{{#each horas.mi }}
-													<input type='time' class="form-control mi" value="{{this}}"/>
-													<br>
-											{{/each}}
-						        </td><td>
-											{{#each horas.j }}
-													<input type='time' class="form-control j" value="{{this}}"/>
-													<br>
-											{{/each}}
-						        </td><td>
-											{{#each horas.v }}
-													<input type='time' class="form-control v" value="{{this}}"/>
-													<br>
-											{{/each}}
-						        </td><td>
-											{{#each horas.s }}
-													<input type='time' class="form-control s" value="{{this}}"/>
-													<br>
-											{{/each}}
-						        </td><td>
-											{{#each horas.d }}
-													<input type='time' class="form-control d" value="{{this}}"/>
-													<br>
-											{{/each}}
-						        </td>
 
-						        <td style="text-align: center;">
-											{{#each numerodefilas }}
 
-												{{#if $eq @index 0 }}
-						        		<button class="btn btn-primary plus"><i class="fa fa-plus" aria-hidden="true"></i></button>
-												{{else}}
-												<button class="btn btn-danger delete"><i class="fa fa-minus" aria-hidden="true"></i></button>
-												{{/if}}
-												<br /><br />
+					{{#each plan in planeamiento}}
+						<div class="row planeamiento" id="{{plan._id}}" >
 
-											{{/each}}
-						        </td>
-					    	</tr>
-					    </tbody>
-						</table>
-						<div class="row">
-							<div class="col-md-2">
-								<button class="btn btn-success guardar">Guardar</button>
+
+							<table class="col-md-3">
+								<tr>
+									<td>Dia</td>
+									<td>
+										<select class="form-control dia">
+											<option value="lunes" {{$selected plan.dia 'lunes'}}>Lunes</option>
+											<option value="martes" {{$selected plan.dia 'martes'}}>Martes</option>
+											<option value="miercoles" {{$selected plan.dia 'miercoles'}}>Miercoles</option>
+											<option value="jueves" {{$selected plan.dia 'jueves'}}>Jueves</option>
+											<option value="viernes" {{$selected plan.dia 'viernes'}}>Viernes</option>
+											<option value="sabado" {{$selected plan.dia 'sabado'}}>Sabado</option>
+											<option value="domingo" {{$selected plan.dia 'domingo'}}>Domigo</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>H. Inicio</td>
+									<td><input type="time" class="form-control input-sm hinicio" value="{{plan.hinicio}}"></td>
+								</tr>
+								<tr>
+									<td>H. Fin</td>
+									<td><input type="time" class="form-control input-sm hfinal" value="{{plan.hfinal}}"></td>
+								</tr>
+								<tr>
+									<td>
+										<label for="" style="position:relative;top:-7px;">Frecuencia</label>
+									</td>
+									<td>
+										<div class="input-group">
+											<input type="number" step="1" min="1" class="form-control input-sm frecuencia" value="{{plan.frecuencia}}">
+											<span class="input-group-btn">
+								        <button class="btn btn-default btn-sm update" type="button">
+								        	<i class="fa fa-refresh" aria-hidden="true"></i>
+								        </button>
+								      </span>
+								    </div>
+									</td>
+								</tr>
+							</table>
+
+
+							<div class="col-md-9 hour-section">
+								<table>
+									<tr>
+										{{#each hora in plan.horas}}
+										<td>
+											<input type="text" class="form-control input-sm" value="{{hora}}" disabled="">
+										</td>
+										{{/each}}
+									</tr>
+								</table>
+
+
 							</div>
+
 						</div>
+						<hr />
+						{{/each}}
+
+
+					<div class="row">
+						<div class="col-md-2">
+							<button class="btn btn-primary btn-block input-lg agregar">Agregar</button>
+						</div>
+						<div class="col-md-offset-8 col-md-2">
+							<button class="btn btn-success btn-block input-lg guardar">Guardar</button>
+						</div>
+					</div>
+
 					</div>
 				</div>
 			</div>

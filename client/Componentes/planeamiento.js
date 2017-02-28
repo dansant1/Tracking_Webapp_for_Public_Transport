@@ -1,3 +1,5 @@
+import { Random } from 'meteor/random';
+
 Template.PlaneamientoInterno.onCreated( () => {
     let template = Template.instance();
 
@@ -26,52 +28,39 @@ Template.PlaneamientoInterno.helpers({
     }
 });
 
+/*
+estructura planeamiento
+[
+  { dia: "lunes", hinicio": "12:00", "hfinal": "14:00", "frecuencia": 100, "horas": [] },
+]
+*/
 
 Template.AgregarPlaneamiento.onCreated( () => {
-    let template = Template.instance();
+    let empresaId = Meteor.user().profile.empresaId;
+    let self = Template.instance();
 
-    //arreglo dinamico para guardar las horas
-    template.frecuencias = new ReactiveVar({
-      'l': 1,
-      'm': 1,
-      'mi': 1,
-      'j': 1,
-      'v': 1,
-      's': 1,
-      'd': 1
+    self.planeamiento = new ReactiveVar([
+      { _id: Random.id(), dia: "martes", hinicio: "12:00", hfinal: "14:00", frecuencia: 20, horas: ["12:05", "12:10", "12:10", "12:30", "12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30","12:05", "12:10", "12:30",] }
+    ]);
+
+    self.empresaId = new ReactiveVar( Meteor.user().profile.empresaId )
+
+    self.subscribe( 'Empresas' );
+    self.subscribe( 'Rutas' );
+
+    self.autorun( () => {
+      // let planeamiento = self.planeamiento.get();
+
     });
 
-    template.horas = new ReactiveVar({
-      'l': [true],
-      'm': [true],
-      'mi': [true],
-      'j': [true],
-      'v': [true],
-      's': [true],
-      'd': [true]
-    });
-
-    template.columnaMayor = new ReactiveVar(1);
-
-
-    template.autorun( () => {
-        let empresaId = Meteor.user().profile.empresaId;
-        template.subscribe( 'Empresas');
-        template.subscribe('Rutas');
-
-        let horasPorColumna = [];
-        _.values( template.horas.get() ).forEach( ( horasxdia ) =>{
-          horasPorColumna.push( horasxdia.length );
-        });
-
-        //obtenemos la frecuencia mayor
-        template.columnaMayor.set( Math.max.apply( null,  horasPorColumna ) );
-    });
 });
 
 Template.AgregarPlaneamiento.helpers({
+    planeamiento(){
+      return Template.instance().planeamiento.get();
+    },
 	  empresas() {
-        return Empresas.findOne({_id: Meteor.user().profile.empresaId });
+        return Empresas.findOne({ _id: Template.instance().empresaId.get() });
     },
     rutas() {
         return Rutas.find({});
@@ -85,9 +74,6 @@ Template.AgregarPlaneamiento.helpers({
     },
     frecuencias(){
       return Template.instance().frecuencias.get();
-    },
-    numerodefilas(){
-      return _.range( Template.instance().columnaMayor.get() );
     }
 
 });
@@ -111,54 +97,92 @@ function converToMinutes(time/*"hh:mm"*/){
 }
 
 Template.AgregarPlaneamiento.events({
-    'click .frecuencia input[type=checkbox]'(e,t) {
+    'keyup input.frecuencia'(e,t) {
       let target = $(e.currentTarget);
-      let dia = target.closest('.input-group').data('dia');
-      let frecuencia = parseInt( target.closest('.input-group').find('input[type=number]')[0].value );
+      let planId = target.closest(".planeamiento").attr("id");
 
-      let frecuencias = Template.instance().frecuencias.get();
-      let horas = Template.instance().horas.get();
-      frecuencias[dia] = frecuencia;
+    },
+    'click button.update'(e,t){
+      let target = $(e.currentTarget);
+      let planeamiento = Template.instance().planeamiento.get();
 
-      let horaInicial = $("tbody td input." + dia)[0].value;
+      let updatedPlaneamiento = {
+        _id: target.closest(".planeamiento").attr("id"),
+        dia: target.closest(".planeamiento").find(".dia").val(),
+        hinicio: target.closest(".planeamiento").find(".hinicio").val(),
+        hfinal: target.closest(".planeamiento").find(".hfinal").val(),
+        frecuencia: parseInt( target.closest(".planeamiento").find(".frecuencia").val() ),
+      };
 
-      if (!horaInicial){
+      //Generar Horas
+      let horas = [];
+      let minutosAlInicio = converToMinutes( updatedPlaneamiento.hinicio );
+      let minutosAlFinal = converToMinutes( updatedPlaneamiento.hfinal );
+      let minutos = minutosAlInicio;
+      let hora = updatedPlaneamiento.hinicio;
+
+      // exceptions
+      if ( !updatedPlaneamiento.hinicio ){
+        Bert.alert( 'Debe ingresar la hora inicial', 'danger', 'growl-top-right' );
         e.preventDefault();
-        Bert.alert( 'Debe colocar la hora inicial', 'danger', 'growl-top-right' );
+        e.stopPropagation();
         return;
       }
 
-      if ( target.is(':checked') && frecuencia >= 0) {
-
-        let minutes = converToMinutes( horaInicial );
-        let nuevaHora = horaInicial;
-        horas[dia] = [ horaInicial ];
-
-        while ( minutes < ( 1439 - frecuencia ) ) {
-          nuevaHora = addMinutes( nuevaHora, frecuencia );
-          horas[dia].push( nuevaHora );
-          minutes += frecuencia;
-        }
-
+      if ( !updatedPlaneamiento.hfinal ){
+        Bert.alert( 'Debe ingresar la hora final', 'danger', 'growl-top-right' );
+        e.preventDefault();
+        e.stopPropagation();
+        return;
       }
 
-      Template.instance().horas.set( horas );
-      // Template.instance().frecuencias.set( frecuencias )
+      if ( minutosAlInicio > minutosAlFinal ){
+        Bert.alert( 'La hora inicial debe ser mayor a la hora final', 'danger', 'growl-top-right' );
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      if ( !updatedPlaneamiento.frecuencia ){
+        Bert.alert( 'La frecuencia debe ser mayor a cero', 'danger', 'growl-top-right' );
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      //Generar Horas
+      while ( minutos + updatedPlaneamiento.frecuencia < minutosAlFinal ) {
+        hora = addMinutes( hora, updatedPlaneamiento.frecuencia );
+        horas.push( hora );
+        minutos += updatedPlaneamiento.frecuencia;
+      }
+
+      updatedPlaneamiento["horas"] = horas;
+
+      //Actualizar Planeamiento
+      for ( let i=0; i<planeamiento.length; i++){
+        if ( planeamiento[i]._id === updatedPlaneamiento._id){
+          planeamiento[i] = updatedPlaneamiento;
+          break;
+        }
+      };
+
+      Template.instance().planeamiento.set( planeamiento );
 
     },
-    'click .plus'(e, t) {
-      let newHoras = Template.instance().horas.get();
-      Object.keys( newHoras ).forEach( (dia) => {
-        newHoras[dia].push( true );
+
+    'click button.agregar'(e, t){
+      let planeamiento = Template.instance().planeamiento.get();
+      planeamiento.push({
+        dia: "lunes",
+        hinicio: "",
+        hfinal: "",
+        frecuencia: "",
+        horas: []
       });
-
-      Template.instance().horas.set( newHoras );
+      Template.instance().planeamiento.set( planeamiento );
     },
 
-    'click .delete'(e,t){
-      // let target
-
-    },
     'click .guardar'(e, t) {
 
             let datos = {
@@ -175,61 +199,22 @@ Template.AgregarPlaneamiento.events({
                 domingo: []
             };
 
-            $('td input.l').each( function () {
+            // transformando datos a estructura actual de planeamiento
 
-                datos.horas.lunes.push({
-                    lunes : $(this).val()
-                });
+            let planeamiento = Template.instance().planeamiento.get();
+            let horas = [];
+            let obj = {};
+
+            planeamiento.forEach( (plan) => {
+              for( let i=0; i<plan.horas.length; i++){
+                obj[plan.dia] = plan["horas"][i];
+                horas.push( obj );
+              }
+              _.extend( datos.horas[ plan.dia ], horas );
             });
 
 
-            $('td input.m').each( function () {
-                datos.horas.martes.push({
-                    martes : $(this).val()
-                });
-            });
-
-
-            $('td input.mi').each( function () {
-
-                datos.horas.miercoles.push({
-                    miercoles : $(this).val()
-                });
-            });
-
-
-            $('td input.j').each( function () {
-
-                datos.horas.jueves.push({
-                    jueves : $(this).val()
-                });
-            });
-
-
-            $('td input.v').each( function () {
-
-                datos.horas.viernes.push({
-                    viernes : $(this).val()
-                });
-            });
-
-
-            $('td input.s').each( function () {
-
-                datos.horas.sabado.push({
-                    sabado : $(this).val()
-                });
-            });
-
-
-            $('td input.d').each( function () {
-
-                datos.horas.domingo.push({
-                    domingo : $(this).val()
-                });
-            });
-
-        let empresaId = Meteor.user().profile.empresaId;
+        let empresaId = Template.instance().empresaId.get();
 
 
         if (datos.rutaId !== '1') {
@@ -292,7 +277,7 @@ Template.AgregarPlaneamiento.events({
                 Bert.alert( 'Complete los datos.', 'warning', 'growl-top-right' );
             }
         } else {
-        	 Bert.alert( 'Complete los datos.', 'warning', 'growl-top-right' );
+        	 Bert.alert( 'Seleccione una ruta', 'warning', 'growl-top-right' );
         }
     }
 });
