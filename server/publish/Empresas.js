@@ -143,6 +143,15 @@ Meteor.publish('DetalleDeEmpresaPlaneamiento', function (empresaId) {
   }
 });
 
+Meteor.publish('Planeamientos', function () {
+  if (this.userId) {
+    return Planeamiento.find();
+  } else {
+    this.stop();
+    return
+  }
+});
+
 Meteor.publish('DetalleDeVehiculos', function (vehiculoId) {
 	if (this.userId) {
 		return Vehiculos.find({_id: vehiculoId});

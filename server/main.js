@@ -6,7 +6,6 @@ Meteor.startup(() => {
   	/*let users = [
      	{nombre: "Usuario 1", email: "superadministrador@tpi.com.pe", roles: [ ROLES.administracion.gerente ]},
      	{nombre: "Usuario 4", email: "soporte@tpi.com.pe", roles: [ ROLES.administracion.soporte ]},
-       	{nombre: "Usuario 2", email: "director@tpi.com.pe", roles: [ ROLES.empresa.director ]},
        	{nombre: "Usuario 3", email: "operador@tpi.com.pe", roles: [ ROLES.empresa.operador ]}
      ]
 
@@ -27,10 +26,6 @@ Meteor.startup(() => {
 
 	   		case 'soporte@tpi.com.pe':
 	   			Roles.addUsersToRoles(id, user.roles, ROLES.grupos.administracion);
-	   		break;
-
-	   		case 'director@tpi.com.pe':
-	   			Roles.addUsersToRoles(id, user.roles, ROLES.grupos.empresa);
 	   		break;
 
 	   		case 'operador@tpi.com.pe':
