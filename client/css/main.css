@@ -271,3 +271,66 @@
     cursor: not-allowed;
     background: gray;
 }
+
+/*MAP*/
+.Schematic__map {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    padding: 25px;
+}
+
+.Schematic__map .Map__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: rgb(70, 70, 70);
+    margin: 0 0 20px 0;
+}
+
+.Schematic__map .Map__content {
+    position: relative;
+}
+
+.Map__content .Content__going, .Map__content .Content__return {
+    height: 100px;
+    padding: 0 55px;
+}
+
+.Map__content .Content__going .Content__route {
+    border-top: 2px solid blue;
+    border-left: 2px solid blue;
+    border-right: 2px solid blue;
+    height: 100%;
+}
+
+.Map__content .Content__return .Content__route {
+    border-bottom: 2px solid orange;
+    border-left: 2px solid orange;
+    border-right: 2px solid orange;
+    height: 100%;
+}
+
+.Map__content .Content__middle {
+    overflow: hidden;
+}
+
+.Map__content .Content__middle div {
+    width: 110px;
+    text-align: center;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.Map__content .Content__middle .Terminal__start {
+    float: left;
+    background-color: #3357ff;
+}
+
+.Map__content .Content__middle .Terminal__end {
+    float: right;
+    background-color: orange;
+}

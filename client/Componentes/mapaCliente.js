@@ -1,20 +1,20 @@
-Template.mapaCliente.onCreated( () => {
+Template.mapaCliente.onCreated(() => {
     let template = Template.instance();
 
-    template.query = new ReactiveVar( false );
+    template.query = new ReactiveVar(false);
     template.ruta = new ReactiveVar(false);
     template.vehiculo = new ReactiveVar(false);
     template.listadevehiculos = new ReactiveVar(false);
 
-    template.verparaderos = new ReactiveVar( false );
-    template.verpuntosdecontrol = new ReactiveVar( false );
-    template.modotrafico = new ReactiveVar( false );
+    template.verparaderos = new ReactiveVar(false);
+    template.verpuntosdecontrol = new ReactiveVar(false);
+    template.modotrafico = new ReactiveVar(false);
 
-    template.autorun( () => {
+    template.autorun(() => {
         let empresaId = Meteor.user().profile.empresaId;
 
-        template.subscribe('DetalleDeEmpresa', empresaId );
-        template.subscribe('VehiculosEmpresaId', empresaId );
+        template.subscribe('DetalleDeEmpresa', empresaId);
+        template.subscribe('VehiculosEmpresaId', empresaId);
 
     });
 });
@@ -28,19 +28,19 @@ Template.mapaCliente.helpers({
         let rutaId = Template.instance().ruta.get();
         let vehiculoId = Template.instance().vehiculo.get();
 
-        if ( rutaId ){
+        if (rutaId) {
             query["rutaId"] = rutaId;
         }
 
-        if ( vehiculoId ){
+        if (vehiculoId) {
             query["_id"] = vehiculoId;
         }
 
-        return Vehiculos.find( query );
+        return Vehiculos.find(query);
     }
 });
 
-Template.mapaCliente.onRendered( () => {
+Template.mapaCliente.onRendered(() => {
 
     let self = this;
 
@@ -51,12 +51,11 @@ Template.mapaCliente.onRendered( () => {
     let empresaId = Meteor.user().profile.empresaId;
 
     mapa.subscribe('Empresas');
-    mapa.subscribe('vehiculosGPS', empresaId );
-    mapa.subscribe('VehiculosPorEmpresaId', empresaId );
+    mapa.subscribe('vehiculosGPS', empresaId);
+    mapa.subscribe('VehiculosPorEmpresaId', empresaId);
 
 
-
-    GoogleMaps.ready('map', function(map) {
+    GoogleMaps.ready('map', function (map) {
 
         let marker;
 
@@ -64,7 +63,7 @@ Template.mapaCliente.onRendered( () => {
         let verparaderosMarker = [];
         let puntosdecontrolMaker = [];
 
-        mapa.autorun( () => {
+        mapa.autorun(() => {
 
             let vehicle;
             let listadevehiculos;
@@ -77,8 +76,8 @@ Template.mapaCliente.onRendered( () => {
                 maxWidth: 200
             });
             // Limpiando el mapa
-            for ( let i=0; i<vehicleMarkers.length; i++){
-                vehicleMarkers[i].setMap( null );
+            for (let i = 0; i < vehicleMarkers.length; i++) {
+                vehicleMarkers[i].setMap(null);
             }
             vehicleMarkers = [];
 
@@ -87,17 +86,17 @@ Template.mapaCliente.onRendered( () => {
             let rutaId = mapa.ruta.get();
             let vehiculoId = mapa.vehiculo.get();
 
-            if ( rutaId ){
+            if (rutaId) {
                 query["rutaId"] = rutaId;
             }
 
-            if ( vehiculoId ){
+            if (vehiculoId) {
                 query["_id"] = vehiculoId;
             }
 
-            listadevehiculos = Vehiculos.find( query );
+            listadevehiculos = Vehiculos.find(query);
 
-            listadevehiculos.forEach( function (v) {
+            listadevehiculos.forEach(function (v) {
                 vehicleMarker = new google.maps.Marker({
                     animation: google.maps.Animation.DROP,
                     position: new google.maps.LatLng(v.posicion.lat, v.posicion.lng),
@@ -108,7 +107,7 @@ Template.mapaCliente.onRendered( () => {
                     title: 'Datos'
                 });
 
-                vehicleMarkers.push( vehicleMarker );
+                vehicleMarkers.push(vehicleMarker);
 
                 google.maps.event.addListener(vehicleMarker, 'click', function () {
                     infowindow.setContent(this.info);
@@ -122,17 +121,13 @@ Template.mapaCliente.onRendered( () => {
              });*/
 
 
-
-
-
-
             // mapa.subscribe('RutasPorEmpresa', () => {
 
-            let subRutasPorEmp= mapa.subscribe( 'RutasPorEmpresa' );
+            let subRutasPorEmp = mapa.subscribe('RutasPorEmpresa');
 
             let numero = 0;
 
-            if ( subRutasPorEmp.ready() ){
+            if (subRutasPorEmp.ready()) {
 
 
                 mapa.defaultRuta = new ReactiveVar(Rutas.findOne()._id)
@@ -143,11 +138,11 @@ Template.mapaCliente.onRendered( () => {
                 let ida;
                 let vuelta;
 
-                function centerOnPath(obj1, obj2){
+                function centerOnPath(obj1, obj2) {
                     let bounds = new google.maps.LatLngBounds();
-                    let points = _.union( obj1.getPath().getArray(), obj2.getPath().getArray() );
+                    let points = _.union(obj1.getPath().getArray(), obj2.getPath().getArray());
 
-                    for (let n = 0; n < points.length ; n++){
+                    for (let n = 0; n < points.length; n++) {
                         bounds.extend(points[n]);
                     }
                     map.instance.fitBounds(bounds);
@@ -156,10 +151,10 @@ Template.mapaCliente.onRendered( () => {
                 function addLine() {
                     mapa.idaPath.setMap(map.instance);
                     mapa.vueltaPath.setMap(map.instance);
-                    centerOnPath( mapa.idaPath, mapa.vueltaPath );
+                    centerOnPath(mapa.idaPath, mapa.vueltaPath);
                 }
 
-                function removeLine () {
+                function removeLine() {
                     mapa.idaPath.setMap(null);
                     mapa.vueltaPath.setMap(null);
                 }
@@ -167,7 +162,7 @@ Template.mapaCliente.onRendered( () => {
 
                 function setMapOnAll(map, p, feature) {
 
-                    if ( mapa.verparaderos.get() ){
+                    if (mapa.verparaderos.get()) {
 
                         marker = new google.maps.Marker({
                             animation: google.maps.Animation.DROP,
@@ -176,12 +171,12 @@ Template.mapaCliente.onRendered( () => {
                             map: map,
                             id: ruta._id
                         });
-                        verparaderosMarker.push( marker );
+                        verparaderosMarker.push(marker);
 
                     } //verparaderos
 
 
-                    if ( mapa.verpuntosdecontrol.get() ){
+                    if (mapa.verpuntosdecontrol.get()) {
 
                         marker = new google.maps.Marker({
                             animation: google.maps.Animation.DROP,
@@ -189,14 +184,14 @@ Template.mapaCliente.onRendered( () => {
                             icon: {
                                 url: '/check-point.png', // url
                                 scaledSize: new google.maps.Size(30, 30), // scaled size
-                                origin: new google.maps.Point(0,0), // origin
+                                origin: new google.maps.Point(0, 0), // origin
                                 anchor: new google.maps.Point(15, 15) // anchor
                             },
                             map: map,
                             id: ruta._id
                         });
 
-                        puntosdecontrolMaker.push( marker );
+                        puntosdecontrolMaker.push(marker);
 
                     } //verpuntosdecontrol
 
@@ -204,8 +199,8 @@ Template.mapaCliente.onRendered( () => {
 
                 // Removes the markers from the map, but keeps them in the array.
                 function clearMarkers() {
-                    verparaderosMarker.forEach( (marker) => marker.setMap(null) );
-                    puntosdecontrolMaker.forEach( (marker) => marker.setMap(null) );
+                    verparaderosMarker.forEach((marker) => marker.setMap(null));
+                    puntosdecontrolMaker.forEach((marker) => marker.setMap(null));
                 }
 
                 // Shows any markers currently in the array.
@@ -225,16 +220,16 @@ Template.mapaCliente.onRendered( () => {
 
                 // let rutaId = mapa.ruta.get();
 
-                if ( rutaId ){
+                if (rutaId) {
                     deleteMarkers();
 
-                    Rutas.find({ _id: rutaId }).forEach( function (ruta) {
+                    Rutas.find({_id: rutaId}).forEach(function (ruta) {
                         ida = ruta.ida;
                         vuelta = ruta.vuelta;
 
-                        if ( _.has( ruta, "paraderos") ){
+                        if (_.has(ruta, "paraderos")) {
 
-                            ruta.paraderos.forEach( function (p) {
+                            ruta.paraderos.forEach(function (p) {
 
                                 setMapOnAll(map.instance, p, 'parking')
 
@@ -243,10 +238,10 @@ Template.mapaCliente.onRendered( () => {
 
                         }
 
-                        if ( _.has( ruta, "puntosdecontrol") ){
+                        if (_.has(ruta, "puntosdecontrol")) {
 
 
-                            ruta.puntosdecontrol.forEach( function (p) {
+                            ruta.puntosdecontrol.forEach(function (p) {
 
                                 setMapOnAll(map.instance, p, 'puntodecontrol')
 
@@ -277,7 +272,6 @@ Template.mapaCliente.onRendered( () => {
                     // })
 
 
-
                     addLine();
                     //setMapOnAll(map.instance)
                 }
@@ -287,9 +281,6 @@ Template.mapaCliente.onRendered( () => {
                 // });
 
             }
-
-
-
 
 
         });
@@ -317,57 +308,57 @@ Template.mapaCliente.onRendered( () => {
 
 Template.mapaCliente.events({
 
-    'change #ruta'(e,t) {
+    'change #ruta'(e, t) {
         let target = e.currentTarget;
-        let rutaId = target.options[ target.selectedIndex ].value;
+        let rutaId = target.options[target.selectedIndex].value;
 
-        Template.instance().ruta.set( rutaId === "0" ? false : rutaId );
+        Template.instance().ruta.set(rutaId === "0" ? false : rutaId);
     },
 
-    'change #vehiculo'(e,t) {
+    'change #vehiculo'(e, t) {
         let target = e.currentTarget;
-        let vehiculoId = target.options[ target.selectedIndex ].value;
+        let vehiculoId = target.options[target.selectedIndex].value;
 
-        Template.instance().vehiculo.set( vehiculoId === "0" ? false : vehiculoId );
+        Template.instance().vehiculo.set(vehiculoId === "0" ? false : vehiculoId);
     },
-    'click #verparaderos'(e,t){
+    'click #verparaderos'(e, t){
         let value = Template.instance().verparaderos.get();
-        Template.instance().verparaderos.set( !value );
+        Template.instance().verparaderos.set(!value);
     },
-    'click #verpuntosdecontrol'(e,t){
+    'click #verpuntosdecontrol'(e, t){
         let value = Template.instance().verpuntosdecontrol.get();
-        Template.instance().verpuntosdecontrol.set( !value );
+        Template.instance().verpuntosdecontrol.set(!value);
     },
-    'click #modotrafico'(e,t){
+    'click #modotrafico'(e, t){
         let value = Template.instance().modotrafico.get();
-        Template.instance().modotrafico.set( !value );
+        Template.instance().modotrafico.set(!value);
     },
 
 });
 
 Template.mapaCliente.helpers({
-    mapOptions: function() {
-        var latLng = {lat: -12.0917633 , lng: -77.0279025}
+    mapOptions: function () {
+        var latLng = {lat: -12.0917633, lng: -77.0279025}
 
 
         var styles = [
             {
                 stylers: [
-                    { hue: "#1784C7" },
-                    { saturation: -20 }
+                    {hue: "#1784C7"},
+                    {saturation: -20}
                 ]
-            },{
+            }, {
                 featureType: "road",
                 elementType: "geometry",
                 stylers: [
-                    { lightness: 100 },
-                    { visibility: "simplified" }
+                    {lightness: 100},
+                    {visibility: "simplified"}
                 ]
-            },{
+            }, {
                 featureType: "road",
                 elementType: "labels",
                 stylers: [
-                    { visibility: "off" }
+                    {visibility: "off"}
                 ]
             }
         ];
@@ -394,35 +385,34 @@ Template.mapaCliente.helpers({
         return Empresas.findOne({_id: Meteor.user().profile.empresaId});
     },
     ruta(id) {
-        let ruta = Rutas.findOne({_id: id}) || { nombre: "" };
+        let ruta = Rutas.findOne({_id: id}) || {nombre: ""};
         return ruta.nombre;
     }
 });
 
 
-
-Template.adminMapaCliente.onCreated( () => {
+Template.adminMapaCliente.onCreated(() => {
     let template = Template.instance();
 
-    template.query = new ReactiveVar( false );
+    template.query = new ReactiveVar(false);
     template.ruta = new ReactiveVar(false);
     template.vehiculo = new ReactiveVar(false);
     template.listadevehiculos = new ReactiveVar(false);
 
-    template.verparaderos = new ReactiveVar( false );
-    template.verpuntosdecontrol = new ReactiveVar( false );
-    template.modotrafico = new ReactiveVar( false );
+    template.verparaderos = new ReactiveVar(false);
+    template.verpuntosdecontrol = new ReactiveVar(false);
+    template.modotrafico = new ReactiveVar(false);
 
     template.empresaId = new ReactiveVar(false);
 
-    template.autorun( () => {
+    template.autorun(() => {
 
         let empresaId = template.empresaId.get();
 
-        if ( empresaId ) {
+        if (empresaId) {
 
-            template.subscribe('DetalleDeEmpresa', empresaId );
-            template.subscribe('VehiculosEmpresaId', empresaId );
+            template.subscribe('DetalleDeEmpresa', empresaId);
+            template.subscribe('VehiculosEmpresaId', empresaId);
 
 
         }
@@ -439,19 +429,24 @@ Template.adminMapaCliente.helpers({
         let rutaId = Template.instance().ruta.get();
         let vehiculoId = Template.instance().vehiculo.get();
 
-        if ( rutaId ){
+        if (rutaId) {
             query["rutaId"] = rutaId;
         }
 
-        if ( vehiculoId ){
+        if (vehiculoId) {
             query["_id"] = vehiculoId;
         }
 
-        return Vehiculos.find( query );
+        return Vehiculos.find(query);
     }
 });
 
-Template.adminMapaCliente.onRendered( () => {
+Template.adminMapaCliente.onRendered(() => {
+
+    $('.content-wrapper').css('height', $(window).height() + 'px');
+    $(window).resize(()=> {
+        $('.content-wrapper').css('height', $(window).height() + 'px');
+    });
 
     let self = this;
 
@@ -460,7 +455,7 @@ Template.adminMapaCliente.onRendered( () => {
 
     let mapa = Template.instance();
 
-    GoogleMaps.ready('map', function(map) {
+    GoogleMaps.ready('map', function (map) {
 
         let marker;
 
@@ -468,15 +463,15 @@ Template.adminMapaCliente.onRendered( () => {
         let verparaderosMarker = [];
         let puntosdecontrolMaker = [];
 
-        mapa.autorun( () => {
+        mapa.autorun(() => {
 
             let empresaId = mapa.empresaId.get();
 
             mapa.subscribe('Empresas');
-            mapa.subscribe('vehiculosGPS', empresaId );
-            mapa.subscribe('VehiculosPorEmpresaId', empresaId );
+            mapa.subscribe('vehiculosGPS', empresaId);
+            mapa.subscribe('VehiculosPorEmpresaId', empresaId);
 
-            let subRutasPorEmp = mapa.subscribe( 'RutasPorEmpresa', empresaId );
+            let subRutasPorEmp = mapa.subscribe('RutasPorEmpresa', empresaId);
 
             let vehicle;
             let listadevehiculos;
@@ -489,8 +484,8 @@ Template.adminMapaCliente.onRendered( () => {
                 maxWidth: 200
             });
             // Limpiando el mapa
-            for ( let i=0; i<vehicleMarkers.length; i++){
-                vehicleMarkers[i].setMap( null );
+            for (let i = 0; i < vehicleMarkers.length; i++) {
+                vehicleMarkers[i].setMap(null);
             }
             vehicleMarkers = [];
 
@@ -499,17 +494,17 @@ Template.adminMapaCliente.onRendered( () => {
             let rutaId = mapa.ruta.get();
             let vehiculoId = mapa.vehiculo.get();
 
-            if ( rutaId ){
+            if (rutaId) {
                 query["rutaId"] = rutaId;
             }
 
-            if ( vehiculoId ){
+            if (vehiculoId) {
                 query["_id"] = vehiculoId;
             }
 
-            listadevehiculos = Vehiculos.find( query );
+            listadevehiculos = Vehiculos.find(query);
 
-            listadevehiculos.forEach( function (v) {
+            listadevehiculos.forEach(function (v) {
                 vehicleMarker = new google.maps.Marker({
                     animation: google.maps.Animation.DROP,
                     position: new google.maps.LatLng(v.posicion.lat, v.posicion.lng),
@@ -520,7 +515,7 @@ Template.adminMapaCliente.onRendered( () => {
                     title: 'Datos'
                 });
 
-                vehicleMarkers.push( vehicleMarker );
+                vehicleMarkers.push(vehicleMarker);
 
                 google.maps.event.addListener(vehicleMarker, 'click', function () {
                     infowindow.setContent(this.info);
@@ -534,27 +529,23 @@ Template.adminMapaCliente.onRendered( () => {
              });*/
 
 
-
-
-
-
             // mapa.subscribe('RutasPorEmpresa', () => {
 
 
             let numero = 0;
 
-            if ( subRutasPorEmp.ready() && mapa.ruta.get() ){
+            if (subRutasPorEmp.ready() && mapa.ruta.get()) {
 
                 mapa.defaultRuta = mapa.ruta.get();
 
                 mapa.idaPath;
                 mapa.vueltaPath;
 
-                function centerOnPath(obj1, obj2){
+                function centerOnPath(obj1, obj2) {
                     let bounds = new google.maps.LatLngBounds();
-                    let points = _.union( obj1.getPath().getArray(), obj2.getPath().getArray() );
+                    let points = _.union(obj1.getPath().getArray(), obj2.getPath().getArray());
 
-                    for (let n = 0; n < points.length ; n++){
+                    for (let n = 0; n < points.length; n++) {
                         bounds.extend(points[n]);
                     }
                     map.instance.fitBounds(bounds);
@@ -563,10 +554,10 @@ Template.adminMapaCliente.onRendered( () => {
                 function addLine() {
                     mapa.idaPath.setMap(map.instance);
                     mapa.vueltaPath.setMap(map.instance);
-                    centerOnPath( mapa.idaPath, mapa.vueltaPath );
+                    centerOnPath(mapa.idaPath, mapa.vueltaPath);
                 }
 
-                function removeLine () {
+                function removeLine() {
                     mapa.idaPath.setMap(null);
                     mapa.vueltaPath.setMap(null);
                 }
@@ -574,7 +565,7 @@ Template.adminMapaCliente.onRendered( () => {
 
                 function setMapOnAll(map, p, feature) {
 
-                    if ( mapa.verparaderos.get() ){
+                    if (mapa.verparaderos.get()) {
 
                         marker = new google.maps.Marker({
                             animation: google.maps.Animation.DROP,
@@ -583,12 +574,12 @@ Template.adminMapaCliente.onRendered( () => {
                             map: map,
                             id: ruta._id
                         });
-                        verparaderosMarker.push( marker );
+                        verparaderosMarker.push(marker);
 
                     } //verparaderos
 
 
-                    if ( mapa.verpuntosdecontrol.get() ){
+                    if (mapa.verpuntosdecontrol.get()) {
 
                         marker = new google.maps.Marker({
                             animation: google.maps.Animation.DROP,
@@ -596,14 +587,14 @@ Template.adminMapaCliente.onRendered( () => {
                             icon: {
                                 url: '/check-point.png', // url
                                 scaledSize: new google.maps.Size(30, 30), // scaled size
-                                origin: new google.maps.Point(0,0), // origin
+                                origin: new google.maps.Point(0, 0), // origin
                                 anchor: new google.maps.Point(15, 15) // anchor
                             },
                             map: map,
                             id: ruta._id
                         });
 
-                        puntosdecontrolMaker.push( marker );
+                        puntosdecontrolMaker.push(marker);
 
                     } //verpuntosdecontrol
 
@@ -611,8 +602,8 @@ Template.adminMapaCliente.onRendered( () => {
 
                 // Removes the markers from the map, but keeps them in the array.
                 function clearMarkers() {
-                    verparaderosMarker.forEach( (marker) => marker.setMap(null) );
-                    puntosdecontrolMaker.forEach( (marker) => marker.setMap(null) );
+                    verparaderosMarker.forEach((marker) => marker.setMap(null));
+                    puntosdecontrolMaker.forEach((marker) => marker.setMap(null));
                 }
 
                 // Shows any markers currently in the array.
@@ -632,16 +623,16 @@ Template.adminMapaCliente.onRendered( () => {
 
                 // let rutaId = mapa.ruta.get();
 
-                if ( rutaId ){
+                if (rutaId) {
                     deleteMarkers();
 
-                    Rutas.find({ _id: rutaId }).forEach( function (ruta) {
+                    Rutas.find({_id: rutaId}).forEach(function (ruta) {
                         ida = ruta.ida;
                         vuelta = ruta.vuelta;
 
-                        if ( _.has( ruta, "paraderos") ){
+                        if (_.has(ruta, "paraderos")) {
 
-                            ruta.paraderos.forEach( function (p) {
+                            ruta.paraderos.forEach(function (p) {
 
                                 setMapOnAll(map.instance, p, 'parking')
 
@@ -649,9 +640,9 @@ Template.adminMapaCliente.onRendered( () => {
                             });
                         }
 
-                        if ( _.has( ruta, "puntosdecontrol") ){
+                        if (_.has(ruta, "puntosdecontrol")) {
 
-                            ruta.puntosdecontrol.forEach( function (p) {
+                            ruta.puntosdecontrol.forEach(function (p) {
 
                                 setMapOnAll(map.instance, p, 'puntodecontrol')
 
@@ -682,7 +673,6 @@ Template.adminMapaCliente.onRendered( () => {
                     })
 
 
-
                     addLine();
                     //setMapOnAll(map.instance)
                 }
@@ -692,8 +682,6 @@ Template.adminMapaCliente.onRendered( () => {
                 // });
 
             }
-
-
 
 
         });
@@ -714,9 +702,9 @@ Template.adminMapaCliente.onRendered( () => {
         var idaPath = null;
         var vueltaPath = null;
 
-        $('#activePolygon').on('click',function () {
-            if(ida && vuelta) {
-                if(activeP == false) {
+        $('#activePolygon').on('click', function () {
+            if (ida && vuelta) {
+                if (activeP == false) {
                     idaPath = new google.maps.Polygon({
                         paths: ida,
                         strokeColor: '#FF0000',
@@ -737,10 +725,10 @@ Template.adminMapaCliente.onRendered( () => {
                     vueltaPath.setMap(map.instance);
                     activeP = true;
                 } else {
-                    if(idaPath) {
+                    if (idaPath) {
                         idaPath.setMap(null);
                     }
-                    if(vueltaPath) {
+                    if (vueltaPath) {
                         vueltaPath.setMap(null);
                     }
                     activeP = false;
@@ -759,64 +747,66 @@ Template.adminMapaCliente.onRendered( () => {
 
 Template.adminMapaCliente.events({
 
-    'change #empresa'(e,t) {
+    'change #empresa'(e, t) {
         let target = e.currentTarget;
-        let empresaId = target.options[ target.selectedIndex ].value;
+        let empresaId = target.options[target.selectedIndex].value;
 
-        Template.instance().empresaId.set( empresaId === "0" ? false : empresaId );
+        Template.instance().empresaId.set(empresaId === "0" ? false : empresaId);
     },
 
-    'change #ruta'(e,t) {
+    'change #ruta'(e, t) {
         let target = e.currentTarget;
-        let rutaId = target.options[ target.selectedIndex ].value;
+        let rutaId = target.options[target.selectedIndex].value;
 
-        Template.instance().ruta.set( rutaId === "0" ? false : rutaId );
+        Template.instance().ruta.set(rutaId === "0" ? false : rutaId);
     },
 
-    'change #vehiculo'(e,t) {
+    'change #vehiculo'(e, t) {
         let target = e.currentTarget;
-        let vehiculoId = target.options[ target.selectedIndex ].value;
+        let vehiculoId = target.options[target.selectedIndex].value;
 
-        Template.instance().vehiculo.set( vehiculoId === "0" ? false : vehiculoId );
+        Template.instance().vehiculo.set(vehiculoId === "0" ? false : vehiculoId);
     },
-    'click #verparaderos'(e,t){
+    'click #verparaderos'(e, t){
         let value = Template.instance().verparaderos.get();
-        Template.instance().verparaderos.set( !value );
+        Template.instance().verparaderos.set(!value);
     },
-    'click #verpuntosdecontrol'(e,t){
+    'click #verpuntosdecontrol'(e, t){
         let value = Template.instance().verpuntosdecontrol.get();
-        Template.instance().verpuntosdecontrol.set( !value );
+        Template.instance().verpuntosdecontrol.set(!value);
     },
-    'click #modotrafico'(e,t){
+    'click #modotrafico'(e, t) {
         let value = Template.instance().modotrafico.get();
-        Template.instance().modotrafico.set( !value );
+        Template.instance().modotrafico.set(!value);
     },
+    'click #schematicMap' (e, t) {
 
+    }
 });
 
 Template.adminMapaCliente.helpers({
-    mapOptions: function() {
-        var latLng = {lat: -12.0917633 , lng: -77.0279025}
+    mapOptions: function () {
+        var latLng = {lat: -12.0917633, lng: -77.0279025}
 
 
         var styles = [
             {
                 stylers: [
-                    { hue: "#1784C7" },
-                    { saturation: -20 }
+                    {hue: "#1784C7"},
+                    {saturation: -20}
                 ]
-            },{
+            }, {
                 featureType: "road",
                 elementType: "geometry",
                 stylers: [
-                    { lightness: 100 },
-                    { visibility: "simplified" }
+                    {lightness: 100},
+                    {visibility: "simplified"}
                 ]
-            },{
+            }, {
                 featureType: "road",
                 elementType: "labels",
                 stylers: [
-                    { visibility: "off" }
+                    {visibility: "off"}
                 ]
             }
         ];
@@ -840,11 +830,11 @@ Template.adminMapaCliente.helpers({
         }
     },
     empresa() {
-        let empresa = Empresas.findOne({_id: Template.instance().empresaId.get() });
+        let empresa = Empresas.findOne({_id: Template.instance().empresaId.get()});
         return empresa;
     },
     ruta(id) {
-        let ruta = Rutas.findOne({_id: id}) || { nombre: "" };
+        let ruta = Rutas.findOne({_id: id}) || {nombre: ""};
         return ruta.nombre;
     }
 });

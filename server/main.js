@@ -3,7 +3,7 @@ import ROLES from '../Both/Roles'
 
 Meteor.startup(() => {
 
-  	let users = [
+  	/*let users = [
      	{nombre: "Usuario 1", email: "superadministrador@tpi.com.pe", roles: [ ROLES.administracion.gerente ]},
      	{nombre: "Usuario 4", email: "soporte@tpi.com.pe", roles: [ ROLES.administracion.soporte ]},
        	{nombre: "Usuario 2", email: "director@tpi.com.pe", roles: [ ROLES.empresa.director ]},
@@ -40,6 +40,6 @@ Meteor.startup(() => {
 
 
 
-	 });
+	 });*/
 
 });

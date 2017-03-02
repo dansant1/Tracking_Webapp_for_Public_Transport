@@ -37,7 +37,7 @@
 
 
 <template name="adminMapaCliente">
-	<div class="content-wrapper" style="padding: 0px; padding-top: 57px;">
+	<div class="content-wrapper" style="padding: 0px; padding-top: 57px; position: relative">
 
 			<div class="col-md-11">
 				<select id="empresa" class="form-control" style="position: absolute; top: 7px; z-index: 1001; left: 12%; width: 180px">
@@ -64,19 +64,35 @@
 
 						{{/each}}
 				</select>
-				<button id="verparaderos" type="button" class="btn btn-primary" style="position: absolute; top: 7px; z-index: 1001; left: 51%; "> <i class="fa fa-eye" aria-hidden="true"></i> Ver Paraderos</button>
-				<button id="verpuntosdecontrol" type="button" class="btn btn-success" style="position: absolute; top: 7px; z-index: 1001; left: 65.5%; "> <i class="fa fa-eye" aria-hidden="true"></i> Ver Puntos de Control</button>
-                <button id="modoTrafico" type="button" class="btn btn-warning trafico" style="position: absolute; top: 7px; z-index: 1001; left: 85%; "> <i class="fa fa-train" aria-hidden="true"></i> Modo Trafico</button>
-                <button id="activePolygon" type="button" class="btn btn-info" style="position: absolute; top: 7px; z-index: 1001; left: 97%; "> <i class="fa fa-codepen" aria-hidden="true"></i> Ver Geocerca</button>
+				<button id="verparaderos" type="button" class="btn btn-primary" style="position: absolute; top: 7px; z-index: 1001; left: 46%; "> <i class="fa fa-eye" aria-hidden="true"></i> Ver Paraderos</button>
+				<button id="verpuntosdecontrol" type="button" class="btn btn-success" style="position: absolute; top: 7px; z-index: 1001; left: 57%; "> <i class="fa fa-eye" aria-hidden="true"></i> Ver Puntos de Control</button>
+                <button id="modoTrafico" type="button" class="btn btn-warning trafico" style="position: absolute; top: 7px; z-index: 1001; left: 74%; "> <i class="fa fa-train" aria-hidden="true"></i> Modo Trafico</button>
+                <button id="activePolygon" type="button" class="btn btn-info" style="position: absolute; top: 7px; z-index: 1001; left: 85%; "> <i class="fa fa-codepen" aria-hidden="true"></i> Ver Geocerca</button>
+                <button id="schematicMap" type="button" class="btn btn-info" style="position: absolute; top: 7px; z-index: 1001; left: 95%; "> <i class="fa fa-map" aria-hidden="true"></i> Ver Geocerca</button>
 			</div>
 
-		<div class="map-container" style="height: 91.4vh">
+		<div class="map-container" style="height: 100%">
 				   	{{#if carga}}
 				    	{{> googleMap name="map" options=mapOptions}}
 				   	{{else}}
 				   		{{>Loader}}
 				   	{{/if}}
 		</div>
+        <div class="Schematic__map">
+            <h3 class="Map__title">Mapa esquemático</h3>
+            <div class="Map__content">
+                <div class="Content__going">
+                    <div class="Content__route"></div>
+                </div>
+                <div class="Content__middle">
+                    <div class="Terminal__start">TERMINAL INICIAL</div>
+                    <div class="Terminal__end">TERMINAL FINAL</div>
+                </div>
+                <div class="Content__return">
+                    <div class="Content__route"></div>
+                </div>
+            </div>
+        </div>
 	</div>
 
 
