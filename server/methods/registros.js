@@ -111,7 +111,7 @@ Meteor.methods({
           })
 
           let fecha = new Date();
-          let hoyEs = fecha.getDay();
+          let diaNumero = fecha.getDay();
 
           let hoy = new Date();
           let dd = hoy.getDate();
@@ -128,48 +128,27 @@ Meteor.methods({
           }
           var today = dd+'/'+mm+'/'+yyyy;
 
-          let planeamiento;
-          let d;
-          if (hoyEs === 1) {
-            d = 'lunes'
-            planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.lunes;
-          } else if (hoyEs === 2) {
-            d = 'martes'
-            planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.martes;
-          } else if (hoyEs === 3) {
-            d = 'miercoles'
-            planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.miercoles;
-          } else if (hoyEs === 4) {
-            d = 'jueves'
-            planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.jueves;
-          } else if (hoyEs === 5) {
-            d = 'viernes'
-            planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.viernes;
-          } else if (hoyEs === 6) {
-            d = 'sabado'
-            planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.sabado;
-          } else if (hoyEs === 0) {
-            d = 'domingo'
-            planeamiento = Planeamiento.find({empresaId: empresaId}).fetch()[0].plan.horas.domingo;
-          }
+          let planeamiento = Planeamiento.findOne({empresaId: empresaId});
 
-          planeamiento.forEach( (plan) => {
-            console.log(plan[d]);
-            if (plan[d] !== null) {
+          let diasArray = [ "", 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo' ];
+          let nombreDia = diasArray[ diaNumero ];
+
+          let horasEnPlaneamientoPorDia = planeamiento.plan.horas[ nombreDia ];
+
+          horasEnPlaneamientoPorDia.forEach( (hora) => {
+
               RegistroDeDespachoDeVehiculos.insert({
                 vehiculoId: _.sample(v),
                 rutaId: rutaId,
                 empresaId: empresaId,
                 despachado: false,
-                hora: plan[d],
+                hora: hora,
                 ida: true,
                 dia: today,
                 createdAt: new Date()
               });
-            }
 
-
-          })
+          });
 
 
 
