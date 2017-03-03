@@ -395,6 +395,7 @@ Template.adminMapaCliente.onCreated(() => {
     let template = Template.instance();
 
     template.query = new ReactiveVar(false);
+    template.schematic = new ReactiveVar(false);
     template.ruta = new ReactiveVar(false);
     template.vehiculo = new ReactiveVar(false);
     template.listadevehiculos = new ReactiveVar(false);
@@ -742,8 +743,8 @@ Template.adminMapaCliente.onRendered(() => {
 
     });
 
-});
 
+});
 
 Template.adminMapaCliente.events({
 
@@ -780,7 +781,48 @@ Template.adminMapaCliente.events({
         Template.instance().modotrafico.set(!value);
     },
     'click #schematicMap' (e, t) {
+        let state = Template.instance().schematic.get();
 
+        if(!state) {
+            $('#schematic').stop().fadeIn(200);
+            var rutaId = Template.instance().ruta.get();
+            let radius = function (x) {
+                return x * Math.PI / 180;
+            };
+            let getDistance = function(p1, p2) {
+                let R = 6378137; // Earth’s mean radius in meter
+                let dLat = radius(p2.lat - p1.lat);
+                let dLong = radius(p2.lng - p1.lng);
+                let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(radius(p1.lat)) * Math.cos(radius(p2.lat)) *
+                    Math.sin(dLong / 2) * Math.sin(dLong / 2);
+                let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                return R * c;
+            };
+
+            if (rutaId) {
+                let route = Rutas.findOne({_id: rutaId});
+                let totalGoing = 0;
+                let totalReturn = 0;
+
+                route.ida.forEach((coordinate, iterator, array)=> {
+                    if (iterator > 0) {
+                        let distance = getDistance(coordinate, route.ida[iterator-1]);
+                        totalGoing = totalGoing + distance;
+                    }
+                });
+
+                route.vuelta.forEach((coordinate, iterator, array)=> {
+                    if (iterator > 0) {
+                        let distance = getDistance(coordinate, route.ida[iterator-1]);
+                        totalReturn = totalReturn + distance;
+                    }
+                });
+            }
+        } else {
+            $('#schematic').stop().fadeOut(200);
+        }
+        Template.instance().schematic.set(!state);
     }
 });
 
