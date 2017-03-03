@@ -112,7 +112,8 @@ Template.NuevoPlaneamientoDelDia.events({
         let planeamientoHoy = Template.instance().planeamientoHoy.get();
 
         if (planeamientoHoy.some(p=>p.vehicleId === null)) {
-            Bert.alert('Todas las horas deben tener asignadas un vehículo', 'danger')
+            Bert.alert('Todas las horas deben tener asignadas un vehículo', 'danger');
+            return;
         }
         let hoy = new Date();
         let dd = hoy.getDate();
