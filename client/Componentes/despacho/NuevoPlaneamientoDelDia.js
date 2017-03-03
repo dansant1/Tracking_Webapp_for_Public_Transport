@@ -40,7 +40,7 @@ Template.NuevoPlaneamientoDelDia.onCreated(() => {
                     time: hora,
                     hours: parseInt(hora.substring(0, separator)),
                     minutes: parseInt(hora.substring(separator + 1)),
-                    vehicle: null
+                    vehicleId: null
                 });
             });
             template.planeamientoHoy.set(planeamientoHoy);
@@ -70,8 +70,15 @@ Template.NuevoPlaneamientoDelDia.onRendered(() => {
 
 Template.NuevoPlaneamientoDelDia.helpers({
     vehiculos(hours, minutes) {
-        // TODO: constraint by time, each road needs an estimated time
-        return Vehiculos.find();
+        let planeamientoHoy = Template.instance().planeamientoHoy.get();
+
+        return Vehiculos.find({empresaId: Meteor.user().profile.empresaId}).fetch().filter(v=> {
+            let nonAdmited = planeamientoHoy.filter(p=> {
+                let time = hours * 60 + minutes;
+                return p.hours * 60 + p.minutes < time && p.hours * 60 + p.minutes > time - 2 * 60; // TODO: just two hours to make available a vehicle again
+            }).map(p=>p.vehicleId);
+            return !nonAdmited.includes(v._id);
+        });
     },
     planeamientoHoy(){
         return Template.instance().planeamientoHoy.get();
@@ -82,6 +89,15 @@ Template.NuevoPlaneamientoDelDia.helpers({
 });
 
 Template.NuevoPlaneamientoDelDia.events({
+    'change .vehicle'(e, t){
+        let planeamientoHoy = Template.instance().planeamientoHoy.get();
+        planeamientoHoy.forEach(p=> {
+            if (p.time === this.time) {
+                p.vehicleId = e.target.value
+            }
+        });
+        Template.instance().planeamientoHoy.set(planeamientoHoy)
+    },
     'click .guardar'(e, t) {
         let datos = [];
 
