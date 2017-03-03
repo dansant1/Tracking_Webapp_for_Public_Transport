@@ -29,6 +29,9 @@ Template.VistaDespacho.helpers({
   despachocola() {
     return RegistroDeDespachoDeVehiculos.find({requisitos: false});
   },
+  vehiculosSancionados() {
+    return Vehiculos.find({'sancionActiva': true});
+  },
   vehiculo(id) {
     return Vehiculos.findOne({_id: this.vehiculoId})
   },

@@ -11,6 +11,7 @@
     <li class="active"><a data-toggle="tab" href="#home">Despacho</a></li>
     <li><a data-toggle="tab" href="#menu1">Vehiculos Despachados</a></li>
     <li><a data-toggle="tab" href="#menu2">Vehiculos en Cola</a></li>
+    <li><a data-toggle="tab" href="#menu3">Vehiculos Sancionados</a></li>
   </ul>
 
   <div class="tab-content">
@@ -92,6 +93,30 @@
             </div>
           </span>
       </li>
+      {{/each}}
+    </div>
+    <div id="menu3" class="tab-pane fade">
+      <h3>Vehiculos Sancionados</h3>
+      <br><br>
+      {{#each vehiculosSancionados}}
+      <li class="list-group-item clearfix horario planeamiento">
+          <span class="pull-left" style="width: 75%; margin-left: 10px">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{this.placa}} - Padron {{this.padron}}</span>
+          </span>
+
+          <span class="pull-right">
+            <div class="form-group" style="display: inline-block; margin-left: 10px">
+              <!-- {{#if this.ida}}
+              <span style="display: inline-block; margin-left: 0px; color: blue">IDA</span>
+              {{else}}
+              <span style="display: inline-block; margin-left: 0px; color: red">VUELTA</span>
+              {{/if}} -->
+            </div>
+          </span>
+      </li>
+      {{else}}
+        Aun no hay vehiculos sancionados.
       {{/each}}
     </div>
   </div>
