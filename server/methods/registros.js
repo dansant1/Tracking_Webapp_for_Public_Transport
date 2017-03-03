@@ -206,8 +206,6 @@ Meteor.methods({
               licencia = true;
             } else {
               licencia = false;
-              console.log( "today", today, process(today) );
-              console.log( "venceLicencia", venceLicencia, process(venceLicencia) );
               return {
                 valido : false,
                 razon : `La licencia esta vencida desde ${venceLicencia}`
@@ -282,10 +280,7 @@ Meteor.methods({
           }
           var today = dd + '/' + mm + '/' + yyyy;
 
-          console.log('holaaa');
-
           let venceCEV = Cobradores.findOne({_id: cobradorId}).CEV.caducidad;
-          console.log(venceCEV);
           let credencial = Cobradores.findOne({_id: cobradorId}).credencial.caducidad;
 
           let cev;
@@ -293,8 +288,6 @@ Meteor.methods({
 
           if (venceCEV !== undefined && venceCEV !== null) {
             if (process(today) < process(venceCEV)) {
-              console.log(today);
-              console.log(venceCEV);
               cev = true;
             } else {
               cev = false;
@@ -302,10 +295,7 @@ Meteor.methods({
           }
 
           if (credencial !== undefined && credencial !== null) {
-            console.log(credencial);
             if (process(today) < process(credencial)) {
-              console.log(today);
-              console.log(credencial);
               cred = true;
             } else {
               cred = false;
@@ -615,7 +605,6 @@ Meteor.methods({
                     }, {});
 
                     placa = conductor['1'];
-                    //console.log(placa);
                     if (placa !== undefined) {
 
                         if (Vehiculos.find({placa: placa}).fetch()[0]._id === undefined) {
@@ -980,7 +969,6 @@ Meteor.methods({
         if (this.userId) {
 
             let planeamiento = Planeamiento.find({empresaId: empresaId}).fetch().length
-            console.log(planeamiento);
             if (planeamiento > 0) {
                 Planeamiento.update({empresaId: empresaId}, {
                     $set: {
@@ -1007,7 +995,6 @@ Meteor.methods({
 
         if (this.userId) {
 
-            console.log(datos.empresaId);
             let rutaId = Rutas.insert(datos);
 
             if (rutaId) {
