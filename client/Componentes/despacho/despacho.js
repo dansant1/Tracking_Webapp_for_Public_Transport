@@ -29,11 +29,8 @@ Template.VistaDespacho.helpers({
   despachocola() {
     return RegistroDeDespachoDeVehiculos.find({requisitos: false});
   },
-  placa() {
-    return Vehiculos.findOne({_id: this.vehiculoId}).placa
-  },
-  padron() {
-    return Vehiculos.findOne({_id: this.vehiculoId}).padron
+  vehiculo(id) {
+    return Vehiculos.findOne({_id: this.vehiculoId})
   },
   rutaId() {
     return FlowRouter.getParam('rutaId')

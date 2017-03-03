@@ -21,9 +21,9 @@
       {{#each despacho}}
       <li class="list-group-item clearfix horario planeamiento">
           <span class="pull-left" style="width: 75%; margin-left: 10px">
-                <i class="fa fa-clock-o" aria-hidden="true"></i>
                 <span class="time hour">{{this.hora}}</span>
-                <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{placa}} - Padron {{padron}}</span>
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">{{#with vehiculo this.id}} Placa {{this.placa}} - Padron {{this.padron}} {{/with}}</span>
 
 
           </span>
