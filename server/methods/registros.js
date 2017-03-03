@@ -6,8 +6,24 @@ function process(date){
     if (date === null || date === undefined ) {
       return '';
     } else {
-      var parts = date.split("/");
-      return new Date(parts[2], parts[1] - 1, parts[0]);
+      let parts;
+      if ( date.search("/") !== -1 ){
+        parts = date.split("/");
+        //format dd/mm/yyyy
+        return new Date(
+          parseInt( parts[2] ),
+          parseInt( parts[1] ) - 1,
+          parseInt( parts[0] )
+        );
+      } else {
+        //format yyyy-mm-dd
+        parts = date.split("-");
+        return new Date(
+          parseInt( parts[0] ),
+          parseInt( parts[1] ) - 1,
+          parseInt( parts[2] )
+        );
+      }
     }
 
 }
@@ -183,49 +199,66 @@ Meteor.methods({
           let licencia;
           let cev;
           let cred;
+          let res = {};
 
-          if (venceLicencia !== undefined && venceLicencia !== null) {
+          if (venceLicencia && venceLicencia !== undefined && venceLicencia !== null) {
             if (process(today) < process(venceLicencia)) {
               licencia = true;
             } else {
               licencia = false;
+              console.log( "today", today, process(today) );
+              console.log( "venceLicencia", venceLicencia, process(venceLicencia) );
+              return {
+                valido : false,
+                razon : `La licencia esta vencida desde ${venceLicencia}`
+              }
+            }
+          } else {
+            return {
+              valido : false,
+              razon : 'El conductor no tiene licencia'
             }
           }
 
-          if (venceCEV !== undefined && venceCEV !== null) {
+          if (venceCEV &&venceCEV !== undefined && venceCEV !== null) {
             if (process(today) < process(venceCEV)) {
               cev = true;
             } else {
               cev = false;
+              return {
+                valido : false,
+                razon : `El CEV esa vencido desde el ${venceCEV}`
+              }
+            }
+          } else {
+            return {
+              valido : false,
+              razon : 'El conductor no tiene CEV'
             }
           }
 
-          if (credencial !== undefined && credencial !== null) {
+          if (credencial && credencial !== undefined && credencial !== null) {
             if (process(today) < process(credencial)) {
               cred = true;
            } else {
               cred = false;
+              return {
+                valido : false,
+                razon : `La credencial esta vencida desde el ${credencial}`
+              }
             }
-          }
 
-          let res = {}
-          if (licencia && cev && cred) {
-            res.valido = true;
-            res.razon = 'El conductor cumple con los requisitos';
           } else {
-            res.valido = false;
-            if (licencia !== true) {
-              res.razon = 'La licencia esta vencido.';
-            } else if (licencia !== true && cev !== true) {
-              res.razon = 'La licencia y el CEV estan vencidos.';
-            } else if (licencia !== true && cev !== true && cred !== true) {
-              res.razon = 'La licencia, el CEV y la credencial del conductor estan vencidos.';
-            } else {
-              res.razon = 'Los documentos del conductor estan vencidos';
+            return {
+              valido : false,
+              razon : 'El conductor no tiene credencial'
             }
           }
 
-          return res;
+          return {
+            valido : true,
+            razon : 'El conductor cumple con los requisitos'
+          }
 
         } else {
           return;
