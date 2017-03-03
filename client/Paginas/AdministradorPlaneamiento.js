@@ -330,8 +330,6 @@ Template.AdministradorAgregarPlaneamiento.events({
 
                     let files = archivo.files;
 
-                    console.log(files);
-
                     let i,f;
 
                     for (i = 0, f = files[i]; i != files.length; ++i) {
@@ -344,7 +342,6 @@ Template.AdministradorAgregarPlaneamiento.events({
                             let data = e.target.result;
 
                             Modal.show('CargandoExcel');
-                            console.log('funca!!');
                             Meteor.call('leerPlaneamientoExcel', empresaId, datos.rutaId, data, (err, result) => {
                                 if (err) {
                                     Modal.hide('CargandoExcel');
@@ -354,7 +351,7 @@ Template.AdministradorAgregarPlaneamiento.events({
                                     if (result) {
                                         Bert.alert(result, 'success');
                                     } else {
-                                    	FlowRouter.go('/planeamiento');
+                                    	FlowRouter.go('/admin/planeamiento');
                                         Bert.alert('Planeamiento agregado', 'success');
                                     }
 
@@ -476,21 +473,23 @@ Template.AdministradorPlaneamientoPorEmpresa.onRendered( () => {
 
 Template.AdministradorPlaneamientoPorEmpresa.helpers({
     planeamiento() {
-        let rutaId = FlowRouter.getParam('rutaId')
+        let rutaId = FlowRouter.getParam('rutaId');
         let empresaId = FlowRouter.getParam('empresaId');
-        console.log(rutaId);
-        console.log(Planeamiento.findOne({empresaId: empresaId, rutaId: rutaId}).plan);
-        return Planeamiento.findOne({rutaId: rutaId});
+
+        let planeamiento = Planeamiento.findOne({ rutaId: rutaId});
+
+        console.log( rutaId, planeamiento );
+        return planeamiento;
 
     },
-    ruta(id) {
-        return Rutas.findOne({_id: id}).nombre;
+    ruta() {
+        return Rutas.findOne({_id: FlowRouter.getParam('rutaId')});
     },
     empresa() {
-        return Empresas.findOne().nombre;
+        return Empresas.findOne();
     },
     empresas() {
-        return Empresas.find({_id: FlowRouter.getParam('empresaId') }).fetch()[0].rutas;
+        return Empresas.find({_id: FlowRouter.getParam('empresaId') });
     }
 });
 

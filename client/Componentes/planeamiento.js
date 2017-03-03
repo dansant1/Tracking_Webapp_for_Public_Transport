@@ -42,10 +42,10 @@ Template.AgregarPlaneamiento.onCreated(() => {
         {
             _id: Random.id(),
             dia: "lunes",
-            hinicio: "12:00",
-            hfinal: "15:00",
+            hinicio: "",
+            hfinal: "",
             frecuencia: 20,
-            horas: ["12:00", "12:20", "12:40", "13:00", "13:20", "13:40", "14:00", "14:20", "14:40", "15:00"]
+            horas: []
         }
     ]);
 

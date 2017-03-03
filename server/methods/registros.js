@@ -745,33 +745,17 @@ Meteor.methods({
                 return acc;
             }, {});
 
+            let value;
             if (hora['0'] !== undefined) {
-                plan.horas.lunes.push({
-                    lunes: hora['0']
-                });
 
-                plan.horas.martes.push({
-                    martes: hora['0']
-                });
+                Object.keys( plan.horas ).forEach( ( dia ) => {
 
-                plan.horas.miercoles.push({
-                    miercoles: hora['0']
-                });
+                    if ( dia !== 'domingo' && dia !== 'sabado' ) { value = hora['0'] }
+                    if ( dia === 'sabado' ){ value = hora['1'] }
+                    if ( dia === 'domingo'){ value = hora['2'] }
 
-                plan.horas.jueves.push({
-                    jueves: hora['0']
-                });
+                    plan.horas[ dia ].push( value );
 
-                plan.horas.viernes.push({
-                    viernes: hora['0']
-                });
-
-                plan.horas.sabado.push({
-                    sabado: hora['1']
-                });
-
-                plan.horas.domingo.push({
-                    domingo: hora['2']
                 });
 
             }
@@ -988,6 +972,7 @@ Meteor.methods({
             if (planeamiento > 0) {
                 Planeamiento.update({empresaId: empresaId}, {
                     $set: {
+                        rutaId: datos.rutaId,
                         plan: datos,
                         modificado: new Date()
                     }
@@ -996,6 +981,7 @@ Meteor.methods({
                 Planeamiento.insert({
                     empresaId: empresaId,
                     modificado: new Date(),
+                    rutaId: datos.rutaId,
                     plan: datos
                 });
             }

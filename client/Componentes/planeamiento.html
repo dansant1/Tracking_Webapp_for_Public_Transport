@@ -38,31 +38,19 @@
     						{{#with planeamiento}}
 						    <tbody id="horarios">
 
-						    	<tr id="h">
+									<tr id="h">
 
 							        <td>
 							        {{#each plan.horas.lunes}}
-												<div class='input-group date' id='hora'>
-															<input disabled type='text' class="form-control m" value="{{this.lunes}}"  />
-															<span class="input-group-addon">
-																	<span class="glyphicon glyphicon-time"></span>
-															</span>
-													</div>
-													<br>
+						              <input disabled type='text' class="form-control l" value="{{this}}" />
+													<br />
 							        {{/each}}
 							        </td>
 
-
-
 							        <td>
 							        {{#each plan.horas.martes}}
-							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control m" value="{{this.martes}}"  />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
-                						<br>
+												<input disabled type='text' class="form-control m" value="{{this}}" />
+												<br />
 							       	{{/each}}
 							        </td>
 
@@ -70,13 +58,8 @@
 
 							        <td>
 							        	{{#each plan.horas.miercoles}}
-							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control mi" value="{{this.miercoles}}"  />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
-                						<br>
+													<input disabled type='text' class="form-control mi" value="{{this}}" />
+													<br />
 							        	{{/each}}
 							        </td>
 
@@ -84,13 +67,8 @@
 
 							        <td>
 							        {{#each plan.horas.jueves}}
-							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control j" value="{{this.jueves}}" />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
-                						<br>
+												<input disabled type='text' class="form-control j" value="{{this}}" />
+												<br />
 							        {{/each}}
 							        </td>
 
@@ -98,26 +76,16 @@
 
 							        <td>
 							        	{{#each plan.horas.viernes}}
-							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control v" value="{{this.viernes}}" />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
-                						<br>
+													<input disabled type='text' class="form-control v" value="{{this}}" />
+													<br />
 							       		{{/each}}
 							        </td>
 
 
 							        <td>
 							       		{{#each plan.horas.sabado}}
-							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control s" value="{{this.sabado}}" />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
-                						<br>
+													<input disabled type='text' class="form-control s" value="{{this}}" />
+													<br />
 							        	{{/each}}
 							        </td>
 
@@ -125,13 +93,8 @@
 
 							        <td>
 							        	{{#each plan.horas.domingo}}
-							        	<div class='input-group date' id='hora'>
-						                    <input disabled type='text' class="form-control d" value="{{this.domingo}}" />
-						                    <span class="input-group-addon">
-						                        <span class="glyphicon glyphicon-time"></span>
-						                    </span>
-                						</div>
-										<br>
+													<input disabled type='text' class="form-control d" value="{{this}}" />
+													<br />
 							        	{{/each}}
 							        </td>
 
