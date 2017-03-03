@@ -18,14 +18,20 @@
                           <span class="time hour">{{time}}</span>
                 					<div class="form-group" style="display: inline-block; margin-left: 20px">
                 						<select class="js-example-basic form-control vehicle">
-                                            {{#unless vehicle}}
-                                                <option value="?" disabled selected>Elegir vehículo</option>
-                                            {{/unless}}
-                                            {{#each vehiculos hours minutes}}
-                                                {{#if matchVehicle ../vehicle _id}}
+                                            {{#if vehicleId}}
+                                                <option value="?">Elegir vehículo</option>
+                                            {{else}}
+                                                <option value="?" selected>Elegir vehículo</option>
+                                            {{/if}}
+                                            {{#each vehiculos}}
+                                                {{#if matchVehicle ../vehicleId _id}}
                                                     <option value="{{_id}}" selected>{{placa}} - {{padron}}</option>
                                                 {{else}}
-                                                    <option value="{{_id}}">{{placa}} - {{padron}}</option>
+                                                    {{#if disabled}}
+                                                        <option value="{{_id}}" disabled>{{placa}} - {{padron}}</option>
+                                                    {{else}}
+                                                        <option value="{{_id}}">{{placa}} - {{padron}}</option>
+                                                    {{/if}}
                                                 {{/if}}
                                             {{else}}
                                                 <option value="0">Cargando...</option>

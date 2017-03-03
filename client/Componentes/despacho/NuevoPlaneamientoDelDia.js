@@ -3,6 +3,8 @@ Template.NuevoPlaneamientoDelDia.onCreated(() => {
 
     template.planeamientoHoy = new ReactiveVar([]);
 
+    template.vehiculos = new ReactiveVar([]);
+
     template.autorun(() => {
         let empresaId = Meteor.user().profile.empresaId;
         template.subscribe('DetalleDeEmpresaPlaneamiento', empresaId);
@@ -69,82 +71,74 @@ Template.NuevoPlaneamientoDelDia.onRendered(() => {
 
 
 Template.NuevoPlaneamientoDelDia.helpers({
-    vehiculos(hours, minutes) {
-        let planeamientoHoy = Template.instance().planeamientoHoy.get();
-
-        return Vehiculos.find({empresaId: Meteor.user().profile.empresaId}).fetch().filter(v=> {
-            let nonAdmited = planeamientoHoy.filter(p=> {
-                let time = hours * 60 + minutes;
-                return p.hours * 60 + p.minutes < time && p.hours * 60 + p.minutes > time - 2 * 60; // TODO: just two hours to make available a vehicle again
-            }).map(p=>p.vehicleId);
-            return !nonAdmited.includes(v._id);
-        });
+    vehiculos() {
+        return Template.instance().vehiculos.get();
     },
     planeamientoHoy(){
         return Template.instance().planeamientoHoy.get();
     },
-    matchVehicle(vehicle, _id){
-        return vehicle && vehicle._id === _id;
+    matchVehicle(vehicleId, _id){
+        return vehicleId === _id;
     }
 });
 
 Template.NuevoPlaneamientoDelDia.events({
+    'click .vehicle'(e, t){
+        let {hours, minutes} = this;
+        let planeamientoHoy = Template.instance().planeamientoHoy.get();
+
+        let vehiculos = Vehiculos.find({empresaId: Meteor.user().profile.empresaId}).fetch().map(v=> {
+            let nonAdmited = planeamientoHoy.filter(p=> {
+                let time = hours * 60 + minutes;
+                let before = p.hours * 60 + p.minutes <= time && p.hours * 60 + p.minutes > time - 2 * 60;
+                let after = p.hours * 60 + p.minutes >= time && p.hours * 60 + p.minutes < time + 2 * 60;
+                return before || after;
+            }).map(p=>p.vehicleId);
+            let disabled = nonAdmited.includes(v._id) ? true : false;
+            return {...v, disabled};
+        });
+        Template.instance().vehiculos.set(vehiculos);
+    },
     'change .vehicle'(e, t){
         let planeamientoHoy = Template.instance().planeamientoHoy.get();
         planeamientoHoy.forEach(p=> {
             if (p.time === this.time) {
-                p.vehicleId = e.target.value
+                p.vehicleId = e.target.value != '?' ? e.target.value : null;
             }
         });
         Template.instance().planeamientoHoy.set(planeamientoHoy)
     },
     'click .guardar'(e, t) {
-        let datos = [];
+        let planeamientoHoy = Template.instance().planeamientoHoy.get();
 
-        $('li.planeamiento').each(function (index, obj) {
+        if (planeamientoHoy.some(p=>p.vehicleId === null)) {
+            Bert.alert('Todas las horas deben tener asignadas un vehículo', 'danger')
+        }
+        let hoy = new Date();
+        let dd = hoy.getDate();
+        var mm = hoy.getMonth() + 1;
+        let yyyy = hoy.getFullYear();
+        dd = (dd < 10 ? '0' : '') + dd;
+        mm = (mm < 10 ? '0' : '') + mm;
+        var today = dd + '/' + mm + '/' + yyyy;
 
-            if ($(obj).find('.vehicle').val() !== '0') {
-                let vehiculo = $(obj).find('.vehicle').val();
-                let hoy = new Date();
-                let dd = hoy.getDate();
-                var mm = hoy.getMonth() + 1;
-
-                let yyyy = hoy.getFullYear();
-
-                if (dd < 10) {
-                    dd = '0' + dd;
-                }
-
-                if (mm < 10) {
-                    mm = '0' + mm;
-                }
-                var today = dd + '/' + mm + '/' + yyyy;
-                let hora = $(obj).find('span.hour').text();
-
-                if (vehiculo !== null) {
-                    let registro = {
-                        vehiculoId: vehiculo,
-                        empresaId: Meteor.user().profile.empresaId,
-                        rutaId: FlowRouter.getParam('rutaId'),
-                        despachado: false,
-                        hora: hora,
-                        dia: today,
-                        createdAt: new Date()
-                    }
-                    datos.push(registro)
-
-
-                }
-
-            }
-
+        planeamientoHoy = planeamientoHoy.map(ph=> {
+            return {
+                vehiculoId: ph.vehicleId,
+                empresaId: Meteor.user().profile.empresaId,
+                rutaId: FlowRouter.getParam('rutaId'),
+                despachado: false,
+                hora: ph.time,
+                dia: today,
+                createdAt: new Date()
+            };
         });
 
-        Meteor.call('guardarPlaneamientoDeHoy', datos, (err) => {
+        Meteor.call('guardarPlaneamientoDeHoy', planeamientoHoy, (err) => {
             if (err) {
                 Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
             } else {
-                FlowRouter.go('/')
+                FlowRouter.go('/');
                 Bert.alert('Planeamiento de hoy agregado', 'success')
             }
         })
