@@ -205,7 +205,6 @@ Template.AdministradorAgregarPlaneamiento.events({
       let minutosAlInicio = converToMinutes( updatedPlaneamiento.hinicio );
       let minutosAlFinal = converToMinutes( updatedPlaneamiento.hfinal );
       let minutos = minutosAlInicio;
-      let hora = updatedPlaneamiento.hinicio;
 
       // exceptions
       if ( !updatedPlaneamiento.hinicio ){
@@ -236,6 +235,9 @@ Template.AdministradorAgregarPlaneamiento.events({
         return;
       }
 
+      let hora = updatedPlaneamiento.hinicio;
+      horas.push(updatedPlaneamiento.hinicio);
+
       //Generar Horas
       while ( minutos + updatedPlaneamiento.frecuencia < minutosAlFinal ) {
         hora = addMinutes( hora, updatedPlaneamiento.frecuencia );
@@ -260,10 +262,11 @@ Template.AdministradorAgregarPlaneamiento.events({
     'click button.agregar'(e, t){
       let planeamiento = Template.instance().planeamiento.get();
       planeamiento.push({
-        dia: "lunes",
+        _id: Random.id(),
+        dia: "",
         hinicio: "",
         hfinal: "",
-        frecuencia: "",
+        frecuencia: 20,
         horas: []
       });
       Template.instance().planeamiento.set( planeamiento );
@@ -288,15 +291,9 @@ Template.AdministradorAgregarPlaneamiento.events({
             // transformando datos a estructura actual de planeamiento
 
             let planeamiento = Template.instance().planeamiento.get();
-            let horas = [];
-            let obj = {};
 
             planeamiento.forEach( (plan) => {
-              for( let i=0; i<plan.horas.length; i++){
-                obj[plan.dia] = plan["horas"][i];
-                horas.push( obj );
-              }
-              _.extend( datos.horas[ plan.dia ], horas );
+              datos.horas[ plan.dia ] = _.union( datos.horas[ plan.dia ],  plan["horas"] );
             });
 
 

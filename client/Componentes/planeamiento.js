@@ -117,14 +117,14 @@ Template.AgregarPlaneamiento.events({
             hfinal: target.closest(".planeamiento").find(".hfinal").val(),
             frecuencia: parseInt(target.closest(".planeamiento").find(".frecuencia").val()),
         };
+        console.log( updatedPlaneamiento );
 
         //Generar Horas
         let horas = [];
         let minutosAlInicio = converToMinutes(updatedPlaneamiento.hinicio);
         let minutosAlFinal = converToMinutes(updatedPlaneamiento.hfinal);
         let minutos = minutosAlInicio;
-        let hora = updatedPlaneamiento.hinicio;
-        horas.push(updatedPlaneamiento.hinicio);
+
 
         // exceptions
         if (!updatedPlaneamiento.hinicio) {
@@ -155,6 +155,9 @@ Template.AgregarPlaneamiento.events({
             return;
         }
 
+        let hora = updatedPlaneamiento.hinicio;
+        horas.push(updatedPlaneamiento.hinicio);
+
         //Generar Horas
         while (minutos + updatedPlaneamiento.frecuencia <= minutosAlFinal) {
             hora = addMinutes(hora, updatedPlaneamiento.frecuencia);
@@ -178,12 +181,12 @@ Template.AgregarPlaneamiento.events({
     'click button.agregar'(e, t){
         let planeamiento = Template.instance().planeamiento.get();
         planeamiento.push({
-            _id: Random.id(),
-            dia: "lunes",
-            hinicio: "12:00",
-            hfinal: "15:00",
-            frecuencia: 20,
-            horas: ["12:00", "12:20", "12:40", "13:00", "13:20", "13:40", "14:00", "14:20", "14:40", "15:00"]
+          _id: Random.id(),
+          dia: "",
+          hinicio: "",
+          hfinal: "",
+          frecuencia: 20,
+          horas: []
         });
         Template.instance().planeamiento.set(planeamiento);
     },
@@ -206,8 +209,8 @@ Template.AgregarPlaneamiento.events({
 
         let planeamiento = Template.instance().planeamiento.get();
 
-        planeamiento.forEach((plan) => {
-            datos.horas[plan.dia] = plan.horas;
+        planeamiento.forEach( (plan) => {
+          datos.horas[ plan.dia ] = _.union( datos.horas[ plan.dia ],  plan["horas"] );
         });
 
         let empresaId = Template.instance().empresaId.get();
