@@ -274,6 +274,7 @@
 
 /*MAP*/
 .Schematic__map {
+    display: none;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -296,19 +297,44 @@
 .Map__content .Content__going, .Map__content .Content__return {
     height: 100px;
     padding: 0 55px;
+    position: relative;
+}
+
+.Map__content .Content__going .Route__control, .Map__content .Content__return .Route__control {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    color: white;
+    line-height: 30px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    position: absolute;
+}
+
+.Map__content .Content__going .Route__control {
+    background-color: orange;
+}
+
+.Map__content .Content__return .Route__control {
+    background-color: blue;
 }
 
 .Map__content .Content__going .Content__route {
-    border-top: 2px solid blue;
-    border-left: 2px solid blue;
-    border-right: 2px solid blue;
+    border-top: 2px solid orange;
+    border-left: 2px solid orange;
+    border-right: 2px solid orange;
     height: 100%;
 }
 
+.Content__going .Content__route {
+
+}
+
 .Map__content .Content__return .Content__route {
-    border-bottom: 2px solid orange;
-    border-left: 2px solid orange;
-    border-right: 2px solid orange;
+    border-bottom: 2px solid blue;
+    border-left: 2px solid blue;
+    border-right: 2px solid blue;
     height: 100%;
 }
 

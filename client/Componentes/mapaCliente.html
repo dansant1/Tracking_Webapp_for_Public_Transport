@@ -68,7 +68,7 @@
 				<button id="verpuntosdecontrol" type="button" class="btn btn-success" style="position: absolute; top: 7px; z-index: 1001; left: 57%; "> <i class="fa fa-eye" aria-hidden="true"></i> Ver Puntos de Control</button>
                 <button id="modoTrafico" type="button" class="btn btn-warning trafico" style="position: absolute; top: 7px; z-index: 1001; left: 74%; "> <i class="fa fa-train" aria-hidden="true"></i> Modo Trafico</button>
                 <button id="activePolygon" type="button" class="btn btn-info" style="position: absolute; top: 7px; z-index: 1001; left: 85%; "> <i class="fa fa-codepen" aria-hidden="true"></i> Ver Geocerca</button>
-                <button id="schematicMap" type="button" class="btn btn-info" style="position: absolute; top: 7px; z-index: 1001; left: 95%; "> <i class="fa fa-map" aria-hidden="true"></i> Ver Geocerca</button>
+                <button id="schematicMap" type="button" class="btn btn-info" style="position: absolute; top: 7px; z-index: 1001; left: 97%; "> <i class="fa fa-map" aria-hidden="true"></i> Esquematico</button>
 			</div>
 
 		<div class="map-container" style="height: 100%">
@@ -78,18 +78,30 @@
 				   		{{>Loader}}
 				   	{{/if}}
 		</div>
-        <div class="Schematic__map">
+        <div class="Schematic__map" id="schematic">
             <h3 class="Map__title">Mapa esquemático</h3>
             <div class="Map__content">
                 <div class="Content__going">
-                    <div class="Content__route"></div>
+                    <div class="Content__route">
+                        <div class="Route__control" style="top: 35px; left: 40px">10</div>
+                        <div class="Route__control" style="top: -15px; right: 80%">9</div>
+                        <div class="Route__control" style="top: -15px; right: 38%">8</div>
+                        <div class="Route__control" style="top: -15px; right: 20%">7</div>
+                        <div class="Route__control" style="top: 10px; right: 40px">6</div>
+                    </div>
                 </div>
                 <div class="Content__middle">
                     <div class="Terminal__start">TERMINAL INICIAL</div>
                     <div class="Terminal__end">TERMINAL FINAL</div>
                 </div>
                 <div class="Content__return">
-                    <div class="Content__route"></div>
+                    <div class="Content__route">
+                        <div class="Route__control" style="top: 30px; left: 40px">1</div>
+                        <div class="Route__control" style="top: 85px; left: 10%">2</div>
+                        <div class="Route__control" style="top: 85px; left: 50%">3</div>
+                        <div class="Route__control" style="top: 85px; left: 70%">4</div>
+                        <div class="Route__control" style="top: 50px; right: 40px">5</div>
+                    </div>
                 </div>
             </div>
         </div>
