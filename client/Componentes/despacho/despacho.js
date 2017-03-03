@@ -153,7 +153,13 @@ Template.Asignar.events({
 Template.Asignar.helpers({
   conductores() {
     let empresaId = Meteor.user().profile.empresaId;
-    return Conductores.find({empresaId: empresaId, despachado: false});
+    return Conductores.find({
+      empresaId: empresaId,
+      $or :[
+        { despachado: { $exists: false } },
+        { despachado: false }
+      ]
+    });
   },
   despachar() {
     if (Template.instance().despachar.get() === true) {
@@ -164,7 +170,13 @@ Template.Asignar.helpers({
   },
   cobradores() {
     let empresaId = Meteor.user().profile.empresaId;
-    return Cobradores.find({empresaId: empresaId, despachado: false});
+    return Cobradores.find({
+      empresaId: empresaId,
+      $or :[
+        { despachado: { $exists: false } },
+        { despachado: false }
+      ]
+    });
   },
   requisitos() {
     return Requisitos.find();
