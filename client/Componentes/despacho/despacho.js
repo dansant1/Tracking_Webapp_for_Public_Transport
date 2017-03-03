@@ -21,13 +21,13 @@ Template.VistaDespacho.onCreated( () => {
 
 Template.VistaDespacho.helpers({
   despacho() {
-    return RegistroDeDespachoDeVehiculos.find();
+    return RegistroDeDespachoDeVehiculos.find({requisitos: {$not: false} });
   },
   despachados() {
     return RegistroDeDespachoDeVehiculos.find({despachado: true});
   },
   despachocola() {
-    return RegistroDeDespachoDeVehiculos.find({despachado: false});
+    return RegistroDeDespachoDeVehiculos.find({requisitos: false});
   },
   placa() {
     return Vehiculos.findOne({_id: this.vehiculoId}).placa
@@ -122,7 +122,7 @@ Template.Asignar.events({
   },
   'click .cumple'(e, t) {
     let vehiculo = Session.get('VehiculoADespachar');
-    let registroId = Session.get('RegistroDeVehiculoADespachar')
+    let registroId = Session.get('RegistroDeVehiculoADespachar');
     Meteor.call('RegistrarVehiculoParaDespachar', registroId, vehiculo, t.conductor.get(), t.cobrador.get(), (err) => {
       if (err) {
         Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
@@ -132,16 +132,21 @@ Template.Asignar.events({
       }
     })
   },
-  'click .reasignar'() {
+  'click .reasignar'(e,t) {
     let rutaId = FlowRouter.getParam('rutaId');
-    console.log(rutaId);
-    Meteor.call('ReasignarVehiculos', rutaId, (err) => {
+    let registroId = Session.get('RegistroDeVehiculoADespachar');
+    let target = $( e.currentTarget );
+    target.text( "Reasignando ...");
+    target.attr( "disabled", "" );
+    Meteor.call('ReasignarVehiculos', rutaId, registroId, (err) => {
       if (err) {
-        Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
+        Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
+        console.log( err );
       } else {
-        Bert.alert('Vehiculos Reasignados', 'success')
+        Bert.alert('Vehiculos Reasignados', 'success');
+        Modal.hide('Asignar');
       }
-    })
+    });
   }
 })
 

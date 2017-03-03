@@ -44,7 +44,7 @@ Meteor.methods({
           return;
         }
       },
-      ReasignarVehiculos(rutaId) {
+      ReasignarVehiculos(rutaId, registroId) {
           let hoy = new Date();
           let dd = hoy.getDate();
           var mm = hoy.getMonth() + 1;
@@ -58,23 +58,47 @@ Meteor.methods({
           if ( mm < 10 ) {
               mm='0'+mm;
           }
-          var today = dd+'/'+mm+'/'+yyyy;
-          let i = 0
-          RegistroDeDespachoDeVehiculos.find({rutaId: rutaId, despachado: false, dia: today}).forEach( (d) => {
-              if (i !== 0) {
-                //let next = RegistroDeDespachoDeVehiculos.find({rutaId: rutaId, despachado: false, dia: today}).fetch()[i + 1]._id;
-                //console.log(RegistroDeDespachoDeVehiculos.findOne({_id: next})).vehiculoId;
-                /*RegistroDeDespachoDeVehiculos.update({_id: next}, {
-                  $set: {
-                    vehiculoId: d.vehiculoId
-                  }
-                })*/
+          let today = dd+'/'+mm+'/'+yyyy;
+          let datetime;
 
-                //console.log(RegistroDeDespachoDeVehiculos.findOne({_id: next})).vehiculoId;
-              }
+          RegistroDeDespachoDeVehiculos.find({rutaId: rutaId, despachado: false, dia: today }).forEach( (despacho) => {
+            // agregando campo Datetime para luego hacer una busqueda ordenada
+            if ( ! _.has(despacho, "datetime") ){
+              datetime = new Date( today + " " + despacho.hora );
+              RegistroDeDespachoDeVehiculos.update({_id: despacho._id}, { $set: { datetime: datetime } });
+            }
+          });
 
-              i++;
-          })
+          // ponemos en espera al vehiculo
+          let despachoDeVehiculoReasignarId = registroId;
+          // = RegistroDeDespachoDeVehiculos.update({_id: registroId}, { $set: { requisitos: false } });
+
+          //obtenemos la lista de despachos ordenada
+          let despachosOrdered = RegistroDeDespachoDeVehiculos.find({ despachado: false, hora: { $nin: ["","24:00"] } }, { $sort : {datetime: 1 } }).fetch();
+          let reordenar = false;
+          let registroDespachoAuxiliar = { hora: "", datetime: "" };
+
+          for( let i=0; i<= despachosOrdered.length; i++){
+
+            if ( typeof despachosOrdered[i] === 'undefined' ){
+              break;
+            }
+
+            if ( reordenar ){
+              RegistroDeDespachoDeVehiculos.update({_id: despachosOrdered[i]._id}, { $set: {
+                  hora: despachosOrdered[i-1].hora,
+                  datetime: despachosOrdered[i-1].datetime
+              }});
+            }
+
+            if ( despachosOrdered[i]._id === registroId ){
+              reordenar = true;
+              RegistroDeDespachoDeVehiculos.update({_id: registroId}, { $set: { requisitos: false } });
+            }
+
+          }
+          return true;
+
       },
       AgregarPlaneamientoDelDiaAutomatico(rutaId) {
         if (this.userId) {
@@ -172,10 +196,10 @@ Meteor.methods({
           var today = dd + '/' + mm + '/' + yyyy;
 
 
-
-          let venceLicencia = Conductores.findOne({_id: conductorId}).licencia.revalidacion;
-          let venceCEV = Conductores.findOne({_id: conductorId}).CEV.caducidad;
-          let credencial = Conductores.findOne({_id: conductorId}).credencial.caducidad;
+          let conductor = Conductores.findOne({_id: conductorId});
+          let venceLicencia = conductor.licencia.revalidacion;
+          let venceCEV = conductor.CEV.caducidad;
+          let credencial = conductor.credencial.caducidad;
 
           let licencia;
           let cev;
@@ -183,8 +207,6 @@ Meteor.methods({
 
           if (venceLicencia !== undefined && venceLicencia !== null) {
             if (process(today) < process(venceLicencia)) {
-              console.log(today);
-              console.log(venceLicencia);
               licencia = true;
             } else {
               licencia = false;
@@ -193,8 +215,6 @@ Meteor.methods({
 
           if (venceCEV !== undefined && venceCEV !== null) {
             if (process(today) < process(venceCEV)) {
-              console.log(today);
-              console.log(venceCEV);
               cev = true;
             } else {
               cev = false;
@@ -202,10 +222,7 @@ Meteor.methods({
           }
 
           if (credencial !== undefined && credencial !== null) {
-            console.log(credencial);
             if (process(today) < process(credencial)) {
-              console.log(today);
-              console.log(credencial);
               cred = true;
            } else {
               cred = false;
@@ -215,17 +232,17 @@ Meteor.methods({
           let res = {}
           if (licencia && cev && cred) {
             res.valido = true;
-            res.razon = 'El conductor cumple con los requisitos'
+            res.razon = 'El conductor cumple con los requisitos';
           } else {
             res.valido = false;
             if (licencia !== true) {
-              res.razon = 'La licencia esta vencido.'
+              res.razon = 'La licencia esta vencido.';
             } else if (licencia !== true && cev !== true) {
-              res.razon = 'La licencia y el CEV estan vencidos.'
+              res.razon = 'La licencia y el CEV estan vencidos.';
             } else if (licencia !== true && cev !== true && cred !== true) {
-              res.razon = 'La licencia, el CEV y la credencial del conductor estan vencidos.'
+              res.razon = 'La licencia, el CEV y la credencial del conductor estan vencidos.';
             } else {
-              res.razon = 'Los documentos del conductor estan vencidos'
+              res.razon = 'Los documentos del conductor estan vencidos';
             }
           }
 
