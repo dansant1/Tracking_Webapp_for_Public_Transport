@@ -82,7 +82,6 @@ Template.AgregarPlaneamiento.events({
             hfinal: target.closest(".planeamiento").find(".hfinal").val(),
             frecuencia: parseInt(target.closest(".planeamiento").find(".frecuencia").val()),
         };
-        console.log( updatedPlaneamiento );
 
         //Generar Horas
         let horas = [];
@@ -146,12 +145,12 @@ Template.AgregarPlaneamiento.events({
     'click button.agregar'(e, t){
         let planeamiento = Template.instance().planeamiento.get();
         planeamiento.push({
-          _id: Random.id(),
-          dia: "",
-          hinicio: "",
-          hfinal: "",
-          frecuencia: 20,
-          horas: []
+            _id: Random.id(),
+            dia: "",
+            hinicio: "",
+            hfinal: "",
+            frecuencia: 20,
+            horas: []
         });
         Template.instance().planeamiento.set(planeamiento);
     },
@@ -174,8 +173,8 @@ Template.AgregarPlaneamiento.events({
 
         let planeamiento = Template.instance().planeamiento.get();
 
-        planeamiento.forEach( (plan) => {
-          datos.horas[ plan.dia ] = _.union( datos.horas[ plan.dia ],  plan["horas"] );
+        planeamiento.forEach((plan) => {
+            datos.horas[plan.dia] = _.union(datos.horas[plan.dia], plan["horas"]);
         });
 
         let empresaId = Template.instance().empresaId.get();
@@ -254,8 +253,8 @@ Template.RutasDeLaEmpresa.onCreated(() => {
 
 Template.RutasDeLaEmpresa.helpers({
     empresa() {
-        let empresaId = Meteor.user().profile.empresaId
-        return Empresas.findOne({_id: empresaId}).nombre;
+        let empresa = Empresas.findOne({_id: Meteor.user().profile.empresaId});
+        return empresa ? empresa.nombre : '';
     },
     rutas() {
         let empresaId = Meteor.user().profile.empresaId
