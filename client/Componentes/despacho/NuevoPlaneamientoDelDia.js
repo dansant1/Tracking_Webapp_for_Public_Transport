@@ -92,7 +92,8 @@ Template.NuevoPlaneamientoDelDia.events({
                 let time = hours * 60 + minutes;
                 let before = p.hours * 60 + p.minutes <= time && p.hours * 60 + p.minutes > time - 2 * 60;
                 let after = p.hours * 60 + p.minutes >= time && p.hours * 60 + p.minutes < time + 2 * 60;
-                return before || after;
+                let existVehicle = p.vehicleId !== null;
+                return existVehicle && (before || after);
             }).map(p=>p.vehicleId);
             let disabled = nonAdmited.includes(v._id) ? true : false;
             return {...v, disabled};

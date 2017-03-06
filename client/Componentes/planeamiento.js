@@ -23,8 +23,8 @@ Template.PlaneamientoInterno.helpers({
         return Rutas.findOne({_id: id}).nombre;
     },
     planeamiento() {
-        let rutaId = FlowRouter.getParam('rutaId')
-        return Planeamiento.findOne({rutaId: rutaId});
+        let rutaId = FlowRouter.getParam('rutaId');
+        return Planeamiento.findOne({"plan.rutaId": rutaId});
     }
 });
 
