@@ -1,268 +1,156 @@
-<template name="PlaneamientoInterno">
-	<div class="content-wrapper">
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-md-12 col-sm-18 col-xs-18">
-					<div class="box">
-						<div class="box-white" style="width: 99.8%; margin-top: 5px; margin-bottom: 20px; min-height: 40vh;">
-							<div class="row">
-								<div class="col-md-4">
-
-									<!--<select id="ruta" class="form-control">
-										<option value="1">Seleccione una ruta</option>
-										{{#each empresas.rutas}}
-										<option value="{{this}}">{{ruta this}}</option>
-										{{/each}}
-									</select> -->
-								</div>
-							</div>
-							<br>
-							<div class="row">
-				<div class="col-md-12 col-sm-18 col-xs-18">
-					<div class="box">
-						<br>
-						<h1 style="margin: 5px; padding: 0px; font-size: 1.5em">Planeamiento actual de la empresa {{empresas}}</h1>
-						<br>
-						<table class="table-responsive">
-							<thead style="border-bottom: 2px solid #ddd;">
-						    	<tr>
-							        <th style="text-align: center;">Lunes</th>
-							        <th style="text-align: center;">Martes</th>
-							        <th style="text-align: center;">Miercoles</th>
-							        <th style="text-align: center;">Jueves</th>
-							        <th style="text-align: center;">Viernes</th>
-							        <th style="text-align: center;">Sabado</th>
-							        <th style="text-align: center;">Domingo</th>
-						    	</tr>
-    						</thead>
-    						{{#with planeamiento}}
-						    <tbody id="horarios">
-
-									<tr id="h">
-
-							        <td>
-							        {{#each plan.horas.lunes}}
-						              <input disabled type='text' class="form-control l" value="{{this}}" />
-													<br />
-							        {{/each}}
-							        </td>
-
-							        <td>
-							        {{#each plan.horas.martes}}
-												<input disabled type='text' class="form-control m" value="{{this}}" />
-												<br />
-							       	{{/each}}
-							        </td>
-
-
-
-							        <td>
-							        	{{#each plan.horas.miercoles}}
-													<input disabled type='text' class="form-control mi" value="{{this}}" />
-													<br />
-							        	{{/each}}
-							        </td>
-
-
-
-							        <td>
-							        {{#each plan.horas.jueves}}
-												<input disabled type='text' class="form-control j" value="{{this}}" />
-												<br />
-							        {{/each}}
-							        </td>
-
-
-
-							        <td>
-							        	{{#each plan.horas.viernes}}
-													<input disabled type='text' class="form-control v" value="{{this}}" />
-													<br />
-							       		{{/each}}
-							        </td>
-
-
-							        <td>
-							       		{{#each plan.horas.sabado}}
-													<input disabled type='text' class="form-control s" value="{{this}}" />
-													<br />
-							        	{{/each}}
-							        </td>
-
-
-
-							        <td>
-							        	{{#each plan.horas.domingo}}
-													<input disabled type='text' class="form-control d" value="{{this}}" />
-													<br />
-							        	{{/each}}
-							        </td>
-
-						    	</tr>
-
-						    </tbody>
-								{{else}}
-								<h3>Cargando Planeamiento...</h3>
-						    {{/with}}
-						</table>
-
-					</div>
-				</div>
-			</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</template>
-
 <template name="RutasDeLaEmpresa">
-	<div class="content-wrapper">
-      <div class="container-fluid">
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-sm-18 col-xs-18">
+                    <div class="box">
+                        <h3>Rutas de la empresa {{empresa}}</h3>
+                        <br>
+                        <ul class="list-group">
 
-
-          <div class="row">
-              <div class="col-md-12 col-sm-18 col-xs-18">
-                  <div class="box">
-                      <h3>Rutas de la empresa {{empresa}}</h3>
-
-                      <br>
-                      <ul class="list-group">
-
-                              {{#each rutas}}
-                                  <li class="list-group-item clearfix">
-                                      <span class="pull-left">{{this.nombre}} </span>
-                                      <span class="pull-right">
+                            {{#each rutas}}
+                                <li class="list-group-item clearfix">
+                                    <span class="pull-left">{{this.nombre}} </span>
+                                    <span class="pull-right">
 
               								          	<a href="/plan/ruta/{{this._id}}" class="btn btn-primary">
               												      <i class="fa fa-eye" aria-hidden="true"></i>
               											      </a>
 
                                       </span>
-                                  </li>
+                                </li>
 
-                              {{else}}
-                                  <h3>Lo sentimos no tenemos resultados de rutas para esta empresa</h3>
-                              {{/each}}
+                            {{else}}
+                                <h3>Lo sentimos no tenemos resultados de rutas para esta empresa</h3>
+                            {{/each}}
 
 
 
-                      </ul>
+                        </ul>
 
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <template name="AgregarPlaneamiento">
-	<div class="content-wrapper">
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-md-12 col-sm-18 col-xs-18">
-					<div class="box">
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-sm-18 col-xs-18">
+                    <div class="box">
 
-						<br>
-						<div class="row">
-							<div class="col-md-3">
+                        <br>
+                        <div class="row">
+                            <div class="col-md-3">
 
-								<select id="ruta" class="form-control">
-									<option value="1">--Seleccione una ruta--</option>
-									{{#each empresas.rutas }}
-									<option value="{{this}}">{{ruta this}}</option>
-									{{/each}}
-								</select>
-							</div>
-						</div>
-						<br>
-						<div class="row">
-							<div class="col-md-3">
-								<label class="btn btn-success btn-file">
-						    			<i style="display: inline-block; margin-right: 6px;" class="fa fa-file-excel-o" aria-hidden="true"></i> Subir Excel  <input type="file" id="excelplan" style="display: none;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-								</label>
-							</div>
-						</div>
-						<br>
+                                <select id="ruta" class="form-control">
+                                    <option value="1">--Seleccione una ruta--</option>
+                                    {{#each empresas.rutas }}
+                                        <option value="{{this}}">{{ruta this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="btn btn-success btn-file">
+                                    <i style="display: inline-block; margin-right: 6px;" class="fa fa-file-excel-o"
+                                       aria-hidden="true"></i> Subir Excel <input type="file" id="excelplan"
+                                                                                  style="display: none;"
+                                                                                  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                </label>
+                            </div>
+                        </div>
+                        <br>
 
 
-					{{#each plan in planeamiento}}
-						<div class="row planeamiento" id="{{plan._id}}" >
+                        {{#each plan in planeamiento}}
+                            <div class="row planeamiento" id="{{plan._id}}">
 
 
-							<table class="col-md-3">
-								<tr>
-									<td>Dia</td>
-									<td>
-										<select class="form-control dia">
-											<option value="lunes" {{$selected plan.dia 'lunes'}}>Lunes</option>
-											<option value="martes" {{$selected plan.dia 'martes'}}>Martes</option>
-											<option value="miercoles" {{$selected plan.dia 'miercoles'}}>Miercoles</option>
-											<option value="jueves" {{$selected plan.dia 'jueves'}}>Jueves</option>
-											<option value="viernes" {{$selected plan.dia 'viernes'}}>Viernes</option>
-											<option value="sabado" {{$selected plan.dia 'sabado'}}>Sabado</option>
-											<option value="domingo" {{$selected plan.dia 'domingo'}}>Domigo</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>H. Inicio</td>
-									<td><input type="time" class="form-control input-sm hinicio" value="{{plan.hinicio}}"></td>
-								</tr>
-								<tr>
-									<td>H. Fin</td>
-									<td><input type="time" class="form-control input-sm hfinal" value="{{plan.hfinal}}"></td>
-								</tr>
-								<tr>
-									<td>
-										<label for="" style="position:relative;top:-7px;">Frecuencia</label>
-									</td>
-									<td>
-										<div class="input-group">
-											<input type="number" step="1" min="1" class="form-control input-sm frecuencia" value="{{plan.frecuencia}}">
-											<span class="input-group-btn">
+                                <table class="col-md-3">
+                                    <tr>
+                                        <td>Dia</td>
+                                        <td>
+                                            <select class="form-control dia">
+                                                <option value="lunes" {{$selected plan.dia 'lunes'}}>Lunes</option>
+                                                <option value="martes" {{$selected plan.dia 'martes'}}>Martes</option>
+                                                <option value="miercoles" {{$selected plan.dia 'miercoles'}}>Miercoles
+                                                </option>
+                                                <option value="jueves" {{$selected plan.dia 'jueves'}}>Jueves</option>
+                                                <option value="viernes" {{$selected plan.dia 'viernes'}}>Viernes
+                                                </option>
+                                                <option value="sabado" {{$selected plan.dia 'sabado'}}>Sabado</option>
+                                                <option value="domingo" {{$selected plan.dia 'domingo'}}>Domigo</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>H. Inicio</td>
+                                        <td><input type="time" class="form-control input-sm hinicio"
+                                                   value="{{plan.hinicio}}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>H. Fin</td>
+                                        <td><input type="time" class="form-control input-sm hfinal"
+                                                   value="{{plan.hfinal}}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="" style="position:relative;top:-7px;">Frecuencia</label>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="number" step="1" min="1"
+                                                       class="form-control input-sm frecuencia"
+                                                       value="{{plan.frecuencia}}">
+                                                <span class="input-group-btn">
 								        <button class="btn btn-default btn-sm update" type="button">
 								        	<i class="fa fa-refresh" aria-hidden="true"></i>
 								        </button>
 								      </span>
-								    </div>
-									</td>
-								</tr>
-							</table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
 
 
-							<div class="col-md-9 hour-section">
-								<table>
-									<tr>
-										{{#each hora in plan.horas}}
-										<td>
-											<input type="text" class="form-control input-sm" value="{{hora}}" disabled="">
-										</td>
-										{{/each}}
-									</tr>
-								</table>
+                                <div class="col-md-9 hour-section">
+                                    <table>
+                                        <tr>
+                                            {{#each hora in plan.horas}}
+                                                <td>
+                                                    <input type="text" class="form-control input-sm" value="{{hora}}"
+                                                           disabled="">
+                                                </td>
+                                            {{/each}}
+                                        </tr>
+                                    </table>
 
 
-							</div>
+                                </div>
 
-						</div>
+                            </div>
 
-						{{/each}}
+                        {{/each}}
 
 
-					<div class="row">
-						<div class="col-md-2">
-							<button class="btn btn-primary btn-block input-lg agregar">Agregar</button>
-						</div>
-						<div class="col-md-offset-8 col-md-2">
-							<button class="btn btn-success btn-block input-lg guardar">Guardar</button>
-						</div>
-					</div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button class="btn btn-primary btn-block input-lg agregar">Agregar</button>
+                            </div>
+                            <div class="col-md-offset-8 col-md-2">
+                                <button class="btn btn-success btn-block input-lg guardar">Guardar</button>
+                            </div>
+                        </div>
 
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>

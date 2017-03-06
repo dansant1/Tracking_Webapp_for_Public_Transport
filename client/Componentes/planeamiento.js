@@ -1,40 +1,5 @@
 import {Random} from 'meteor/random';
 
-Template.PlaneamientoInterno.onCreated(() => {
-    let template = Template.instance();
-
-    template.autorun(() => {
-        let empresaId = Meteor.user().profile.empresaId;
-        template.subscribe('Empresas');
-        template.subscribe('Rutas');
-        template.subscribe('DetalleDeEmpresaPlaneamiento', empresaId);
-    });
-});
-
-Template.PlaneamientoInterno.onRendered(() => {
-
-});
-
-Template.PlaneamientoInterno.helpers({
-    empresas() {
-        return Empresas.findOne({_id: Meteor.user().profile.empresaId}).nombre;
-    },
-    ruta(id) {
-        return Rutas.findOne({_id: id}).nombre;
-    },
-    planeamiento() {
-        let rutaId = FlowRouter.getParam('rutaId');
-        return Planeamiento.findOne({"plan.rutaId": rutaId});
-    }
-});
-
-/*
- estructura planeamiento
- [
- { dia: "lunes", hinicio": "12:00", "hfinal": "14:00", "frecuencia": 100, "horas": [] },
- ]
- */
-
 Template.AgregarPlaneamiento.onCreated(() => {
     let self = Template.instance();
 

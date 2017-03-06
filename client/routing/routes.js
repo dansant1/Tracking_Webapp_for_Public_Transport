@@ -80,7 +80,7 @@ FlowRouter.route('/planeamiento', {
 FlowRouter.route('/plan/ruta/:rutaId', {
     name: 'Planeamiento',
     action() {
-        BlazeLayout.render('LayoutCliente', {cliente: 'PlaneamientoInterno'});
+        BlazeLayout.render('LayoutCliente', {cliente: 'Planeamiento_mostrar'});
     }
 });
 
