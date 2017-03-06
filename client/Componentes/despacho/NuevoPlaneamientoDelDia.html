@@ -30,7 +30,13 @@
                                                     <option value="{{_id}}" selected>{{placa}} - {{padron}}</option>
                                                 {{else}}
                                                     {{#if disabled}}
-                                                        <option value="{{_id}}" disabled>{{placa}} - {{padron}}</option>
+                                                        {{#if reason}}
+                                                            <option value="{{_id}}" disabled>{{placa}}
+                                                                - {{padron}} | {{reason}}</option>
+                                                        {{else}}
+                                                            <option value="{{_id}}" disabled>{{placa}}
+                                                                - {{padron}}</option>
+                                                        {{/if}}
                                                     {{else}}
                                                         <option value="{{_id}}">{{placa}} - {{padron}}</option>
                                                     {{/if}}

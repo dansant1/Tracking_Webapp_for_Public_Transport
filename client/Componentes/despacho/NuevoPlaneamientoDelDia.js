@@ -95,8 +95,9 @@ Template.NuevoPlaneamientoDelDia.events({
                 let existVehicle = p.vehicleId !== null;
                 return existVehicle && (before || after);
             }).map(p=>p.vehicleId);
-            let disabled = nonAdmited.includes(v._id) ? true : false;
-            return {...v, disabled};
+            let disabled = nonAdmited.includes(v._id) || v.sancionActiva ? true : false;
+            let reason = v.sancionActiva ? 'Sancionado' : false;
+            return {...v, disabled, reason};
         });
         Template.instance().vehiculos.set(vehiculos);
     },
