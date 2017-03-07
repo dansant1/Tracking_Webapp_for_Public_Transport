@@ -8,6 +8,7 @@ Template.mapaCliente.onCreated(() => {
 
     template.verparaderos = new ReactiveVar(false);
     template.verpuntosdecontrol = new ReactiveVar(false);
+    template.vergeocerca = new ReactiveVar(false);
     template.modotrafico = new ReactiveVar(false);
 
     template.autorun(() => {
@@ -403,6 +404,7 @@ Template.adminMapaCliente.onCreated(() => {
     template.verparaderos = new ReactiveVar(false);
     template.verpuntosdecontrol = new ReactiveVar(false);
     template.modotrafico = new ReactiveVar(false);
+    template.vergeocerca = new ReactiveVar(false);
 
     template.empresaId = new ReactiveVar(false);
 
@@ -684,11 +686,22 @@ Template.adminMapaCliente.onRendered(() => {
 
             }
 
+            if ( mapa.vergeocerca.get() ){
+              Modules.client.activarGeocerca( mapa, map.instance, ida, vuelta );
+            } else {
+              if ( typeof mapa.goingPath !== 'undefined' ){
+                mapa.goingPath.setMap( null );
+              }
+              if ( typeof mapa.returnPath !== 'undefined' ){
+                mapa.returnPath.setMap( null );
+              }
+            }
 
         });
 
         var trafficLayer = new google.maps.TrafficLayer();
         mapa.modoTrafico = new ReactiveVar(false);
+
         $('.trafico').on('click', function () {
             if (mapa.modoTrafico.get() !== false) {
                 trafficLayer.setMap(null);
@@ -696,44 +709,6 @@ Template.adminMapaCliente.onRendered(() => {
             } else {
                 mapa.modoTrafico.set(true)
                 trafficLayer.setMap(map.instance);
-            }
-        })
-
-        let activeP = false;
-        var idaPath = null;
-        var vueltaPath = null;
-
-        $('#activePolygon').on('click', function () {
-            if (ida && vuelta) {
-                if (activeP == false) {
-                    idaPath = new google.maps.Polygon({
-                        paths: ida,
-                        strokeColor: '#FF0000',
-                        strokeOpacity: 0.8,
-                        strokeWeight: 2,
-                        fillColor: '#FF0000',
-                        fillOpacity: 0.35
-                    });
-                    vueltaPath = new google.maps.Polygon({
-                        paths: vuelta,
-                        strokeColor: '#2980b9',
-                        strokeOpacity: 0.8,
-                        strokeWeight: 2,
-                        fillColor: '#3498db',
-                        fillOpacity: 0.35
-                    });
-                    idaPath.setMap(map.instance);
-                    vueltaPath.setMap(map.instance);
-                    activeP = true;
-                } else {
-                    if (idaPath) {
-                        idaPath.setMap(null);
-                    }
-                    if (vueltaPath) {
-                        vueltaPath.setMap(null);
-                    }
-                    activeP = false;
-                }
             }
         });
 
@@ -749,17 +724,32 @@ Template.adminMapaCliente.onRendered(() => {
 Template.adminMapaCliente.events({
 
     'change #empresa'(e, t) {
+        let instance = Template.instance();
+
         let target = e.currentTarget;
         let empresaId = target.options[target.selectedIndex].value;
 
-        Template.instance().empresaId.set(empresaId === "0" ? false : empresaId);
+        instance.empresaId.set(empresaId === "0" ? false : empresaId);
+        instance.vergeocerca.set( false );
+
     },
 
+    'click #vergeocerca'(e,t){
+      let instance = Template.instance();
+
+      instance.vergeocerca.set(
+        ! instance.vergeocerca.get()
+      );
+    },
     'change #ruta'(e, t) {
+        let instance = Template.instance();
+
         let target = e.currentTarget;
         let rutaId = target.options[target.selectedIndex].value;
 
-        Template.instance().ruta.set(rutaId === "0" ? false : rutaId);
+        instance.ruta.set(rutaId === "0" ? false : rutaId);
+        instance.vergeocerca.set( false );
+
     },
 
     'change #vehiculo'(e, t) {
@@ -878,5 +868,14 @@ Template.adminMapaCliente.helpers({
     ruta(id) {
         let ruta = Rutas.findOne({_id: id}) || {nombre: ""};
         return ruta.nombre;
+    },
+    verParaderos(){
+      return Template.instance().verparaderos.get();
+    },
+    verPuntosDeControl(){
+      return Template.instance().verpuntosdecontrol.get();
+    },
+    modoTrafico(){
+      return Template.instance().modotrafico.get();
     }
 });

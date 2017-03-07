@@ -1,0 +1,14 @@
+#adminMapaCliente {
+  .commands{
+    position: absolute;
+    z-index: 1000;
+    right: 10px;
+
+    button{
+      float: right;
+      clear: both;
+      margin-bottom: 10px;
+      &:first-child{ margin-top: 10px; }
+    }
+  }
+}

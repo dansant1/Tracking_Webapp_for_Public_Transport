@@ -11,5 +11,8 @@
     "meteor-node-stubs": "^0.2.5",
     "node-xlsx": "^0.7.4",
     "simpl-schema": "^0.1.0"
+  },
+  "devDependencies": {
+    "geolib": "^2.0.22"
   }
 }
