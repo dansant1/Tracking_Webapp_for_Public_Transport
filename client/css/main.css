@@ -360,3 +360,13 @@
     float: right;
     background-color: orange;
 }
+
+.header-hora {
+    font-size: 16px;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.header-hora b {
+    font-weight: bold;
+}

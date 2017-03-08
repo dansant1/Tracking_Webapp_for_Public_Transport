@@ -7,14 +7,18 @@
                         <div class="col-md-12 col-sm-18 col-xs-18">
                             <div class="box">
                                 <div class="page-header clearfix" style="margin-top: 0">
-                                    <h4 class="pull-left">Nuevo Planeamiento de Hoy</h4>
+                                    <h4 class="pull-left">Nueva Programación de Hoy</h4>
                                     <br><br>
                                     <button type="button" class="btn btn-success guardar">Guardar</button>
                                 </div>
-                                <ul class="list-group">
-
+                                <div>
                                     {{#each planeamientoHoy}}
-                                        <li class="list-group-item clearfix horario planeamiento">
+                                        <p class="header-hora">Hora Inicio: <b>{{hora_inicio}}</b> | Hora Fin:
+                                            <b>{{hora_fin}}</b> |
+                                            Frecuencia: <b>{{ frecuencia }} min</b></p>
+                                        <ul class="list-group">
+                                            {{#each horas}}
+                                                <li class="list-group-item clearfix horario planeamiento">
           				  <span class="pull-left" style="width: 75%; margin-left: 10px">
                           <i class="fa fa-clock-o" aria-hidden="true"></i>
                           <span class="time hour">{{time}}</span>
@@ -25,21 +29,11 @@
                                             {{else}}
                                                 <option value="?" selected>Elegir vehículo</option>
                                             {{/if}}
-                                            {{#each vehiculos}}
+                                            {{#each vehicles}}
                                                 {{#if matchVehicle ../vehicleId _id}}
                                                     <option value="{{_id}}" selected>{{placa}} - {{padron}}</option>
                                                 {{else}}
-                                                    {{#if disabled}}
-                                                        {{#if reason}}
-                                                            <option value="{{_id}}" disabled>{{placa}}
-                                                                - {{padron}} | {{reason}}</option>
-                                                        {{else}}
-                                                            <option value="{{_id}}" disabled>{{placa}}
-                                                                - {{padron}}</option>
-                                                        {{/if}}
-                                                    {{else}}
-                                                        <option value="{{_id}}">{{placa}} - {{padron}}</option>
-                                                    {{/if}}
+                                                    <option value="{{_id}}">{{placa}} - {{padron}}</option>
                                                 {{/if}}
                                             {{else}}
                                                 <option value="0">Cargando...</option>
@@ -47,7 +41,9 @@
                 						</select>
                 					</div>
           				  </span>
-                                        </li>
+                                                </li>
+                                            {{/each}}
+                                        </ul>
                                     {{else}}
                                         <div class="loader"></div>
                                         <br>
@@ -55,7 +51,7 @@
                                             Planeamiento</p>
                                     {{/each}}
 
-                                </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
