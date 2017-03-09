@@ -1,0 +1,60 @@
+<template name="agregarProgramacionIda">
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-sm-18 col-xs-18">
+          <div class="box">
+            <div class="row">
+              <div class="col-md-12">
+                <h3>Agregar Programacion de Hoy en Ida</h3>
+                <br>
+                <div class="row">
+                  <div class="col-md-3">
+                    <input type="number" name="cantidad" placeholder="Cantidad de Vehiculos" class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <br>
+                    <ul class="list-group">
+                        {{#each horarios}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left">
+                                <strong>{{this}}</strong> 
+                                <select class="form-control" name="vehiculo">
+                                  {{#each vehiculos}}
+                                  <option value="{{this._id}}">{{this.placa}}</option>
+                                  {{/each}}
+                                </select>
+                            </span>
+                          </li>
+                        {{/each}}
+                     </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="agregarProgramacionVuelta">
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-sm-18 col-xs-18">
+          <div class="box">
+            <div class="row">
+              <div class="col-md-12">
+                <h3>Agregar Programacion de Hoy en Vuelta</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

@@ -87,7 +87,7 @@ FlowRouter.route('/plan/ruta/:rutaId', {
 FlowRouter.route('/despacho/d/:rutaId', {
     name: 'Planeamiento',
     action() {
-        BlazeLayout.render('LayoutCliente', {cliente: 'FuncionDespachar'});
+        BlazeLayout.render('LayoutCliente', {cliente: 'layoutDirector' /*'FuncionDespachar'*/});
     }
 });
 
@@ -95,6 +95,20 @@ FlowRouter.route('/planeamiento/:rutaId/nuevo', {
     name: 'Planeamiento.Nuevo',
     action() {
         BlazeLayout.render('LayoutCliente', {cliente: 'NuevoPlaneamientoDelDia'});
+    }
+});
+
+FlowRouter.route('/planeamiento/:rutaId/nuevo/ida', {
+    name: 'Planeamiento.Nuevo.Ida',
+    action() {
+        BlazeLayout.render('LayoutCliente', {cliente: 'agregarProgramacionIda'/*'NuevoPlaneamientoDelDia'*/});
+    }
+});
+
+FlowRouter.route('/planeamiento/:rutaId/nuevo/vuelta', {
+    name: 'Planeamiento.Nuevo.Vuelta',
+    action() {
+        BlazeLayout.render('LayoutCliente', {cliente: 'agregarProgramacionVuelta'/*'NuevoPlaneamientoDelDia'*/});
     }
 });
 
