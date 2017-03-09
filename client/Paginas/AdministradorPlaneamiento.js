@@ -1469,7 +1469,7 @@ Template.AdministradorRutasPorEmpresa.helpers({
     // empresas() {
     //     return Empresas.find({_id: FlowRouter.getParam('empresaId')}).fetch()[0].rutas;
     // },
-    ruta(id) {
-        return Rutas.findOne({_id: id});
+    ruta() {
+        return Rutas.findOne({_id: FlowRouter.getParam('rutaId') });
     }
   });

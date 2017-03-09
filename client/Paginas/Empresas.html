@@ -166,7 +166,7 @@
         <div id="opcion-vehiculos" class="tab-pane fade">
             <button class="btn btn-success agregar-vehiculo">Agregar Vehículo</button>
             <br>
-            {{>ListaDeVehiculosPorEmpresas}}
+            {{>ListaDeVehiculosPorEmpresas empresaId=empresaId rutaId=rutaId}}
         </div>
         <div id="opcion-operadores" class="tab-pane fade">
             <button class="btn btn-success agregar-conductor"><i class="fa fa-user-plus" aria-hidden="true"
@@ -753,13 +753,7 @@
 
         <div class="pull-left">
 
-            <p style="font-size: 14px; margin-bottom: 5px">Filtrar por ruta</p>
-            <select class="form-control" id="routeVehicle">
-                <option value="">Seleccione ruta</option>
-                {{#each ruta}}
-                    <option value="{{this.nombre}}">{{this.nombre}}</option>
-                {{/each}}
-            </select>
+            <p style="font-size: 14px; margin-bottom: 5px">Ruta {{ruta.nombre}}</p>
             <br>
             <input type="text" name="search" class="form-control" style="width: 350px;"
                    placeholder="Buscar vehículo por placa, padron o ruta">
