@@ -7,6 +7,14 @@ Meteor.publish('PlanesHorarios', function () {
   }
 })
 
+Meteor.publish('PlanesHorarios2', function (ida) {
+  if (this.userId) {
+    return PlanesHorarios.find({ida: ida});
+  } else {
+    this.stop()
+    return;
+  }
+})
 
 Meteor.publish('PlanHorario', function (planHorarioId) {
   if (this.userId) {

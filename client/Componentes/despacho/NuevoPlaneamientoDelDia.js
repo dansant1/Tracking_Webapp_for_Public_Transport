@@ -32,7 +32,7 @@ function crearProgramaciones(template) {
         let id_rangos = plan_dia.plan[hoyEs];
 
         let plan_rangos = id_rangos.map(id=> {
-            let ph = PlanHorario.findOne({_id: id});
+            let ph = PlanesHorarios.findOne({_id: id});
             return {
                 hora_inicio: ph.hi,
                 hora_fin: ph.hf,
@@ -103,8 +103,8 @@ Template.NuevoPlaneamientoDelDia.onCreated(() => {
         let empresaId = Meteor.user().profile.empresaId;
         template.subscribe('DetalleDeEmpresaPlaneamiento', empresaId);
         template.subscribe('VehiculosEmpresa', () => {
-            template.subscribe('planes', Meteor.user().profile.ida, function () {
-                template.subscribe('planes_horarios', Meteor.user().profile.ida, function () {
+            template.subscribe('planes', true, function () {
+                template.subscribe('PlanesHorarios2', true, function () {
                     crearProgramaciones(template);
                 });
             });
@@ -216,7 +216,7 @@ Template.NuevoPlaneamientoDelDia.events({
             rutaId: FlowRouter.getParam('rutaId'),
             createdAt: new Date(),
             dia: today,
-            ida: Meteor.user().profile.ida,
+            ida: true,
             programacion: programaciones
         };
 
