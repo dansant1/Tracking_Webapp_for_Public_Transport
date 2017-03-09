@@ -55,7 +55,7 @@ Meteor.methods({
           }
         }
       },
-      ReasignarVehiculos(rutaId, registroId) {
+      ReasignarVehiculos(programacionVehiculoId, vehiculoId ) {
           let hoy = new Date();
           let dd = hoy.getDate();
           var mm = hoy.getMonth() + 1;
@@ -72,42 +72,70 @@ Meteor.methods({
           let today = dd+'/'+mm+'/'+yyyy;
           let datetime;
 
-          ProgramacionVehiculo.find({rutaId: rutaId, despachado: false, dia: today }).forEach( (despacho) => {
-            // agregando campo Datetime para luego hacer una busqueda ordenada
-            if ( ! _.has(despacho, "datetime") ){
-              datetime = new Date( today + " " + despacho.hora );
-              ProgramacionVehiculo.update({_id: despacho._id}, { $set: { datetime: datetime } });
-            }
-          });
+          let programacionNueva = [];
+          let despachoAuxiliar;
+          let despachoAnterior;
+          let swap = false;
 
-          // ponemos en espera al vehiculo
-          let despachoDeVehiculoReasignarId = registroId;
-          // = ProgramacionVehiculo.update({_id: registroId}, { $set: { requisitos: false } });
+          let programacionActual = ProgramacionVehiculo.findOne({_id: programacionVehiculoId }).programacion;
+          console.log( programacionVehiculoId, vehiculoId );
+          console.log( programacionActual.length );
+          console.log( programacionActual );
 
-          //obtenemos la lista de despachos ordenada
-          let despachosOrdered = ProgramacionVehiculo.find({ despachado: false, hora: { $nin: ["","24:00"] } }, { $sort : {datetime: 1 } }).fetch();
-          let reordenar = false;
-          let registroDespachoAuxiliar = { hora: "", datetime: "" };
+          for (let i = 0; i < programacionActual.length; i++) {
+            let despacho = programacionActual[i];
 
-          for( let i=0; i<= despachosOrdered.length; i++){
 
-            if ( typeof despachosOrdered[i] === 'undefined' ){
-              break;
-            }
-
-            if ( reordenar ){
-              ProgramacionVehiculo.update({_id: despachosOrdered[i]._id}, { $set: {
-                  hora: despachosOrdered[i-1].hora,
-                  datetime: despachosOrdered[i-1].datetime
-              }});
+            if ( swap ){
+              despachoAuxiliar = despachoAnterior;
+              despachoAnterior = _.clone( despacho );
+              despacho["hora"] = despachoAuxiliar["hora"];
+              despacho["despachado"] = despachoAuxiliar["despachado"];
+              console.log( "swap", i );
             }
 
-            if ( despachosOrdered[i]._id === registroId ){
-              reordenar = true;
-              ProgramacionVehiculo.update({_id: registroId}, { $set: { requisitos: false } });
+            if ( despacho["vehiculoId"] === vehiculoId ){
+              swap = true;
+              despachoAnterior = despacho;
+              console.log( "found" );
+              continue;
             }
+
+            programacionNueva.push( despacho );
 
           }
+
+          ProgramacionVehiculo.update({_id: programacionVehiculoId}, { $set: { programacion: programacionNueva } });
+          Vehiculos.update({_id: vehiculoId}, { $set : { espera: true } });
+
+          // // ponemos en espera al vehiculo
+          // let despachoDeVehiculoReasignarId = registroId;
+          // // = ProgramacionVehiculo.update({_id: registroId}, { $set: { requisitos: false } });
+          //
+          // //obtenemos la lista de despachos ordenada
+          // let despachosOrdered = ProgramacionVehiculo.find({ despachado: false, hora: { $nin: ["","24:00"] } }, { $sort : {datetime: 1 } }).fetch();
+          // let reordenar = false;
+          // let registroDespachoAuxiliar = { hora: "", datetime: "" };
+          //
+          // for( let i=0; i<= despachosOrdered.length; i++){
+          //
+          //   if ( typeof despachosOrdered[i] === 'undefined' ){
+          //     break;
+          //   }
+          //
+          //   if ( reordenar ){
+          //     ProgramacionVehiculo.update({_id: despachosOrdered[i]._id}, { $set: {
+          //         hora: despachosOrdered[i-1].hora,
+          //         datetime: despachosOrdered[i-1].datetime
+          //     }});
+          //   }
+          //
+          //   if ( despachosOrdered[i]._id === registroId ){
+          //     reordenar = true;
+          //     ProgramacionVehiculo.update({_id: registroId}, { $set: { requisitos: false } });
+          //   }
+          //
+          // }
           return true;
 
       },
@@ -412,7 +440,7 @@ Meteor.methods({
             break;
 
         }
-        
+
         id = Accounts.createUser(datos);
 
         if (id) {

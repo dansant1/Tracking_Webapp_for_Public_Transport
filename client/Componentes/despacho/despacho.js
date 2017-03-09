@@ -7,7 +7,7 @@ Template.VistaDespacho.onCreated(() => {
         template.unidadesProgramadas = new ReactiveVar([]);
 
         template.subscribe('ProgramacionVehiculoPorEmpresaYRuta', empresaId, rutaId, true, () => {
-      
+
             if (ProgramacionVehiculo.find().fetch().length === 0) {
                 /*Meteor.call('AgregarPlaneamientoDelDiaAutomatico', rutaId, (err) => {
                     if (err) {
@@ -23,20 +23,20 @@ Template.VistaDespacho.onCreated(() => {
 })
 
 Template.VistaDespacho.helpers({
-    despacho() {
-        return ProgramacionVehiculo.find({ida: true}).fetch()[0].programacion;
+    ProgramacionVehiculo() {
+        return ProgramacionVehiculo.findOne({ida: true});
     },
     despachados() {
         return ProgramacionVehiculo.find({despachado: true});
     },
     despachocola() {
-        return ProgramacionVehiculo.find({requisitos: false});
+        return Vehiculos.find({ espera: true });
     },
     vehiculosSancionados() {
         return Vehiculos.find({'sancionActiva': true});
     },
-    vehiculo() {
-        return Vehiculos.findOne({_id: this.vehiculoId})
+    vehiculo( vehiculoId ) {
+        return Vehiculos.findOne({_id: vehiculoId})
     },
     rutaId() {
         return FlowRouter.getParam('rutaId')
@@ -46,9 +46,14 @@ Template.VistaDespacho.helpers({
 Template.VistaDespacho.events({
     'click .despachar'(e, t) {
         //let unidadProgramada = t.unidadesProgramadas.get().search(u=>u._id === this._id);
-        console.log('hola');
+        // console.log('hola');
         //console.log(unidadProgramada);
-        Modal.show('Asignar')
+        let target = $( e.currentTarget );
+
+        Session.set('programacionVehiculoId', target.data("programacionvehiculoid") );
+        Session.set('vehiculoId', target.data("vehiculoid") );
+
+        Modal.show('Asignar');
     }
 })
 
@@ -123,18 +128,24 @@ Template.Asignar.events({
     },
     'click .reasignar'(e, t) {
         let rutaId = FlowRouter.getParam('rutaId');
-        let registroId = Session.get('RegistroDeVehiculoADespachar');
+
+        let programacionVehiculoId = Session.get('programacionVehiculoId');
+        let vehiculoId = Session.get('vehiculoId');
+
         let target = $(e.currentTarget);
+
         target.text("Reasignando ...");
+        console.log( programacionVehiculoId, vehiculoId );
         target.attr("disabled", "");
-        Meteor.call('ReasignarVehiculos', rutaId, registroId, (err) => {
-            if (err) {
-                Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
-                console.log(err);
-            } else {
-                Bert.alert('Vehiculos Reasignados', 'success');
-                Modal.hide('Asignar');
-            }
+        Meteor.call('ReasignarVehiculos', programacionVehiculoId, vehiculoId, (err) => {
+          target.removeAttr("disabled", "");
+        //     if (err) {
+        //         Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
+        //         console.log(err);
+        //     } else {
+        //         Bert.alert('Vehiculos Reasignados', 'success');
+        //         Modal.hide('Asignar');
+        //     }
         });
     }
 })
