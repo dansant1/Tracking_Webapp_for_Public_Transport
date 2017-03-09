@@ -1,0 +1,719 @@
+<template name="agregarPlaneamientoIda">
+  <div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+        <div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+            <h3>Agregar Planeamiento de Ida</h3>
+            <br>
+            <div class="row">
+              <div class="col-md-2">
+                <select class="form-control" id="ruta">
+                  {{#each rutas}}
+                  <option value="{{this._id}}">{{this.nombre}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="col-md-3">
+                <button type="button" class="btn btn-success" name="guardar-plan">Guardar</button>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Lunes</th>
+                      <th>Martes</th>
+                      <th>Miercoles</th>
+                      <th>Jueves</th>
+                      <th>Viernes</th>
+                      <th>Sabado</th>
+                      <th>Domingo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a1">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosLunes}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+
+                         </ul>
+                      </td>
+
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a2">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosMartes}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove2" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a3">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosMiercoles}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove3" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a4">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosJueves}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove4" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a5">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosViernes}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove5" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a6">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosSabado}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove6" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a7">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosDomingo}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove7" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="agregarPlaneamientoVuelta">
+  <div class="content-wrapper">
+		<div class="container-fluid">
+			<div class="row">
+        <div class="col-md-12 col-sm-18 col-xs-18">
+					<div class="box">
+            <h3>Agregar Planeamiento de Vuelta</h3>
+            <br>
+            <div class="row">
+              <div class="col-md-2">
+                <select class="form-control" id="ruta">
+                  {{#each rutas}}
+                  <option value="{{this._id}}">{{this.nombre}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="col-md-3">
+                <button type="button" class="btn btn-success" name="guardar-plan">Guardar</button>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Lunes</th>
+                      <th>Martes</th>
+                      <th>Miercoles</th>
+                      <th>Jueves</th>
+                      <th>Viernes</th>
+                      <th>Sabado</th>
+                      <th>Domingo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a1">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+
+                          {{#each planesSeleccionadosLunes}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a2">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosMartes}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a3">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosMiercoles}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a4">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosJueves}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a5">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosViernes}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a6">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosSabado}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                      <td>
+
+                        <button type="button" name="agregar" class="btn btn-primary a7">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <br><br>
+                        <ul class="list-group">
+                          {{#each planesSeleccionadosDomingo}}
+                          <li class="list-group-item clearfix">
+                            <span class="pull-left letra_pequena">4:00 a 6:00 cada 5 minutos</span>
+                              <i id="remove" class="fa fa-times" aria-hidden="true"></i>
+                          </li>
+                          {{/each}}
+                         </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="seleccionarPlanHorarioIda">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  <ul class="list-group">
+                    {{#each planes}}
+                    <li class="list-group-item clearfix">
+                      <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                      <span class="pull-right">
+                        <button type="button" name="seleccionar" class="btn btn-warning as">Seleccionar</button>
+                      </span>
+                    </li>
+                    {{/each}}
+                   </ul>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioVuelta">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning plunes">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioVuelta2">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning pmartes">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioVuelta3">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning pmiercoles">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioVuelta4">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning pjueves">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioVuelta5">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning pviernes">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioVuelta6">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning psabado">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioVuelta7">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning pdomingo">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioIda2">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning as">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioIda3">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning as">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioIda4">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning as">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioIda5">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning as">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioIda6">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning as">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="seleccionarPlanHorarioIda7">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Seleccionar Plan Horario</h4>
+                </div>
+
+                <div class="modal-body">
+                  {{#each planes}}
+                  <li class="list-group-item clearfix">
+                    <span class="pull-left">{{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                    <span class="pull-right">
+                      <button type="button" name="seleccionar" class="btn btn-warning as">Seleccionar</button>
+                    </span>
+                  </li>
+                  {{/each}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>

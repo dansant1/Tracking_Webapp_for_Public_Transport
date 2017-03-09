@@ -36,6 +36,7 @@ cfs:worker@0.1.4
 check@1.2.4
 chipcastledotcom:jspdf@0.0.2
 chrismbeckett:toastr@2.1.2_1
+ciclopes:reactive-array@0.0.12
 dburles:google-maps@1.1.5
 ddp@1.2.5
 ddp-client@1.3.3

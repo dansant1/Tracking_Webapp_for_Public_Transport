@@ -202,9 +202,58 @@ FlowRouter.route('/admin/rutas/:empresaId', {
 });
 
 
-FlowRouter.route('/admin/agregarplan', {
+FlowRouter.route('/admin/agregarplan/ida', {
     name: 'AdministradorAgregarPlaneamiento',
     action() {
-        BlazeLayout.render('LayoutCliente', {administrador: 'AdministradorAgregarPlaneamiento'});
+        BlazeLayout.render('LayoutCliente', {administrador: 'agregarPlaneamientoIda' /*'AdministradorAgregarPlaneamiento'*/});
+    }
+});
+
+FlowRouter.route('/admin/agregarplan/vuelta', {
+    name: 'AdministradorAgregarPlaneamiento',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'agregarPlaneamientoVuelta' /*'AdministradorAgregarPlaneamiento'*/});
+    }
+});
+
+FlowRouter.route('/admin/agregarplanhorario/ida', {
+    name: 'AdministradorAgregarPlanHorarioIda',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'AgregarPlanHorarioIda'});
+    }
+});
+
+FlowRouter.route('/admin/agregarplanhorario/vuelta', {
+    name: 'AdministradorAgregarPlanHorarioVuelta',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'AgregarPlanHorarioVuelta'});
+    }
+});
+
+FlowRouter.route('/admin/listas/planeshorarios', {
+    name: 'AdministradorListaPlanesHorarios',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'ListaDePlanesHorarios'});
+    }
+});
+
+FlowRouter.route('/admin/listas/planes', {
+    name: 'AdministradorListaPlanes',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'ListaDePlanes'});
+    }
+});
+
+FlowRouter.route('/admin/planeshorarios/editar/:planHorarioId', {
+    name: 'EditarPlanHorario',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'EditarPlanHorario'});
+    }
+});
+
+FlowRouter.route('/admin/planes/editar/:planId', {
+    name: 'EditarPlaneamiento',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'EditarPlan'});
     }
 });

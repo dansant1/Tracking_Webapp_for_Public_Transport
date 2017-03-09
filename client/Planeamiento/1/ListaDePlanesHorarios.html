@@ -1,0 +1,59 @@
+<template name="ListaDePlanesHorarios">
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-sm-18 col-xs-18">
+          <div class="box">
+            <div class="row">
+              <div class="col-md-9">
+                <a href="/admin/agregarplanhorario/ida" class="btn btn-success">Agregar Plan Horario de Ida</a>
+                <a href="/admin/agregarplanhorario/vuelta" class="btn btn-primary">Agregar Plan Horario de Vuelta</a>
+              </div>
+            </div>
+            <br>
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#ida">Planes Horario de Ida</a></li>
+              <li><a data-toggle="tab" href="#vuelta">Planes Horario de Vuelta</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <div id="ida" class="tab-pane fade in active">
+                <h3>Planes Horarios de Ida</h3>
+                <br>
+                <ul class="list-group">
+                    {{#each planesida}}
+                      <li class="list-group-item clearfix">
+                        <span class="pull-left">Plan Horario <strong>{{this.numero}}</strong>: {{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                        <span class="pull-right">
+                          <a href="/admin/planeshorarios/editar/{{this._id}}" class="btn btn-primary">Editar</a>
+                          <button class="btn btn-danger" type="button" name="remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        </span>
+                      </li>
+                    {{/each}}
+                 </ul>
+
+              </div>
+              <div id="vuelta" class="tab-pane fade">
+                <h3>Planes Horarios de Vuelta</h3>
+                <br>
+                <ul class="list-group">
+                    {{#each planesvuelta}}
+                      <li class="list-group-item clearfix">
+                        <span class="pull-left">Plan Horario {{this.numero}}: {{this.hi}} a {{this.hf}} cada {{this.frecuencia}} minutos</span>
+                        <span class="pull-right">
+                          <a href="/admin/planeshorarios/editar/{{this._id}}" class="btn btn-primary">Editar</a>
+                          <button class="btn btn-danger" type="button" name="remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        </span>
+                      </li>
+                    {{/each}}
+                 </ul>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
