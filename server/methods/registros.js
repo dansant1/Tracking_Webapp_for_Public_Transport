@@ -48,14 +48,11 @@ function formarJSON(date) {
 }
 
 Meteor.methods({
-      crearProgramacionVehiculo(datos) {
+      crearProgramacionVehiculo(d) {
         if (this.userId) {
-          if (typeof datos !== 'undefined' && datos.length > 0) {
-            datos.forEach( (d) => {
+          if (typeof d !== 'undefined') {
                 ProgramacionVehiculo.insert(d);
-            })
           }
-
         }
       },
       ReasignarVehiculos(rutaId, registroId) {
