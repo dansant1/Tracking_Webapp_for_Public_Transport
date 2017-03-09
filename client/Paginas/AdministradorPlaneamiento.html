@@ -770,34 +770,20 @@
 </template>
 
 <template name="AdministradorRutasPorEmpresa">
-	<div class="content-wrapper">
+	<div class="">
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12 col-sm-18 col-xs-18">
-					<div class="box">
-						<h1 style="margin: 0; padding: 0; font-size: 1.5em">Rutas de la empresa {{empresa}}</h1>
-						<br>
+						<h1 style="margin: 0; padding: 0; font-size: 1.5em">Ruta {{ruta.nombre}} </h1>
+
 						<ul class="nav nav-tabs">
-							<li class="active"><a data-toggle="tab" href="#home">Mapa</a></li>
-							<li><a data-toggle="tab" href="#menu1">Ruta</a></li>
+							<li class="active"><a data-toggle="tab" href="#view-ruta">Mapa</a></li>
+							<li><a data-toggle="tab" href="#ruta-detail">Ruta</a></li>
 						</ul>
 
 						<div class="tab-content">
-							<div id="home" class="tab-pane fade in active">
+							<div id="view-ruta" class="tab-pane fade in active">
 
-								<div class="row">
-									<div class="col-md-4">
-										<select id="ruta" class="form-control">
-											<option value="1">--Seleccione una ruta--</option>
-											{{#each empresas}}
-
-													<option value="{{this}}">{{ruta this}}</option>
-
-											{{/each}}
-										</select>
-
-									</div>
-								</div>
 								<br>
 								<div class="map-container">
 								   	{{#if carga}}
@@ -808,12 +794,11 @@
 								</div>
 
 							</div>
-							<div id="menu1" class="tab-pane fade">
+							<div id="ruta-detail" class="tab-pane fade">
 							    <!--{{>MapaDeRuta}} -->
 							    {{>RutaPorEmpresa}}
 							</div>
 						</div>
-					</div>
 				</div>
 			</div>
 		</div>

@@ -87,7 +87,7 @@ FlowRouter.route('/plan/ruta/:rutaId', {
 FlowRouter.route('/despacho/d/:rutaId', {
     name: 'Planeamiento',
     action() {
-        BlazeLayout.render('LayoutCliente', {cliente: 'FuncionDespachar'});
+        BlazeLayout.render('LayoutCliente', {cliente: 'layoutDirector' /*'FuncionDespachar'*/});
     }
 });
 
@@ -98,12 +98,20 @@ FlowRouter.route('/planeamiento/:rutaId/nuevo', {
     }
 });
 
+
 FlowRouter.route('/planeamiento/:rutaId/nuevo/vuelta', {
     name: 'Planeamiento.Nuevo',
     action() {
         BlazeLayout.render('LayoutCliente', {cliente: 'NuevoPlaneamientoDelDiaVuelta'});
+
+FlowRouter.route('/planeamiento/:rutaId/nuevo/ida', {
+    name: 'Planeamiento.Nuevo.Ida',
+    action() {
+        BlazeLayout.render('LayoutCliente', {cliente: 'agregarProgramacionIda'/*'NuevoPlaneamientoDelDia'*/});
     }
 });
+
+
 
 FlowRouter.route('/rutas', {
     name: 'Rutas',
@@ -139,6 +147,15 @@ FlowRouter.route('/admin/reportes', {
 
 FlowRouter.route('/empresas/:empresaId', {
     name: 'Empresa',
+    action() {
+
+        BlazeLayout.render('LayoutCliente', {administrador: 'DetalleDeEmpresa'});
+    }
+});
+
+
+FlowRouter.route('/empresas/:empresaId/ruta/:rutaId', {
+    name: 'EmpresaRuta',
     action() {
 
         BlazeLayout.render('LayoutCliente', {administrador: 'DetalleDeEmpresa'});
