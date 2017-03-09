@@ -98,6 +98,13 @@ FlowRouter.route('/planeamiento/:rutaId/nuevo', {
     }
 });
 
+FlowRouter.route('/planeamiento/:rutaId/nuevo/vuelta', {
+    name: 'Planeamiento.Nuevo',
+    action() {
+        BlazeLayout.render('LayoutCliente', {cliente: 'NuevoPlaneamientoDelDiaVuelta'});
+    }
+});
+
 FlowRouter.route('/rutas', {
     name: 'Rutas',
     action() {

@@ -5,16 +5,16 @@ Template.VistaDespacho.onCreated(() => {
         let empresaId = Meteor.user().profile.empresaId;
         let rutaId = FlowRouter.getParam('rutaId');
         template.unidadesProgramadas = new ReactiveVar([]);
-        template.subscribe('ProgramacionVehiculoPorEmpresaYRuta', empresaId, rutaId, () => {
-            template.unidadesProgramadas.set(ProgramacionVehiculo.find().fetch());
+        template.subscribe('ProgramacionVehiculoPorEmpresaYRuta', empresaId, rutaId, true, () => {
+
             if (ProgramacionVehiculo.find().fetch().length === 0) {
-                Meteor.call('AgregarPlaneamientoDelDiaAutomatico', rutaId, (err) => {
+                /*Meteor.call('AgregarPlaneamientoDelDiaAutomatico', rutaId, (err) => {
                     if (err) {
                         Bert.alert('Hubo un error al crear el planeamiento de hoy, intentelo manualmente', 'warning')
                     } else {
                         Bert.alert('El planeamiento del dia se agrego automaticamente.')
                     }
-                })
+                })*/
             }
         });
         template.subscribe('VehiculosEmpresaId', empresaId);
@@ -23,7 +23,7 @@ Template.VistaDespacho.onCreated(() => {
 
 Template.VistaDespacho.helpers({
     despacho() {
-        return Template.instance().unidadesProgramadas.get();
+        return ProgramacionVehiculo.find({ida: true}).fetch()[0].programacion;
     },
     despachados() {
         return ProgramacionVehiculo.find({despachado: true});

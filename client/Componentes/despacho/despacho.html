@@ -2,15 +2,19 @@
     <div class="page-header clearfix" style="margin-top: 0px">
         <h4 class="pull-left">Despacho de Vehículos</h4>
     </div>
+    <div class="row">
+      <div class="col-md-9">
+        <a href="/planeamiento/{{rutaId}}/nuevo" class="btn btn-success">Agregar Planeamiento de Hoy de Ida</a>
 
-    <a href="/planeamiento/{{rutaId}}/nuevo" class="btn btn-success">Agregar Planeamiento de Hoy de Ida</a>
-    <br><br>
-    <a href="/planeamiento/{{rutaId}}/nuevo" class="btn btn-primary">Agregar Planeamiento de Hoy de Vuelta</a>
+        <a href="/planeamiento/{{rutaId}}/nuevo/vuelta" class="btn btn-primary">Agregar Planeamiento de Hoy de Vuelta</a>
+      </div>
+    </div>
+
     <br><br>
     <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home">Despacho</a></li>
+        <li class="active"><a data-toggle="tab" href="#home">Flota</a></li>
         <li><a data-toggle="tab" href="#menu1">Vehiculos Despachados</a></li>
-        <li><a data-toggle="tab" href="#menu2">Vehiculos en Cola</a></li>
+        <li><a data-toggle="tab" href="#menu2">Vehiculos en Espera</a></li>
         <li><a data-toggle="tab" href="#menu3">Vehiculos Sancionados</a></li>
     </ul>
 
@@ -41,7 +45,7 @@
                             {{#if this.despachado}}
                                 <button type="button" class="btn btn-warning">Despachado</button>
                             {{else}}
-                                <button type="button" class="despachar btn btn-success">Asignar Personal</button>
+                                <button type="button" class="despachar btn btn-warning">Asignar Personal</button>
                             {{/if}}
                         </div>
                     </li>
