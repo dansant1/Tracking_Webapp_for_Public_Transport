@@ -79,6 +79,15 @@ Meteor.publish('rutas', function () {
     }
 });
 
+Meteor.publish('rutaSingle', function ( rutaId ) {
+    if (this.userId) {
+        return Rutas.find({ _id: rutaId });
+    } else {
+        this.stop();
+        return;
+    }
+});
+
 Meteor.publish('rutasPorEmpresa', function (empresaId) {
     if (this.userId) {
         return Rutas.find({empresasId: empresaId});
@@ -384,8 +393,8 @@ Meteor.publish('Entidades', function () {
 
 });
 
-Meteor.publish('PlanHorarioPorRuta', function (rutaId) {
-    return PlanHorario.find({rutaId: rutaId});
+Meteor.publish('planes_horarios', function (ida) {
+    return PlanHorario.find({ida});
 });
 
 Meteor.publish('RequisitosPorVehiculo', function (vehiculoId) {

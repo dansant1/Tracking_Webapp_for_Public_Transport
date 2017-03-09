@@ -71,13 +71,11 @@ Meteor.startup(() => {
      planes.forEach(p=> {
          PlanHorario.insert(p);
      });
+*/
 
+     /*	let users = [
+        	{nombre: "Usuario 1", email: "superadministrador@tpi.com.pe", roles: [ ROLES.administracion.gerente ]},
 
-     	let users = [
-        //	{nombre: "Usuario 1", email: "superadministrador@tpi.com.pe", roles: [ ROLES.administracion.gerente ]},
-        	{nombre: "Usuario 4", email: "soporte@tpi.com.pe", roles: [ ROLES.administracion.soporte ]},
-         	{nombre: "Usuario 2", email: "director@tpi.com.pe", roles: [ ROLES.empresa.director ]},
-          	{nombre: "Usuario 3", email: "operador@tpi.com.pe", roles: [ ROLES.empresa.operador ]}
         ]
 
      _.each(users, ( user ) => {
@@ -109,6 +107,6 @@ Meteor.startup(() => {
 
 
 
-      }); */
+      });*/
 
 });

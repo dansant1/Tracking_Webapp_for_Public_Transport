@@ -5,6 +5,7 @@ Template.Empresas.onCreated(() => {
 
     template.searchQuery = new ReactiveVar();
     template.searching = new ReactiveVar(false);
+    template.rutaId = new ReactiveVar(false);
 
     template.autorun(() => {
 
@@ -44,8 +45,11 @@ Template.Empresas.helpers({
 
         return Empresas.find(query, projection);
     },
-    rutas() {
-        return Rutas.find();
+    rutas( arrayOfRutaId ) {
+        return Rutas.find({ _id: {$in : arrayOfRutaId } });
+    },
+    rutaId(){
+        return Template.instance().rutaId.get();
     }
 });
 
@@ -84,6 +88,9 @@ Template.Empresas.events({
             });
 
     },
+    'change .listarutas'(e,t){
+      Template.instance().rutaId.set( e.currentTarget.value );
+    }
 
 });
 
@@ -247,7 +254,6 @@ Template.ListaDeConductoresPorEmpresa.onCreated(() => {
 
     template.autorun(() => {
         let empresaId = FlowRouter.getParam('empresaId');
-        console.log(empresaId);
         template.subscribe('ConductoresPorEmpresa', empresaId, template.searchQuery.get(), () => {
             setTimeout(() => {
                 template.searching.set(false);
@@ -477,6 +483,7 @@ Template.EditarVehiculo.onCreated(() => {
         let vehiculo = Session.get('editarVehiculo');
 
         template.subscribe('DetalleDeVehiculos', vehiculo);
+        template.subscribe('Entidades');
 
     });
 
@@ -486,7 +493,10 @@ Template.EditarVehiculo.helpers({
     vehiculo() {
         let vehiculo = Session.get('editarVehiculo');
         return Vehiculos.findOne({_id: vehiculo});
-    }
+    },
+    entidades() {
+        return Entidades.find({});
+    },
 });
 
 Template.Opciones.events({
@@ -524,11 +534,7 @@ Template.EditarVehiculo.events({
             },
             codigoDeRuta: t.find("[name='codigoDeRuta']").value,
             fechaDePermanenciaEnLaEmpresa: t.find("[name='fechaDePermanenciaEnLaEmpresa']").value,
-            TC: {
-                numero: t.find("[name='tc']").value,
-                emision: t.find("[name='emisiontc']").value,
-                caducidad: t.find("[name='caducidadtc']").value
-            },
+            TC: [],
             SOAT: {
                 numero: t.find("[name='soat']").value,
                 inicio: t.find("[name='emisionsoat']").value,
@@ -545,6 +551,28 @@ Template.EditarVehiculo.events({
                 fin: t.find("[name='caducidadrc']").value
             }
         }
+
+        let entityArray = [];
+
+        let listedEntities = $('#editarVehiculo .Entity__toggle');
+
+        for (var i = 0; i < listedEntities.length; i++) {
+            let entity = $( listedEntities[i] );
+
+            if ( entity.find(".select__entity:checked").length > 0 ){
+              let data = {
+                  entidad: entity.data('name'),
+                  numero: entity.find("input[name='tc']")[0].value,
+                  emision: entity.find("input[name='emisiontc']")[0].value,
+                  caducidad: entity.find("input[name='caducidadtc']")[0].value,
+              };
+              entityArray.push(data);
+            }
+        }
+
+        datos.TC = entityArray;
+
+        console.log( entityArray );
 
         if (datos) {
             Meteor.call('editarVehiculo', Session.get('editarVehiculo'), datos, function (err) {
@@ -800,6 +828,7 @@ Template.agregarEmpresa.events({
 
 Template.DetalleDeEmpresa.onCreated(() => {
     let template = Template.instance();
+    console.log( );
 
     template.autorun(() => {
         let empresaId = FlowRouter.getParam('empresaId');
@@ -814,6 +843,12 @@ Template.DetalleDeEmpresa.helpers({
 
         let empresa = Empresas.findOne({_id: empresaId});
         return empresa;
+    },
+    empresaId(){
+      return FlowRouter.getParam('empresaId');
+    },
+    rutaId(){
+      return FlowRouter.getParam('rutaId');
     }
 });
 
