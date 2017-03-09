@@ -2,7 +2,7 @@ Template.ListaDePlanes.onCreated( () => {
   let template = Template.instance()
 
   template.autorun( () => {
-    template.subscribe('planes')
+    template.subscribe('planes2')
     template.subscribe('rutas')
   })
 })

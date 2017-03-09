@@ -10,7 +10,8 @@ Template.EditarPlan.onCreated( () => {
   let template = Template.instance()
 
   template.autorun( () => {
-    template.subscribe('planes');
+    template.subscribe('planes2');
+    template.subscribe('PlanesHorarios')
   })
 })
 
@@ -18,6 +19,8 @@ Template.EditarPlan.onRendered( () => {
   let t = Template.instance()
 
   t.autorun( () => {
+
+
     let planId = FlowRouter.getParam('planId');
     let plan = Plan.findOne({_id: planId}).plan;
     lunes.set(plan.lunes)
@@ -34,6 +37,16 @@ Template.EditarPlan.onRendered( () => {
 Template.EditarPlan.helpers({
   lunes() {
     return lunes.get()
+  },
+  hi() {
+    console.log(this.valueOf());
+    return PlanesHorarios.findOne({_id: this.valueOf()}).hi;
+  },
+  hf() {
+    return PlanesHorarios.findOne({_id: this.valueOf()}).hf;
+  },
+  f() {
+    return PlanesHorarios.findOne({_id: this.valueOf()}).frecuencia;
   },
   martes() {
     return martes.get()
@@ -59,6 +72,7 @@ Template.EditarPlan.events({
   'click .a1'() {
     let planId = FlowRouter.getParam('planId');
     let plan = Plan.findOne({_id: planId}).ida;
+    console.log(plan);
     if (plan) {
       Modal.show('seleccionarPlanHorarioIda01')
     } else {

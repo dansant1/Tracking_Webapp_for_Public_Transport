@@ -12,7 +12,17 @@ Template.EditarPlanHorario.helpers({
   plan() {
     let PlanHorarioId = FlowRouter.getParam('planHorarioId');
     return PlanesHorarios.findOne({_id: PlanHorarioId})
-  }
+  },
+  hi() {
+    console.log(this.valueOf());
+    return PlanesHorarios.findOne({_id: this.valueOf()}).hi;
+  },
+  hf() {
+    return PlanesHorarios.findOne({_id: this.valueOf()}).hf;
+  },
+  f() {
+    return PlanesHorarios.findOne({_id: this.valueOf()}).frecuencia;
+  },
 })
 
 Template.EditarPlanHorario.events({

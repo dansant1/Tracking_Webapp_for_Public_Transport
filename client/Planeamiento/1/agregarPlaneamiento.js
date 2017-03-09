@@ -30,6 +30,16 @@ Template.agregarPlaneamientoIda.helpers({
   planesida() {
     return PlanesHorarios.find({ida: true});
   },
+  hi() {
+    console.log(this.valueOf());
+    return PlanesHorarios.findOne({_id: this.valueOf()}).hi;
+  },
+  hf() {
+    return PlanesHorarios.findOne({_id: this.valueOf()}).hf;
+  },
+  f() {
+    return PlanesHorarios.findOne({_id: this.valueOf()}).frecuencia;
+  },
   planesvuelta() {
     return PlanesHorarios.find({ida: false});
   },
@@ -156,6 +166,16 @@ Template.agregarPlaneamientoVuelta.onCreated( () => {
 Template.agregarPlaneamientoVuelta.helpers({
   planesida() {
     return PlanesHorarios.find({ida: true});
+  },
+  hi() {
+    console.log(this.valueOf());
+    return PlanesHorarios.findOne({_id: this.valueOf()}).hi;
+  },
+  hf() {
+    return PlanesHorarios.findOne({_id: this.valueOf()}).hf;
+  },
+  f() {
+    return PlanesHorarios.findOne({_id: this.valueOf()}).frecuencia;
   },
   rutas() {
     return Rutas.find()
