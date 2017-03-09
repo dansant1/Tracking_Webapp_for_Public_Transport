@@ -477,6 +477,7 @@ Template.EditarVehiculo.onCreated(() => {
         let vehiculo = Session.get('editarVehiculo');
 
         template.subscribe('DetalleDeVehiculos', vehiculo);
+        template.subscribe('Entidades');
 
     });
 
@@ -486,7 +487,10 @@ Template.EditarVehiculo.helpers({
     vehiculo() {
         let vehiculo = Session.get('editarVehiculo');
         return Vehiculos.findOne({_id: vehiculo});
-    }
+    },
+    entidades() {
+        return Entidades.find({});
+    },
 });
 
 Template.Opciones.events({
@@ -524,11 +528,7 @@ Template.EditarVehiculo.events({
             },
             codigoDeRuta: t.find("[name='codigoDeRuta']").value,
             fechaDePermanenciaEnLaEmpresa: t.find("[name='fechaDePermanenciaEnLaEmpresa']").value,
-            TC: {
-                numero: t.find("[name='tc']").value,
-                emision: t.find("[name='emisiontc']").value,
-                caducidad: t.find("[name='caducidadtc']").value
-            },
+            TC: [],
             SOAT: {
                 numero: t.find("[name='soat']").value,
                 inicio: t.find("[name='emisionsoat']").value,
@@ -545,6 +545,28 @@ Template.EditarVehiculo.events({
                 fin: t.find("[name='caducidadrc']").value
             }
         }
+
+        let entityArray = [];
+
+        let listedEntities = $('#editarVehiculo .Entity__toggle');
+
+        for (var i = 0; i < listedEntities.length; i++) {
+            let entity = $( listedEntities[i] );
+
+            if ( entity.find(".select__entity:checked").length > 0 ){
+              let data = {
+                  entidad: entity.data('name'),
+                  numero: entity.find("input[name='tc']")[0].value,
+                  emision: entity.find("input[name='emisiontc']")[0].value,
+                  caducidad: entity.find("input[name='caducidadtc']")[0].value,
+              };
+              entityArray.push(data);
+            }
+        }
+
+        datos.TC = entityArray;
+
+        console.log( entityArray );
 
         if (datos) {
             Meteor.call('editarVehiculo', Session.get('editarVehiculo'), datos, function (err) {

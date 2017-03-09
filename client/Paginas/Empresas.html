@@ -1759,20 +1759,21 @@
 
 
 <template name="EditarVehiculo">
-    <div class="modal fade">
+    <div class="modal fade" id="editarVehiculo">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Editar Datos de Vehículo</h4>
                 </div>
                 <div class="modal-body">
-                    <br> {{#with vehiculo}}
+                    <br>
+                    {{#with vehiculo}}
                     <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#1{{vehiculo._id}}">Detalles</a></li>
-                        <li><a data-toggle="tab" href="#p1{{vehiculo._id}}">Propietario</a></li>
-                        <li><a data-toggle="tab" href="#tec1{{vehiculo._id}}">Tecnico</a></li>
-                        <li><a data-toggle="tab" href="#s1{{vehiculo._id}}">SOAT</a></li>
-                        <li><a data-toggle="tab" href="#t1{{vehiculo._id}}">Tarjeta de Circulación</a></li>
+                        <li><a data-toggle="tab" href="#p1{{this._id}}">Propietario</a></li>
+                        <li><a data-toggle="tab" href="#tec1{{this._id}}">Tecnico</a></li>
+                        <li><a data-toggle="tab" href="#s1{{this._id}}">SOAT</a></li>
+                        <li><a data-toggle="tab" href="#t1{{this._id}}">Tarjeta de Circulación</a></li>
                         <li><a data-toggle="tab" href="#r1{{vehiculo._id}}">Revisión Tecnica</a></li>
                         <li><a data-toggle="tab" href="#rc1{{vehiculo._id}}">RC</a></li>
                     </ul>
@@ -1888,22 +1889,51 @@
                         <div id="t1{{this._id}}" class="tab-pane fade">
                             <br>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Número de Tarjeta de Circulación</label>
-                                        <input class="form-control" type="text" required name="tc" value="{{this.TC.numero}}">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Fecha de Emisión de Tarjeta de Circulación</label>
-                                        <input class="form-control" type="date" required name="emisiontc" value="{{this.TC.emision}}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Fecha de Caducidad de Tarjeta de Circulación</label>
-                                        <input class="form-control" type="date" required name="caducidadtc" value="{{this.TC.caducidad}}">
-                                    </div>
-                                </div>
+
+                              <div class="panel-group" id="accordion">
+
+                                <div class="panel panel-default Entity__list">
+                              		{{#each entidad in entidades}}
+                                    {{#let tc=($getObjectInArrayBySearchValueInKey vehiculo.TC entidad.nombre 'entidad') }}
+                                      <div class="Entity__toggle" data-name="{{entidad.nombre}}">
+                                          <div class="panel-heading">
+                                              <h4 class="panel-title">
+                                                  <a style="color: black;" data-toggle="collapse" data-parent="#accordion" href="#{{entidad._id}}">
+                                                      {{entidad.nombre}} </a>
+                                                  <div class="Entity__active">
+                                                      <input class="select__entity" type="checkbox" value="{{this._id}}" {{$checked tc}}>
+                                                  </div>
+                                              </h4>
+                                          </div>
+                                          <div id="{{entidad._id}}" class="panel-collapse">
+                                              <div class="panel-body">
+                                                  <div class="row">
+                                                      <div class="col-md-6">
+                                                          <div class="form-group">
+                                                              <label for="domicilio">Número de Tarjeta de Circulación</label>
+                                                              <input type="text"  class="form-control" name="tc" value="{{tc.numero}}">
+                                                          </div>
+                                                      </div>
+                                                      <div class="col-md-6">
+                                                          <div class="form-group">
+                                                              <label for="domicilio">Fecha de Emisión</label>
+                                                              <input type="date"  class="form-control" name="emisiontc" value="{{tc.emision}}">
+                                                          </div>
+                                                          <div class="form-group">
+                                                              <label for="domicilio">Fecha de Caducidad</label>
+                                                              <input type="date"  class="form-control" name="caducidadtc" value="{{tc.caducidad}}">
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    {{/let}}
+                              		{{/each}}
+                              	</div>
+
+                              </div>
+
                             </div>
                         </div>
                         <div id="r1{{this._id}}" class="tab-pane fade">
