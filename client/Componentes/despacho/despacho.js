@@ -24,7 +24,22 @@ Template.VistaDespacho.onCreated(() => {
 
 Template.VistaDespacho.helpers({
     ProgramacionVehiculo() {
-        return ProgramacionVehiculo.findOne({ida: true});
+        let ida;
+        if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
+          ida = true
+        } else {
+            ida = Meteor.user().profile.ida;
+        }
+        return ProgramacionVehiculo.findOne({ida: ida});
+    },
+    despacho() {
+      let ida;
+      if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
+        ida = true
+      } else {
+          ida = Meteor.user().profile.ida;
+      }
+      return ProgramacionVehiculo.find({ida: ida}).fetch()[0].programacion;
     },
     despachados() {
         return ProgramacionVehiculo.find({despachado: true});
