@@ -384,8 +384,8 @@ Meteor.publish('Entidades', function () {
 
 });
 
-Meteor.publish('PlanHorarioPorRuta', function (rutaId) {
-    return PlanHorario.find({rutaId: rutaId});
+Meteor.publish('planes_horarios', function (ida) {
+    return PlanHorario.find({ida});
 });
 
 Meteor.publish('RequisitosPorVehiculo', function (vehiculoId) {
