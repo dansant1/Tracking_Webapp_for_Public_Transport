@@ -2,27 +2,30 @@ Template.mapaCliente.onCreated(() => {
     let template = Template.instance();
 
     template.query = new ReactiveVar(false);
+    template.schematic = new ReactiveVar(false);
     template.ruta = new ReactiveVar(false);
     template.vehiculo = new ReactiveVar(false);
     template.listadevehiculos = new ReactiveVar(false);
 
     template.verparaderos = new ReactiveVar(false);
     template.verpuntosdecontrol = new ReactiveVar(false);
-    template.vergeocerca = new ReactiveVar(false);
     template.modotrafico = new ReactiveVar(false);
+    template.vergeocerca = new ReactiveVar(false);
 
     template.autorun(() => {
         let empresaId = Meteor.user().profile.empresaId;
 
         template.subscribe('DetalleDeEmpresa', empresaId);
         template.subscribe('VehiculosEmpresaId', empresaId);
+        template.subscribe('rutasPorEmpresa', empresaId);
+
 
     });
 });
 
 Template.mapaCliente.helpers({
     empresa() {
-        return Empresas.find({_id: Meteor.user().profile.empresaId}).fetch()[0].nombre;
+        return Empresas.findOne({ _id: Meteor.user().profile.empresaId });
     },
     vehiculos() {
         let query = {};
@@ -38,23 +41,26 @@ Template.mapaCliente.helpers({
         }
 
         return Vehiculos.find(query);
+    },
+    ruta(id) {
+        let ruta = Rutas.findOne({_id: id}) || {nombre: ""};
+        return ruta.nombre;
     }
 });
 
 Template.mapaCliente.onRendered(() => {
 
+    $('.content-wrapper').css('height', $(window).height() + 'px');
+    $(window).resize(()=> {
+        $('.content-wrapper').css('height', $(window).height() + 'px');
+    });
+
     let self = this;
 
+    let ida;
+    let vuelta;
+
     let mapa = Template.instance();
-
-    mapa.subscribe('rutas');
-
-    let empresaId = Meteor.user().profile.empresaId;
-
-    mapa.subscribe('Empresas');
-    mapa.subscribe('vehiculosGPS', empresaId);
-    mapa.subscribe('VehiculosPorEmpresaId', empresaId);
-
 
     GoogleMaps.ready('map', function (map) {
 
@@ -66,9 +72,13 @@ Template.mapaCliente.onRendered(() => {
 
         mapa.autorun(() => {
 
+            let empresaId = Meteor.user().profile.empresaId;
+
+            mapa.subscribe('vehiculosGPS', empresaId);
+            mapa.subscribe('VehiculosPorEmpresaId', empresaId);
+
             let vehicle;
             let listadevehiculos;
-
 
             var contentString = 'Info';
 
@@ -128,16 +138,12 @@ Template.mapaCliente.onRendered(() => {
 
             let numero = 0;
 
-            if (subRutasPorEmp.ready()) {
+            if (subRutasPorEmp.ready() && mapa.ruta.get()) {
 
-
-                mapa.defaultRuta = new ReactiveVar(Rutas.findOne()._id)
+                mapa.defaultRuta = mapa.ruta.get();
 
                 mapa.idaPath;
                 mapa.vueltaPath;
-
-                let ida;
-                let vuelta;
 
                 function centerOnPath(obj1, obj2) {
                     let bounds = new google.maps.LatLngBounds();
@@ -256,21 +262,21 @@ Template.mapaCliente.onRendered(() => {
                     if (mapa.idaPath) {
                         removeLine();
                     }
-                    // mapa.idaPath = new google.maps.Polyline({
-                    //     path: ida,
-                    //     geodesic: true,
-                    //     strokeColor: '#3498db',
-                    //     strokeOpacity: 1.0,
-                    //     strokeWeight: 4
-                    // });
-                    //
-                    // mapa.vueltaPath = new google.maps.Polyline({
-                    //     path: vuelta,
-                    //     geodesic: true,
-                    //     strokeColor: '#e67e22',
-                    //     strokeOpacity: 1.0,
-                    //     strokeWeight: 4
-                    // })
+                    mapa.idaPath = new google.maps.Polyline({
+                        path: ida,
+                        geodesic: true,
+                        strokeColor: '#3498db',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 4
+                    });
+
+                    mapa.vueltaPath = new google.maps.Polyline({
+                        path: vuelta,
+                        geodesic: true,
+                        strokeColor: '#e67e22',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 4
+                    })
 
 
                     addLine();
@@ -281,6 +287,17 @@ Template.mapaCliente.onRendered(() => {
 
                 // });
 
+            }
+
+            if ( mapa.vergeocerca.get() ){
+              Modules.client.activarGeocerca( mapa, map.instance, ida, vuelta );
+            } else {
+              if ( typeof mapa.goingPath !== 'undefined' ){
+                mapa.goingPath.setMap( null );
+              }
+              if ( typeof mapa.returnPath !== 'undefined' ){
+                mapa.returnPath.setMap( null );
+              }
             }
 
 
@@ -308,12 +325,22 @@ Template.mapaCliente.onRendered(() => {
 
 
 Template.mapaCliente.events({
+    'click #vergeocerca'(e,t){
+      let instance = Template.instance();
+
+      instance.vergeocerca.set(
+        ! instance.vergeocerca.get()
+      );
+    },
 
     'change #ruta'(e, t) {
+        let instance = Template.instance();
+
         let target = e.currentTarget;
         let rutaId = target.options[target.selectedIndex].value;
 
-        Template.instance().ruta.set(rutaId === "0" ? false : rutaId);
+        instance.ruta.set(rutaId === "0" ? false : rutaId);
+        instance.vergeocerca.set( false );
     },
 
     'change #vehiculo'(e, t) {
@@ -381,13 +408,6 @@ Template.mapaCliente.helpers({
         } else {
             return false
         }
-    },
-    empresa() {
-        return Empresas.findOne({_id: Meteor.user().profile.empresaId});
-    },
-    ruta(id) {
-        let ruta = Rutas.findOne({_id: id}) || {nombre: ""};
-        return ruta.nombre;
     }
 });
 
@@ -474,8 +494,6 @@ Template.adminMapaCliente.onRendered(() => {
             mapa.subscribe('vehiculosGPS', empresaId);
             mapa.subscribe('VehiculosPorEmpresaId', empresaId);
 
-            let subRutasPorEmp = mapa.subscribe('RutasPorEmpresa', empresaId);
-
             let vehicle;
             let listadevehiculos;
 
@@ -534,6 +552,7 @@ Template.adminMapaCliente.onRendered(() => {
 
             // mapa.subscribe('RutasPorEmpresa', () => {
 
+            let subRutasPorEmp = mapa.subscribe('RutasPorEmpresa', empresaId);
 
             let numero = 0;
 
@@ -741,6 +760,7 @@ Template.adminMapaCliente.events({
         ! instance.vergeocerca.get()
       );
     },
+
     'change #ruta'(e, t) {
         let instance = Template.instance();
 
