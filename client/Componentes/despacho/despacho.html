@@ -2,6 +2,7 @@
     <div class="page-header clearfix" style="margin-top: 0px">
         <h4 class="pull-left">Despacho de Vehículos</h4>
     </div>
+    {{#if isInRole 'director' 'Empresa'}}
     <div class="row">
       <div class="col-md-9">
         <a href="/planeamiento/{{rutaId}}/nuevo" class="btn btn-success">Agregar Planeamiento de Hoy de Ida</a>
@@ -9,6 +10,8 @@
         <a href="/planeamiento/{{rutaId}}/nuevo/vuelta" class="btn btn-primary">Agregar Planeamiento de Hoy de Vuelta</a>
       </div>
     </div>
+
+    {{/if}}
 
     <br><br>
     <ul class="nav nav-tabs">

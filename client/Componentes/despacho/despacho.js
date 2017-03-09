@@ -7,7 +7,7 @@ Template.VistaDespacho.onCreated(() => {
         template.unidadesProgramadas = new ReactiveVar([]);
 
         template.subscribe('ProgramacionVehiculoPorEmpresaYRuta', empresaId, rutaId, true, () => {
-      
+
             if (ProgramacionVehiculo.find().fetch().length === 0) {
                 /*Meteor.call('AgregarPlaneamientoDelDiaAutomatico', rutaId, (err) => {
                     if (err) {
@@ -24,7 +24,16 @@ Template.VistaDespacho.onCreated(() => {
 
 Template.VistaDespacho.helpers({
     despacho() {
-        return ProgramacionVehiculo.find({ida: true}).fetch()[0].programacion;
+      let ida;
+      if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
+        ida = true
+      } else {
+          ida = Meteor.user().profile.ida;
+      }
+
+
+
+      return ProgramacionVehiculo.find({ida: ida}).fetch()[0].programacion;
     },
     despachados() {
         return ProgramacionVehiculo.find({despachado: true});
