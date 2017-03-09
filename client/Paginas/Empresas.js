@@ -5,6 +5,7 @@ Template.Empresas.onCreated(() => {
 
     template.searchQuery = new ReactiveVar();
     template.searching = new ReactiveVar(false);
+    template.rutaId = new ReactiveVar(false);
 
     template.autorun(() => {
 
@@ -44,8 +45,11 @@ Template.Empresas.helpers({
 
         return Empresas.find(query, projection);
     },
-    rutas() {
-        return Rutas.find();
+    rutas( arrayOfRutaId ) {
+        return Rutas.find({ _id: {$in : arrayOfRutaId } });
+    },
+    rutaId(){
+        return Template.instance().rutaId.get();
     }
 });
 
@@ -84,6 +88,9 @@ Template.Empresas.events({
             });
 
     },
+    'change .listarutas'(e,t){
+      Template.instance().rutaId.set( e.currentTarget.value );
+    }
 
 });
 
@@ -247,7 +254,6 @@ Template.ListaDeConductoresPorEmpresa.onCreated(() => {
 
     template.autorun(() => {
         let empresaId = FlowRouter.getParam('empresaId');
-        console.log(empresaId);
         template.subscribe('ConductoresPorEmpresa', empresaId, template.searchQuery.get(), () => {
             setTimeout(() => {
                 template.searching.set(false);
@@ -822,6 +828,7 @@ Template.agregarEmpresa.events({
 
 Template.DetalleDeEmpresa.onCreated(() => {
     let template = Template.instance();
+    console.log( );
 
     template.autorun(() => {
         let empresaId = FlowRouter.getParam('empresaId');
@@ -836,6 +843,12 @@ Template.DetalleDeEmpresa.helpers({
 
         let empresa = Empresas.findOne({_id: empresaId});
         return empresa;
+    },
+    empresaId(){
+      return FlowRouter.getParam('empresaId');
+    },
+    rutaId(){
+      return FlowRouter.getParam('rutaId');
     }
 });
 

@@ -79,6 +79,15 @@ Meteor.publish('rutas', function () {
     }
 });
 
+Meteor.publish('rutaSingle', function ( rutaId ) {
+    if (this.userId) {
+        return Rutas.find({ _id: rutaId });
+    } else {
+        this.stop();
+        return;
+    }
+});
+
 Meteor.publish('rutasPorEmpresa', function (empresaId) {
     if (this.userId) {
         return Rutas.find({empresasId: empresaId});

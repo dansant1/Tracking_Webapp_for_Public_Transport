@@ -138,6 +138,15 @@ FlowRouter.route('/empresas/:empresaId', {
     }
 });
 
+
+FlowRouter.route('/empresas/:empresaId/ruta/:rutaId', {
+    name: 'EmpresaRuta',
+    action() {
+
+        BlazeLayout.render('LayoutCliente', {administrador: 'DetalleDeEmpresa'});
+    }
+});
+
 FlowRouter.route('/admin/entidades', {
     name: 'Entidades',
     action() {

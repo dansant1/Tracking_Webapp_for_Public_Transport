@@ -11,6 +11,10 @@ Template.registerHelper('$lastIndex', function(obj, currentIndex) {
 });
 
 
+Template.registerHelper('$disabledIfFalse', function(value) {
+    return !value ? 'disabled' : '';
+});
+
 Template.registerHelper('$checked', function(value) {
     return value ? 'checked' : '';
 });
