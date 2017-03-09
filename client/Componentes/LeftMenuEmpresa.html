@@ -66,6 +66,7 @@
 
 					</ul>
 				</li>
+
 				{{#if isInRole 'monitoreo' 'Empresa'}}
 				<li class="has-children users top-nav-btn">
 					<a href="/rutas">Rutas</a>
@@ -88,7 +89,6 @@
 					{{/if}}
 
 				{{/if}}
-
 
 
 				{{#if isInRole 'director' 'Empresa'}}
@@ -180,14 +180,9 @@
 						<li style="z-index: 1001 !important" class="ae"><a href="#">Agregar Empresa</a></li>
 					</ul>
 				</li>
-				<!--<li class="has-children comments top-nav-btn">
-					<a href="/admin/rutas">Rutas</a>
-					<ul>
-						<li><a href="/admin/rutas">Rutas por Empresa</a></li>
 
-						<li><a href="/admin/agregaruta">Agregar Ruta</a></li>
-					</ul>
-				</li> -->
+				
+
 				{{else}}
 						{{#if isInRole 'soporte' 'Administracion'}}
 						<li class="cd-label">Gestión</li>

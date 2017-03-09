@@ -1399,7 +1399,6 @@ Template.AdministradorRutasPorEmpresa.onRendered( () => {
 
             let marker;
             ruta.paraderos.forEach( (p) => {
-              console.log( p );
               marker = new google.maps.Marker({
                   animation: google.maps.Animation.DROP,
                   position: new google.maps.LatLng(p.lat, p.lng),
@@ -1469,7 +1468,14 @@ Template.AdministradorRutasPorEmpresa.helpers({
     // empresas() {
     //     return Empresas.find({_id: FlowRouter.getParam('empresaId')}).fetch()[0].rutas;
     // },
-    ruta(id) {
-        return Rutas.findOne({_id: id});
+    ruta() {
+        return Rutas.findOne({_id: FlowRouter.getParam('rutaId') });
     }
   });
+
+
+Template.AdministradorRutasPorEmpresa.events({
+  'click #agregar-ruta'(e,t){
+    return FlowRouter.go( "AdministradorAgregarRuta" );
+  }
+});

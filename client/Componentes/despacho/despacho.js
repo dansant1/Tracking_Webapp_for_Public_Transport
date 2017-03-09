@@ -5,8 +5,9 @@ Template.VistaDespacho.onCreated(() => {
         let empresaId = Meteor.user().profile.empresaId;
         let rutaId = FlowRouter.getParam('rutaId');
         template.unidadesProgramadas = new ReactiveVar([]);
-        template.subscribe('ProgramacionVehiculoPorEmpresaYRuta', empresaId, rutaId, true, () => {
 
+        template.subscribe('ProgramacionVehiculoPorEmpresaYRuta', empresaId, rutaId, true, () => {
+      
             if (ProgramacionVehiculo.find().fetch().length === 0) {
                 /*Meteor.call('AgregarPlaneamientoDelDiaAutomatico', rutaId, (err) => {
                     if (err) {

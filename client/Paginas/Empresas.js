@@ -100,6 +100,10 @@ Template.ListaDeVehiculosPorEmpresas.onCreated(() => {
     template.searchQuery = new ReactiveVar();
     template.searching = new ReactiveVar(false);
 
+    let rutaId = FlowRouter.getParam('rutaId');
+
+    template.subscribe("rutaSingle", rutaId );
+
     Session.set('editarVehiculo', null);
 
     template.autorun(() => {
@@ -125,8 +129,8 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
         return Template.instance().searchQuery.get();
     },
     ruta() {
-        let empresaId = FlowRouter.getParam('empresaId');
-        return Rutas.find({empresasId: empresaId});
+        let rutaId = FlowRouter.getParam('rutaId');
+        return Rutas.findOne({ _id: rutaId });
     },
     vehiculo: function () {
         let empresaId = FlowRouter.getParam('empresaId');
