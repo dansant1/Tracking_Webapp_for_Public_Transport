@@ -32,7 +32,7 @@ Template.agregarProgramacionIda.onCreated( () => {
     break;
   }
 
-
+  let horas;
   template.autorun( () => {
     let ida = true//Meteor.user().profile.ida;
     console.log(ida);
@@ -44,8 +44,8 @@ Template.agregarProgramacionIda.onCreated( () => {
     template.subscribe('Horarios', ida, rutaId, () => {
       if (Plan.find().fetch().length > 0) {
 
-          horarios.set(Plan.find({}).fetch()[0].plan[d])
-          console.log(horarios.get());
+        horas = Plan.find({}).fetch()[0].plan[d];
+          
       }
     })
   })
@@ -54,7 +54,6 @@ Template.agregarProgramacionIda.onCreated( () => {
 Template.agregarProgramacionIda.events({
   'keyup [name="cantidad"]'(e, t) {
     t.cantidad.set(e.target.value);
-    console.log(t.cantidad.get());
   }
 })
 

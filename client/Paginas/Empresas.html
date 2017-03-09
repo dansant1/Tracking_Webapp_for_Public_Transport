@@ -1757,286 +1757,204 @@
     </div>
 </template>
 
-<template name="EditarVehiculo">
 
+<template name="EditarVehiculo">
     <div class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-
                 <div class="modal-header">
                     <h4 class="modal-title">Editar Datos de Vehículo</h4>
                 </div>
-
                 <div class="modal-body">
-                    <br>
-                    {{#with vehiculo}}
-
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#1{{this._id}}">Detalles</a></li>
-                            <li><a data-toggle="tab" href="#p1{{this._id}}">Propietario</a></li>
-                            <li><a data-toggle="tab" href="#tec1{{this._id}}">Tecnico</a></li>
-                            <li><a data-toggle="tab" href="#s1{{this._id}}">SOAT</a></li>
-                            <li><a data-toggle="tab" href="#t1{{this._id}}">Tarjeta de Circulación</a></li>
-                            <li><a data-toggle="tab" href="#r1{{this._id}}">Revisión Tecnica</a></li>
-                            <li><a data-toggle="tab" href="#rc1{{this._id}}">RC</a></li>
-
-                        </ul>
-
-                        <div class="tab-content">
-                            <div id="1{{this._id}}" class="tab-pane fade in active">
-                                <br>
-                                <form class="__formulario">
-
-                                    <div class="group">
-                                        <input type="text" required name="placa" value="{{this.placa}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
+                    <br> {{#with vehiculo}}
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#1{{vehiculo._id}}">Detalles</a></li>
+                        <li><a data-toggle="tab" href="#p1{{vehiculo._id}}">Propietario</a></li>
+                        <li><a data-toggle="tab" href="#tec1{{vehiculo._id}}">Tecnico</a></li>
+                        <li><a data-toggle="tab" href="#s1{{vehiculo._id}}">SOAT</a></li>
+                        <li><a data-toggle="tab" href="#t1{{vehiculo._id}}">Tarjeta de Circulación</a></li>
+                        <li><a data-toggle="tab" href="#r1{{vehiculo._id}}">Revisión Tecnica</a></li>
+                        <li><a data-toggle="tab" href="#rc1{{vehiculo._id}}">RC</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="1{{this._id}}" class="tab-pane fade in active">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label>Placa</label>
+                                        <input class="form-control" type="text" required name="placa" value="{{this.placa}}">
                                     </div>
-                                    <!--<div class="group">
-                                        <input type="text" required name="compania" value="{{this.compania}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Compañia</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="aseguradora" value="{{this.aseguradora}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Aseguradora</label>
-                                    </div> -->
-                                    <div class="group">
-                                        <input type="text" required name="codigoDeRuta" value="{{this.codigoDeRuta}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label>Código de Ruta</label>
+                                        <input class="form-control" type="text" required name="codigoDeRuta" value="{{this.codigoDeRuta}}">
                                     </div>
-                                    <div class="group">
-                                        <input type="text" required name="fechaDePermanenciaEnLaEmpresa"
-                                               value="{{this.fechaDePermanenciaEnLaEmpresa}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
+                                    <div class="form-group">
                                         <label>Fecha de Permanencia en la Empresa</label>
+                                        <input class="form-control" type="date" required name="fechaDePermanenciaEnLaEmpresa" value="{{this.fechaDePermanenciaEnLaEmpresa}}">
                                     </div>
-
-                                </form>
-
+                                </div>
                             </div>
-                            <div id="p1{{this._id}}" class="tab-pane fade">
-
-                                <br>
-                                <form class="__formulario">
-
-                                    <div class="group">
-                                        <input type="text" required name="propietario"
-                                               value="{{this.propietario.nombre}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Nombre del Propietario</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="dni" value="{{this.propietario.dni}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>DNI</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="domicilio"
-                                               value="{{this.propietario.domicilio}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Domicilio del Propietario</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="distrito"
-                                               value="{{this.propietario.distrito}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Distrito</label>
-                                    </div>
-
-                                    <div class="group">
-                                        <input type="text" required name="telefono"
-                                               value="{{this.propietario.telefono}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Teléfono</label>
-                                    </div>
-
-                                </form>
-                            </div>
-                            <div id="tec1{{this._id}}" class="tab-pane fade">
-
-                                <br>
-                                <form class="__formulario">
-
-                                    <div class="group">
-                                        <input type="text" required name="marca" value="{{this.propietario.nombre}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Marca</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="modelo" value="{{this.tecnico.modelo}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Modelo</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="serie" value="{{this.tecnico.serie}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Serie</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="combustible"
-                                               value="{{this.tecnico.combustible}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Combustible</label>
-                                    </div>
-
-                                    <div class="group">
-                                        <input type="number" required name="anioDeFabricacion"
-                                               value="{{this.tecnico.anioDeFabricacion}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Año de Fabricación</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="number" required name="longitud" value="{{this.tecnico.longitud}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Longitud</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="number" required name="asientos" value="{{this.tecnico.asientos}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Asientos</label>
-                                    </div>
-
-                                </form>
-                            </div>
-                            <div id="s1{{this._id}}" class="tab-pane fade">
-
-                                <br>
-                                <form class="__formulario">
-
-                                    <div class="group">
-                                        <input type="text" required name="soat" value="{{this.SOAT.numero}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Número de SOAT</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="emisionsoat" value="{{this.SOAT.inicio}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Fecha de Emisión de SOAT</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="caducidadsoat" value="{{this.SOAT.fin}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Fecha de Caducidad de SOAT</label>
-                                    </div>
-
-                                </form>
-
-                            </div>
-                            <div id="t1{{this._id}}" class="tab-pane fade">
-                                <br>
-                                <form class="__formulario">
-
-                                    <div class="group">
-                                        <input type="text" required name="tc" value="{{this.TC.numero}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Número de Tarjeta de Circulación</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="emisiontc" value="{{this.TC.emision}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Fecha de Emisión de Tarjeta de Circulación</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="caducidadtc" value="{{this.TC.caducidad}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Fecha de Caducidad de Tarjeta de Circulación</label>
-                                    </div>
-
-                                </form>
-
-                            </div>
-                            <div id="r1{{this._id}}" class="tab-pane fade">
-
-                                <br>
-                                <form class="__formulario">
-
-                                    <div class="group">
-                                        <input type="text" required name="rt" value="{{this.CITV.numero}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Número de Revisión Tecnica</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="emisionrt" value="{{this.CITV.inicio}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Fecha de Emisión de Revisión Tecnica</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="caducidadrt" value="{{this.CITV.fin}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Fecha de Caducidad de Revisión Tecnica</label>
-                                    </div>
-
-                                </form>
-
-                            </div>
-                            <div id="rc1{{this._id}}" class="tab-pane fade">
-
-                                <br>
-                                <form class="__formulario">
-
-                                    <div class="group">
-                                        <input type="text" required name="rc" value="{{this.RC.numero}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Número</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="emisionrc" value="{{this.RC.inicio}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Fecha de Emisión</label>
-                                    </div>
-                                    <div class="group">
-                                        <input type="text" required name="caducidadrc" value="{{this.RC.fin}}">
-                                        <span class="highlight"></span>
-                                        <span class="bar"></span>
-                                        <label>Fecha de Caducidad</label>
-                                    </div>
-
-                                </form>
-
-                            </div>
-
                         </div>
+                        <div id="p1{{this._id}}" class="tab-pane fade">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nombre del Propietario</label>
+                                        <input class="form-control" type="text" required name="propietario" value="{{this.propietario.nombre}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>DNI</label>
+                                        <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" class="form-control" maxlength="8" required name="dni" id="dni" value="{{this.propietario.dni}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Domicilio del Propietario</label>
+                                        <input class="form-control" type="text" required name="domicilio" value="{{this.propietario.domicilio}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Distrito</label>
+                                        <input class="form-control" type="text" required name="distrito" value="{{this.propietario.distrito}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Teléfono</label>
+                                        <input class="form-control" type="number" maxlength="9" required name="telefono" value="{{this.propietario.telefono}}" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tec1{{this._id}}" class="tab-pane fade">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Marca</label>
+                                        <input class="form-control" type="text" required name="marca" value="{{this.propietario.nombre}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Modelo</label>
+                                        <input class="form-control" type="text" required name="modelo" value="{{this.tecnico.modelo}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Serie</label>
+                                        <input class="form-control" type="text" required name="serie" value="{{this.tecnico.serie}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Combustible</label>
+                                        <input class="form-control" type="text" required name="combustible" value="{{this.tecnico.combustible}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Año de Fabricación</label>
+                                        <input class="form-control" type="number" min="1950" max="2018" required name="anioDeFabricacion" value="{{this.tecnico.anioDeFabricacion}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Longitud</label>
+                                        <input class="form-control" type="number" required min="1" step="0.1" name="longitud" value="{{this.tecnico.longitud}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Asientos</label>
+                                        <input class="form-control" type="number" required min="1" max="100"  name="asientos" value="{{this.tecnico.asientos}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="s1{{this._id}}" class="tab-pane fade">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Número de SOAT</label>
+                                        <input class="form-control" type="text" required name="soat" value="{{this.SOAT.numero}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Fecha de Emisión de SOAT</label>
+                                        <input class="form-control" type="date" required name="emisionsoat" value="{{this.SOAT.inicio}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fecha de Caducidad de SOAT</label>
+                                        <input class="form-control" type="date" required name="caducidadsoat" value="{{this.SOAT.fin}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="t1{{this._id}}" class="tab-pane fade">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Número de Tarjeta de Circulación</label>
+                                        <input class="form-control" type="text" required name="tc" value="{{this.TC.numero}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Fecha de Emisión de Tarjeta de Circulación</label>
+                                        <input class="form-control" type="date" required name="emisiontc" value="{{this.TC.emision}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fecha de Caducidad de Tarjeta de Circulación</label>
+                                        <input class="form-control" type="date" required name="caducidadtc" value="{{this.TC.caducidad}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="r1{{this._id}}" class="tab-pane fade">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Número de Revisión Tecnica</label>
+                                        <input class="form-control" type="date" required name="rt" value="{{this.CITV.numero}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Fecha de Emisión de Revisión Tecnica</label>
+                                        <input class="form-control" type="date" required name="emisionrt" value="{{this.CITV.inicio}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fecha de Caducidad de Revisión Tecnica</label>
+                                        <input class="form-control" type="date" required name="caducidadrt" value="{{this.CITV.fin}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="rc1{{this._id}}" class="tab-pane fade">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Número</label>
+                                        <input class="form-control" type="text" required name="rc" value="{{this.RC.numero}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Fecha de Emisión</label>
+                                        <input class="form-control" type="date" required name="emisionrc" value="{{this.RC.inicio}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fecha de Caducidad</label>
+                                        <input class="form-control" type="date" required name="caducidadrc" value="{{this.RC.fin}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {{/with}}
-
-
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success guardar ">Guardar</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>
-
             </div>
         </div>
     </div>
