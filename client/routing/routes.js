@@ -87,22 +87,24 @@ FlowRouter.route('/plan/ruta/:rutaId', {
 FlowRouter.route('/despacho/d/:rutaId', {
     name: 'Planeamiento',
     action() {
-        BlazeLayout.render('LayoutCliente', {cliente: 'layoutDirector' /*'FuncionDespachar'*/});
+        BlazeLayout.render('LayoutCliente', {cliente: 'FuncionDespachar'});
     }
 });
 
 FlowRouter.route('/planeamiento/:rutaId/nuevo', {
     name: 'Planeamiento.Nuevo',
     action() {
-        BlazeLayout.render('LayoutCliente', {cliente: 'NuevoPlaneamientoDelDia'});
+        console.log('holas');
+        BlazeLayout.render('LayoutCliente', {cliente: 'NuevoPlaneamientoDelDia', administrador: 'NuevoPlaneamientoDelDia'});
     }
 });
-
 
 FlowRouter.route('/planeamiento/:rutaId/nuevo/vuelta', {
     name: 'Planeamiento.Nuevo',
     action() {
-        BlazeLayout.render('LayoutCliente', {cliente: 'NuevoPlaneamientoDelDiaVuelta'});
+        BlazeLayout.render('LayoutCliente', {cliente: 'NuevoPlaneamientoDelDiaVuelta', administrador: 'NuevoPlaneamientoDelDiaVuelta'});
+    }
+});
 
 FlowRouter.route('/planeamiento/:rutaId/nuevo/ida', {
     name: 'Planeamiento.Nuevo.Ida',
@@ -161,6 +163,13 @@ FlowRouter.route('/empresas/:empresaId/ruta/:rutaId', {
         BlazeLayout.render('LayoutCliente', {administrador: 'DetalleDeEmpresa'});
     }
 });
+
+FlowRouter.route('/empresas/:empresaId/rutas/', {
+  name: 'EmpresaRuta',
+  action() {
+      BlazeLayout.render('LayoutCliente', {administrador: 'ListaDeRutasDespacho'});
+  }
+})
 
 FlowRouter.route('/admin/entidades', {
     name: 'Entidades',
@@ -281,3 +290,25 @@ FlowRouter.route('/admin/planes/editar/:planId', {
         BlazeLayout.render('LayoutCliente', {administrador: 'EditarPlan'});
     }
 });
+
+FlowRouter.route('/admin/listas/despacho', {
+  name: 'Despacho.Empresa',
+  action() {
+    BlazeLayout.render('LayoutCliente', {administrador: 'ListaDeEmpresasDespacho'});
+  }
+})
+
+
+FlowRouter.route('/admin/listas/programacion', {
+  name: 'Despacho.Empresa',
+  action() {
+    BlazeLayout.render('LayoutCliente', {administrador: 'ListaDeEmpresasProgramacion'});
+  }
+})
+
+FlowRouter.route('/admin/:rutaId/rutas', {
+  name: 'Rutas.Empresa',
+  action() {
+    BlazeLayout.render('LayoutCliente', {administrador: 'ListaDeRutasProgramacion'});
+  }
+})

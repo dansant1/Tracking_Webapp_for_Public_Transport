@@ -2,8 +2,8 @@
     <div class="content-wrapper">
         <div class="container-fluid">
             {{#if currentUser}}
-            
-                {{#if isInRole 'director' 'Empresa'}}
+
+                
                     <div class="row">
                         <div class="col-md-12 col-sm-18 col-xs-18">
                             <div class="box">
@@ -61,9 +61,7 @@
                             </div>
                         </div>
                     </div>
-                {{else}}
-                    <div>403 FORBIDDEN</div>
-                {{/if}}
+
             {{else}}
                 <div>401 UNATHORIZED</div>
             {{/if}}

@@ -44,8 +44,10 @@ Template.VistaDespacho.helpers({
 
 Template.VistaDespacho.events({
     'click .despachar'(e, t) {
-        let unidadProgramada = t.unidadesProgramadas.get().search(u=>u._id === this._id);
-        console.log(unidadProgramada);
+        //let unidadProgramada = t.unidadesProgramadas.get().search(u=>u._id === this._id);
+        console.log('hola');
+        //console.log(unidadProgramada);
+        Modal.show('Asignar')
     }
 })
 

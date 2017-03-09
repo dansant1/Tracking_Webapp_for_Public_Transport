@@ -1,0 +1,75 @@
+<template name="ListaDeEmpresasDespacho">
+  <div class="content-wrapper">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-12 col-sm-18 col-xs-18">
+                  <div class="box">
+                      <h3>Despacho por Empresa</h3>
+                      <br>
+                      <div class="page-header clearfix" style="margin-top: 0px;">
+                          <h4 class="pull-left">
+                            <input type="text" style="position: relative; top: 5px; width: 275px" name="search"
+                              class="form-control" width="250px" placeholder="Buscar por Nombre o RUC">
+                          </h4>
+
+                      </div>
+                      <ul class="list-group">
+                          {{#if searching}}
+                          <h3>Cargando...</h3>
+                          {{else}}
+
+                          {{#each empresa in empresas}}
+                          <li class="list-group-item clearfix">
+                              <span class="pull-left">{{empresa.ruc}} - {{empresa.nombre}}</span>
+                              <span class="pull-right">
+                                <a href="/empresas/{{empresa._id}}/rutas/" class="btn btn-primary">
+                                  <i class="fa fa-eye" aria-hidden="true"></i>
+                                </a>
+                              </span>
+                          </li>
+                          {{else}}
+                          <h3>Lo sentimos no tenemos resultados para {{query}}</h3>
+                          {{/each}}
+                        {{/if}}
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</template>
+
+<template name="ListaDeRutasDespacho">
+  <div class="content-wrapper">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-12 col-sm-18 col-xs-18">
+                  <div class="box">
+                      <h3>Rutas de la Empresa</h3>
+                      <br>
+                      <ul class="list-group">
+
+
+                          {{#each rutas}}
+                          <li class="list-group-item clearfix">
+                              <span class="pull-left">Ruta {{this.nombre}}</span>
+                              <span class="pull-right" >
+
+                                <a href="/planeamiento/{{this._id}}/nuevo" class="btn btn-success">
+                                  Despacho de Hoy Ida
+                                </a>
+                                <a href="/planeamiento/{{this._id}}/nuevo" class="btn btn-primary">
+                                  Despacho de Hoy Vuelta
+                                </a>
+                              </span>
+                          </li>
+
+                          {{/each}}
+
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</template>
