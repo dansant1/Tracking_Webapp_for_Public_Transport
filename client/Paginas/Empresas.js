@@ -867,8 +867,10 @@ Template.nuevoUsuario.events({
             rol = 2;
         } else if (r === "3") {
             rol = 3;
+        } else if (r === "22" ) {
+            rol = 22;
         } else {
-            rol = 4;
+          rol = 4
         }
 
         if (datos.email !== "" && datos.password !== "" && datos.profile.nombre !== "") {

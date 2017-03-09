@@ -405,6 +405,17 @@ Meteor.methods({
         Entidades.remove({_id: id});
     },
     agregarUsuario(datos, rol) {
+
+        switch (rol) {
+          case 2:
+            datos.profile.ida = true;
+            break;
+          case 22:
+            datos.profile.ida = false;
+            break;
+
+        }
+        
         id = Accounts.createUser(datos);
 
         if (id) {
@@ -435,6 +446,15 @@ Meteor.methods({
                     tipo: 'Operador de Monitoreo'
                 });
                 Roles.addUsersToRoles(id, [ROLES.empresa.monitoreo], ROLES.grupos.empresa);
+            } else if (rol === 22) {
+              Operadores.insert({
+                  nombre: datos.profile.nombre,
+                  empresaId: datos.profile.empresaId,
+                  email: datos.email,
+                  userId: id,
+                  tipo: 'Operador de Despacho'
+              });
+              Roles.addUsersToRoles(id, [ROLES.empresa.operador], ROLES.grupos.empresa);
             } else {
                 Operadores.insert({
                     nombre: datos.profile.nombre,
