@@ -17,11 +17,8 @@ function crearProgramaciones(template) {
     if (template.totalVehicles.get() === null) {
       let empresaId;
       if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
-        console.log(empresaId);
-        console.log('gggg');
         empresaId = Rutas.findOne({_id: FlowRouter.getParam('rutaId')}).empresasId;
       } else {
-        console.log('holaaa');
         empresaId = Meteor.user().profile.empresaId;
       }
         template.totalVehicles.set(Vehiculos.find({
@@ -110,12 +107,9 @@ Template.NuevoPlaneamientoDelDiaVuelta.onCreated(() => {
     template.autorun(() => {
       let empresaId
       template.subscribe('rutas', () => {
-      console.log('fff');
       if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
-        console.log(empresaId);
         empresaId = Rutas.findOne({_id: FlowRouter.getParam('rutaId')}).empresasId;
       } else {
-        console.log('holaaa');
         empresaId = Meteor.user().profile.empresaId;
       }
     })
@@ -181,10 +175,8 @@ Template.NuevoPlaneamientoDelDiaVuelta.events({
         if (hora) {
           let empresaId;
           if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
-            console.log(empresaId);
             empresaId = Rutas.findOne({_id: FlowRouter.getParam('rutaId')}).empresasId;
           } else {
-            console.log('holaaa');
             empresaId = Meteor.user().profile.empresaId;
           }
             vehiculos = Vehiculos.find({
@@ -239,10 +231,8 @@ Template.NuevoPlaneamientoDelDiaVuelta.events({
         });
         let empresaId;
         if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
-          console.log(empresaId);
           empresaId = Rutas.findOne({_id: FlowRouter.getParam('rutaId')}).empresasId;
         } else {
-          console.log('holaaa');
           empresaId = Meteor.user().profile.empresaId;
         }
         let data = {

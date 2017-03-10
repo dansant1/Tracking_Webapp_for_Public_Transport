@@ -7,9 +7,9 @@ Meteor.publish('PlanesHorarios', function () {
   }
 })
 
-Meteor.publish('ProgramacionVehiculoPorEmpresaYRuta', function (empresaId, rutaId, ida) {
+Meteor.publish('ProgramacionVehiculoRutaDiaIda', function (rutaId, dia, ida) {
   if (this.userId) {
-    return ProgramacionVehiculo.find({empresaId: empresaId, rutaId: rutaId, ida: ida})
+    return ProgramacionVehiculo.find({rutaId: rutaId, dia:dia, ida: ida})
   } else {
     this.stop()
     return;

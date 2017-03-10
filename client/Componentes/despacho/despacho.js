@@ -1,22 +1,29 @@
 Template.VistaDespacho.onCreated(() => {
-    let template = Template.instance()
+    let template = Template.instance();
 
     template.autorun(() => {
+        let hoy = new Date();
+        let dd = hoy.getDate();
+        var mm = hoy.getMonth() + 1;
+        let yyyy = hoy.getFullYear();
+        dd = (dd < 10 ? '0' : '') + dd;
+        mm = (mm < 10 ? '0' : '') + mm;
+        var today = dd + '/' + mm + '/' + yyyy;
         let empresaId = Meteor.user().profile.empresaId;
         let rutaId = FlowRouter.getParam('rutaId');
         template.unidadesProgramadas = new ReactiveVar([]);
 
-        template.subscribe('ProgramacionVehiculoPorEmpresaYRuta', empresaId, rutaId, true, () => {
+        template.programacionList = new ReactiveVar(null);
 
-            if (ProgramacionVehiculo.find().fetch().length === 0) {
-                /*Meteor.call('AgregarPlaneamientoDelDiaAutomatico', rutaId, (err) => {
-                    if (err) {
-                        Bert.alert('Hubo un error al crear el planeamiento de hoy, intentelo manualmente', 'warning')
-                    } else {
-                        Bert.alert('El planeamiento del dia se agrego automaticamente.')
-                    }
-                })*/
-            }
+        let ida;
+        if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
+            ida = true
+        } else {
+            ida = Meteor.user().profile.ida;
+        }
+
+        template.subscribe('ProgramacionVehiculoRutaDiaIda', rutaId, today, ida, ()=> {
+            template.programacionList.set(ProgramacionVehiculo.findOne());
         });
         template.subscribe('VehiculosEmpresaId', empresaId);
     })
@@ -24,33 +31,27 @@ Template.VistaDespacho.onCreated(() => {
 
 Template.VistaDespacho.helpers({
     ProgramacionVehiculo() {
+        return Template.instance().programacionList.get();
+    },
+    despacho() {
         let ida;
         if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
-          ida = true
+            ida = true
         } else {
             ida = Meteor.user().profile.ida;
         }
-        return ProgramacionVehiculo.findOne({ida: ida});
-    },
-    despacho() {
-      let ida;
-      if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
-        ida = true
-      } else {
-          ida = Meteor.user().profile.ida;
-      }
-      return ProgramacionVehiculo.find({ida: ida}).fetch()[0].programacion;
+        return ProgramacionVehiculo.find({ida: ida}).fetch()[0].programacion;
     },
     despachados() {
         return ProgramacionVehiculo.find({despachado: true});
     },
     despachocola() {
-        return Vehiculos.find({ espera: true });
+        return Vehiculos.find({espera: true});
     },
     vehiculosSancionados() {
         return Vehiculos.find({'sancionActiva': true});
     },
-    vehiculo( vehiculoId ) {
+    vehiculo(vehiculoId) {
         return Vehiculos.findOne({_id: vehiculoId})
     },
     rutaId() {
@@ -60,15 +61,17 @@ Template.VistaDespacho.helpers({
 
 Template.VistaDespacho.events({
     'click .despachar'(e, t) {
-        //let unidadProgramada = t.unidadesProgramadas.get().search(u=>u._id === this._id);
-        // console.log('hola');
-        //console.log(unidadProgramada);
-        let target = $( e.currentTarget );
+        let programacionList = Template.instance().programacionList.get();
+        let p = programacionList.programacion.find(p=>p.hora == this.hora);
+        p.despachado = true;
 
-        Session.set('programacionVehiculoId', target.data("programacionvehiculoid") );
-        Session.set('vehiculoId', target.data("vehiculoid") );
 
+        // Session.set('programacionVehiculoId', target.data("programacionvehiculoid"));
+        // Session.set('vehiculoId', target.data("vehiculoid"));
+        //
         Modal.show('Asignar');
+
+
     }
 })
 
@@ -150,17 +153,17 @@ Template.Asignar.events({
         let target = $(e.currentTarget);
 
         target.text("Reasignando ...");
-        console.log( programacionVehiculoId, vehiculoId );
+        console.log(programacionVehiculoId, vehiculoId);
         target.attr("disabled", "");
-        Meteor.call('ReasignarVehiculos', programacionVehiculoId, vehiculoId, (err) => {
-          target.removeAttr("disabled", "");
-        //     if (err) {
-        //         Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
-        //         console.log(err);
-        //     } else {
-        //         Bert.alert('Vehiculos Reasignados', 'success');
-        //         Modal.hide('Asignar');
-        //     }
+        Meteor.call('reasignarVehiculos', programacionVehiculoId, vehiculoId, (err) => {
+            target.removeAttr("disabled", "");
+            //     if (err) {
+            //         Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
+            //         console.log(err);
+            //     } else {
+            //         Bert.alert('Vehiculos Reasignados', 'success');
+            //         Modal.hide('Asignar');
+            //     }
         });
     }
 })

@@ -2,390 +2,397 @@ import {Meteor} from 'meteor/meteor';
 import {Excel} from 'meteor/netanelgilad:excel'
 import ROLES from '../../Both/Roles'
 
-function process(date){
-    if (date === null || date === undefined ) {
-      return '';
+function process(date) {
+    if (date === null || date === undefined) {
+        return '';
     } else {
-      let parts;
-      if ( date.search("/") !== -1 ){
-        parts = date.split("/");
-        //format dd/mm/yyyy
-        return new Date(
-          parseInt( parts[2] ),
-          parseInt( parts[1] ) - 1,
-          parseInt( parts[0] )
-        );
-      } else {
-        //format yyyy-mm-dd
-        parts = date.split("-");
-        return new Date(
-          parseInt( parts[0] ),
-          parseInt( parts[1] ) - 1,
-          parseInt( parts[2] )
-        );
-      }
+        let parts;
+        if (date.search("/") !== -1) {
+            parts = date.split("/");
+            //format dd/mm/yyyy
+            return new Date(
+                parseInt(parts[2]),
+                parseInt(parts[1]) - 1,
+                parseInt(parts[0])
+            );
+        } else {
+            //format yyyy-mm-dd
+            parts = date.split("-");
+            return new Date(
+                parseInt(parts[0]),
+                parseInt(parts[1]) - 1,
+                parseInt(parts[2])
+            );
+        }
     }
 
 }
 
 function formarJSON(date) {
-  if (date === null ||  date === undefined) {
+    if (date === null || date === undefined) {
 
-    return ''
-  } else {
-    var parts = date.split("/");
-    if (parts[2] !== undefined) {
-      if (parts[2].length === 2) {
+        return ''
+    } else {
+        var parts = date.split("/");
+        if (parts[2] !== undefined) {
+            if (parts[2].length === 2) {
 
-        parts[2] = '20' + parts[2];
-      }
+                parts[2] = '20' + parts[2];
+            }
+        }
+
+        return parts[1] + '/' + parts[0] + '/' + parts[2]
     }
-
-    return parts[1] + '/' + parts[0] + '/' + parts[2]
-  }
 
 
 }
 
 Meteor.methods({
-      crearProgramacionVehiculo(d) {
+    crearProgramacionVehiculo(d) {
         if (this.userId) {
-          if (typeof d !== 'undefined') {
+            if (typeof d !== 'undefined') {
                 ProgramacionVehiculo.insert(d);
-          }
+            }
         }
-      },
-      ReasignarVehiculos(programacionVehiculoId, vehiculoId ) {
-          let hoy = new Date();
-          let dd = hoy.getDate();
-          var mm = hoy.getMonth() + 1;
+    },
+    reasignarVehiculos(programacionVehiculoId, vehiculoId, reqSi, reqNo) {
 
-          let yyyy = hoy.getFullYear();
+        if (reqSi && reqNo) {
+            ProgramacionVehiculoHistorial.insert({
+                progInicialId: programacionVehiculoId,
+                vehiculoId,
+                reqSi,
+                reqNo
+            });
+        }
 
-          if ( dd < 10 ) {
-              dd='0'+dd;
-          }
+        let hoy = new Date();
+        let dd = hoy.getDate();
+        var mm = hoy.getMonth() + 1;
 
-          if ( mm < 10 ) {
-              mm='0'+mm;
-          }
-          let today = dd+'/'+mm+'/'+yyyy;
-          let datetime;
+        let yyyy = hoy.getFullYear();
 
-          let programacionNueva = [];
-          let despachoAuxiliar;
-          let despachoAnterior;
-          let swap = false;
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
 
-          let programacionActual = ProgramacionVehiculo.findOne({_id: programacionVehiculoId }).programacion;
-          console.log( programacionVehiculoId, vehiculoId );
-          console.log( programacionActual.length );
-          console.log( programacionActual );
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
 
-          for (let i = 0; i < programacionActual.length; i++) {
+        let programacionNueva = [];
+        let despachoAuxiliar;
+        let despachoAnterior;
+        let swap = false;
+
+        let programacionActual = ProgramacionVehiculo.findOne({_id: programacionVehiculoId}).programacion;
+        console.log(programacionVehiculoId, vehiculoId);
+        console.log(programacionActual.length);
+        console.log(programacionActual);
+
+        for (let i = 0; i < programacionActual.length; i++) {
             let despacho = programacionActual[i];
 
 
-            if ( swap ){
-              despachoAuxiliar = despachoAnterior;
-              despachoAnterior = _.clone( despacho );
-              despacho["hora"] = despachoAuxiliar["hora"];
-              despacho["despachado"] = despachoAuxiliar["despachado"];
-              console.log( "swap", i );
+            if (swap) {
+                despachoAuxiliar = despachoAnterior;
+                despachoAnterior = _.clone(despacho);
+                despacho["hora"] = despachoAuxiliar["hora"];
+                despacho["despachado"] = despachoAuxiliar["despachado"];
+                console.log("swap", i);
             }
 
-            if ( despacho["vehiculoId"] === vehiculoId ){
-              swap = true;
-              despachoAnterior = despacho;
-              console.log( "found" );
-              continue;
+            if (despacho["vehiculoId"] === vehiculoId) {
+                swap = true;
+                despachoAnterior = despacho;
+                console.log("found");
+                continue;
             }
 
-            programacionNueva.push( despacho );
+            programacionNueva.push(despacho);
 
-          }
+        }
 
-          ProgramacionVehiculo.update({_id: programacionVehiculoId}, { $set: { programacion: programacionNueva } });
-          Vehiculos.update({_id: vehiculoId}, { $set : { espera: true } });
+        ProgramacionVehiculo.update({_id: programacionVehiculoId}, {$set: {programacion: programacionNueva}});
+        Vehiculos.update({_id: vehiculoId}, {$set: {espera: true}});
 
-          // // ponemos en espera al vehiculo
-          // let despachoDeVehiculoReasignarId = registroId;
-          // // = ProgramacionVehiculo.update({_id: registroId}, { $set: { requisitos: false } });
-          //
-          // //obtenemos la lista de despachos ordenada
-          // let despachosOrdered = ProgramacionVehiculo.find({ despachado: false, hora: { $nin: ["","24:00"] } }, { $sort : {datetime: 1 } }).fetch();
-          // let reordenar = false;
-          // let registroDespachoAuxiliar = { hora: "", datetime: "" };
-          //
-          // for( let i=0; i<= despachosOrdered.length; i++){
-          //
-          //   if ( typeof despachosOrdered[i] === 'undefined' ){
-          //     break;
-          //   }
-          //
-          //   if ( reordenar ){
-          //     ProgramacionVehiculo.update({_id: despachosOrdered[i]._id}, { $set: {
-          //         hora: despachosOrdered[i-1].hora,
-          //         datetime: despachosOrdered[i-1].datetime
-          //     }});
-          //   }
-          //
-          //   if ( despachosOrdered[i]._id === registroId ){
-          //     reordenar = true;
-          //     ProgramacionVehiculo.update({_id: registroId}, { $set: { requisitos: false } });
-          //   }
-          //
-          // }
-          return true;
+        // // ponemos en espera al vehiculo
+        // let despachoDeVehiculoReasignarId = registroId;
+        // // = ProgramacionVehiculo.update({_id: registroId}, { $set: { requisitos: false } });
+        //
+        // //obtenemos la lista de despachos ordenada
+        // let despachosOrdered = ProgramacionVehiculo.find({ despachado: false, hora: { $nin: ["","24:00"] } }, { $sort : {datetime: 1 } }).fetch();
+        // let reordenar = false;
+        // let registroDespachoAuxiliar = { hora: "", datetime: "" };
+        //
+        // for( let i=0; i<= despachosOrdered.length; i++){
+        //
+        //   if ( typeof despachosOrdered[i] === 'undefined' ){
+        //     break;
+        //   }
+        //
+        //   if ( reordenar ){
+        //     ProgramacionVehiculo.update({_id: despachosOrdered[i]._id}, { $set: {
+        //         hora: despachosOrdered[i-1].hora,
+        //         datetime: despachosOrdered[i-1].datetime
+        //     }});
+        //   }
+        //
+        //   if ( despachosOrdered[i]._id === registroId ){
+        //     reordenar = true;
+        //     ProgramacionVehiculo.update({_id: registroId}, { $set: { requisitos: false } });
+        //   }
+        //
+        // }
+        return true;
 
-      },
-      AgregarPlaneamientoDelDiaAutomatico(rutaId) {
+    },
+    AgregarPlaneamientoDelDiaAutomatico(rutaId) {
         if (this.userId) {
-          let v = [];
-          let empresaId = Meteor.users.findOne({_id: this.userId}).profile.empresaId;
-          let vehiculos = Vehiculos.find({empresaId: empresaId});
+            let v = [];
+            let empresaId = Meteor.users.findOne({_id: this.userId}).profile.empresaId;
+            let vehiculos = Vehiculos.find({empresaId: empresaId});
 
-          vehiculos.forEach( (vid) => {
-            v.push(vid._id)
-          })
+            vehiculos.forEach((vid) => {
+                v.push(vid._id)
+            })
 
-          let fecha = new Date();
-          let diaNumero = fecha.getDay();
+            let fecha = new Date();
+            let diaNumero = fecha.getDay();
 
-          let hoy = new Date();
-          let dd = hoy.getDate();
-          var mm = hoy.getMonth() + 1;
+            let hoy = new Date();
+            let dd = hoy.getDate();
+            var mm = hoy.getMonth() + 1;
 
-          let yyyy = hoy.getFullYear();
+            let yyyy = hoy.getFullYear();
 
-          if ( dd < 10 ) {
-              dd='0'+dd;
-          }
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
 
-          if ( mm < 10 ) {
-              mm='0'+mm;
-          }
-          var today = dd+'/'+mm+'/'+yyyy;
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var today = dd + '/' + mm + '/' + yyyy;
 
-          let planeamiento = Planeamiento.findOne({empresaId: empresaId});
+            let planeamiento = Planeamiento.findOne({empresaId: empresaId});
 
-          let diasArray = [ "", 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo' ];
-          let nombreDia = diasArray[ diaNumero ];
+            let diasArray = ["", 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+            let nombreDia = diasArray[diaNumero];
 
-          let horasEnPlaneamientoPorDia = planeamiento.plan.horas[ nombreDia ];
+            let horasEnPlaneamientoPorDia = planeamiento.plan.horas[nombreDia];
 
-          horasEnPlaneamientoPorDia.forEach( (hora) => {
+            horasEnPlaneamientoPorDia.forEach((hora) => {
 
-              ProgramacionVehiculo.insert({
-                vehiculoId: _.sample(v),
-                rutaId: rutaId,
-                empresaId: empresaId,
-                despachado: false,
-                hora: hora,
-                ida: true,
-                dia: today,
-                createdAt: new Date()
-              });
+                ProgramacionVehiculo.insert({
+                    vehiculoId: _.sample(v),
+                    rutaId: rutaId,
+                    empresaId: empresaId,
+                    despachado: false,
+                    hora: hora,
+                    ida: true,
+                    dia: today,
+                    createdAt: new Date()
+                });
 
-          });
-
+            });
 
 
         } else {
-          return;
+            return;
         }
-      },
-      verificarConductorEsAptoParaSalirARuta(conductorId) {
+    },
+    verificarConductorEsAptoParaSalirARuta(conductorId) {
         if (this.userId) {
 
-          let hoy = new Date();
-          let dd = hoy.getDate();
-          var mm = hoy.getMonth() + 1;
+            let hoy = new Date();
+            let dd = hoy.getDate();
+            var mm = hoy.getMonth() + 1;
 
-          let yyyy = hoy.getFullYear();
+            let yyyy = hoy.getFullYear();
 
-          if ( dd < 10 ) {
-              dd='0'+dd;
-          }
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
 
-          if ( mm < 10 ) {
-              mm='0'+mm;
-          }
-          var today = dd + '/' + mm + '/' + yyyy;
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var today = dd + '/' + mm + '/' + yyyy;
 
 
-          let conductor = Conductores.findOne({_id: conductorId});
-          let venceLicencia = conductor.licencia.revalidacion;
-          let venceCEV = conductor.CEV.caducidad;
-          let credencial = conductor.credencial.caducidad;
+            let conductor = Conductores.findOne({_id: conductorId});
+            let venceLicencia = conductor.licencia.revalidacion;
+            let venceCEV = conductor.CEV.caducidad;
+            let credencial = conductor.credencial.caducidad;
 
-          let licencia;
-          let cev;
-          let cred;
-          let res = {};
+            let licencia;
+            let cev;
+            let cred;
+            let res = {};
 
-          if (venceLicencia && venceLicencia !== undefined && venceLicencia !== null) {
-            if (process(today) < process(venceLicencia)) {
-              licencia = true;
+            if (venceLicencia && venceLicencia !== undefined && venceLicencia !== null) {
+                if (process(today) < process(venceLicencia)) {
+                    licencia = true;
+                } else {
+                    licencia = false;
+                    return {
+                        valido: false,
+                        razon: `La licencia esta vencida desde ${venceLicencia}`
+                    }
+                }
             } else {
-              licencia = false;
-              return {
-                valido : false,
-                razon : `La licencia esta vencida desde ${venceLicencia}`
-              }
+                return {
+                    valido: false,
+                    razon: 'El conductor no tiene licencia'
+                }
             }
-          } else {
-            return {
-              valido : false,
-              razon : 'El conductor no tiene licencia'
-            }
-          }
 
-          if (venceCEV &&venceCEV !== undefined && venceCEV !== null) {
-            if (process(today) < process(venceCEV)) {
-              cev = true;
+            if (venceCEV && venceCEV !== undefined && venceCEV !== null) {
+                if (process(today) < process(venceCEV)) {
+                    cev = true;
+                } else {
+                    cev = false;
+                    return {
+                        valido: false,
+                        razon: `El CEV esa vencido desde el ${venceCEV}`
+                    }
+                }
             } else {
-              cev = false;
-              return {
-                valido : false,
-                razon : `El CEV esa vencido desde el ${venceCEV}`
-              }
+                return {
+                    valido: false,
+                    razon: 'El conductor no tiene CEV'
+                }
             }
-          } else {
+
+            if (credencial && credencial !== undefined && credencial !== null) {
+                if (process(today) < process(credencial)) {
+                    cred = true;
+                } else {
+                    cred = false;
+                    return {
+                        valido: false,
+                        razon: `La credencial esta vencida desde el ${credencial}`
+                    }
+                }
+
+            } else {
+                return {
+                    valido: false,
+                    razon: 'El conductor no tiene credencial'
+                }
+            }
+
             return {
-              valido : false,
-              razon : 'El conductor no tiene CEV'
+                valido: true,
+                razon: 'El conductor cumple con los requisitos'
             }
-          }
-
-          if (credencial && credencial !== undefined && credencial !== null) {
-            if (process(today) < process(credencial)) {
-              cred = true;
-           } else {
-              cred = false;
-              return {
-                valido : false,
-                razon : `La credencial esta vencida desde el ${credencial}`
-              }
-            }
-
-          } else {
-            return {
-              valido : false,
-              razon : 'El conductor no tiene credencial'
-            }
-          }
-
-          return {
-            valido : true,
-            razon : 'El conductor cumple con los requisitos'
-          }
 
         } else {
-          return;
+            return;
         }
-      },
-     verificarCobradorEsAptoParaSalirARuta(cobradorId) {
+    },
+    verificarCobradorEsAptoParaSalirARuta(cobradorId) {
         if (this.userId) {
 
-          let hoy = new Date();
-          let dd = hoy.getDate();
-          var mm = hoy.getMonth() + 1;
+            let hoy = new Date();
+            let dd = hoy.getDate();
+            var mm = hoy.getMonth() + 1;
 
-          let yyyy = hoy.getFullYear();
+            let yyyy = hoy.getFullYear();
 
-          if ( dd < 10 ) {
-              dd='0'+dd;
-          }
-
-          if ( mm < 10 ) {
-              mm='0'+mm;
-          }
-          var today = dd + '/' + mm + '/' + yyyy;
-
-          let venceCEV = Cobradores.findOne({_id: cobradorId}).CEV.caducidad;
-          let credencial = Cobradores.findOne({_id: cobradorId}).credencial.caducidad;
-
-          let cev;
-          let cred;
-
-          if (venceCEV !== undefined && venceCEV !== null) {
-            if (process(today) < process(venceCEV)) {
-              cev = true;
-            } else {
-              cev = false;
+            if (dd < 10) {
+                dd = '0' + dd;
             }
-          }
 
-          if (credencial !== undefined && credencial !== null) {
-            if (process(today) < process(credencial)) {
-              cred = true;
-            } else {
-              cred = false;
+            if (mm < 10) {
+                mm = '0' + mm;
             }
-          }
+            var today = dd + '/' + mm + '/' + yyyy;
 
-          let res = {}
-         if (cev && cred) {
-            res.valido = true;
-            res.razon = 'El cobrador cumple con los requisitos'
-          } else {
-           res.valido = false;
-            if (cred !== true) {
-              res.razon = 'La licencia esta vencido.'
-            } else if (cred !== true && cev !== true) {
-              res.razon = 'La licencia y el CEV estan vencidos.'
+            let venceCEV = Cobradores.findOne({_id: cobradorId}).CEV.caducidad;
+            let credencial = Cobradores.findOne({_id: cobradorId}).credencial.caducidad;
+
+            let cev;
+            let cred;
+
+            if (venceCEV !== undefined && venceCEV !== null) {
+                if (process(today) < process(venceCEV)) {
+                    cev = true;
+                } else {
+                    cev = false;
+                }
+            }
+
+            if (credencial !== undefined && credencial !== null) {
+                if (process(today) < process(credencial)) {
+                    cred = true;
+                } else {
+                    cred = false;
+                }
+            }
+
+            let res = {}
+            if (cev && cred) {
+                res.valido = true;
+                res.razon = 'El cobrador cumple con los requisitos'
             } else {
-              res.razon = 'Los documentos del cobrador estan vencidos'
-                      }
-          }
+                res.valido = false;
+                if (cred !== true) {
+                    res.razon = 'La licencia esta vencido.'
+                } else if (cred !== true && cev !== true) {
+                    res.razon = 'La licencia y el CEV estan vencidos.'
+                } else {
+                    res.razon = 'Los documentos del cobrador estan vencidos'
+                }
+            }
 
-          return res;
+            return res;
 
         } else {
-          return;
+            return;
         }
-      },
+    },
 
-      RegistrarVehiculoParaDespachar(registroId, vehiculoId, conductorId, cobradorId) {
+    RegistrarVehiculoParaDespachar(registroId, vehiculoId, conductorId, cobradorId) {
 
         if (this.userId) {
 
-          ProgramacionVehiculo.update({_id: registroId}, {
-              $set: {
-                despachado: true,
-                despachadoHora: new Date(),
-                conductorId: conductorId,
-                cobradorId: cobradorId
-              }
+            ProgramacionVehiculo.update({_id: registroId}, {
+                $set: {
+                    despachado: true,
+                    despachadoHora: new Date(),
+                    conductorId: conductorId,
+                    cobradorId: cobradorId
+                }
             })
 
             Vehiculos.update({_id: vehiculoId}, {
-              $set: {
-                despachado: true,
-                despachadoHora: new Date(),
-                  conductorId: conductorId,
-                  cobradorId: cobradorId
-              }
+                $set: {
+                    despachado: true,
+                    despachadoHora: new Date(),
+                    conductorId: conductorId,
+                    cobradorId: cobradorId
+                }
             })
 
             Conductores.update({_id: conductorId}, {
-              $set: {
-                despachado: true
-              }
+                $set: {
+                    despachado: true
+                }
             })
 
             Cobradores.update({_id: cobradorId}, {
-              $set: {
-                despachado: true
-              }
+                $set: {
+                    despachado: true
+                }
             })
 
         } else {
-          return;
+            return;
         }
 
-      },
+    },
     agregarRequisito({nombre, activo = true}){
         Requisitos.insert({
             nombre: nombre,
@@ -432,12 +439,12 @@ Meteor.methods({
     agregarUsuario(datos, rol) {
 
         switch (rol) {
-          case 2:
-            datos.profile.ida = true;
-            break;
-          case 22:
-            datos.profile.ida = false;
-            break;
+            case 2:
+                datos.profile.ida = true;
+                break;
+            case 22:
+                datos.profile.ida = false;
+                break;
 
         }
 
@@ -472,14 +479,14 @@ Meteor.methods({
                 });
                 Roles.addUsersToRoles(id, [ROLES.empresa.monitoreo], ROLES.grupos.empresa);
             } else if (rol === 22) {
-              Operadores.insert({
-                  nombre: datos.profile.nombre,
-                  empresaId: datos.profile.empresaId,
-                  email: datos.email,
-                  userId: id,
-                  tipo: 'Operador de Despacho'
-              });
-              Roles.addUsersToRoles(id, [ROLES.empresa.operador], ROLES.grupos.empresa);
+                Operadores.insert({
+                    nombre: datos.profile.nombre,
+                    empresaId: datos.profile.empresaId,
+                    email: datos.email,
+                    userId: id,
+                    tipo: 'Operador de Despacho'
+                });
+                Roles.addUsersToRoles(id, [ROLES.empresa.operador], ROLES.grupos.empresa);
             } else {
                 Operadores.insert({
                     nombre: datos.profile.nombre,
@@ -550,205 +557,202 @@ Meteor.methods({
             cobradores.shift();
 
 
-
             if (Rutas.findOne({_id: rutaId}).nombre !== undefined) {
-              if (typeof datos !== 'undefined' && datos.length > 0 && typeof conductores !== 'undefined' && conductores.length > 0 && typeof cobradores !== 'undefined' && cobradores.length > 0) {
+                if (typeof datos !== 'undefined' && datos.length > 0 && typeof conductores !== 'undefined' && conductores.length > 0 && typeof cobradores !== 'undefined' && cobradores.length > 0) {
 
-                // Parsear los Vehiculos e insertar en la BD
-                datos.forEach(d => {
+                    // Parsear los Vehiculos e insertar en la BD
+                    datos.forEach(d => {
 
-                    let obj = d.reduce((acc, cur, i) => {
-                        acc[i] = cur;
-                        return acc;
-                    }, {});
+                        let obj = d.reduce((acc, cur, i) => {
+                            acc[i] = cur;
+                            return acc;
+                        }, {});
 
-                    let arregloRutas = Rutas.findOne({_id: rutaId}).ida;
-                    let p = _.sample(arregloRutas);
-                    let posicion = p
+                        let arregloRutas = Rutas.findOne({_id: rutaId}).ida;
+                        let p = _.sample(arregloRutas);
+                        let posicion = p
 
-                    let tc = []
-
-
+                        let tc = []
 
 
-                    if (obj['1'] !== undefined) {
-                        tc.push({
-                          numero: obj['32'],
-                          entidad: obj['33'],
-                          emision: formarJSON(obj['34']),
-                          caducidad:  formarJSON(obj['35'])
-                        })
+                        if (obj['1'] !== undefined) {
+                            tc.push({
+                                numero: obj['32'],
+                                entidad: obj['33'],
+                                emision: formarJSON(obj['34']),
+                                caducidad: formarJSON(obj['35'])
+                            })
 
-                        tc.push({
-                            numero: obj['16'],
-                            entidad: obj['17'],
-                            emision:formarJSON( obj['18'] ),
-                            caducidad: formarJSON( obj['19'] )
-                        })
+                            tc.push({
+                                numero: obj['16'],
+                                entidad: obj['17'],
+                                emision: formarJSON(obj['18']),
+                                caducidad: formarJSON(obj['19'])
+                            })
 
-                        Vehiculos.insert({
-                            empresaId: id,
-                            activo: true,
-                            posicion: posicion,
-                            rutaId: rutaId,
-                            borrador: false,
-                            despachado: false,
-                            padron: obj['0'],
-                            placa: obj['1'],
-                            propietario: {
-                                nombre: obj['2'],
-                                dni: obj['3'],
-                                domicilio: obj['4'],
-                                distrito: obj['5'],
-                                telefono: obj['6'],
-                            },
-                            tecnico: {
-                                marca: obj['7'],
-                                modelo: obj['8'],
-                                serie: obj['9'],
-                                combustible: obj['10'],
-                                anioDeFabricacion: parseInt(obj['11']),
-                                longitud: obj['12'],
-                                asientos: parseInt(obj['13'])
-                            },
-                            codigoDeRuta: Rutas.findOne({_id: rutaId}).nombre,
-                            fechaDePermanenciaEnLaEmpresa: formarJSON( obj['15'] ),
-                            TC: tc,
-                            SOAT: {
-                                numero: obj['20'],
-                                compnia: obj['21'],
-                                inicio: formarJSON( obj['22'] ),
-                                fin: formarJSON( obj['23'] )
-                            },
-                            CITV: {
-                                numero: obj['24'],
-                                compania: obj['25'],
-                                inicio: formarJSON( obj['26'] ),
-                                fin: formarJSON( obj['27'] )
-                            },
-                            RC: {
-                                numero: obj['28'],
-                                compania: obj['29'],
-                                inicio: formarJSON(obj['30']),
-                                fin: formarJSON(obj['31'])
+                            Vehiculos.insert({
+                                empresaId: id,
+                                activo: true,
+                                posicion: posicion,
+                                rutaId: rutaId,
+                                borrador: false,
+                                despachado: false,
+                                padron: obj['0'],
+                                placa: obj['1'],
+                                propietario: {
+                                    nombre: obj['2'],
+                                    dni: obj['3'],
+                                    domicilio: obj['4'],
+                                    distrito: obj['5'],
+                                    telefono: obj['6'],
+                                },
+                                tecnico: {
+                                    marca: obj['7'],
+                                    modelo: obj['8'],
+                                    serie: obj['9'],
+                                    combustible: obj['10'],
+                                    anioDeFabricacion: parseInt(obj['11']),
+                                    longitud: obj['12'],
+                                    asientos: parseInt(obj['13'])
+                                },
+                                codigoDeRuta: Rutas.findOne({_id: rutaId}).nombre,
+                                fechaDePermanenciaEnLaEmpresa: formarJSON(obj['15']),
+                                TC: tc,
+                                SOAT: {
+                                    numero: obj['20'],
+                                    compnia: obj['21'],
+                                    inicio: formarJSON(obj['22']),
+                                    fin: formarJSON(obj['23'])
+                                },
+                                CITV: {
+                                    numero: obj['24'],
+                                    compania: obj['25'],
+                                    inicio: formarJSON(obj['26']),
+                                    fin: formarJSON(obj['27'])
+                                },
+                                RC: {
+                                    numero: obj['28'],
+                                    compania: obj['29'],
+                                    inicio: formarJSON(obj['30']),
+                                    fin: formarJSON(obj['31'])
+                                }
+                            });
+                        }
+
+                    });
+
+                    let vehiculoId;
+                    let placa;
+                    // Parsear los conductores e insertar en la BD
+                    conductores.forEach(c => {
+
+                        let conductor = c.reduce((acc, cur, i) => {
+                            acc[i] = cur;
+                            return acc;
+                        }, {});
+
+                        placa = conductor['1'];
+                        if (placa !== undefined) {
+
+                            if (Vehiculos.find({placa: placa}).fetch()[0]._id === undefined) {
+                                vehiculoId = "";
+                            } else {
+                                vehiculoId = Vehiculos.find({placa: placa}).fetch()[0]._id;
                             }
-                        });
-                    }
 
-                });
+                        }
 
-                let vehiculoId;
-                let placa;
-                // Parsear los conductores e insertar en la BD
-                conductores.forEach(c => {
+                        if (conductor['2'] !== undefined) {
+                            Conductores.insert({
+                                empresaId: id,
+                                vehiculoId: vehiculoId,
+                                borrador: false,
+                                despachado: false,
+                                datos: {
+                                    nombre: conductor['3'],
+                                    apellido: conductor['2'],
+                                    dni: conductor['4'],
+                                    caducidad: formarJSON(conductor['5']),
+                                    domicilio: conductor['6'],
+                                    distrito: conductor['7'],
+                                    telefono: conductor['8']
+                                },
+                                licencia: {
+                                    codigo: conductor['9'],
+                                    categoria: conductor['10'],
+                                    expedicion: formarJSON(conductor['11']),
+                                    revalidacion: formarJSON(conductor['12'])
+                                },
+                                CEV: {
+                                    codigo: conductor['13'],
+                                    entidad: conductor['14'],
+                                    emision: formarJSON(conductor['15']),
+                                    caducidad: formarJSON(conductor['16'])
+                                },
+                                credencial: {
+                                    numero: conductor['17'],
+                                    emision: formarJSON(conductor['18']),
+                                    caducidad: formarJSON(conductor['19'])
+                                },
+                                chc: conductor['20'],
+                                fotocheck: conductor['21']
+                            });
+                        }
 
-                    let conductor = c.reduce((acc, cur, i) => {
-                        acc[i] = cur;
-                        return acc;
-                    }, {});
 
-                    placa = conductor['1'];
-                    if (placa !== undefined) {
+                    });
 
-                        if (Vehiculos.find({placa: placa}).fetch()[0]._id === undefined) {
-                            vehiculoId = "";
-                        } else {
+                    // Parsear los cobradores e insertar en la BD
+                    cobradores.forEach(co => {
+
+                        let cobrador = co.reduce((acc, cur, i) => {
+                            acc[i] = cur;
+                            return acc;
+                        }, {});
+
+
+                        placa = cobrador['1'];
+
+                        if (placa !== undefined) {
+
                             vehiculoId = Vehiculos.find({placa: placa}).fetch()[0]._id;
                         }
 
-                    }
 
-                    if (conductor['2'] !== undefined) {
-                        Conductores.insert({
-                            empresaId: id,
-                            vehiculoId: vehiculoId,
-                            borrador: false,
-                            despachado: false,
-                            datos: {
-                                nombre: conductor['3'],
-                                apellido: conductor['2'],
-                                dni: conductor['4'],
-                                caducidad: formarJSON(conductor['5']),
-                                domicilio: conductor['6'],
-                                distrito: conductor['7'],
-                                telefono: conductor['8']
-                            },
-                            licencia: {
-                                codigo: conductor['9'],
-                                categoria: conductor['10'],
-                                expedicion: formarJSON( conductor['11'] ),
-                                revalidacion: formarJSON(conductor['12'])
-                            },
-                            CEV: {
-                                codigo: conductor['13'],
-                                entidad: conductor['14'],
-                                emision: formarJSON(conductor['15']),
-                                caducidad: formarJSON(conductor['16'])
-                            },
-                            credencial: {
-                                numero: conductor['17'],
-                                emision: formarJSON(conductor['18']),
-                                caducidad: formarJSON(conductor['19'])
-                            },
-                            chc: conductor['20'],
-                            fotocheck: conductor['21']
-                        });
-                    }
+                        if (cobrador['2'] !== undefined) {
+                            Cobradores.insert({
+                                empresaId: id,
+                                vehiculoId: vehiculoId,
+                                borrador: false,
+                                despachado: false,
+                                datos: {
+                                    nombre: cobrador['3'],
+                                    apellido: cobrador['2'],
+                                    dni: cobrador['4'],
+                                    domicilio: cobrador['5'],
+                                    distrito: cobrador['6'],
+                                    telefono: cobrador['7']
+                                },
+                                CEV: {
+                                    codigo: cobrador['8'],
+                                    emision: formarJSON(cobrador['9']),
+                                    caducidad: formarJSON(cobrador['10'])
+                                },
+                                credencial: {
+                                    numero: cobrador['11'],
+                                    emision: formarJSON(cobrador['12']),
+                                    caducidad: formarJSON(cobrador['13'])
+                                },
+                                chc: cobrador['14'],
+                                fotocheck: cobrador['15']
+                            });
+                        }
 
 
-                });
-
-                // Parsear los cobradores e insertar en la BD
-                cobradores.forEach(co => {
-
-                    let cobrador = co.reduce((acc, cur, i) => {
-                        acc[i] = cur;
-                        return acc;
-                    }, {});
-
-
-                    placa = cobrador['1'];
-
-                    if (placa !== undefined) {
-
-                        vehiculoId = Vehiculos.find({placa: placa}).fetch()[0]._id;
-                    }
-
-
-                    if (cobrador['2'] !== undefined) {
-                        Cobradores.insert({
-                            empresaId: id,
-                            vehiculoId: vehiculoId,
-                            borrador: false,
-                            despachado: false,
-                            datos: {
-                                nombre: cobrador['3'],
-                                apellido: cobrador['2'],
-                                dni: cobrador['4'],
-                                domicilio: cobrador['5'],
-                                distrito: cobrador['6'],
-                                telefono: cobrador['7']
-                            },
-                            CEV: {
-                                codigo: cobrador['8'],
-                                emision: formarJSON(cobrador['9']),
-                                caducidad: formarJSON(cobrador['10'])
-                            },
-                            credencial: {
-                                numero: cobrador['11'],
-                                emision: formarJSON(cobrador['12']),
-                                caducidad: formarJSON(cobrador['13'])
-                            },
-                            chc: cobrador['14'],
-                            fotocheck: cobrador['15']
-                        });
-                    }
-
-
-                });
-              } else {
-                console.log('no cumple')
-              }
+                    });
+                } else {
+                    console.log('no cumple')
+                }
             }
 
         } else {
@@ -792,13 +796,19 @@ Meteor.methods({
             let value;
             if (hora['0'] !== undefined) {
 
-                Object.keys( plan.horas ).forEach( ( dia ) => {
+                Object.keys(plan.horas).forEach((dia) => {
 
-                    if ( dia !== 'domingo' && dia !== 'sabado' ) { value = hora['0'] }
-                    if ( dia === 'sabado' ){ value = hora['1'] }
-                    if ( dia === 'domingo'){ value = hora['2'] }
+                    if (dia !== 'domingo' && dia !== 'sabado') {
+                        value = hora['0']
+                    }
+                    if (dia === 'sabado') {
+                        value = hora['1']
+                    }
+                    if (dia === 'domingo') {
+                        value = hora['2']
+                    }
 
-                    plan.horas[ dia ].push( value );
+                    plan.horas[dia].push(value);
 
                 });
 
@@ -1042,11 +1052,11 @@ Meteor.methods({
 
             if (rutaId) {
 
-                    Empresas.update({_id: datos.empresasId}, {
-                        $push: {
-                            rutas: rutaId
-                        }
-                    });
+                Empresas.update({_id: datos.empresasId}, {
+                    $push: {
+                        rutas: rutaId
+                    }
+                });
 
             }
 
@@ -1062,8 +1072,10 @@ Meteor.methods({
             return;
         }
     },
-    despachar({vehiculoId, hora}){
-        let vehiculo = Vehiculos.findOne({_id: vehiculoId});
+    despachar({programacionId, hora}){
+        let programacion = ProgramacionVehiculo.findOne({_id: programacionId});
+
+        ProgramacionVehiculo.update({_id: programacionId}, {});
         let totalRequisitosVehiculo = Requisitos.find({_id: {$in: vehiculo.idRequisitos}}).count();
         let totalRequisitos = Requisitos.find().count();
         if (!vehiculo.despachado && totalRequisitosVehiculo === totalRequisitos) {

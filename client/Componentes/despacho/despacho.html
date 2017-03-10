@@ -3,13 +3,14 @@
         <h4 class="pull-left">Despacho de Vehículos</h4>
     </div>
     {{#if isInRole 'director' 'Empresa'}}
-    <div class="row">
-      <div class="col-md-9">
-        <a href="/planeamiento/{{rutaId}}/nuevo" class="btn btn-success">Agregar Planeamiento de Hoy de Ida</a>
+        <div class="row">
+            <div class="col-md-9">
+                <a href="/planeamiento/{{rutaId}}/nuevo" class="btn btn-success">Agregar Planeamiento de Hoy de Ida</a>
 
-        <a href="/planeamiento/{{rutaId}}/nuevo/vuelta" class="btn btn-primary">Agregar Planeamiento de Hoy de Vuelta</a>
-      </div>
-    </div>
+                <a href="/planeamiento/{{rutaId}}/nuevo/vuelta" class="btn btn-primary">Agregar Planeamiento de Hoy de
+                    Vuelta</a>
+            </div>
+        </div>
 
     {{/if}}
 
@@ -26,32 +27,32 @@
             <h3>Lista de Vehiculos a Despachar</h3>
             <br>
             <ul>
-                {{#each programacion in ProgramacionVehiculo.programacion }}
-                    <li class="list-group-item clearfix horario planeamiento">
-                        <div class="pull-left" style="width: 75%; margin-left: 10px">
-                            <span class="time hour">{{programacion.hora}}</span>
-                            <i class="fa fa-clock-o" aria-hidden="true"></i>
-                            {{#let v=(vehiculo programacion.vehiculoId ) }}
-                                <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{v.placa}}
-                                    - Padron {{v.padron}}</span>
-                            {{/let}}
-                        </div>
-                        <div class="pull-right">
-                            <div class="form-group"
-                                 style="display: inline-block; margin-left: 10px; margin-right: 15px">
-                                {{#if ProgramacionVehiculo.ida}}
-                                    <span style="display: inline-block; margin-left: 0px; color: blue;">VUELTA</span>
-                                {{else}}
-                                    <span style="display: inline-block; margin-left: 0px; color: red">IDA</span>
-                                {{/if}}
+                {{#each ProgramacionVehiculo.programacion }}
+                    {{#unless despachado}}
+                        <li class="list-group-item clearfix horario planeamiento">
+                            <div class="pull-left" style="width: 75%; margin-left: 10px">
+                                <span class="time hour">{{hora}}</span>
+                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                {{#let v=(vehiculo vehiculoId ) }}
+                                    <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{v.placa}}
+                                        - Padron {{v.padron}}</span>
+                                {{/let}}
                             </div>
-                            {{#if programacion.despachado}}
-                                <button type="button" class="btn btn-warning">Despachado</button>
-                            {{else}}
-                                <button type="button" class="despachar btn btn-warning" data-programacionVehiculoId="{{ProgramacionVehiculo._id}}" data-vehiculoId="{{programacion.vehiculoId}}">Asignar Personal</button>
-                            {{/if}}
-                        </div>
-                    </li>
+                            <div class="pull-right">
+                                <div class="form-group"
+                                     style="display: inline-block; margin-left: 10px; margin-right: 15px">
+                                    {{#if ProgramacionVehiculo.ida}}
+                                        <span style="display: inline-block; margin-left: 0px; color: blue;">VUELTA</span>
+                                    {{else}}
+                                        <span style="display: inline-block; margin-left: 0px; color: red">IDA</span>
+                                    {{/if}}
+                                </div>
+
+                                <button type="button" class="despachar btn btn-warning">Asignar Personal
+                                </button>
+                            </div>
+                        </li>
+                    {{/unless}}
                 {{/each}}
             </ul>
         </div>
@@ -87,7 +88,7 @@
                 <li class="list-group-item clearfix horario planeamiento">
           <span class="pull-left" style="width: 75%; margin-left: 10px">
                 <i class="fa fa-clock-o" aria-hidden="true"></i>
-                <!-- <span class="time hour">{{vehiculo.hora}}</span> -->
+              <!-- <span class="time hour">{{vehiculo.hora}}</span> -->
                 <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{vehiculo.placa}}
                     - Padron {{vehiculo.padron}}</span>
 
