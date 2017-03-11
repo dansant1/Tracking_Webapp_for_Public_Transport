@@ -6,33 +6,32 @@
                     <div class="box">
                         <h3>Empresas</h3>
                         <br>
-                        <div class="page-header clearfix" style="margin-top: 0px;">
-                            <h4 class="pull-left">
-                        <input type="text" style="position: relative; top: 5px; width: 275px" name="search"
-                           class="form-control" width="250px" placeholder="Buscar por Nombre o RUC">
-                     </h4>
-                            <h4 class="pull-right">
-                        <span class="action-btn agregar-empresa">
-                        <a style="width: 220px; margin-left: 0px; font-weight: 300; background-color: #3498db;"
-                           class="top-nav-btn blue">Agregar Empresa</a>
-                        </span>
-                     </h4>
+                        <div class="row">
+                          <div class="col-md-8">
+                            <input type="text" style="position: relative; top: 5px; width: 250px" name="search"
+                       class="form-control" placeholder="Buscar por Nombre o RUC">
+                          </div>
+                          <div class="col-md-4">
+                              <a class="btn btn-primary agregar-empresa">Agregar Empresa</a>
+                              <a href="/admin/agregaruta" class="btn btn-success">Agregar Ruta</a>
+                          </div>
                         </div>
+                        <br>
                         <ul class="list-group">
                             {{#if searching}}
                             <h3>Cargando...</h3>
                             {{else}}
 
-                            {{#each empresa in empresas}}
+                            {{#each empresas}}
                             <li class="list-group-item clearfix">
-                                <span class="pull-left">{{empresa.ruc}} - {{empresa.nombre}}</span>
+                                <span class="pull-left">{{this.ruc}} - {{this.nombre}}</span>
                                 <span class="pull-right" style="width: 255px">
                                  <select
                                     data-empresaId="{{this._id}}"
                                     style="width: 88px; display: inline-block; position: relative; top: 1px; margin-right: 5px;"
-                                    class="form-control listarutas">
+                                    class="form-control ruta" id="listarutas{{this._id}}">
                                     <option value="1">RUTA</option>
-                                    {{#each ruta in rutas empresa.rutas }}
+                                    {{#each ruta in rutas this.rutas }}
                                       <option value="{{ruta._id}}">{{ruta.nombre}}</option>
                                     {{/each}}
                                  </select>
@@ -40,7 +39,8 @@
                                  <label class="btn btn-success btn-file">
                                    <i class="fa fa-upload" aria-hidden="true"></i>
                                    <input
-                                      id="subirFlota"
+                                      class="subirFlota2"
+                                      id="subirFlota{{this._id}}"
                                       type="file"
                                       style="display: none;"
                                       accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -48,13 +48,16 @@
                                  </label>
 
                                  <a
-                                    href="/empresas/{{empresa._id}}/ruta/{{rutaId}}"
+                                    href="/empresas/{{this._id}}/ruta/{{rutaId}}"
                                     class="btn btn-primary"
-                                    {{ $disabledIfFalse rutaId }}
+                                    id="e{{this._id}}"
+                                    disabled
                                   >
                                    <i class="fa fa-eye" aria-hidden="true"></i>
                                  </a>
-                                 <button type="button" class="btn btn-danger eliminar-empresa">x</button>
+                                 <button type="button" class="btn btn-danger eliminar-empresa">
+                                   <i class="fa fa-trash" aria-hidden="true"></i>
+                                 </button>
                               </span>
                             </li>
                             {{else}}

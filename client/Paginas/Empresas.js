@@ -88,8 +88,10 @@ Template.Empresas.events({
             });
 
     },
-    'change .listarutas'(e,t){
-      Template.instance().rutaId.set( e.currentTarget.value );
+    'change .ruta'(e,t){
+      t.rutaId.set( e.currentTarget.value );
+      console.log('.e' + this._id);
+      //$('.e' + this._id).css( "background", 'red' );
     }
 
 });
@@ -773,20 +775,23 @@ Template.Empresas.events({
     'click .agregar-empresa'() {
         Modal.show('agregarEmpresa');
     },
-    'change #subirFlota'(e, t) {
-        let id = this._id;
+    'change .subirFlota2'(e, t) {
+        let id = 'subirFlota' + this._id;
+        let empresasId = this._id;
         let rutaId = $("#listarutas" + this._id).val();
+        console.log(rutaId);
+        console.log(id);
         Session.set('filtroRuta', rutaId);
 
         if (rutaId === '1') {
             Bert.alert('Seleccione una ruta', 'success');
         } else {
-            handleFile(e, id, rutaId);
+            handleFile(e, id, empresasId, rutaId);
 
         }
 
     },
-    'change #listarutas'() {
+    'change .listarutas'() {
         let rutaId = $("#listarutas").val();
         Session.set('filtroRuta', rutaId);
     }

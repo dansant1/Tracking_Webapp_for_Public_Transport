@@ -104,37 +104,47 @@ function removeDiacritics (str) {
 }
 
 
-export function handleFile (e, id, rutaId) {
+export function handleFile (e, id, empresaId, rutaId) {
 
-    let files = e.target.files;
-    let i,f;
+  let archivo = document.getElementById(id)
 
-    for (i = 0, f = files[i]; i != files.length; ++i) {
+  if ('files' in archivo) {
 
-        let reader = new FileReader();
-        let name = f.name;
+      if (archivo.files.length == 0) {
+         alert('Selecciona un archivo, vuelve a intentarlo', 'warning');
+      } else if (archivo.files.length > 1) {
+         alert('Selecciona solo un archivo, vuelve a intentarlo', 'warning');
+      } else {
 
-        reader.onload = (e) => {
 
-            let data = e.target.result;
+        for (var i = 0; i < archivo.files.length; i++) {
 
-            Modal.show('CargandoExcel');
+            let data;
 
-            console.log(rutaId);
+            data = archivo.files[i];
 
-            Meteor.call('leerExcel', data, id, rutaId, function (err) {
-                if (err) {
-                    alert(err);
-                    Modal.hide('CargandoExcel');
-                } else {
-                    Modal.hide('CargandoExcel');
-                    Bert.alert( 'Datos cargados', 'success', 'growl-top-right' );
-                }
-            });
-        };
+            let fr = new FileReader();
+            fr.readAsBinaryString(data);
+            fr.onload = function (event) {
+              Modal.show('CargandoExcel');
+              let dato = event.target.result
 
-        reader.readAsBinaryString(f);
-    }
+              Meteor.call('leerExcel', dato, empresaId, rutaId, function (err) {
+                  if (err) {
+                      alert(err);
+                      Modal.hide('CargandoExcel');
+                  } else {
+                      Modal.hide('CargandoExcel');
+                      Bert.alert( 'Datos cargados', 'success', 'growl-top-right' );
+                  }
+              });
+
+            }
+
+        }
+
+      }
+  }
 }
 
 export function SubirFotoVehiculo (event, template, vehiculoId, tipo, id) {

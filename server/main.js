@@ -73,7 +73,7 @@ Meteor.startup(() => {
      });
 */
 
-     /*	let users = [
+     	/*let users = [
         	{nombre: "Usuario 1", email: "superadministrador@tpi.com.pe", roles: [ ROLES.administracion.gerente ]},
 
         ]

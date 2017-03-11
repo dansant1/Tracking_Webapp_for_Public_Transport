@@ -556,7 +556,6 @@ Template.AdministradorAgregarRuta.onRendered( function () {
     let template = Template.instance();
 
     template.ruta = {
-        empresaId: '',
         nombre: '',
         ida: [],
         vuelta: [],
