@@ -1,4 +1,4 @@
-ProgramacionVehiculoHistorial = new Mongo.Collection('programacion_vehiculo')
+ProgramacionVehiculoHistorial = new Mongo.Collection('programacion_vehiculo_historial')
 
 ProgramacionVehiculoHistorial.allow({
     insert: () => {
