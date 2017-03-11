@@ -8,6 +8,15 @@
     height: 100vh;
 }
 
+@media (max-width: 500px) {
+  .fondo {
+    width: 127% !important
+  }
+
+  .box-white {
+    width: 275px;
+  }
+}
 
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px white inset;
@@ -25,13 +34,13 @@ input:-webkit-autofill {
 
 .box-white {
     width: 320px;
-    
+
     background-color: white;
     border-radius: 4px;
     box-shadow: 0px 1px 3px 0px rgba(50, 50, 93, 0.2);
     margin: 100px auto;
     padding: 10px 15px;
-    
+
 }
 
 .medium {
@@ -77,9 +86,9 @@ input:-webkit-autofill {
   margin-bottom: 30px;
 }
 
-.group 			  { 
-  position:relative; 
-  margin-bottom:45px; 
+.group 			  {
+  position:relative;
+  margin-bottom:45px;
 }
 
 .__formulario input 				{
@@ -96,15 +105,15 @@ input:-webkit-autofill {
 
 /* LABEL ======================================= */
 .__formulario label 				 {
-  color:#999; 
+  color:#999;
   font-size:18px;
   font-weight:normal;
   position:absolute;
   pointer-events:none;
   left:5px;
   top:10px;
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
+  transition:0.2s ease all;
+  -moz-transition:0.2s ease all;
   -webkit-transition:0.2s ease all;
 }
 
@@ -119,20 +128,20 @@ input:-webkit-autofill {
 .bar  { position:relative; display:block; width: 100%; }
 .bar:before, .bar:after   {
   content:'';
-  height:2px; 
+  height:2px;
   width:0;
-  bottom:1px; 
+  bottom:1px;
   position:absolute;
-  background:#005C97; 
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
+  background:#005C97;
+  transition:0.2s ease all;
+  -moz-transition:0.2s ease all;
   -webkit-transition:0.2s ease all;
 }
 .bar:before {
   left:50%;
 }
 .bar:after {
-  right:50%; 
+  right:50%;
 }
 
 /* active state */
@@ -143,9 +152,9 @@ input:focus ~ .bar:before, input:focus ~ .bar:after {
 /* HIGHLIGHTER ================================== */
 .highlight {
   position:absolute;
-  height:60%; 
-  width:100px; 
-  top:25%; 
+  height:60%;
+  width:100px;
+  top:25%;
   left:0;
   pointer-events:none;
   opacity:0.5;
@@ -185,14 +194,14 @@ input:focus ~ .highlight {
     height: 45px;
     text-align: center;
     color: white;
-    
+
     background: #e74c3c;
     box-shadow: 0px 1px 3px 0px rgba(50, 50, 93, 0.2);
     border: none;
     text-align: center;
     border-radius: 4px;
     font-weight: 300;
-    font-size: 17px; 
+    font-size: 17px;
     line-height: 1.3333333;
     transition: all 0.2s linear;
     user-select: none;
@@ -202,6 +211,6 @@ input:focus ~ .highlight {
 .__button:hover, .__button:focus {
     cursor: pointer;
     background:#c0392b; /* fallback for old browsers */
-    
-    
+
+
 }
