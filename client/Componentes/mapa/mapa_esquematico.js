@@ -29,107 +29,102 @@ Template.mapa_esquematico.onCreated( () => {
   template.largoVuelta = new ReactiveVar(0)
 
   template.autorun( () => {
-    template.subscribe('rutas', () => {
+    template.subscribe('rutaSingle', Session.get('esquematicoRuta'), () => {
 
-      template.ida.set(Rutas.find({empresasId: 'dSD7Ks9BswRiLwYBg'}).fetch()[0].ida)
-      template.vuelta.set(Rutas.find({empresasId: 'dSD7Ks9BswRiLwYBg'}).fetch()[0].vuelta)
+        template.ida.set(Rutas.find({_id: Session.get('esquematicoRuta')}).fetch()[0].ida)
+        template.vuelta.set(Rutas.find({_id: Session.get('esquematicoRuta')}).fetch()[0].vuelta)
 
-      if (typeof template.ida.get() != "undefined" && template.ida.get() != null && template.ida.get().length > 0) for (var i = 1; i < template.ida.get().length; i++) template.DistanciaRutaIda = template.DistanciaRutaIda + getDistanceFromLatLonInKm(template.ida.get()[i - 1].lat, template.ida.get()[i - 1].lng, template.ida.get()[i].lat, template.ida.get()[i].lng)
+        if (typeof template.ida.get() != "undefined" && template.ida.get() != null && template.ida.get().length > 0) for (var i = 1; i < template.ida.get().length; i++) template.DistanciaRutaIda = template.DistanciaRutaIda + getDistanceFromLatLonInKm(template.ida.get()[i - 1].lat, template.ida.get()[i - 1].lng, template.ida.get()[i].lat, template.ida.get()[i].lng)
 
-      if (typeof template.vuelta.get() != "undefined" && template.vuelta.get() != null && template.vuelta.get().length > 0) for (var i = 1; i < template.vuelta.get().length; i++)   template.DistanciaRutaVuelta = template.DistanciaRutaVuelta + getDistanceFromLatLonInKm(template.vuelta.get()[i - 1].lat, template.vuelta.get()[i - 1].lng, template.vuelta.get()[i].lat, template.vuelta.get()[i].lng)
+        if (typeof template.vuelta.get() != "undefined" && template.vuelta.get() != null && template.vuelta.get().length > 0) for (var i = 1; i < template.vuelta.get().length; i++)   template.DistanciaRutaVuelta = template.DistanciaRutaVuelta + getDistanceFromLatLonInKm(template.vuelta.get()[i - 1].lat, template.vuelta.get()[i - 1].lng, template.vuelta.get()[i].lat, template.vuelta.get()[i].lng)
 
 
-      template.largoIda.set(template.DistanciaRutaIda);
-      template.largoVuelta.set(template.DistanciaRutaVuelta);
+        template.largoIda.set(template.DistanciaRutaIda);
+        template.largoVuelta.set(template.DistanciaRutaVuelta);
 
-      template.canvas = document.getElementById('mapa_esquematico')
-      let contexto = template.canvas.getContext("2d")
+        template.canvas = document.getElementById('mapa_esquematico')
+        let contexto = template.canvas.getContext("2d")
 
-      // Ida
-      contexto.beginPath();
-      contexto.moveTo(15, 30);
-      contexto.lineTo(template.largoIda.get() * 16, 30);
-      contexto.strokeStyle = '#e67e22';
-      contexto.stroke();
+        // Ida
+        contexto.beginPath();
+        contexto.moveTo(15, 30);
+        contexto.lineTo(template.largoIda.get() * 16, 30);
+        Session.set('removeLargoIda', template.largoIda.get() * 16)
+        contexto.strokeStyle = '#e67e22';
+        contexto.stroke();
 
-      // vuelta
-      contexto.beginPath();
-      contexto.moveTo(15, 110);
-      contexto.lineTo(template.largoVuelta.get() * 16, 110);
-      contexto.strokeStyle = '#3498db';
-      contexto.stroke();
+        // vuelta
+        contexto.beginPath();
+        contexto.moveTo(15, 110);
+        contexto.lineTo(template.largoVuelta.get() * 16, 110);
+        Session.set('removeLargoVuelta', template.largoVuelta.get() * 16)
+        contexto.strokeStyle = '#3498db';
+        contexto.stroke();
+
+
     });
 
     template.subscribe('Vehiculos', () => {
-      let contexto = template.canvas.getContext("2d")
-      let i = 0
 
-      let a = Rutas.find({empresasId: 'dSD7Ks9BswRiLwYBg'}).fetch()[0].ida[0]
+        let contexto = template.canvas.getContext("2d")
+        let i = 0
 
-      let d;
-      let arreglo = []
+        let a = Rutas.find({_id: Session.get('esquematicoRuta') }).fetch()[0].ida[0]
 
-      Vehiculos.find({empresaId: 'dSD7Ks9BswRiLwYBg'}, {limit: 5}).forEach( (v) => {
+        let d;
+        let arreglo = []
 
-        d = getDistanceFromLatLonInKm(a.lat, a.lng, v.posicion.lat, v.posicion.lng)
+        Vehiculos.find({rutaId: Session.get('esquematicoRuta')}, {limit: 5}).forEach( (v) => {
 
-        arreglo.push({
-          vehiculoId: v._id,
-          distancia: d
+          d = getDistanceFromLatLonInKm(a.lat, a.lng, v.posicion.lat, v.posicion.lng)
+
+          arreglo.push({
+            vehiculoId: v._id,
+            distancia: d
+          })
+
         })
 
-      })
+        let arregloOrdenado = _.sortBy(arreglo, 'distancia')
 
-      let arregloOrdenado = _.sortBy(arreglo, 'distancia')
+        arregloOrdenado.forEach( (a) => {
+          var img = document.getElementById("scream");
+          contexto.drawImage( img , a.distancia * 16, 19, 12, 10);
+        })
 
-      arregloOrdenado.forEach( (a) => {
-        var img = document.getElementById("scream");
-        contexto.drawImage( img , a.distancia * 16, 19, 12, 10);
-      })
+        contexto.font = "7px Arial";
+        contexto.fillStyle = "#e67e22";
+        contexto.fillText("Inicial" , 0, 75);
+        contexto.fillStyle = "#3498db";
+        contexto.fillText("Final" , 280, 75);
 
-      contexto.font = "8px Arial";
-      contexto.fillStyle = "#e67e22";
-      contexto.fillText("Terminal Inicial" , 0, 75);
-      contexto.fillStyle = "#3498db";
-      contexto.fillText("Terminal Final" , 250, 75);
+        contexto.beginPath();
+        contexto.moveTo(15, 30);
+        contexto.lineTo(15, 65);
+        contexto.strokeStyle = '#e67e22';
+        contexto.stroke();
 
-      contexto.beginPath();
-      contexto.moveTo(15, 30);
-      contexto.lineTo(15, 65);
-      contexto.strokeStyle = '#e67e22';
-      contexto.stroke();
+        contexto.beginPath();
+        contexto.moveTo(15, 80);
+        contexto.lineTo(15, 110);
+        contexto.strokeStyle = '#3498db';
+        contexto.stroke();
 
-      contexto.beginPath();
-      contexto.moveTo(15, 80);
-      contexto.lineTo(15, 110);
-      contexto.strokeStyle = '#3498db';
-      contexto.stroke();
+        contexto.beginPath();
+        contexto.moveTo(template.largoIda.get() * 16, 30);
+        contexto.lineTo(template.largoIda.get() * 16, 65);
+        contexto.strokeStyle = '#e67e22';
+        contexto.stroke();
 
-      contexto.beginPath();
-      contexto.moveTo(template.largoIda.get() * 16, 30);
-      contexto.lineTo(template.largoIda.get() * 16, 65);
-      contexto.strokeStyle = '#e67e22';
-      contexto.stroke();
+        contexto.beginPath();
+        contexto.moveTo(template.largoVuelta.get() * 16, 80);
+        contexto.lineTo(template.largoVuelta.get() * 16, 110);
+        contexto.strokeStyle = '#3498db';
+        contexto.stroke();
 
-      contexto.beginPath();
-      contexto.moveTo(template.largoVuelta.get() * 16, 80);
-      contexto.lineTo(template.largoVuelta.get() * 16, 110);
-      contexto.strokeStyle = '#3498db';
-      contexto.stroke();
+      
+
     });
   })
-
-})
-
-
-Template.mapa_esquematico.onRendered( () => {
-  let template = Template.instance()
-
-  template.vehiculosEnOrdenIda = new ReactiveArray()
-  template.vehiculosEnOrdenVuelta = new ReactiveArray()
-
-})
-
-Template.mapa_esquematico.helpers({
 
 })

@@ -274,7 +274,7 @@
 
 /*MAP*/
 .Schematic__map {
-    display: none;
+    display: hidden;
     position: absolute;
     bottom: 0;
     left: 0;
