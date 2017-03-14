@@ -287,6 +287,15 @@ Template.ListaDeConductoresPorEmpresa.helpers({
 });
 
 Template.ListaDeConductoresPorEmpresa.events({
+    'click [name="ver_datos_mtc"]'() {
+      Meteor.call('infracciones_conductores_mtc', this._id, (err, res) => {
+        if (err) {
+          alert(err)
+        } else {
+          console.log(res);
+        }
+      })
+    },
     'click .printDriver'(event, template) {
         var windowUrl = 'MyPage.aspx';
         var uniqueName = new Date();
