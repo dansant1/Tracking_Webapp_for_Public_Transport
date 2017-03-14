@@ -1,7 +1,7 @@
 Vehiculos = new Mongo.Collection('vehiculos');
 
 if ( Meteor.isServer ) {
-  Vehiculos._ensureIndex( { placa: 1, padron: 1} );
+  Vehiculos._ensureIndex( { posicion: '2dsphere'} );
 }
 
 

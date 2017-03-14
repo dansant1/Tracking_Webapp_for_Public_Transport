@@ -663,6 +663,7 @@ Meteor.methods({
                         }
 
                         if (conductor['2'] !== undefined) {
+
                             Conductores.insert({
                                 empresaId: id,
                                 vehiculoId: vehiculoId,
@@ -720,6 +721,7 @@ Meteor.methods({
 
 
                         if (cobrador['2'] !== undefined) {
+                            //console.log(id);
                             Cobradores.insert({
                                 empresaId: id,
                                 vehiculoId: vehiculoId,

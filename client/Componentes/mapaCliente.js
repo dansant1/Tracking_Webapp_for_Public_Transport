@@ -741,7 +741,6 @@ Template.adminMapaCliente.onRendered(() => {
 });
 
 Template.adminMapaCliente.events({
-
     'change #empresa'(e, t) {
         let instance = Template.instance();
 
@@ -791,7 +790,7 @@ Template.adminMapaCliente.events({
         Template.instance().modotrafico.set(!value);
     },
     'click #schematicMap' (e, t) {
-        let state = Template.instance().schematic.get();
+      /*  let state = Template.instance().schematic.get();
 
         if(!state) {
             $('#schematic').stop().fadeIn(200);
@@ -832,7 +831,9 @@ Template.adminMapaCliente.events({
         } else {
             $('#schematic').stop().fadeOut(200);
         }
-        Template.instance().schematic.set(!state);
+        Template.instance().schematic.set(!state);*/
+        
+        Modal.show('mapa_esquematico');
     }
 });
 
