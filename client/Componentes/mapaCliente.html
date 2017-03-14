@@ -20,10 +20,11 @@
 				</select>
 
 				<div class="commands">
-						<button id="verparaderos" type="button" class="btn btn-primary {{#if verParaderos}} active {{/if}}"> Paraderos</button>
-						<button id="verpuntosdecontrol" type="button" class="btn btn-success {{#if verPuntosDeControl}} active {{/if}}" >  Puntos de Control</button>
-						<button id="modoTrafico" type="button" class="btn btn-warning trafico {{#if modoTrafico}} active {{/if}}" > <i class="fa fa-train" aria-hidden="true"></i> Modo Trafico</button>
-						<button id="vergeocerca" type="button" class="btn btn-info"> <i class="fa fa-codepen" aria-hidden="true"></i> Ver Geocerca</button>
+						<button id="verparaderos" type="button" class="btn btn-primary {{#if verParaderos}} active {{/if}}"> <i class="fa fa-hand-paper-o" aria-hidden="true"></i></button>
+						<button id="verpuntosdecontrol" type="button" class="btn btn-success {{#if verPuntosDeControl}} active {{/if}}" > <i class="fa fa-clock-o" aria-hidden="true"></i></button>
+						<button id="modoTrafico" type="button" class="btn btn-warning trafico {{#if modoTrafico}} active {{/if}}" > <i class="fa fa-train" aria-hidden="true"></i></button>
+						<button id="vergeocerca" type="button" class="btn btn-info"> <i class="fa fa-codepen" aria-hidden="true"></i> </button>
+						<button id="schematicMap" type="button" class="btn btn-danger" > <i class="fa fa-map" aria-hidden="true"></i></button>
 				</div>
 
 			</div>
@@ -73,11 +74,11 @@
 			</div>
 
 			<div class="commands">
-					<button id="verparaderos" type="button" class="btn btn-primary {{#if verParaderos}} active {{/if}}"> Paraderos</button>
-					<button id="verpuntosdecontrol" type="button" class="btn btn-success {{#if verPuntosDeControl}} active {{/if}}" >  Puntos de Control</button>
-					<button id="modoTrafico" type="button" class="btn btn-warning trafico {{#if modoTrafico}} active {{/if}}" > <i class="fa fa-train" aria-hidden="true"></i> Modo Trafico</button>
-					<button id="vergeocerca" type="button" class="btn btn-info"> <i class="fa fa-codepen" aria-hidden="true"></i> Ver Geocerca</button>
-					<button id="schematicMap" type="button" class="btn btn-info" > <i class="fa fa-map" aria-hidden="true"></i> Esquematico</button>
+					<button id="verparaderos" type="button" class="btn btn-primary {{#if verParaderos}} active {{/if}}"> <i class="fa fa-hand-paper-o" aria-hidden="true"></i></button>
+					<button id="verpuntosdecontrol" type="button" class="btn btn-success {{#if verPuntosDeControl}} active {{/if}}" >  <i class="fa fa-clock-o" aria-hidden="true"></i></button>
+					<button id="modoTrafico" type="button" class="btn btn-warning trafico {{#if modoTrafico}} active {{/if}}" > <i class="fa fa-train" aria-hidden="true"></i></button>
+					<button id="vergeocerca" type="button" class="btn btn-info"> <i class="fa fa-codepen" aria-hidden="true"></i></button>
+					<button id="schematicMap" type="button" class="btn btn-danger" > <i class="fa fa-map" aria-hidden="true"></i></button>
 			</div>
 
 		<div class="map-container" style="height: 100%">
@@ -87,7 +88,7 @@
 				   		{{>Loader}}
 				   	{{/if}}
 		</div>
-        
+
 	</div>
 
 

@@ -16,7 +16,7 @@ function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
 
-Template.mapa_esquematico.onCreated( () => {
+Template.mapa_esquematico.onRendered( () => {
   let template = Template.instance()
 
   template.ida = new ReactiveVar();
@@ -29,6 +29,8 @@ Template.mapa_esquematico.onCreated( () => {
   template.largoVuelta = new ReactiveVar(0)
 
   template.autorun( () => {
+    template.canvas = document.getElementById('mapa_esquematico')
+    let contexto = template.canvas.getContext("2d")
     template.subscribe('rutaSingle', Session.get('esquematicoRuta'), () => {
 
         template.ida.set(Rutas.find({_id: Session.get('esquematicoRuta')}).fetch()[0].ida)
@@ -42,8 +44,8 @@ Template.mapa_esquematico.onCreated( () => {
         template.largoIda.set(template.DistanciaRutaIda);
         template.largoVuelta.set(template.DistanciaRutaVuelta);
 
-        template.canvas = document.getElementById('mapa_esquematico')
-        let contexto = template.canvas.getContext("2d")
+
+
 
         // Ida
         contexto.beginPath();
@@ -64,9 +66,11 @@ Template.mapa_esquematico.onCreated( () => {
 
     });
 
+    //let contexto = template.canvas.getContext("2d")
+
     template.subscribe('Vehiculos', () => {
 
-        let contexto = template.canvas.getContext("2d")
+
         let i = 0
 
         let a = Rutas.find({_id: Session.get('esquematicoRuta') }).fetch()[0].ida[0]
@@ -74,7 +78,7 @@ Template.mapa_esquematico.onCreated( () => {
         let d;
         let arreglo = []
 
-        Vehiculos.find({rutaId: Session.get('esquematicoRuta')}, {limit: 5}).forEach( (v) => {
+        Vehiculos.find({rutaId: Session.get('esquematicoRuta')}, {limit: 50}).forEach( (v) => {
 
           d = getDistanceFromLatLonInKm(a.lat, a.lng, v.posicion.lat, v.posicion.lng)
 
@@ -86,17 +90,15 @@ Template.mapa_esquematico.onCreated( () => {
         })
 
         let arregloOrdenado = _.sortBy(arreglo, 'distancia')
-
+        let h = 1
         arregloOrdenado.forEach( (a) => {
           var img = document.getElementById("scream");
-          contexto.drawImage( img , a.distancia * 16, 19, 12, 10);
+          h++
+          console.log(h);
+          contexto.drawImage( img , a.distancia * 10 + 15, 19, 12, 10);
         })
 
-        contexto.font = "7px Arial";
-        contexto.fillStyle = "#e67e22";
-        contexto.fillText("Inicial" , 0, 75);
-        contexto.fillStyle = "#3498db";
-        contexto.fillText("Final" , 280, 75);
+
 
         contexto.beginPath();
         contexto.moveTo(15, 30);
@@ -122,9 +124,15 @@ Template.mapa_esquematico.onCreated( () => {
         contexto.strokeStyle = '#3498db';
         contexto.stroke();
 
-      
+
 
     });
+
+    contexto.font = "7px Arial";
+    contexto.fillStyle = "#e67e22";
+    contexto.fillText("Inicial" , 0, 75);
+    contexto.fillStyle = "#3498db";
+    contexto.fillText("Final" , 280, 75);
   })
 
 })

@@ -127,12 +127,6 @@ Template.mapaCliente.onRendered(() => {
 
             });
 
-            /*vehicle.addListener('click', function() {
-             infowindow.open(map.instance, vehicle);
-             });*/
-
-
-            // mapa.subscribe('RutasPorEmpresa', () => {
 
             let subRutasPorEmp = mapa.subscribe('RutasPorEmpresa');
 
@@ -282,10 +276,6 @@ Template.mapaCliente.onRendered(() => {
                     addLine();
                     //setMapOnAll(map.instance)
                 }
-                // });
-
-
-                // });
 
             }
 
@@ -325,6 +315,9 @@ Template.mapaCliente.onRendered(() => {
 
 
 Template.mapaCliente.events({
+    'click #schematicMap' (e, t) {
+      Modal.show('mapa_esquematico');
+    },
     'click #vergeocerca'(e,t){
       let instance = Template.instance();
 
@@ -769,6 +762,7 @@ Template.adminMapaCliente.events({
     },
 
     'change #ruta'(e, t) {
+
         let instance = Template.instance();
 
         let target = e.currentTarget;
@@ -779,14 +773,6 @@ Template.adminMapaCliente.events({
 
         Session.set('esquematicoRuta', Rutas.find().fetch()[0]._id)
         console.log(Session.get('esquematicoRuta'));
-
-        /*var canvas = document.getElementById('mapa_esquematico');
-        var ctx = canvas.getContext('2d');
-
-        ctx.clearRect(15, 30,   Session.get('removeLargoIda'), 30);
-        ctx.clearRect(15, 110,   Session.get('removeLargoVuelta'), 30);
-        Session.set('esquematicoRuta', instance.ruta.get())*/
-        console.log(Session.get('removeLargoIda'));
 
     },
 
@@ -809,49 +795,6 @@ Template.adminMapaCliente.events({
         Template.instance().modotrafico.set(!value);
     },
     'click #schematicMap' (e, t) {
-       //let state = Template.instance().schematic.get();
-
-        /*if(!state) {
-            $('#schematic').stop().fadeIn(200);
-            var rutaId = Template.instance().ruta.get();
-            let radius = function (x) {
-                return x * Math.PI / 180;
-            };*/
-            /*let getDistance = function(p1, p2) {
-                let R = 6378137; // Earth’s mean radius in meter
-                let dLat = radius(p2.lat - p1.lat);
-                let dLong = radius(p2.lng - p1.lng);
-                let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(radius(p1.lat)) * Math.cos(radius(p2.lat)) *
-                    Math.sin(dLong / 2) * Math.sin(dLong / 2);
-                let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                return R * c;
-            };*/
-
-            /*if (rutaId) {
-                let route = Rutas.findOne({_id: rutaId});
-                let totalGoing = 0;
-                let totalReturn = 0;
-
-                route.ida.forEach((coordinate, iterator, array)=> {
-                    if (iterator > 0) {
-                        let distance = getDistance(coordinate, route.ida[iterator-1]);
-                        totalGoing = totalGoing + distance;
-                    }
-                });
-
-                route.vuelta.forEach((coordinate, iterator, array)=> {
-                    if (iterator > 0) {
-                        let distance = getDistance(coordinate, route.ida[iterator-1]);
-                        totalReturn = totalReturn + distance;
-                    }
-                });
-            }*/
-      /*  } else {
-            $('#schematic').stop().fadeOut(200);
-        }
-        Template.instance().schematic.set(!state);*/
-
         Modal.show('mapa_esquematico');
     }
 });
