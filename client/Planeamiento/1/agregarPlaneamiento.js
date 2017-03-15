@@ -22,8 +22,78 @@ Template.agregarPlaneamientoIda.onCreated( () => {
   template.autorun( () => {
     template.subscribe('PlanesHorarios')
     template.subscribe('rutas')
+    template.subscribe('calendario')
   })
 
+})
+
+Template.agregarPlaneamientoIda.onRendered( () => {
+  let template = Template.instance();
+  template.rutaId = new ReactiveVar()
+  $( "#ruta" ).change(function(e) {
+    template.rutaId.set($(this).val())
+  });
+
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1;
+
+  var yyyy = today.getFullYear();
+  if(dd<10){
+      dd='0'+dd;
+  }
+  if(mm<10){
+      mm='0'+mm;
+  }
+  var today = yyyy + '-' + mm + '-' + dd;
+
+  $( '#planeamiento' ).fullCalendar({
+    lang: 'es',
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'basicWeek'
+    },
+    defaultView: 'basicWeek',
+    defaultDate: today,
+    events( start, end, timezone, callback ) {
+      let data = CalendarioPlaneamiento.find({ida: true, rutaId: template.rutaId.get()}).fetch().map( ( event ) => {
+        event.editable = false
+        return event;
+      });
+
+      if ( data ) {
+        callback( data );
+      }
+    },
+    eventRender: function(event, element) {
+      element.find(".fc-event-title").remove();
+      element.find(".fc-event-time").remove();
+      element.append( "<span class='closeon'>X</span>" );
+            element.find(".closeon").click(function() {
+              console.log(event._id);
+              Meteor.call('removePlan2', event._id, function (err) {
+                if (err) {
+                  Bert.alert('Hubo un error', 'danger')
+                } else {
+                  Bert.alert('Plan Horario eliminado', 'success')
+                }
+              })
+               $('#calendar').fullCalendar('removeEvents', event._id);
+            });
+
+    },
+    dayClick(date, jsEvent, view) {
+        console.log(date.format());
+        Session.set('date', date.format())
+        Modal.show('ConfigurarPlaneamiento')
+    }
+  });
+
+  Tracker.autorun( () => {
+    CalendarioPlaneamiento.find().fetch();
+    $( '#planeamiento' ).fullCalendar( 'refetchEvents' );
+  });
 })
 
 Template.agregarPlaneamientoIda.helpers({
@@ -564,5 +634,52 @@ Template.seleccionarPlanHorarioVuelta6.events({
 Template.seleccionarPlanHorarioVuelta7.events({
   'click .pdomingo'() {
     pdomingo.push(this._id)
+  }
+})
+
+Template.ConfigurarPlaneamiento.onCreated( () => {
+  let template = Template.instance()
+
+  template.autorun( () => {
+    template.subscribe('PlanesHorarios')
+  })
+
+})
+
+Template.ConfigurarPlaneamiento.helpers({
+  horarios() {
+    return PlanesHorarios.find();
+  }
+})
+
+Template.ConfigurarPlaneamiento.events({
+  'click [name="guardar_planeamiento"]'(e, t) {
+
+    let programacion = {
+      hi: t.find('[name="hi"]').value,
+      hf: t.find('[name="hf"]').value
+    }
+
+    let validacion = {
+      rutaId: $('#ruta').val(),
+      ida: true,
+      activo: false,
+      dia: Session.get('date').slice(0, 10)
+    }
+
+    if (programacion.hi !== "" && programacion.hf !== "") {
+      Meteor.call('add_plan_horario', programacion, validacion, (err) => {
+        if (err) {
+          Bert.alert('Hubo un Error', 'danger');
+          Modal.hide('ConfigurarPlaneamiento')
+        } else {
+          Modal.hide('ConfigurarPlaneamiento')
+          Bert.alert('Planeamiento Agregado');
+        }
+      })
+    } else {
+      Bert.alert('Complete los datos')
+    }
+
   }
 })

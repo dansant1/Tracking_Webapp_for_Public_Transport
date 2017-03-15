@@ -722,3 +722,18 @@ body {
   left: 85px;
 	font-size: 10px
 }
+
+div.wrapper-calendar {
+  width: 860px;
+	height: 520px;
+	overflow-y: hidden;
+  overflow-x: scroll;
+}
+
+.fc {
+	width: 1120px !important;
+}
+
+.fc-view table {
+	height: 245px;
+}

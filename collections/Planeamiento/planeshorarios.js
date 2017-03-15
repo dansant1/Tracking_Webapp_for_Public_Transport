@@ -26,3 +26,17 @@ Plan.deny({
 	update: () => { return true },
 	remove: () => { return true }
 });
+
+CalendarioPlaneamiento = new Mongo.Collection('calendario_planeamiento')
+
+CalendarioPlaneamiento.allow({
+	insert: () => { return false },
+	update: () => { return false },
+	remove: () => { return false }
+});
+
+CalendarioPlaneamiento.deny({
+	insert: () => { return true },
+	update: () => { return true },
+	remove: () => { return true }
+});

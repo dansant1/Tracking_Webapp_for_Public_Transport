@@ -16,6 +16,15 @@ Meteor.publish('ProgramacionVehiculoRutaDiaIda', function (rutaId, dia, ida) {
   }
 })
 
+Meteor.publish('calendario', function () {
+  if (this.userId) {
+    return CalendarioPlaneamiento.find();
+  } else {
+    this.stop()
+    return;
+  }
+})
+
 Meteor.publish('PlanesHorarios2', function (ida) {
   if (this.userId) {
     return PlanesHorarios.find({ida: ida});

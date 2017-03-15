@@ -28,6 +28,65 @@ Meteor.methods({
     }
 
   },
+  add_plan_horario(programacion, validacion) {
+
+    let arreglo = []
+    programacion.hora = programacion.hi + ':' + programacion.hf;
+    arreglo.push(programacion)
+
+    if (Plan.find({ activo: false, dia: validacion.dia, rutaId: validacion.rutaId}).fetch().length > 0) {
+      Plan.update({ activo: false, dia: validacion.dia, rutaId: validacion.rutaId}, {
+        $push: {
+          programacion: programacion
+        }
+      })
+
+      CalendarioPlaneamiento.insert({
+        ida: validacion.ida,
+        hora: programacion.hi + ':' + programacion.hf,
+        planId: Plan.findOne({ activo: false, dia: validacion.dia, rutaId: validacion.rutaId})._id,
+        rutaId: validacion.rutaId,
+        title: 'H: ' + programacion.hi + ' - ' + programacion.hf  + ' F: 5 minutos',
+        start: validacion.dia + 'T' + programacion.hi + ":00",
+        end: validacion.dia + 'T' + programacion.hf + ":00",
+        editable: false
+      })
+    } else {
+      let planId = Plan.insert({
+        activo: false,
+        rutaId: validacion.rutaId,
+        ida: validacion.ida,
+        dia: validacion.dia,
+        programacion: arreglo
+      });
+
+      if (planId) {
+        CalendarioPlaneamiento.insert({
+          ida: validacion.ida,
+          hora: programacion.hi + ':' + programacion.hf,
+          planId: planId,
+          rutaId: validacion.rutaId,
+          title: 'H: ' + programacion.hi + ' - ' + programacion.hf  + ' F: 5 minutos',
+          start: validacion.dia + 'T' + programacion.hi + ":00",
+          end: validacion.dia + 'T' + programacion.hf + ":00",
+          editable: false
+        })
+      }
+
+    }
+
+  },
+  removePlan2(calendarioId) {
+    console.log(calendarioId);
+    let planId = CalendarioPlaneamiento.findOne({_id: calendarioId}).planId
+    let hora = CalendarioPlaneamiento.findOne({_id: calendarioId}).hora;
+    // Plan.update({_id: planId, programacion: { $elemMatch: {hora: hora} }}, {
+    //   $pull: {
+    //     'programacion.$':
+    //   }
+    // })
+    CalendarioPlaneamiento.remove({_id: calendarioId})
+  },
   editarPlanHorario(id, datos) {
 
     if (this.userId) {

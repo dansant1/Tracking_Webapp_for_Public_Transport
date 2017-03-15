@@ -357,14 +357,6 @@ Meteor.methods({
 
         if (this.userId) {
 
-            /*ProgramacionVehiculo.update({_id: registroId}, {
-                $set: {
-                    despachado: true,
-                    despachadoHora: new Date(),
-                    conductorId: conductorId,
-                    cobradorId: cobradorId
-                }
-            })*/
             let p = ProgramacionVehiculo.find({ _id: registroId, programacion: { $elemMatch: {vehiculoId: vehiculoId} } }).fetch()
             console.log(p);
             ProgramacionVehiculo.update({ _id: registroId, programacion: { $elemMatch: {vehiculoId: vehiculoId} } }, {
