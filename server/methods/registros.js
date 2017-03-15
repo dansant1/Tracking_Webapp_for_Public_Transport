@@ -44,7 +44,6 @@ function formarJSON(date) {
         return parts[1] + '/' + parts[0] + '/' + parts[2]
     }
 
-
 }
 
 Meteor.methods({
@@ -99,7 +98,7 @@ Meteor.methods({
                 despachoAnterior = _.clone(despacho);
                 despacho["hora"] = despachoAuxiliar["hora"];
                 despacho["despachado"] = despachoAuxiliar["despachado"];
-                console.log("swap", i);
+                //console.log("swap", i);
             }
 
             if (despacho["vehiculoId"] === vehiculoId) {
@@ -354,17 +353,24 @@ Meteor.methods({
         }
     },
 
-    RegistrarVehiculoParaDespachar(registroId, vehiculoId, conductorId, cobradorId) {
+    RegistrarVehiculoParaDespachar(registroId, vehiculoId, conductorId, cobradorId, number) {
 
         if (this.userId) {
 
-            ProgramacionVehiculo.update({_id: registroId}, {
+            /*ProgramacionVehiculo.update({_id: registroId}, {
                 $set: {
                     despachado: true,
                     despachadoHora: new Date(),
                     conductorId: conductorId,
                     cobradorId: cobradorId
                 }
+            })*/
+            let p = ProgramacionVehiculo.find({ _id: registroId, programacion: { $elemMatch: {vehiculoId: vehiculoId} } }).fetch()
+            console.log(p);
+            ProgramacionVehiculo.update({ _id: registroId, programacion: { $elemMatch: {vehiculoId: vehiculoId} } }, {
+              $set: {
+                "programacion.$.despachado": true
+              }
             })
 
             Vehiculos.update({_id: vehiculoId}, {
@@ -392,6 +398,15 @@ Meteor.methods({
             return;
         }
 
+    },
+    volver_salir(vehiculoId) {
+      if (this.userId) {
+        Vehiculos.update({_id: vehiculoId}, {
+          $set: {
+            espera: false
+          }
+        })
+      }
     },
     agregarRequisito({nombre, activo = true}){
         Requisitos.insert({
@@ -752,8 +767,10 @@ Meteor.methods({
 
 
                     });
+
+                    return 'Datos Cargados'
                 } else {
-                    console.log('no cumple')
+                    return 'Formato Incorrecto'
                 }
             }
 

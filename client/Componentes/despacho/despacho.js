@@ -14,6 +14,7 @@ Template.VistaDespacho.onCreated(() => {
         template.unidadesProgramadas = new ReactiveVar([]);
 
         template.programacionList = new ReactiveVar(null);
+        template.programacionListDespachados = new ReactiveVar(null);
 
         let ida;
         if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
@@ -24,6 +25,7 @@ Template.VistaDespacho.onCreated(() => {
 
         template.subscribe('ProgramacionVehiculoRutaDiaIda', rutaId, today, ida, ()=> {
             template.programacionList.set(ProgramacionVehiculo.findOne());
+            template.programacionListDespachados.set(ProgramacionVehiculo.findOne({ida: ida , 'programacion.$.despachado': true}));
         });
         template.subscribe('VehiculosEmpresaId', empresaId);
     })
@@ -40,10 +42,10 @@ Template.VistaDespacho.helpers({
         } else {
             ida = Meteor.user().profile.ida;
         }
-        return ProgramacionVehiculo.find({ida: ida}).fetch()[0].programacion;
+        return ProgramacionVehiculo.find({ida: ida, 'programacion.$.despachado': false}).fetch()[0].programacion;
     },
     despachados() {
-        return ProgramacionVehiculo.find({despachado: true});
+      return Template.instance().programacionListDespachados.get();
     },
     despachocola() {
         return Vehiculos.find({espera: true});
@@ -65,13 +67,27 @@ Template.VistaDespacho.events({
         let p = programacionList.programacion.find(p=>p.hora == this.hora);
         p.despachado = true;
 
+        let ida;
+        if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
+            ida = true
+        } else {
+            ida = Meteor.user().profile.ida;
+        }
+        Session.set('RegistroDeVehiculoADespachar', ProgramacionVehiculo.find({ida: ida}).fetch()[0]._id);
+        Session.set('vehiculoId', this.vehiculoId);
 
-        // Session.set('programacionVehiculoId', target.data("programacionvehiculoid"));
-        // Session.set('vehiculoId', target.data("vehiculoid"));
-        //
         Modal.show('Asignar');
 
 
+    },
+    'click [name="volver_salir"]'() {
+      Meteor.call('volver_salir', this._id, (err) => {
+        if (err) {
+          Bert.alert('Hubo un error', 'danger')
+        } else {
+          Bert.alert('Vehiculo volvio a ruta', 'success')
+        }
+      })
     }
 })
 
@@ -133,21 +149,24 @@ Template.Asignar.events({
 
     },
     'click .cumple'(e, t) {
-        let vehiculo = Session.get('VehiculoADespachar');
+        let vehiculo = Session.get('vehiculoId');
+      //  console.log(vehiculo);
         let registroId = Session.get('RegistroDeVehiculoADespachar');
+        //console.log(registroId);
         Meteor.call('RegistrarVehiculoParaDespachar', registroId, vehiculo, t.conductor.get(), t.cobrador.get(), (err) => {
             if (err) {
                 Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
             } else {
                 Modal.hide('Asignar');
                 Bert.alert('Vehiculo Despachado', 'success')
+                location.reload();
             }
         })
     },
     'click .reasignar'(e, t) {
         let rutaId = FlowRouter.getParam('rutaId');
 
-        let programacionVehiculoId = Session.get('programacionVehiculoId');
+        let programacionVehiculoId = Session.get('RegistroDeVehiculoADespachar'); //Session.get('programacionVehiculoId');
         let vehiculoId = Session.get('vehiculoId');
 
         let target = $(e.currentTarget);
@@ -157,13 +176,14 @@ Template.Asignar.events({
         target.attr("disabled", "");
         Meteor.call('reasignarVehiculos', programacionVehiculoId, vehiculoId, (err) => {
             target.removeAttr("disabled", "");
-            //     if (err) {
-            //         Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
-            //         console.log(err);
-            //     } else {
-            //         Bert.alert('Vehiculos Reasignados', 'success');
-            //         Modal.hide('Asignar');
-            //     }
+             if (err) {
+                     Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
+                     console.log(err);
+                 } else {
+                     Bert.alert('Vehiculos Reasignados', 'success');
+                     Modal.hide('Asignar');
+                     location.reload();
+                 }
         });
     }
 })

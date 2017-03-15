@@ -10,8 +10,8 @@ FotosDeVehiculos = new FS.Collection("fvehiculos", {
   filter: {
     maxSize: 1048576, //in bytes
     allow: {
-      contentTypes: ['image/*'],
-      extensions: ['png', 'jpg', 'jpeg']
+      contentTypes: ['image/*', 'application/pdf'],
+      extensions: ['png', 'jpg', 'jpeg', 'pdf']
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {

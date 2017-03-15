@@ -129,13 +129,13 @@ export function handleFile (e, id, empresaId, rutaId) {
               Modal.show('CargandoExcel');
               let dato = event.target.result
 
-              Meteor.call('leerExcel', dato, empresaId, rutaId, function (err) {
+              Meteor.call('leerExcel', dato, empresaId, rutaId, function (err, result) {
                   if (err) {
                       alert(err);
                       Modal.hide('CargandoExcel');
                   } else {
                       Modal.hide('CargandoExcel');
-                      Bert.alert( 'Datos cargados', 'success', 'growl-top-right' );
+                      Bert.alert( result, 'success', 'growl-top-right' );
                   }
               });
 

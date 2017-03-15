@@ -16,6 +16,17 @@ Template.AgregarVehiculo.helpers({
     }
 });
 
+function formarJSON(date) {
+    if (date === null || date === undefined) {
+
+        return ''
+    } else {
+        var parts = date.split("-");
+        return parts[2] + '/' + parts[1] + '/' + parts[0]
+    }
+
+}
+
 Template.AgregarVehiculo.events({
     'click .guardar'(e, t) {
 
@@ -41,24 +52,24 @@ Template.AgregarVehiculo.events({
             },
             rutaId: $('#listaruta').val(),
             codigoDeRuta: Rutas.findOne({_id: $('#listaruta').val()}).nombre,
-            fechaDePermanenciaEnLaEmpresa: t.find("[name='fechaDePermanenciaEnLaEmpresa']").value,
+            fechaDePermanenciaEnLaEmpresa: formarJSON(t.find("[name='fechaDePermanenciaEnLaEmpresa']").value),
             TC: [],
             SOAT: {
                 numero: t.find("[name='soat']").value,
-                inicio: t.find("[name='emisionsoat']").value,
-                fin: t.find("[name='caducidadsoat']").value,
+                inicio: formarJSON(t.find("[name='emisionsoat']").value),
+                fin: formarJSON(t.find("[name='caducidadsoat']").value),
                 aseguradora: t.find("[name='aseguradorasoat']").value
             },
             CITV: {
                 numero: t.find("[name='rt']").value,
-                inicio: t.find("[name='emisionrt']").value,
-                fin: t.find("[name='caducidadrt']").value,
+                inicio: formarJSON(t.find("[name='emisionrt']").value),
+                fin: formarJSON(t.find("[name='caducidadrt']").value),
                 entidad: t.find("[name='entidadrt']").value
             },
             RC: {
                 numero: t.find("[name='rc']").value,
-                inicio: t.find("[name='emisionrc']").value,
-                fin: t.find("[name='caducidadrc']").value,
+                inicio: formarJSON(t.find("[name='emisionrc']").value),
+                fin: formarJSON(t.find("[name='caducidadrc']").value),
                 aseguradora: t.find("[name='aseguradorarc']").value
             },
             padron: t.find("[name='padron']").value,
@@ -72,8 +83,8 @@ Template.AgregarVehiculo.events({
                 var block = $('#'+entityId)[0];
                 var data = {
                     numero: $(block).find("input[name='tc']")[0].value,
-                    emision: $(block).find("input[name='emisiontc']")[0].value,
-                    caducidad: $(block).find("input[name='caducidadtc']")[0].value
+                    emision: formarJSON($(block).find("input[name='emisiontc']")[0].value),
+                    caducidad: formarJSON($(block).find("input[name='caducidadtc']")[0].value)
                 };
                 entidades.forEach(entidad=> {
                     if(entidad._id == entityId) {
@@ -86,6 +97,7 @@ Template.AgregarVehiculo.events({
         datos.TC = entityArray;
 
         if (datos.placa !== "") {
+
             Meteor.call('agregarVehiculo', datos, function (err) {
                 if (err) {
                     alert(err);

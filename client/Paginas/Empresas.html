@@ -144,8 +144,6 @@
 
                         <hr style="margin-top: -18px;">
                         {{>Opciones empresaId=empresaId rutaId=rutaId }}
-
-
                     </div>
                 </div>
             </div>
@@ -817,27 +815,14 @@
                                         <i class="fa fa-camera" aria-hidden="true"></i>
                                         <input name="fotosubir" type="file"
                                                class="fotovehiculo1"
-                                               style="display: none;" accept="image/*">
+                                               style="display: none;" accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printVehicle">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
 
-                                    </button>
                                 </div>
 
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <p style="display: inline-block;">Activo / Inactivo</p>
 
-                                <label style="display: inline-block; top: 10px;" class="switch">
-                                    <input type="checkbox" id="sw{{this._id}}" {{checked}} class="vehiculo-activo">
-                                    <div class="slider round"></div>
-                                </label>
-                            </div>
-                        </div>
 
                         <div class="row">
                             <br>
@@ -1175,12 +1160,26 @@
     {{#each fotos}}
 
         {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                     aria-hidden="true"></i>
+            <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+            <!--<button class="btn btn-primary printVehicle">
+                <i class="fa fa-print"
+                   aria-hidden="true"></i>
+
+            </button>-->
+        {{else}}
+            <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+            <br>
+            <a href="{{this.url}}" id="" class="btn btn-primary" target="_blank" >Visualizar</a>
+            <button class="btn btn-primary print_pdf">
+                <i class="fa fa-print"
+                   aria-hidden="true"></i>
             </button>
         {{/if}}
+
+        <br><br>
+        <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                                 aria-hidden="true"></i>
+        </button>
 
     {{/each}}
 
@@ -1223,7 +1222,7 @@
     {{#each fotos}}
 
         {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+            <a href="{{this.url}}" target="_blank"><img class="photo imprimir{{this._id}}" src="{{this.url}}"/></a>
             <br><br>
             <button class="btn btn-danger remove"><i class="fa fa-trash"
                                                      aria-hidden="true"></i>

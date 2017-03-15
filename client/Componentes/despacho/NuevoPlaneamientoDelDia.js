@@ -126,6 +126,7 @@ Template.NuevoPlaneamientoDelDia.onCreated(() => {
         template.subscribe('VehiculosEmpresa', () => {
             template.subscribe('planes', true, function () {
                 template.subscribe('PlanesHorarios2', true, function () {
+
                     crearProgramaciones(template);
                 });
             });

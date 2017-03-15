@@ -152,14 +152,16 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
 
 Template.ListaDeVehiculosPorEmpresas.events({
     'click .printVehicle'(event, template) {
+
+        //console.log($(event.target).parent().find('a img')[0].src);
         var windowUrl = 'MyPage.aspx';
         var uniqueName = new Date();
         var windowName = "MyPage" + uniqueName.getTime();
-
+        console.log($('.imprimir' + this._id).attr('href'));
         var printWindow = window.open(windowUrl, windowName, 'location=1,status=1,scrollbars=1,width=800,height=600');
 
         printWindow.document.write("<div style='width:100%;text-align: center;'>");
-        printWindow.document.write("<img id='img' style='max-width: 100%' src='" + $(event.currentTarget).parent().find('a img')[0].src + "'/>");
+        printWindow.document.write("<img id='img' style='max-width: 100%' src='" + $('.imprimir' + this._id).attr('href') + "'/>");
         printWindow.document.write("</div>");
 
         printWindow.document.close();
@@ -167,6 +169,11 @@ Template.ListaDeVehiculosPorEmpresas.events({
         printWindow.print();
         printWindow.close();
         return false;
+    },
+    'click .print_pdf'() {
+      let getMyFrame = document.getElementById('print' + this._id);
+      getMyFrame.focus();
+      getMyFrame.contentWindow.print();
     },
     'change #routeVehicle' (event, template) {
         let value = event.currentTarget.value;
