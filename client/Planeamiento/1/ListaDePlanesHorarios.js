@@ -9,14 +9,19 @@ Template.ListaDePlanesHorarios.onCreated( () => {
 
 Template.ListaDePlanesHorarios.helpers({
   planesida() {
-    return PlanesHorarios.find({ida: true});
-  },
-  planesvuelta() {
-    return PlanesHorarios.find({ida: false});
+    return PlanesHorarios.find();
   }
 })
 
 Template.ListaDePlanesHorarios.events({
+  'keyup [name="frec"]'() {
+    let frecuencia = $('.ph' + this._id).val();
+    Meteor.call('actualizarFrecuencia', frecuencia, this._id, (err) =>  {
+      if (err) {
+        alert(err)
+      }
+    })
+  },
   'click [name="remove"]'(e, t) {
 
     swal({

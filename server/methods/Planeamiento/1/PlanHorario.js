@@ -80,11 +80,14 @@ Meteor.methods({
     console.log(calendarioId);
     let planId = CalendarioPlaneamiento.findOne({_id: calendarioId}).planId
     let hora = CalendarioPlaneamiento.findOne({_id: calendarioId}).hora;
-    // Plan.update({_id: planId, programacion: { $elemMatch: {hora: hora} }}, {
-    //   $pull: {
-    //     'programacion.$':
-    //   }
-    // })
+    console.log(hora);
+    let id = Plan.find( {_id: planId, programacion: { $elemMatch: { hora: hora} } }).fetch()
+    console.log(id);
+    Plan.update( {_id: planId, programacion: { $elemMatch: { hora: hora} } }, {
+      $pull: {
+        "programacion": { hora: hora }
+      }
+    })
     CalendarioPlaneamiento.remove({_id: calendarioId})
   },
   editarPlanHorario(id, datos) {
@@ -122,6 +125,13 @@ Meteor.methods({
     } else {
       return;
     }
+  },
+  actualizarFrecuencia(frec, id) {
+    PlanesHorarios.update({_id: id}, {
+      $set: {
+        frecuencia: frec
+      }
+    })
   },
   crearPlan(datos) {
     if (this.userId) {

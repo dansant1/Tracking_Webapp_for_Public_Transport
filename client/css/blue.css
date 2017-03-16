@@ -737,3 +737,8 @@ div.wrapper-calendar {
 .fc-view table {
 	height: 245px;
 }
+
+.fc-content-skeleton {
+	padding-bottom: 0px !important;
+  border-bottom: 1px solid #ddd;
+}
