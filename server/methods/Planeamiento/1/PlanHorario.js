@@ -32,6 +32,8 @@ Meteor.methods({
 
     let arreglo = []
     programacion.hora = programacion.hi + ':' + programacion.hf;
+    let frec = PlanesHorarios.findOne({_id: validacion.phId}).frecuencia;
+    programacion.frecuencia = frec;
     arreglo.push(programacion)
 
     if (Plan.find({ activo: false, dia: validacion.dia, rutaId: validacion.rutaId}).fetch().length > 0) {

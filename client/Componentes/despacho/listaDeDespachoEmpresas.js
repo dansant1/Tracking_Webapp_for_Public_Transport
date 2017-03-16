@@ -69,6 +69,15 @@ Template.ListaDeRutasDespacho.onCreated( () => {
   });
 })
 
+Template.ListaDeRutasDespacho.events({
+  'click .dida'() {
+    Session.set('Ida', true)
+  },
+  'click .dvuelta'() {
+    Session.set('Ida', false)
+  }
+})
+
 Template.ListaDeRutasDespacho.helpers({
   rutas() {
     return Rutas.find({empresasId: FlowRouter.getParam('empresaId')})

@@ -20,7 +20,13 @@ Template.VistaDespacho.onCreated(() => {
         if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
             ida = true
         } else {
-            ida = Meteor.user().profile.ida;
+
+            if (Meteor.user().profile.ida === undefined) {
+              ida = Session.get('Ida')
+            } else {
+              ida = Meteor.user().profile.ida;
+            }
+
         }
 
         template.subscribe('ProgramacionVehiculoRutaDiaIda', rutaId, today, ida, ()=> {

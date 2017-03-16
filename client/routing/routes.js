@@ -87,7 +87,7 @@ FlowRouter.route('/plan/ruta/:rutaId', {
 FlowRouter.route('/despacho/d/:rutaId', {
     name: 'Planeamiento',
     action() {
-        BlazeLayout.render('LayoutCliente', {cliente: 'FuncionDespachar'});
+        BlazeLayout.render('LayoutCliente', {cliente: 'FuncionDespachar', administrador: 'FuncionDespachar'});
     }
 });
 
@@ -276,6 +276,13 @@ FlowRouter.route('/admin/listas/planes', {
     name: 'AdministradorListaPlanes',
     action() {
         BlazeLayout.render('LayoutCliente', {administrador: 'ListaDePlanes'});
+    }
+});
+
+FlowRouter.route('/admin/listas/planes/2', {
+    name: 'AdministradorListaPlanes',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'ListaDePlanes2'});
     }
 });
 

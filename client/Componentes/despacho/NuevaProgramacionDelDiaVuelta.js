@@ -18,6 +18,7 @@ function crearProgramaciones(template) {
       let empresaId;
       if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
         empresaId = Rutas.findOne({_id: FlowRouter.getParam('rutaId')}).empresasId;
+        console.log(empresaId);
       } else {
         empresaId = Meteor.user().profile.empresaId;
       }
@@ -29,21 +30,56 @@ function crearProgramaciones(template) {
     }
     let fecha = new Date();
     let hoyEs = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"][fecha.getDay()];
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
 
-    let plan_dia = Plan.findOne({rutaId: FlowRouter.getParam('rutaId')});
+    var yyyy = today.getFullYear();
+    if(dd<10){
+        dd='0'+dd;
+    }
+    if(mm<10){
+        mm='0'+mm;
+    }
+    var today = yyyy+'-'+mm+'-'+dd;
+    let plan_dia = Plan.findOne({dia: today, ida: false, rutaId: FlowRouter.getParam('rutaId')});
+
 
     if (plan_dia) {
 
-        let id_rangos = plan_dia.plan[hoyEs];
+        // let id_rangos = plan_dia.plan[hoyEs];
+        //
+        // let plan_rangos = id_rangos.map(id=> {
+        //     let ph = PlanesHorarios.findOne({_id: id});
+        //     return {
+        //         hora_inicio: ph.hi,
+        //         hora_fin: ph.hf,
+        //         frecuencia: ph.frecuencia
+        //     };
+        // });
 
-        let plan_rangos = id_rangos.map(id=> {
-            let ph = PlanesHorarios.findOne({_id: id});
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+
+        var yyyy = today.getFullYear();
+        if(dd<10){
+            dd='0'+dd;
+        }
+        if(mm<10){
+            mm='0'+mm;
+        }
+        var today = yyyy+'-'+mm+'-'+dd;
+
+        let plan_rangos = Plan.find({dia: today, ida: false, rutaId: FlowRouter.getParam('rutaId')}).fetch()[0].programacion.map( p => {
             return {
-                hora_inicio: ph.hi,
-                hora_fin: ph.hf,
-                frecuencia: ph.frecuencia
-            };
-        });
+              hora_inicio: p.hi,
+              hora_fin: p.hf,
+              frecuencia: p.frecuencia
+            }
+        })
+
+        //console.log(plan_rangos);
 
         let programacion_rangos = [];
 
@@ -114,13 +150,13 @@ Template.NuevoPlaneamientoDelDiaVuelta.onCreated(() => {
       }
     })
         //let empresaId = Meteor.user().profile.empresaId;
-        template.subscribe('DetalleDeEmpresaPlaneamiento', empresaId);
+        //template.subscribe('DetalleDeEmpresaPlaneamiento', empresaId);
         template.subscribe('VehiculosEmpresa', () => {
-            template.subscribe('planes', false, function () {
-                template.subscribe('PlanesHorarios2', false, function () {
+            //template.subscribe('planes', false, function () {
+                template.subscribe('ProgramacionHoy', false, function () {
                     crearProgramaciones(template);
                 });
-            });
+            //});
         });
     })
 });

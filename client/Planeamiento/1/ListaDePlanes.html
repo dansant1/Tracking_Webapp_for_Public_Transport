@@ -8,7 +8,7 @@
             <br>
             <ul class="nav nav-tabs">
               <li class="active"><a data-toggle="tab" href="#ida">Planeamiento de Ida</a></li>
-              <li><a data-toggle="tab" href="#vuelta">Planeamiento de Vuelta</a></li>
+              <li><a href="/admin/listas/planes/2">Planeamiento de Vuelta</a></li>
             </ul>
 
             <div class="tab-content">
@@ -16,7 +16,39 @@
                 <h3>Planeamiento de Ida</h3>
                 {{>agregarPlaneamientoIda}}
               </div>
-              <div id="vuelta" class="tab-pane fade">
+              <!--<div id="vuelta" class="tab-pane fade">
+                <h3>Planeamiento de Vuelta</h3>
+                {{>agregarPlaneamientoVuelta}}
+              </div> -->
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="ListaDePlanes2">
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-sm-18 col-xs-18">
+          <div class="box">
+
+            <br>
+            <ul class="nav nav-tabs">
+              <li><a href="/admin/listas/planes/">Planeamiento de Ida</a></li>
+              <li class="active" ><a data-toggle="tab" href="/admin/listas/planes/2">Planeamiento de Vuelta</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <!--<div id="ida" class="tab-pane fade in active">
+                <h3>Planeamiento de Ida</h3>
+                {{>agregarPlaneamientoIda}}
+              </div> -->
+              <div id="vuelta" class="tab-pane fade in active">
                 <h3>Planeamiento de Vuelta</h3>
                 {{>agregarPlaneamientoVuelta}}
               </div>

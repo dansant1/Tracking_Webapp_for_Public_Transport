@@ -72,6 +72,8 @@ Template.agregarPlaneamientoIda.onRendered( () => {
         if (template.rutaId.get() !== undefined) {
           Session.set('date', date.format())
           Modal.show('ConfigurarPlaneamiento')
+        } else {
+          Bert.alert('Seleccione una ruta', 'warning');
         }
 
     }
@@ -278,6 +280,8 @@ Template.agregarPlaneamientoVuelta.onRendered( () => {
         if (template.rutaId.get() !== undefined) {
           Session.set('date', date.format())
           Modal.show('ConfigurarPlaneamientoVuelta')
+        } else {
+          Bert.alert('Seleccione una ruta', 'warning');
         }
 
     }
@@ -315,14 +319,15 @@ Template.ConfigurarPlaneamiento.events({
 
     let programacion = {
       hi: t.find('[name="hi"]').value,
-      hf: t.find('[name="hf"]').value
+      hf: t.find('[name="hf"]').value,
     }
 
     let validacion = {
       rutaId: $('#ruta').val(),
       ida: true,
       activo: false,
-      dia: Session.get('date').slice(0, 10)
+      dia: Session.get('date').slice(0, 10),
+      phId: $('#ph1').val()
     }
 
     if (programacion.hi !== "" && programacion.hf !== "") {
@@ -367,10 +372,11 @@ Template.ConfigurarPlaneamientoVuelta.events({
     }
 
     let validacion = {
-      rutaId: $('#ruta').val(),
+      rutaId: $('#ruta2').val(),
       ida: false,
       activo: false,
-      dia: Session.get('date').slice(0, 10)
+      dia: Session.get('date').slice(0, 10),
+      phId: $('#ph1').val()
     }
 
     if (programacion.hi !== "" && programacion.hf !== "") {

@@ -42,3 +42,26 @@ Meteor.publish('PlanHorario', function (planHorarioId) {
     return;
   }
 })
+
+
+Meteor.publish('ProgramacionHoy', function (ida) {
+  if (this.userId) {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+
+    var yyyy = today.getFullYear();
+    if(dd<10){
+        dd='0'+dd;
+    }
+    if(mm<10){
+        mm='0'+mm;
+    }
+    var today = yyyy+'-'+mm+'-'+dd;
+
+    return Plan.find({ida: ida, dia: today});
+  } else {
+    this.stop()
+    return;
+  }
+})

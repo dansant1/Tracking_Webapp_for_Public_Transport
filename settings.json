@@ -3,7 +3,7 @@
 	{
 			"env":
 				{
-        			"ROOT_URL": "http://tpi.grupoddv.com",
+        			"ROOT_URL": "http://app.tpi.com.pe",
 					"MONGO_URL": "mongodb://admin:admin@ds139899.mlab.com:39899/tpi"
 				}
 	}
