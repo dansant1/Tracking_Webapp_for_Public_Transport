@@ -3,7 +3,7 @@ const HORAS = [ '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00',
                 '13:00', '14:00', '15:00', '16:00', '17:00', '18:00',
                 '19:00', '20:00', '21:00', '22:00', '23:00', '23:59'];
 
-let getHorario = (rango) => {
+let getHorario = (rango, dia, ida, rutaId) => {
 
   let r1 = rango.hi;
   let r2 = rango.hf;
@@ -23,27 +23,48 @@ let getHorario = (rango) => {
     numeros_apareceran2 = _.range(0, r1)
 
   } else {
+    let u = HorasPorDia.find({dia: dia, ida: ida, rutaId: rutaId}).fetch()[0].horas.length;
+    // console.log(u);
+    let ultimo = HorasPorDia.findOne({dia: dia, ida: ida, rutaId: rutaId}).horas[u - 1]
+    console.log(ultimo);
+    ultimo.slice(0, 2)
+    ultimo = parseInt(ultimo)
     numeros_apareceran1 = _.range(r2 + 1, 24)
-
-    numeros_apareceran2 = _.range(0, r1)
-
+    console.log(numeros_apareceran1);
+    //console.log(HorasPorDia.findOne({dia: dia, ida: ida, rutaId: rutaId}).horas);
+    numeros_apareceran2 = _.range(0, 23)
+    console.log(numeros_apareceran2);
   }
 
 
 
-  nuevo_horario = _.union(numeros_apareceran1, numeros_apareceran2)
+  nuevo_horario = numeros_apareceran1//_.union(numeros_apareceran1, numeros_apareceran2)
 
+  if (r2 > 9) {
+    horario.push( r2 + ':01')
+  } else {
+    horario.push( '0' + r2 + ':01')
+  }
 
-  horario.push(r2 + ':01')
   nuevo_horario.map( h => {
-    let hora = h + ':00'
+    let hora;
+    console.log('HORA: ' + h);
+    if (h > 9) {
+      hora = h + ':00'
+      console.log('nueva hora: ' + hora);
+    } else {
+      hora = '0' + h + ':00'
+    }
+
     horario.push(hora)
   })
-  if (r1 === 0) {
-    horario.push('23:59')
-  } else {
-    horario.push(r1 - 1 + ':59')
-  }
+
+  horario.push('23:59')
+  // if (r1 === 0) {
+  //   horario.push('23:59')
+  // } else {
+  //   horario.push(r1 - 1 + ':59')
+  // }
 
 
   return horario
@@ -77,7 +98,7 @@ Meteor.methods({
   },
   ActualizarRangoHorarioPorDia(dia, ida, rango, rutaId) {
 
-    let nuevoRangoDeHoras = getHorario(rango)
+    let nuevoRangoDeHoras = getHorario(rango, dia, ida, rutaId)
 
     HorasPorDia.update({dia: dia, ida: ida, rutaId}, {
       $set: {

@@ -44,7 +44,8 @@ Meteor.methods({
       if (parseInt(programacion.hi.slice(0, 2)) > 9) {
         hi = programacion.hi.slice(0, 2) + ":00:00"
       } else {
-        hi = "0" + programacion.hi.slice(0, 2) + "00:00"
+        console.log(programacion.hi);
+        hi = programacion.hi.slice(0, 2) + ":00:00"
       }
 
     }
@@ -55,7 +56,8 @@ Meteor.methods({
       if (parseInt(programacion.hf.slice(0, 2)) > 9) {
         hf = programacion.hf.slice(0, 2) + ":00:00"
       } else {
-        hf = "0" + programacion.hf.slice(0, 2) + "00:00"
+        console.log(programacion.hf);
+        hf = programacion.hf.slice(0, 2) + ":00:00"
       }
 
     }
