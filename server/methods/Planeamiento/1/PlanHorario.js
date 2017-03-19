@@ -36,6 +36,30 @@ Meteor.methods({
     programacion.frecuencia = frec;
     arreglo.push(programacion)
 
+    let hi = programacion.hi.slice(0, 2);
+    let hf = programacion.hf.slice(0, 2)
+    if (hi === '00') {
+      hi = programacion.hi.slice(0, 2) + ":00:00"
+    } else {
+      if (parseInt(programacion.hi.slice(0, 2)) > 9) {
+        hi = programacion.hi.slice(0, 2) + ":00:00"
+      } else {
+        hi = "0" + programacion.hi.slice(0, 2) + "00:00"
+      }
+
+    }
+
+    if (hf === '00') {
+      hf = programacion.hf.slice(0, 2) + ":00:00"
+    } else {
+      if (parseInt(programacion.hf.slice(0, 2)) > 9) {
+        hf = programacion.hf.slice(0, 2) + ":00:00"
+      } else {
+        hf = "0" + programacion.hf.slice(0, 2) + "00:00"
+      }
+
+    }
+
     if (Plan.find({ activo: false, dia: validacion.dia, rutaId: validacion.rutaId}).fetch().length > 0) {
       Plan.update({ activo: false, dia: validacion.dia, rutaId: validacion.rutaId}, {
         $push: {
@@ -43,14 +67,16 @@ Meteor.methods({
         }
       })
 
+
+
       CalendarioPlaneamiento.insert({
         ida: validacion.ida,
         hora: programacion.hi + ':' + programacion.hf,
         planId: Plan.findOne({ activo: false, dia: validacion.dia, rutaId: validacion.rutaId})._id,
         rutaId: validacion.rutaId,
         title: 'H: ' + programacion.hi + ' - ' + programacion.hf + ' F: ' + programacion.frecuencia,
-        start: validacion.dia + 'T' + programacion.hi + ":00",
-        end: validacion.dia + 'T' + programacion.hf + ":00",
+        start: validacion.dia + 'T' + hi,
+        end: validacion.dia + 'T' + hf,
         editable: false
       })
     } else {
@@ -63,14 +89,15 @@ Meteor.methods({
       });
 
       if (planId) {
+
         CalendarioPlaneamiento.insert({
           ida: validacion.ida,
           hora: programacion.hi + ':' + programacion.hf,
           planId: planId,
           rutaId: validacion.rutaId,
           title: 'H: ' + programacion.hi + ' - ' + programacion.hf  + ' F: ' + programacion.frecuencia,
-          start: validacion.dia + 'T' + programacion.hi + ":00",
-          end: validacion.dia + 'T' + programacion.hf + ":00",
+          start: validacion.dia + 'T' + hi,
+          end: validacion.dia + 'T' + hf,
           editable: false
         })
       }

@@ -367,7 +367,7 @@ Template.ConfigurarPlaneamiento.events({
             Modal.hide('ConfigurarPlaneamiento')
 
           } else {
-            Meteor.call('ActualizarRangoHorarioPorDia', validacion.dia, validacion.ida, programacion, (err) => {
+            Meteor.call('ActualizarRangoHorarioPorDia', validacion.dia, validacion.ida, programacion, validacion.rutaId, (err) => {
               if (err) {
                 console.log(err);
               } else {
@@ -424,8 +424,6 @@ Template.ConfigurarPlaneamientoVuelta.events({
       phId: $('#ph').val()
     }
 
-    console.log('holaaaa');
-    alert(validacion.phId);
 
     if (programacion.hi !== "" && programacion.hf !== "") {
 
@@ -442,7 +440,7 @@ Template.ConfigurarPlaneamientoVuelta.events({
             Modal.hide('ConfigurarPlaneamientoVuelta')
 
           } else {
-            Meteor.call('ActualizarRangoHorarioPorDia', validacion.dia, validacion.ida, programacion, (err) => {
+            Meteor.call('ActualizarRangoHorarioPorDia', validacion.dia, validacion.ida, programacion, validacion.rutaId, (err) => {
               if (err) {
                 console.log(err);
               } else {

@@ -13,35 +13,40 @@ let getHorario = (rango) => {
   r1 = parseInt(r1)
   r2 = parseInt(r2)
 
-  // console.log(r1);
-  // console.log(r2);
-
   let numeros_menos =  _.range(r1, r2)
   let numeros_apareceran1, numeros_apareceran2, nuevo_horario;
   let horario = []
 
   if (r1 === 0) {
-    console.log(r1);
+
     numeros_apareceran1 = _.range(r2 + 1, 24)
     numeros_apareceran2 = _.range(0, r1)
-    console.log(numeros_apareceran2);
+
   } else {
     numeros_apareceran1 = _.range(r2 + 1, 24)
-    console.log(numeros_apareceran1);
+
     numeros_apareceran2 = _.range(0, r1)
-    console.log(numeros_apareceran2);
+
   }
+
+
 
   nuevo_horario = _.union(numeros_apareceran1, numeros_apareceran2)
 
-  console.log(nuevo_horario);
 
+  horario.push(r2 + ':01')
   nuevo_horario.map( h => {
     let hora = h + ':00'
     horario.push(hora)
   })
+  if (r1 === 0) {
+    horario.push('23:59')
+  } else {
+    horario.push(r1 - 1 + ':59')
+  }
 
-  console.log(horario);
+
+  return horario
 }
 
 Meteor.methods({
@@ -70,15 +75,15 @@ Meteor.methods({
     }
 
   },
-  ActualizarRangoHorarioPorDia(dia, ida, rango) {
+  ActualizarRangoHorarioPorDia(dia, ida, rango, rutaId) {
 
     let nuevoRangoDeHoras = getHorario(rango)
 
-    // HorasPorDia.update({dia: dia, ida: ida}, {
-    //   $set: {
-    //     horas: nuevoRangoDeHoras
-    //   }
-    // })
+    HorasPorDia.update({dia: dia, ida: ida, rutaId}, {
+      $set: {
+        horas: nuevoRangoDeHoras
+      }
+    })
 
   }
 })
