@@ -48,7 +48,7 @@ Meteor.methods({
         hora: programacion.hi + ':' + programacion.hf,
         planId: Plan.findOne({ activo: false, dia: validacion.dia, rutaId: validacion.rutaId})._id,
         rutaId: validacion.rutaId,
-        title: 'H: ' + programacion.hi + ' - ' + programacion.hf  + ' F: 5 minutos',
+        title: 'H: ' + programacion.hi + ' - ' + programacion.hf + ' F: ' + programacion.frecuencia,
         start: validacion.dia + 'T' + programacion.hi + ":00",
         end: validacion.dia + 'T' + programacion.hf + ":00",
         editable: false
@@ -68,7 +68,7 @@ Meteor.methods({
           hora: programacion.hi + ':' + programacion.hf,
           planId: planId,
           rutaId: validacion.rutaId,
-          title: 'H: ' + programacion.hi + ' - ' + programacion.hf  + ' F: 5 minutos',
+          title: 'H: ' + programacion.hi + ' - ' + programacion.hf  + ' F: ' + programacion.frecuencia,
           start: validacion.dia + 'T' + programacion.hi + ":00",
           end: validacion.dia + 'T' + programacion.hf + ":00",
           editable: false

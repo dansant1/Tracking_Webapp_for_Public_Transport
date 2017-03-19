@@ -71,7 +71,15 @@ Template.agregarPlaneamientoIda.onRendered( () => {
         console.log(date.format());
         if (template.rutaId.get() !== undefined) {
           Session.set('date', date.format())
-          Modal.show('ConfigurarPlaneamiento')
+          Session.set('rutaPorHora', template.rutaId.get())
+          Meteor.call('agregarHoraPorDia', date.format(), true, template.rutaId.get(), (err) => {
+              if (err) {
+                console.log(err);
+              } else {
+                Modal.show('ConfigurarPlaneamiento')
+              }
+          })
+
         } else {
           Bert.alert('Seleccione una ruta', 'warning');
         }
@@ -279,7 +287,14 @@ Template.agregarPlaneamientoVuelta.onRendered( () => {
         console.log(date.format());
         if (template.rutaId.get() !== undefined) {
           Session.set('date', date.format())
-          Modal.show('ConfigurarPlaneamientoVuelta')
+          Meteor.call('agregarHoraPorDia', date.format(), false, template.rutaId.get(), (err) => {
+              if (err) {
+                console.log(err);
+              } else {
+                Modal.show('ConfigurarPlaneamientoVuelta')
+              }
+          })
+
         } else {
           Bert.alert('Seleccione una ruta', 'warning');
         }
@@ -289,7 +304,7 @@ Template.agregarPlaneamientoVuelta.onRendered( () => {
 
   Tracker.autorun( () => {
     CalendarioPlaneamiento.find().fetch();
-    $( '#planeamiento' ).fullCalendar( 'refetchEvents' );
+    $( '#planeamiento2' ).fullCalendar( 'refetchEvents' );
   });
 })
 
@@ -303,12 +318,18 @@ Template.ConfigurarPlaneamiento.onCreated( () => {
   let template = Template.instance()
 
   template.autorun( () => {
+    template.subscribe('HorasPorDia', true);
     template.subscribe('PlanesHorarios')
   })
 
 })
 
 Template.ConfigurarPlaneamiento.helpers({
+  horas() {
+    let hoy = Session.get('date')
+    let ruta = Session.get('rutaPorHora')
+    return HorasPorDia.findOne({dia: hoy, ida: true, rutaId: ruta}).horas;
+  },
   horarios() {
     return PlanesHorarios.find();
   }
@@ -330,16 +351,34 @@ Template.ConfigurarPlaneamiento.events({
       phId: $('#ph1').val()
     }
 
+
     if (programacion.hi !== "" && programacion.hf !== "") {
-      Meteor.call('add_plan_horario', programacion, validacion, (err) => {
-        if (err) {
-          Bert.alert('Hubo un Error', 'danger');
-          Modal.hide('ConfigurarPlaneamiento')
-        } else {
-          Modal.hide('ConfigurarPlaneamiento')
-          Bert.alert('Planeamiento Agregado', 'success');
-        }
-      })
+
+      let h1 = programacion.hi.slice(0, 2)
+      h1 = parseInt(h1)
+      let h2 = programacion.hf.slice(0, 2)
+      h2 = parseInt(h2)
+      if (h1 > h2) {
+          Bert.alert('Ingrese un rango de horas valido', 'warning')
+      } else {
+        Meteor.call('add_plan_horario', programacion, validacion, (err) => {
+          if (err) {
+            Bert.alert('Hubo un Error', 'danger');
+            Modal.hide('ConfigurarPlaneamiento')
+
+          } else {
+            Meteor.call('ActualizarRangoHorarioPorDia', validacion.dia, validacion.ida, programacion, (err) => {
+              if (err) {
+                console.log(err);
+              } else {
+                Modal.hide('ConfigurarPlaneamiento')
+                Bert.alert('Planeamiento Agregado', 'success');
+              }
+            })
+          }
+        })
+      }
+
     } else {
       Bert.alert('Complete los datos')
     }
@@ -352,14 +391,20 @@ Template.ConfigurarPlaneamientoVuelta.onCreated( () => {
   let template = Template.instance()
 
   template.autorun( () => {
+    template.subscribe('HorasPorDia', false);
     template.subscribe('PlanesHorarios')
   })
 
 })
 
 Template.ConfigurarPlaneamientoVuelta.helpers({
+  horas() {
+    let hoy = Session.get('date')
+    let ruta = Session.get('rutaPorHora')
+    return HorasPorDia.findOne({dia: hoy, ida: false, rutaId: ruta}).horas;
+  },
   horarios() {
-    return PlanesHorarios.find();
+    return PlanesHorarios.find()
   }
 })
 
@@ -376,19 +421,39 @@ Template.ConfigurarPlaneamientoVuelta.events({
       ida: false,
       activo: false,
       dia: Session.get('date').slice(0, 10),
-      phId: $('#ph1').val()
+      phId: $('#ph').val()
     }
 
+    console.log('holaaaa');
+    alert(validacion.phId);
+
     if (programacion.hi !== "" && programacion.hf !== "") {
-      Meteor.call('add_plan_horario', programacion, validacion, (err) => {
-        if (err) {
-          Bert.alert('Hubo un Error', 'danger');
-          Modal.hide('ConfigurarPlaneamientoVuelta')
-        } else {
-          Modal.hide('ConfigurarPlaneamientoVuelta')
-          Bert.alert('Planeamiento Agregado', 'success');
-        }
-      })
+
+      let h1 = programacion.hi.slice(0, 2)
+      h1 = parseInt(h1)
+      let h2 = programacion.hf.slice(0, 2)
+      h2 = parseInt(h2)
+      if (h1 > h2) {
+          Bert.alert('Ingrese un rango de horas valido', 'warning')
+      } else {
+        Meteor.call('add_plan_horario', programacion, validacion, (err) => {
+          if (err) {
+            Bert.alert('Hubo un Error', 'danger');
+            Modal.hide('ConfigurarPlaneamientoVuelta')
+
+          } else {
+            Meteor.call('ActualizarRangoHorarioPorDia', validacion.dia, validacion.ida, programacion, (err) => {
+              if (err) {
+                console.log(err);
+              } else {
+                Modal.hide('ConfigurarPlaneamientoVuelta')
+                Bert.alert('Planeamiento Agregado', 'success');
+              }
+            })
+          }
+        })
+      }
+
     } else {
       Bert.alert('Complete los datos')
     }
