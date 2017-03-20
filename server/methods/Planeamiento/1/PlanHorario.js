@@ -1,3 +1,64 @@
+function getHorarioNuevo (hora, dia, ida, rutaId) {
+  let r1 = hora.slice(0, 2)
+
+  let r2 = hora.slice(6, 8)
+
+  r1 = parseInt(r1)
+  r2 = parseInt(r2)
+
+
+  console.log(r1);
+  console.log(r2);
+
+  let horario = HorasPorDia.findOne({dia: dia, ida: ida, rutaId}).horas
+  let ultimo = horario[0]
+  let u = ultimo.slice(0, 2);
+  u = parseInt(u)
+  //let nuevo_horario = _.range(r1, u + 1)
+  let nuevo_horario = _.range(r1, r2 + 1)
+
+  //let index = horario.indexOf(1);
+  //horario.splice(1, 2);
+
+  horario.shift()
+
+
+  if (horario[0].includes(":01")) {
+    if (parseInt(horario.slice(0, 2)) > 9) {
+      horario[0] = parseInt(horario.slice(0, 2)) + ':00';
+    } else {
+      horario[0] = '0' + parseInt(horario.slice(0, 2)) + ':00';
+    }
+  }
+
+
+
+
+  console.log(horario);
+  console.log(nuevo_horario);
+  let nuevo = [];
+  nuevo_horario.map( h => {
+
+    if (h > 9) {
+      h = h + ':00'
+    } else {
+      h = '0' + h + ':00'
+    }
+
+    nuevo.push(h)
+
+  })
+
+
+
+
+
+  nuevo = _.union(nuevo, horario)
+
+  console.log('Nuevo: ' + nuevo);
+  return nuevo;
+}
+
 Meteor.methods({
   agregarPlanHorario(datos) {
 
@@ -119,7 +180,19 @@ Meteor.methods({
         "programacion": { hora: hora }
       }
     })
+
+    let plan = Plan.findOne({_id: planId})
+
     CalendarioPlaneamiento.remove({_id: calendarioId})
+
+    let nuevoRangoDeHoras = getHorarioNuevo(hora, plan.dia, plan.ida, plan.rutaId)
+
+    HorasPorDia.update({dia: plan.dia, ida: plan.ida, rutaId: plan.rutaId}, {
+      $set: {
+        horas: nuevoRangoDeHoras
+      }
+    });
+
   },
   editarPlanHorario(id, datos) {
 
