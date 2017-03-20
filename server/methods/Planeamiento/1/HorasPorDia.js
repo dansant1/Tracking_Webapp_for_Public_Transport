@@ -13,61 +13,170 @@ let getHorario = (rango, dia, ida, rutaId) => {
   r1 = parseInt(r1)
   r2 = parseInt(r2)
 
-  let numeros_menos =  _.range(r1, r2)
+  console.log(dia);
+  console.log(ida);
+  console.log(rutaId);
   let numeros_apareceran1, numeros_apareceran2, nuevo_horario;
-  let horario = []
+  //let longitud = HorasPorDia.findOne({dia: dia, id: ida, rutaId: rutaId}).horas.length;
+  let horario = HorasPorDia.find({dia: dia, ida: ida, rutaId: rutaId}).fetch()[0].horas
 
-  if (r1 === 0) {
+  console.log('Horario: ' + horario);
+  console.log('r1: ' + r1);
+  console.log('r2: ' + r2);
+  nuevo_horario = [];
 
-    numeros_apareceran1 = _.range(r2 + 1, 24)
-    numeros_apareceran2 = _.range(0, r1)
+  horario.forEach( (h) => {
+      h = parseInt(h.slice(0, 2))
 
-  } else {
-    let u = HorasPorDia.find({dia: dia, ida: ida, rutaId: rutaId}).fetch()[0].horas.length;
-    // console.log(u);
-    let ultimo = HorasPorDia.findOne({dia: dia, ida: ida, rutaId: rutaId}).horas[u - 1]
-    console.log(ultimo);
-    ultimo.slice(0, 2)
-    ultimo = parseInt(ultimo)
-    numeros_apareceran1 = _.range(r2 + 1, 24)
-    console.log(numeros_apareceran1);
-    //console.log(HorasPorDia.findOne({dia: dia, ida: ida, rutaId: rutaId}).horas);
-    numeros_apareceran2 = _.range(0, 23)
-    console.log(numeros_apareceran2);
-  }
-
-
-
-  nuevo_horario = numeros_apareceran1//_.union(numeros_apareceran1, numeros_apareceran2)
-
-  if (r2 > 9) {
-    horario.push( r2 + ':01')
-  } else {
-    horario.push( '0' + r2 + ':01')
-  }
-
-  nuevo_horario.map( h => {
-    let hora;
-    console.log('HORA: ' + h);
-    if (h > 9) {
-      hora = h + ':00'
-      console.log('nueva hora: ' + hora);
-    } else {
-      hora = '0' + h + ':00'
-    }
-
-    horario.push(hora)
+      nuevo_horario.push(h)
   })
 
-  horario.push('23:59')
-  // if (r1 === 0) {
-  //   horario.push('23:59')
-  // } else {
-  //   horario.push(r1 - 1 + ':59')
-  // }
+  console.log('Nuevo horario: ' + nuevo_horario);
+
+  let sacar = _.range(r1, r2);
+
+  console.log('Sacar: ' + sacar);
+
+  let diferencia = _.difference(nuevo_horario, sacar);
+
+  let oficial = [];
+  let e;
+
+  diferencia.map( d => {
 
 
-  return horario
+
+      if (d === r2) {
+
+        if (d > 0) {
+          console.log('caso 2');
+          if (d > 9) {
+            d = d + ':01'
+          } else {
+            d = '0' + d + ':01'
+          }
+
+        } else {
+          d = '0' + d + ':01'
+        }
+
+
+    } else if (d === r1) {
+      if (d > 0) {
+
+        if (r1 === 0) {
+          console.log('Es: ' + r1);
+        } else {
+          console.log( "r1: " + r1);
+          d = d + 1
+          oficial.push('0' + d + ':00')
+          d = d + ':59'
+        }
+
+      } else {
+        let e = d - 1
+        oficial.push('0' + e + ':00')
+        d = '0' + d + ':59'
+      }
+    } else {
+
+      if (d > 0) {
+        if (d === r1 - 1) {
+
+          //console.log(d);
+          //oficial.push(e)
+          //console.log(e);
+          //d = d + ':59'
+        } else {
+          if (d > 9) {
+            d = d + ':00'
+          } else {
+            d = '0' +  d + ':00'
+          }
+
+        }
+
+      } else {
+
+        if (d === r1 - 1) {
+          e = '0' + d + ':59'
+          // let e = '0' + d + ':59'
+          // oficial.push(d)
+          // console.log(d);
+          // oficial.push(e)
+          // console.log(e);
+        } else {
+          d = '0' + d + ':00'
+        }
+
+      }
+
+    }
+
+    //console.log(r1 - 1);
+
+    if (d === r1 - 1) {
+      //console.log('jeje');
+
+      if (d > 9) {
+        e = d + ':59';
+        d = d + ':00'
+      } else {
+        e = '0' + d + ':59';
+        d = '0' + d + ':00'
+      }
+      console.log('DE: ' + d);
+      oficial.push(d)
+      console.log('E: ' + e);
+      oficial.push(e)
+    } else {
+      oficial.push(d)
+    }
+
+    console.log('D: ' + d);
+
+  })
+  let n = oficial.length - 1
+
+  if (oficial.length > 1) {
+    oficial[n] = oficial[n].slice(0, 2) + ':59'
+  }
+
+
+  oficial = _.uniq(oficial);
+
+
+  if ( oficial[0].includes( '0' + r2 + ':01' ) ) {
+    if (oficial[0] === '0'+r2 + ':01' ) {
+      if (r1 !== 0) {
+          //oficial.shift();
+      }
+
+
+
+    }
+
+    // if (parseInt(oficial[0].slice(0, 2)) + 1 === parseInt(oficial[1].slice(0, 2))) {
+    //   oficial.shift()
+    //   oficial[0] = oficial[0].slice(0, 2) + ':01'
+    // } else {
+    //   oficial[1] = oficial[1].slice(0, 2) + ':01'
+    // }
+
+    oficial[1] = oficial[1].slice(0, 2) + ':01'
+  }
+
+  console.log(oficial[0]);
+
+  console.log('Diferencia final: ' + oficial);
+
+  if (oficial.length < 3) {
+    oficial.shift()
+  }
+
+
+
+  return oficial;
 }
 
 Meteor.methods({

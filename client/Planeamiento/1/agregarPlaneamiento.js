@@ -358,7 +358,7 @@ Template.ConfigurarPlaneamiento.events({
       h1 = parseInt(h1)
       let h2 = programacion.hf.slice(0, 2)
       h2 = parseInt(h2)
-      if (h1 > h2) {
+      if (h1 === h2) {
           Bert.alert('Ingrese un rango de horas valido', 'warning')
       } else {
         Meteor.call('add_plan_horario', programacion, validacion, (err) => {
@@ -431,7 +431,7 @@ Template.ConfigurarPlaneamientoVuelta.events({
       h1 = parseInt(h1)
       let h2 = programacion.hf.slice(0, 2)
       h2 = parseInt(h2)
-      if (h1 > h2) {
+      if (h1 === h2) {
           Bert.alert('Ingrese un rango de horas valido', 'warning')
       } else {
         Meteor.call('add_plan_horario', programacion, validacion, (err) => {
