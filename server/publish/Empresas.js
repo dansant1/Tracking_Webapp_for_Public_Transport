@@ -237,7 +237,8 @@ Meteor.publish('RutasEmpresa', function (empresaId) {
     return Rutas.find({empresasId: empresaId});
 });
 
-Meteor.publish('ConductoresPorEmpresa', function (empresaId, search) {
+Meteor.publish('ConductoresPorEmpresa', function (rutaId, search) {
+    let  empresaId = Rutas.findOne({_id: rutaId}).empresasId
     let query = {empresaId},
         projection = {limit: 4, sort: {placa: 1}};
 
@@ -256,23 +257,26 @@ Meteor.publish('ConductoresPorEmpresa', function (empresaId, search) {
     return Conductores.find(query, projection);
 });
 
-Meteor.publish('CobradoresPorEmpresa', function (empresaId, search) {
-    let query = {empresaId},
-        projection = {limit: 4, sort: {placa: 1}};
+Meteor.publish('CobradoresPorEmpresa', function (rutaId, search) {
+
+    let  empresaId = Rutas.findOne({_id: rutaId}).empresasId
+    let query = {empresaId: empresaId},
+        projection = {limit: 4};
 
     if (search) {
         let regex = new RegExp(search, 'i');
         query = {
-            ...query,
+            //...query,
             $or: [
                 {'datos.dni': regex},
                 {'datos.nombre': regex},
                 {'datos.apellido': regex}
             ]
         };
-        projection = {...projection, limit: 200};
+        projection = {limit: 200};
     }
-
+    //console.log(Cobradores.find().fetch());
+    console.log(Cobradores.find({empresaId: empresaId}).fetch());
     return Cobradores.find(query, projection);
 });
 
@@ -374,8 +378,9 @@ Meteor.publish('VehiculosEmpresa', function () {
 });
 
 Meteor.publish('VehiculosEmpresaId', function (empresaId) {
-
+    console.log(empresaId);
     if (this.userId) {
+        console.log(Vehiculos.find({empresaId: empresaId}).fetch());
         return Vehiculos.find({empresaId: empresaId});
     } else {
         this.stop()

@@ -47,14 +47,23 @@ function formarJSON(date) {
 }
 
 Meteor.methods({
-    crearProgramacionVehiculo(d) {
+  obtenerEmpresaId(rutaId) {
+    let empresa = Rutas.findOne({_id: rutaId}).empresasId;
+    if (empresa) {
+      return empresa
+    } else {
+      return undefined;
+    }
+
+  },
+  crearProgramacionVehiculo(d) {
         if (this.userId) {
             if (typeof d !== 'undefined') {
                 ProgramacionVehiculo.insert(d);
             }
         }
-    },
-    reasignarVehiculos(programacionVehiculoId, vehiculoId, reqSi, reqNo) {
+  },
+  reasignarVehiculos(programacionVehiculoId, vehiculoId, reqSi, reqNo) {
 
         if (reqSi && reqNo) {
             ProgramacionVehiculoHistorial.insert({

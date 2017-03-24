@@ -11,6 +11,24 @@ Template.VistaDespacho.onCreated(() => {
         var today = dd + '/' + mm + '/' + yyyy;
         let empresaId = Meteor.user().profile.empresaId;
         let rutaId = FlowRouter.getParam('rutaId');
+        if (empresaId === undefined) {
+          Meteor.call('obtenerEmpresaId', rutaId, (err, result) => {
+            if (err) {
+              alert(err)
+            } else {
+              console.log('empresaid: ' ,result);
+              empresaId = result;
+              template.subscribe('VehiculosEmpresaId', empresaId, () => {
+                console.log(Vehiculos.find().fetch());
+              });
+            }
+          })
+        } else {
+          template.subscribe('VehiculosEmpresaId', empresaId, () => {
+            console.log(Vehiculos.find().fetch());
+          });
+        }
+
         template.unidadesProgramadas = new ReactiveVar([]);
 
         template.programacionList = new ReactiveVar(null);
@@ -33,7 +51,7 @@ Template.VistaDespacho.onCreated(() => {
             template.programacionList.set(ProgramacionVehiculo.findOne());
             template.programacionListDespachados.set(ProgramacionVehiculo.findOne({ida: ida , 'programacion.$.despachado': true}));
         });
-        template.subscribe('VehiculosEmpresaId', empresaId);
+
     })
 })
 
@@ -64,6 +82,12 @@ Template.VistaDespacho.helpers({
     },
     rutaId() {
         return FlowRouter.getParam('rutaId')
+    },
+    placa() {
+      return Vehiculos.findOne({_id: this.vehiculoId}).placa;
+    },
+    padron() {
+      return Vehiculos.findOne({_id: this.vehiculoId}).padron;
     }
 })
 
@@ -75,11 +99,17 @@ Template.VistaDespacho.events({
 
         let ida;
         if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
-            ida = true
+            ida = true;
+        } else if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
+            ida = true;
         } else {
             ida = Meteor.user().profile.ida;
         }
-        Session.set('RegistroDeVehiculoADespachar', ProgramacionVehiculo.find({ida: ida}).fetch()[0]._id);
+
+        console.log(ida);
+
+        console.log('ID: ', ProgramacionVehiculo.findOne({ida: ida})._id);
+        Session.set('RegistroDeVehiculoADespachar', ProgramacionVehiculo.findOne({ida: ida})._id);
         Session.set('vehiculoId', this.vehiculoId);
 
         Modal.show('Asignar');
@@ -188,7 +218,7 @@ Template.Asignar.events({
                  } else {
                      Bert.alert('Vehiculos Reasignados', 'success');
                      Modal.hide('Asignar');
-                     location.reload();
+                     //location.reload();
                  }
         });
     }
@@ -196,9 +226,8 @@ Template.Asignar.events({
 
 Template.Asignar.helpers({
     conductores() {
-        let empresaId = Meteor.user().profile.empresaId;
+        //let empresaId = Meteor.user().profile.empresaId;
         return Conductores.find({
-            empresaId: empresaId,
             $or: [
                 {despachado: {$exists: false}},
                 {despachado: false}
@@ -213,9 +242,9 @@ Template.Asignar.helpers({
         }
     },
     cobradores() {
-        let empresaId = Meteor.user().profile.empresaId;
+        //let empresaId = Meteor.user().profile.empresaId;
         return Cobradores.find({
-            empresaId: empresaId,
+            //empresaId: empresaId,
             $or: [
                 {despachado: {$exists: false}},
                 {despachado: false}
@@ -264,16 +293,16 @@ Template.Asignar.onCreated(() => {
     template.despachar = new ReactiveVar(false);
 
     template.autorun(() => {
-        let empresaId = Meteor.user().profile.empresaId;
 
-
-        template.subscribe('CobradoresPorEmpresa', empresaId, template.searchQuery2.get(), () => {
+        template.subscribe('CobradoresPorEmpresa', FlowRouter.getParam('rutaId'), template.searchQuery2.get(), () => {
+            console.log('primero');
             setTimeout(() => {
                 template.searching2.set(false);
             }, 300);
         });
 
-        template.subscribe('ConductoresPorEmpresa', empresaId, template.searchQuery.get(), () => {
+        template.subscribe('ConductoresPorEmpresa', FlowRouter.getParam('rutaId'), template.searchQuery.get(), () => {
+            console.log('segundo');
             setTimeout(() => {
                 template.searching.set(false);
             }, 300);

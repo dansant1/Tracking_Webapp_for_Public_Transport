@@ -66,7 +66,7 @@ function crearProgramaciones(template) {
 
         var today = new Date();
         var dd = today.getDate();
-        var mm = today.getMonth()+1; //January is 0!
+        var mm = today.getMonth()+1;
 
         var yyyy = today.getFullYear();
         if(dd<10){
@@ -85,6 +85,8 @@ function crearProgramaciones(template) {
             }
         })
 
+        console.log('Rangos: ', plan_rangos);
+
         let programacion_rangos = [];
 
         let index = 0;
@@ -95,7 +97,7 @@ function crearProgramaciones(template) {
             let minutosAlInicio = converToMinutes(r.hora_inicio);
             let minutosAlFinal = converToMinutes(r.hora_fin);
             let minutos = minutosAlInicio;
-
+            console.log('Minutos: ', minutos);
             let group = {
                 hora_inicio: r.hora_inicio,
                 hora_fin: r.hora_fin,
@@ -110,7 +112,17 @@ function crearProgramaciones(template) {
             });
             index++;
 
-            while (minutos + r.frecuencia <= minutosAlFinal) {
+            console.log('Horas: ', group.horas);
+            console.log('minutos mas frecuencia: ', r.frecuencia);
+            console.log('minutosAlFinal:', minutosAlFinal);
+            let suma = minutos + parseInt(r.frecuencia)
+            suma = parseInt(suma)
+            minutosAlFinal = parseInt(minutosAlFinal)
+            if (suma <= minutosAlFinal) {
+              console.log('cumplopop');
+            }
+            while (suma <= minutosAlFinal) {
+                console.log('cumple');
                 if (index >= template.totalVehicles.get()) {
                     break;
                 }
@@ -122,6 +134,7 @@ function crearProgramaciones(template) {
                 });
                 index++;
                 minutos += r.frecuencia;
+                console.log('Horas reales: ', group.horas);
             }
 
             programacion_rangos.push(group);
