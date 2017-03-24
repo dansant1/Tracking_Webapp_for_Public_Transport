@@ -21,7 +21,18 @@ Template.mapaCliente.onCreated(() => {
 
 
     });
+
 });
+
+Template.mapaCliente.onRendered( () => {
+  $('[data-toggle="tooltip"]').tooltip();
+  $('[data-toggle="tooltip2"]').tooltip();
+  $('[data-toggle="tooltip3"]').tooltip();
+  $('[data-toggle="tooltip4"]').tooltip();
+  $('[data-toggle="tooltip5"]').tooltip();
+})
+
+
 
 Template.mapaCliente.helpers({
     empresa() {
@@ -438,6 +449,14 @@ Template.adminMapaCliente.onCreated(() => {
 
     });
 });
+
+Template.adminMapaCliente.onRendered( () => {
+  $('[data-toggle="tooltip"]').tooltip();
+  $('[data-toggle="tooltip2"]').tooltip();
+  $('[data-toggle="tooltip3"]').tooltip();
+  $('[data-toggle="tooltip4"]').tooltip();
+  $('[data-toggle="tooltip5"]').tooltip();
+})
 
 Template.adminMapaCliente.helpers({
     empresas(){
