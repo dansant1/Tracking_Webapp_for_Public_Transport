@@ -287,6 +287,7 @@ Template.agregarPlaneamientoVuelta.onRendered( () => {
         console.log(date.format());
         if (template.rutaId.get() !== undefined) {
           Session.set('date', date.format())
+          console.log('holaaaa vuelta');
           Meteor.call('agregarHoraPorDia', date.format(), false, template.rutaId.get(), (err) => {
               if (err) {
                 console.log(err);
@@ -424,6 +425,7 @@ Template.ConfigurarPlaneamientoVuelta.events({
       phId: $('#ph').val()
     }
 
+    console.log(validacion.ida);
 
     if (programacion.hi !== "" && programacion.hf !== "") {
 

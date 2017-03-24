@@ -47,6 +47,26 @@ function formarJSON(date) {
 }
 
 Meteor.methods({
+  agregarLista(nombre) {
+    if (this.userId) {
+      Listas.insert({
+        nombre: nombre
+      })
+    } else {
+      return;
+    }
+  },
+  guardarPuntosControl(datos) {
+    if (this.userId) {
+      Rutas.update({_id: datos.rutaId}, {
+        $set: {
+          'puntosdecontrol': datos.puntos
+        }
+      })
+    } else {
+      return;
+    }
+  },
   obtenerEmpresaId(rutaId) {
     let empresa = Rutas.findOne({_id: rutaId}).empresasId;
     if (empresa) {
@@ -409,11 +429,12 @@ Meteor.methods({
         })
       }
     },
-    agregarRequisito({nombre, activo = true}){
+    agregarRequisito({nombre, activo = true, listaId}){
         Requisitos.insert({
             nombre: nombre,
             createdAt: new Date(),
-            activo: activo
+            activo: activo,
+            listaId: listaId
         });
     },
     eliminarRequisito(id){
@@ -437,7 +458,7 @@ Meteor.methods({
             representante: datos.representante,
             telefono: datos.telefono,
             email: datos.email,
-            plan: parseInt(datos.plan)
+            plan: datos.plan
         });
 
     },

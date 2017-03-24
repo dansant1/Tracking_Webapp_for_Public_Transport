@@ -22,8 +22,6 @@
                                   <h3>Lo sentimos no tenemos resultados para {{query}}</h3>
                               {{/each}}
 
-
-
                       </ul>
 
                   </div>
@@ -31,4 +29,77 @@
           </div>
       </div>
   </div>
+</template>
+
+<template name="mantenimiento">
+  <div class="content-wrapper">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-12 col-sm-18 col-xs-18">
+                  <div class="box">
+                      <h3>Requisitos Vehicular</h3>
+                      <br><br>
+                      <button type="button" class="btn btn-primary add__mantenimiento_lista">Agregar Lista</button>
+                      <br><br>
+                      <div class="panel-group" id="accordion">
+                      {{#each listas}}
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#{{this._id}}">
+                            {{this.nombre}}</a>
+                          </h4>
+                        </div>
+                        <div id="{{this._id}}" class="panel-collapse collapse">
+                          <div class="panel-body">
+                            <button type="button" class="btn btn-primary add__mantenimiento_req">Agregar Requisito</button>
+                            <br><br>
+                            {{#each requisitos}}
+                                <li class="list-group-item clearfix">
+                                    <span class="pull-left">{{nombre}}</span>
+                                    <span class="pull-right" style="width: 35px">
+                                        <button type="button" class="btn btn-danger delete">x</button>
+                                    </span>
+                                </li>
+
+                            {{else}}
+                                <h3>Agregue requisitos a la lista</h3>
+                            {{/each}}
+                          </div>
+                        </div>
+                      </div>
+                      {{else}}
+                      <h4>Sin listas para mostrar</h4>
+                      {{/each}}
+
+                    </div>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+</template>
+
+<template name="agregarLista">
+  <div class="modal fade">
+       <div class="modal-dialog">
+           <div class="modal-content">
+
+               <div class="modal-header">
+                   <h4 class="modal-title">Crear Lista de Requisitos</h4>
+               </div>
+
+               <div class="modal-body">
+                   <input type="text" name="nombre" placeholder="Nombre de Lista">
+                   <button type="button" class="save" name="save">Guardar</button>
+               </div>
+
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+               </div>
+
+           </div>
+       </div>
+   </div>
 </template>

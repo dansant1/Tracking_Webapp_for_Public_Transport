@@ -14,14 +14,14 @@
                                 </div>
                                 <div class="row">
                                   <div class="col-md-3">
-                                      <input type="number" class="total_vehicles form-control" placeholder="número de vehículos">
+                                      <input style="display: inline-block; margin-bottom: 20px;" type="number" class="total_vehicles form-control" placeholder="número de vehículos">
                                   </div>
                                 </div>
                                 <div>
                                     {{#each planeamientoHoy}}
-                                        <p class="header-hora">Hora Inicio: <b>{{hora_inicio}}</b> | Hora Fin:
+                                        <!-- <p class="header-hora">Hora Inicio: <b>{{hora_inicio}}</b> | Hora Fin:
                                             <b>{{hora_fin}}</b> |
-                                            Frecuencia: <b>{{ frecuencia }} min</b></p>
+                                            Frecuencia: <b>{{ frecuencia }} min</b></p> -->
                                         <ul class="list-group">
                                             {{#each horas}}
                                                 <li class="list-group-item clearfix horario planeamiento">
@@ -52,7 +52,7 @@
                                         </ul>
                                     {{else}}
                                         <h3>No hay planeamiento registrado para hoy</h3>
-                                        
+
                                     {{/each}}
 
                                 </div>

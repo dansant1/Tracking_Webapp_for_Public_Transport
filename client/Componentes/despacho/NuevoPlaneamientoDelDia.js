@@ -17,7 +17,7 @@ function crearProgramaciones(template) {
     if (template.totalVehicles.get() === null) {
       let empresaId;
       if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
-        console.log(empresaId);
+
 
         empresaId = Rutas.findOne({_id: FlowRouter.getParam('rutaId')}).empresasId;
       } else {
@@ -31,10 +31,7 @@ function crearProgramaciones(template) {
             }).count() / 2);
 
     }
-    // let fecha = new Date();
-    // let hoyEs = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"][fecha.getDay()];
-    //
-    // let plan_dia = Plan.findOne({rutaId: FlowRouter.getParam('rutaId')});
+
     let fecha = new Date();
     let hoyEs = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"][fecha.getDay()];
     var today = new Date();
@@ -53,16 +50,6 @@ function crearProgramaciones(template) {
 
     if (plan_dia) {
 
-        // let id_rangos = plan_dia.plan[hoyEs];
-        //
-        // let plan_rangos = id_rangos.map(id=> {
-        //     let ph = PlanesHorarios.findOne({_id: id});
-        //     return {
-        //         hora_inicio: ph.hi,
-        //         hora_fin: ph.hf,
-        //         frecuencia: ph.frecuencia
-        //     };
-        // });
 
         var today = new Date();
         var dd = today.getDate();
@@ -92,6 +79,7 @@ function crearProgramaciones(template) {
         let index = 0;
 
         for (let i in plan_rangos) {
+            console.log('I: ', i);
             let r = plan_rangos[i];
             let hora = r.hora_inicio;
             let minutosAlInicio = converToMinutes(r.hora_inicio);

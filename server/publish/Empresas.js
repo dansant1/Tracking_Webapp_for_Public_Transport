@@ -210,7 +210,7 @@ Meteor.publish('VehiculosPorEmpresa', function (empresaId, search) {
 
 Meteor.publish('VehiculosPorEmpresa2', function (empresaId, search) {
     let query = {},
-        projection = {sort: {placa: 1}};
+        projection = {sort: {placa: 1}, limit: 5};
 
     if (search) {
         let regex = new RegExp(search, 'i');
@@ -225,7 +225,7 @@ Meteor.publish('VehiculosPorEmpresa2', function (empresaId, search) {
 
         projection.limit = 200;
     }
-
+    //console.log(Vehiculos.find(query, projection).fetch());
     return Vehiculos.find(query, projection);
 });
 
@@ -238,9 +238,23 @@ Meteor.publish('RutasEmpresa', function (empresaId) {
 });
 
 Meteor.publish('ConductoresPorEmpresa', function (rutaId, search) {
-    let  empresaId = Rutas.findOne({_id: rutaId}).empresasId
-    let query = {empresaId},
-        projection = {limit: 4, sort: {placa: 1}};
+    console.log(rutaId);
+    let  empresaId;
+    let query;
+    let projection = {limit: 4}
+    if (rutaId === null) {
+      empresaId = undefined;
+      query = {}
+    } else {
+
+      empresaId = Rutas.findOne({_id: rutaId}).empresasId;
+
+        query = {empresaId}
+    }
+
+    console.log(empresaId);
+
+
 
     if (search) {
         let regex = new RegExp(search, 'i');
@@ -251,17 +265,45 @@ Meteor.publish('ConductoresPorEmpresa', function (rutaId, search) {
                 {'datos.nombre': regex}
             ]
         };
-        projection = {...projection, limit: 200};
+        projection = {limit: 200};
+
+        if (empresaId === undefined) {
+
+          return Conductores.find({$or: [
+              {'datos.dni': regex},
+              {'datos.nombre': regex}
+          ]}, projection);
+        } else {
+          return Conductores.find(query, projection);
+        }
     }
 
     return Conductores.find(query, projection);
+
+
+
+
 });
 
 Meteor.publish('CobradoresPorEmpresa', function (rutaId, search) {
 
-    let  empresaId = Rutas.findOne({_id: rutaId}).empresasId
-    let query = {empresaId: empresaId},
-        projection = {limit: 4};
+  console.log(rutaId);
+  let  empresaId;
+  let query;
+  let projection = {limit: 4}
+  if (rutaId === null) {
+    empresaId = undefined;
+    query = {}
+  } else {
+
+    empresaId = Rutas.findOne({_id: rutaId}).empresasId
+
+    query = {empresaId}
+  }
+
+    // let  empresaId = Rutas.findOne({_id: rutaId}).empresasId
+    // let query = {empresaId: empresaId},
+    //     projection = {limit: 4};
 
     if (search) {
         let regex = new RegExp(search, 'i');
@@ -274,9 +316,22 @@ Meteor.publish('CobradoresPorEmpresa', function (rutaId, search) {
             ]
         };
         projection = {limit: 200};
+
+        if (empresaId === undefined) {
+
+          return Cobradores.find({$or: [
+              {'datos.dni': regex},
+              {'datos.nombre': regex},
+              {'datos.apellido': regex}
+          ]}, projection);
+        } else {
+          return Cobradores.find(query, projection);
+        }
     }
-    //console.log(Cobradores.find().fetch());
-    console.log(Cobradores.find({empresaId: empresaId}).fetch());
+
+    console.log(query);
+
+    console.log(Cobradores.find(query, projection).fetch());
     return Cobradores.find(query, projection);
 });
 
@@ -512,4 +567,8 @@ Meteor.publish('RecaudacionTPI', function () {
         this.stop();
         return;
     }
+})
+
+Meteor.publish('listas', function () {
+  return Listas.find();
 })

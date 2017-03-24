@@ -243,15 +243,18 @@
                             <h3>Requisitos</h3>
                             <br>
                             <ul>
-                                {{#each requisitos}}
-                                    <li class="list-group-item clearfix reqs">
-                                        <span style="display: inline-block; margin-left: 20px;">{{this.nombre}}</span>
-                                        <label style="display: inline-block; top: 9px; margin-left: 10px"
-                                               class="switch">
-                                            <input type="checkbox" id="req{{this._id}}" class="requisito">
-                                            <div class="slider round"></div>
-                                        </label>
-                                    </li>
+                                {{#each checklist}}
+                                  
+                                  {{#each requisitos this._id}}
+                                      <li class="list-group-item clearfix reqs">
+                                          <input type="checkbox" id="req{{this._id}}" class="requisito">
+                                          <span style="display: inline-block; margin-left: 20px;">{{this.nombre}}</span>
+                                      </li>
+                                  {{else}}
+                                  <h5>Sin Requisitos</h5>
+                                  {{/each}}
+                                {{else}}
+                                <h5>Sin Lista Asociada</h5>
                                 {{/each}}
                             </ul>
                             <br>

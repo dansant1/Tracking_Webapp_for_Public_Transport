@@ -53,6 +53,11 @@ Template.VistaDespacho.onCreated(() => {
         });
 
     })
+
+    Tracker.autorun( () => {
+      ProgramacionVehiculo.find()
+      Template.instance().programacionList.get();
+    });
 })
 
 Template.VistaDespacho.helpers({
@@ -99,9 +104,9 @@ Template.VistaDespacho.events({
 
         let ida;
         if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
-            ida = true;
+            ida = Session.get('Ida');
         } else if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
-            ida = true;
+            ida = Session.get('Ida');
         } else {
             ida = Meteor.user().profile.ida;
         }
@@ -194,8 +199,9 @@ Template.Asignar.events({
                 Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
             } else {
                 Modal.hide('Asignar');
+
                 Bert.alert('Vehiculo Despachado', 'success')
-                location.reload();
+
             }
         })
     },
@@ -251,8 +257,14 @@ Template.Asignar.helpers({
             ]
         });
     },
-    requisitos() {
-        return Requisitos.find();
+    checklist() {
+      return Template.instance().reqs.get();
+
+    },
+    requisitos(id) {
+        console.log('id: ', id);
+        console.log('reqs: ', Requisitos.find({listaId: this._id}));
+        return Requisitos.find({listaId: id});
     }
 })
 
@@ -283,6 +295,7 @@ Template.Asignar.onCreated(() => {
     let template = Template.instance();
 
     template.searchQuery = new ReactiveVar();
+    template.reqs = new ReactiveVar([]);
     template.searching = new ReactiveVar(false);
 
     template.searchQuery2 = new ReactiveVar();
@@ -294,6 +307,30 @@ Template.Asignar.onCreated(() => {
 
     template.autorun(() => {
 
+        template.subscribe('listas', () => {
+          let empresaId = Meteor.user().profile.empresaId;
+          let rutaId = FlowRouter.getParam('rutaId');
+          if (empresaId === undefined) {
+            Meteor.call('obtenerEmpresaId', rutaId, (err, result) => {
+              if (err) {
+                alert(err)
+              } else {
+                console.log('empresaid: ' ,result);
+                empresaId = result;
+                // console.log('empresa', Empresas.findOne({_id: empresaId}));
+                // console.log('lista: ', Listas.findOne({_id: Empresas.find({_id: empresaId}).plan }));
+                console.log(Listas.find({_id: Empresas.findOne({_id: empresaId}).plan }).fetch());
+                template.reqs.set(Listas.find({_id: Empresas.findOne({_id: empresaId}).plan }))
+              }
+            })
+            //return Listas.find({_id: Empresas.findOne({_id: empresaId}).plan })
+          } else {
+            // console.log('empresa', Empresas.findOne({_id: empresaId}));
+            // console.log('lista: ', Listas.findOne({_id: Empresas.findOne({_id: empresaId}).plan }));
+            template.reqs.set(Listas.find({_id: Empresas.findOne({_id: empresaId}).plan }))
+          }
+        })
+        template.subscribe('Empresas')
         template.subscribe('CobradoresPorEmpresa', FlowRouter.getParam('rutaId'), template.searchQuery2.get(), () => {
             console.log('primero');
             setTimeout(() => {

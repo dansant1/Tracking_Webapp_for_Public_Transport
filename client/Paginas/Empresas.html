@@ -296,7 +296,7 @@
     <div class="page-header clearfix" style="margin-top: 0;">
         <div class="pull-left">
             <input type="text" name="search" class="form-control" style="width: 350px;"
-                   placeholder="Buscar conductor por DNI">
+                   placeholder="Buscar conductor por DNI, Nombre o Apellido">
         </div>
     </div>
 
@@ -573,7 +573,7 @@
     <div class="page-header clearfix" style="margin-top: 1px;">
         <div class="pull-left">
             <input type="text" name="search" class="form-control" style="width: 350px;"
-                   placeholder="Buscar cobrador por DNI">
+                   placeholder="Buscar cobrador por DNI, Nombre o Apellido">
         </div>
     </div>
 
@@ -753,8 +753,9 @@
     <div class="page-header clearfix" style="margin-top: 0;">
 
         <div class="pull-left">
-
+            {{#if hayRuta}}
             <p style="font-size: 14px; margin-bottom: 5px">Ruta {{ruta.nombre}}</p>
+            {{/if}}
             <br>
             <input type="text" name="search" class="form-control" style="width: 350px;"
                    placeholder="Buscar vehículo por placa, padron o ruta">
@@ -1344,8 +1345,9 @@
                         <div class="form-group">
                             <label for="plan" style="    margin-left: 70px;">Checklist</label>
                             <select class="form-control" style="margin-left: 4px;width: 115px;" id="plan">
-                              <option value="1">Basico</option>
-                              <option value="2">Avanzado</option>
+                              {{#each listas}}
+                              <option value="{{this._id}}">{{this.nombre}}</option>
+                              {{/each}}
                             </select>
                         </div>
                     </form>

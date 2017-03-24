@@ -47,17 +47,6 @@ function crearProgramaciones(template) {
 
     if (plan_dia) {
 
-        // let id_rangos = plan_dia.plan[hoyEs];
-        //
-        // let plan_rangos = id_rangos.map(id=> {
-        //     let ph = PlanesHorarios.findOne({_id: id});
-        //     return {
-        //         hora_inicio: ph.hi,
-        //         hora_fin: ph.hf,
-        //         frecuencia: ph.frecuencia
-        //     };
-        // });
-
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth()+1; //January is 0!
@@ -106,7 +95,11 @@ function crearProgramaciones(template) {
             });
             index++;
 
-            while (minutos + r.frecuencia <= minutosAlFinal) {
+            let suma = minutos + parseInt(r.frecuencia)
+            suma = parseInt(suma)
+            minutosAlFinal = parseInt(minutosAlFinal)
+
+            while (suma <= minutosAlFinal) {
                 if (index >= template.totalVehicles.get()) {
                     break;
                 }
@@ -125,7 +118,10 @@ function crearProgramaciones(template) {
             if (index >= template.totalVehicles.get()) {
                 break;
             }
+
         }
+
+        console.log('progamacion rangos', programacion_rangos);
 
         template.planeamientoHoy.set(programacion_rangos);
     } else {
@@ -182,6 +178,7 @@ Template.NuevoPlaneamientoDelDiaVuelta.onRendered(() => {
 
 Template.NuevoPlaneamientoDelDiaVuelta.helpers({
     planeamientoHoy(){
+        console.log('holaaaa:', Template.instance().planeamientoHoy.get());
         return Template.instance().planeamientoHoy.get();
     },
     matchVehicle(vehicleId, _id){

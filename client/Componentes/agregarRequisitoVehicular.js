@@ -5,7 +5,7 @@ Template.agregarRequisitoVehicular.events({
     let requisito = t.find("[name='requisito']").value;
     console.log(requisito)
     if (requisito != "") {
-      Meteor.call('agregarRequisito', {nombre: requisito, activo: true}, function (err) {
+      Meteor.call('agregarRequisito', {nombre: requisito, activo: true, listaId: Session.get('listaId')}, function (err) {
         if (err) {
           Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
         } else {

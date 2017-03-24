@@ -17,7 +17,7 @@ FlowRouter.route('/rastreo', {
 FlowRouter.route('/mantenimiento', {
     name: 'Mantenimiento',
     action() {
-        BlazeLayout.render('LayoutCliente', {administrador: 'Mantenimiento'});
+        BlazeLayout.render('LayoutCliente', {administrador: 'mantenimiento'});
     }
 });
 
@@ -145,6 +145,28 @@ FlowRouter.route('/admin/reportes', {
     name: 'AdministradorReportes',
     action() {
         BlazeLayout.render('LayoutCliente', {administrador: 'AdministradorReportes'});
+    }
+});
+
+
+FlowRouter.route('/admin/flotas', {
+    name: 'AdministradorReportes',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'flotas'});
+    }
+});
+
+FlowRouter.route('/admin/operadores', {
+    name: 'AdministradorReportes',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'operadores'});
+    }
+});
+
+FlowRouter.route('/pc', {
+    name: 'AdministradorReportes',
+    action() {
+        BlazeLayout.render('LayoutCliente', {administrador: 'ConfigPuntosDeControl'});
     }
 });
 

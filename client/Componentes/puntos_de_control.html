@@ -1,0 +1,46 @@
+<template name="ConfigPuntosDeControl">
+  <div class="content-wrapper">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-12 col-sm-18 col-xs-18">
+                  <div class="box">
+                    <h2>Configuracion de Puntos de Control</h2>
+                    <br>
+                    <div class="col-md-6">
+                      <select class="form-control" name="rutas" style="display: inline-block; margin-bottom: 20px; width: 50%">
+                          <option value="0">-- Selecciones una Ruta --</option>
+                        {{#each rutas}}
+                          <option value="{{this._id}}">{{this.nombre}}</option>
+                        {{/each}}
+                      </select>
+                      <button type="button" name="save" class="btn btn-success save" style="display: inline-block">Guardar</button>
+                    </div>
+                    <br><br><br>
+
+                        {{#each puntos}}
+                        <li class="list-group-item clearfix pc">
+                          <span class="pull-left"><span id="lat">{{this.lat}}</span>  <span id="lng">{{this.lng}}</span></span>
+                          <span class="pull-right">
+                            <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                   onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0"
+                                   type="text" maxlength="2" name="tiempoida" style="width: 138px; margin-left: 70px;"  id="tida"  value="{{this.tida}}" placeholder="Tiempo desde Ida">
+                            <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                   onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0"
+                                   type="text" maxlength="2" name="tiempovuelta" style="width: 138px; margin-left: 70px;" id="tvuelta"  value="{{this.tvuelta}}" placeholder="Tiempo desde Vuelta">
+                          </span>
+                        </li>
+                        {{else}}
+                        <li class="list-group-item clearfix">
+                          <span class="pull-left">Seleccione una Ruta</span>
+                        </li>
+                        {{/each}}
+
+
+
+
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</template>

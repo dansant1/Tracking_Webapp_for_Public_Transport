@@ -102,14 +102,23 @@ Template.ListaDeVehiculosPorEmpresas.onCreated(() => {
     template.searchQuery = new ReactiveVar();
     template.searching = new ReactiveVar(false);
 
+    template.empresaId = new ReactiveVar(null)
+
     let rutaId = FlowRouter.getParam('rutaId');
 
     template.subscribe("rutaSingle", rutaId );
 
     Session.set('editarVehiculo', null);
 
+
+
     template.autorun(() => {
         let empresaId = FlowRouter.getParam('empresaId');
+
+        if (empresaId === undefined) {
+          empresaId = template.empresaId.get()
+        }
+
         template.subscribe('VehiculosPorEmpresa2', empresaId, template.searchQuery.get(), () => {
             setTimeout(() => {
                 template.searching.set(false);
@@ -132,10 +141,28 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
     },
     ruta() {
         let rutaId = FlowRouter.getParam('rutaId');
+        if (rutaId === undefined) {
+          rutaId = null;
+          //return Rutas.findOne({ _id: rutaId });
+        }
         return Rutas.findOne({ _id: rutaId });
+    },
+    hayRuta() {
+      if (FlowRouter.getParam('rutaId') === undefined) {
+        return false
+      } else {
+        return true;
+      }
     },
     vehiculo: function () {
         let empresaId = FlowRouter.getParam('empresaId');
+        if (empresaId === undefined) {
+          empresaId = Template.instance().empresaId.get()
+
+          return Vehiculos.find({});
+        }
+
+        //console.log(Vehiculos.find().fetch());
         return Vehiculos.find({empresaId: empresaId});
     },
     fotos() {
@@ -267,7 +294,11 @@ Template.ListaDeConductoresPorEmpresa.onCreated(() => {
 
     template.autorun(() => {
         let empresaId = FlowRouter.getParam('empresaId');
-        template.subscribe('ConductoresPorEmpresa', empresaId, template.searchQuery.get(), () => {
+        let rutaId =  FlowRouter.getParam('rutaId');
+
+        console.log(rutaId);
+
+        template.subscribe('ConductoresPorEmpresa', rutaId, template.searchQuery.get(), () => {
             setTimeout(() => {
                 template.searching.set(false);
             }, 300);
@@ -287,7 +318,14 @@ Template.ListaDeConductoresPorEmpresa.helpers({
 
         if (vehiculos) {
             let empresaId = FlowRouter.getParam('empresaId');
-            return Conductores.find({empresaId: empresaId});
+
+            if (empresaId === undefined) {
+              return Conductores.find();
+            } else {
+              return Conductores.find({empresaId: empresaId});
+
+            }
+            //return Conductores.find({empresaId: empresaId});
         }
 
     }
@@ -379,12 +417,16 @@ Template.ListaDeCobradoresPorEmpresa.onCreated(() => {
 
     template.searchQuery = new ReactiveVar();
     template.searching = new ReactiveVar(false);
+    template.rutaId = new ReactiveVar(undefined)
 
     Session.set('editarCobrador', null);
 
     template.autorun(() => {
         let empresaId = FlowRouter.getParam('empresaId');
-        template.subscribe('CobradoresPorEmpresa', empresaId, template.searchQuery.get(), () => {
+        let rutaId =  FlowRouter.getParam('rutaId');
+
+
+        template.subscribe('CobradoresPorEmpresa', rutaId, template.searchQuery.get(), () => {
             setTimeout(() => {
                 template.searching.set(false);
             }, 300);
@@ -413,7 +455,13 @@ Template.ListaDeCobradoresPorEmpresa.helpers({
 
         if (vehiculos) {
             let empresaId = FlowRouter.getParam('empresaId');
-            return Cobradores.find({empresaId: empresaId});
+
+            if (empresaId === undefined) {
+              return Cobradores.find();
+            } else {
+              return Cobradores.find({empresaId: empresaId});
+            }
+
         }
 
     }
@@ -813,6 +861,21 @@ Template.Empresas.events({
     }
 });
 
+Template.agregarEmpresa.onCreated(() => {
+
+  let template = Template.instance()
+
+  template.autorun( () => {
+    template.subscribe('listas')
+  })
+
+})
+
+Template.agregarEmpresa.helpers({
+  listas() {
+    return Listas.find();
+  }
+})
 
 Template.agregarEmpresa.events({
     'submit form'(e, t) {
