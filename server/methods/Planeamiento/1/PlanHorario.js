@@ -1,62 +1,56 @@
-function getHorarioNuevo (hora, dia, ida, rutaId) {
-  let r1 = hora.slice(0, 2)
-
-  let r2 = hora.slice(6, 8)
-
+function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
+  let r1 = rango.hi.slice(0, 2)
+  let r2 = rango.hf.slice(0, 2)
   r1 = parseInt(r1)
   r2 = parseInt(r2)
 
+  let horas = _.range(r1, r2 + 1);
 
-  console.log(r1);
-  console.log(r2);
+  let u = [];
 
-  let horario = HorasPorDia.findOne({dia: dia, ida: ida, rutaId}).horas
-  let ultimo = horario[0]
-  let u = ultimo.slice(0, 2);
-  u = parseInt(u)
-  //let nuevo_horario = _.range(r1, u + 1)
-  let nuevo_horario = _.range(r1, r2 + 1)
+  let inicio;
 
-  //let index = horario.indexOf(1);
-  //horario.splice(1, 2);
-
-  horario.shift()
-
-
-  if (horario[0].includes(":01")) {
-    if (parseInt(horario.slice(0, 2)) > 9) {
-      horario[0] = parseInt(horario.slice(0, 2)) + ':00';
-    } else {
-      horario[0] = '0' + parseInt(horario.slice(0, 2)) + ':00';
+  if (opcion === true) {
+    if (r1 + 1 > 9) {
+      inicio = r1 + ':00'
+    }  else {
+      inicio = '0' + r1 + ':00'
+    }
+  } else {
+    if (r1 + 1 > 9) {
+      inicio = r1 + ':01'
+    }  else {
+      inicio = '0' + r1 + ':01'
     }
   }
 
 
 
 
-  console.log(horario);
-  console.log(nuevo_horario);
-  let nuevo = [];
-  nuevo_horario.map( h => {
 
-    if (h > 9) {
-      h = h + ':00'
+  horas.map( d => {
+
+    if (d > 9) {
+      u.push(d + ':00')
     } else {
-      h = '0' + h + ':00'
+      u.push( '0' + d + ':00')
     }
-
-    nuevo.push(h)
 
   })
 
+  u.shift()
 
+  u.unshift(inicio)
 
+  let horario = HorasPorDia.findOne({dia: dia, ida: ida, rutaId}).horas
 
+  horario.shift();
 
-  nuevo = _.union(nuevo, horario)
+  let nuevo_horario = []
 
-  console.log('Nuevo: ' + nuevo);
-  return nuevo;
+  nuevo_horario = _.union(u, horario)
+
+  return nuevo_horario
 }
 
 Meteor.methods({
@@ -130,18 +124,30 @@ Meteor.methods({
         }
       })
 
+      CalendarioPlaneamiento.find({dia: validacion.dia}).forEach( c => {
+        CalendarioPlaneamiento.update({_id: c._id}, {
+          $set: {
+            permitir: false
+          }
+        })
+      })
 
-
-      CalendarioPlaneamiento.insert({
+      let calendario = CalendarioPlaneamiento.insert({
         ida: validacion.ida,
+        dia: validacion.dia,
         hora: programacion.hi + ':' + programacion.hf,
         planId: Plan.findOne({ activo: false, dia: validacion.dia, rutaId: validacion.rutaId})._id,
         rutaId: validacion.rutaId,
         title: 'H: ' + programacion.hi + ' - ' + programacion.hf + ' F: ' + programacion.frecuencia,
         start: validacion.dia + 'T' + hi,
         end: validacion.dia + 'T' + hf,
-        editable: false
+        hi: programacion.hi,
+        hf: programacion.hf,
+        editable: false,
+        permitir: true
       })
+
+
     } else {
       let planId = Plan.insert({
         activo: false,
@@ -153,15 +159,28 @@ Meteor.methods({
 
       if (planId) {
 
+
+        CalendarioPlaneamiento.find({dia: validacion.dia}).forEach( c => {
+          CalendarioPlaneamiento.update({_id: c._id}, {
+            $set: {
+              permitir: false
+            }
+          })
+        })
+
         CalendarioPlaneamiento.insert({
           ida: validacion.ida,
+          dia: validacion.dia,
           hora: programacion.hi + ':' + programacion.hf,
           planId: planId,
           rutaId: validacion.rutaId,
           title: 'H: ' + programacion.hi + ' - ' + programacion.hf  + ' F: ' + programacion.frecuencia,
           start: validacion.dia + 'T' + hi,
           end: validacion.dia + 'T' + hf,
-          editable: false
+          hi: programacion.hi,
+          hf: programacion.hf,
+          editable: false,
+          permitir: true
         })
       }
 
@@ -170,28 +189,87 @@ Meteor.methods({
   },
   removePlan2(calendarioId) {
     console.log(calendarioId);
-    let planId = CalendarioPlaneamiento.findOne({_id: calendarioId}).planId
-    let hora = CalendarioPlaneamiento.findOne({_id: calendarioId}).hora;
-    console.log(hora);
-    let id = Plan.find( {_id: planId, programacion: { $elemMatch: { hora: hora} } }).fetch()
-    console.log(id);
-    Plan.update( {_id: planId, programacion: { $elemMatch: { hora: hora} } }, {
-      $pull: {
-        "programacion": { hora: hora }
+
+    if (CalendarioPlaneamiento.findOne({_id: calendarioId}).permitir === true) {
+      let planId = CalendarioPlaneamiento.findOne({_id: calendarioId}).planId
+      let dia = CalendarioPlaneamiento.findOne({_id: calendarioId}).dia;
+      let ida = CalendarioPlaneamiento.findOne({_id: calendarioId}).ida;
+      let rutaId = CalendarioPlaneamiento.findOne({_id: calendarioId}).rutaId;
+      let hora = CalendarioPlaneamiento.findOne({_id: calendarioId}).hora;
+      let hi = CalendarioPlaneamiento.findOne({_id: calendarioId}).hi;
+      let hf = CalendarioPlaneamiento.findOne({_id: calendarioId}).hf;
+      console.log(hora);
+
+      let rango = {
+        hi: hi,
+        hf: hf
       }
-    })
 
-    let plan = Plan.findOne({_id: planId})
+      let nuevoRangoDeHoras = getHorarioNuevo(rango, dia, ida, rutaId, false)
 
-    CalendarioPlaneamiento.remove({_id: calendarioId})
+      HorasPorDia.update({dia: dia, ida: ida, rutaId: rutaId}, {
+        $set: {
+            horas: nuevoRangoDeHoras
+        }
+      });
 
-    let nuevoRangoDeHoras = getHorarioNuevo(hora, plan.dia, plan.ida, plan.rutaId)
+      let id = Plan.find( {_id: planId, programacion: { $elemMatch: { hora: hora} } }).fetch()
+      console.log(id);
+      Plan.update( {_id: planId, programacion: { $elemMatch: { hora: hora} } }, {
+        $pull: {
+          "programacion": { hora: hora }
+        }
+      })
 
-    HorasPorDia.update({dia: plan.dia, ida: plan.ida, rutaId: plan.rutaId}, {
-      $set: {
-        horas: nuevoRangoDeHoras
+      let plan = Plan.findOne({_id: planId})
+
+      CalendarioPlaneamiento.remove({_id: calendarioId})
+
+      let numeroCalendarios = CalendarioPlaneamiento.find({dia: dia}).fetch().length;
+
+      if (numeroCalendarios > 0) {
+        let ultimoCalendario = CalendarioPlaneamiento.find({dia: dia}).fetch()[numeroCalendarios - 1]._id;
+
+        if (ultimoCalendario !== undefined) {
+          CalendarioPlaneamiento.update({_id: ultimoCalendario}, {
+            $set: {
+              permitir: true
+            }
+          })
+        }
+      } else {
+        rango.hi = '00:00';
+        let nuevoRangoDeHoras = getHorarioNuevo(rango, dia, ida, rutaId, true)
+
+        HorasPorDia.update({dia: dia, ida: ida, rutaId: rutaId}, {
+          $set: {
+              horas: nuevoRangoDeHoras,
+              primera: false
+          }
+        });
       }
-    });
+
+
+      return {
+        mensaje: 'Planeamiento Eliminado',
+        eliminado: true
+      }
+    } else {
+      return {
+        mensaje: 'Planeamiento no se puede eliminar',
+        eliminado: false
+      }
+
+    }
+
+
+    // let nuevoRangoDeHoras = getHorarioNuevo(hora, plan.dia, plan.ida, plan.rutaId)
+    //
+    // HorasPorDia.update({dia: plan.dia, ida: plan.ida, rutaId: plan.rutaId}, {
+    //   $set: {
+    //     horas: nuevoRangoDeHoras
+    //   }
+    // });
 
   },
   editarPlanHorario(id, datos) {

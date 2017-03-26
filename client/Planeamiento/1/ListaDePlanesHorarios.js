@@ -16,11 +16,37 @@ Template.ListaDePlanesHorarios.helpers({
 Template.ListaDePlanesHorarios.events({
   'keyup [name="frec"]'() {
     let frecuencia = $('.ph' + this._id).val();
-    Meteor.call('actualizarFrecuencia', frecuencia, this._id, (err) =>  {
-      if (err) {
-        alert(err)
+    if (frecuencia !== "") {
+      frecuencia = parseInt(frecuencia)
+      if (frecuencia > 50) {
+        Bert.alert('Ingrese una frecuencia valida de maximo 50 minutos', 'warning');
+      } else {
+        Meteor.call('actualizarFrecuencia', frecuencia, this._id, (err) =>  {
+          if (err) {
+            alert(err)
+          }
+        })
       }
-    })
+
+    }
+
+  },
+  'change [name="frec"]'() {
+    let frecuencia = $('.ph' + this._id).val();
+    if (frecuencia !== "") {
+      frecuencia = parseInt(frecuencia)
+      if (frecuencia > 50) {
+        Bert.alert('Ingrese una frecuencia valida de maximo 50 minutos', 'warning');
+      } else {
+        Meteor.call('actualizarFrecuencia', frecuencia, this._id, (err) =>  {
+          if (err) {
+            alert(err)
+          }
+        })
+      }
+
+    }
+
   },
   'click [name="remove"]'(e, t) {
 

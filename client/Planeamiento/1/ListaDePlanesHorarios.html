@@ -19,7 +19,11 @@
                       <li class="list-group-item clearfix">
                         <span class="pull-left">Plan Horario <strong>{{this.nombre}}</strong> Frecuencia: {{this.frecuencia}} minutos</span>
                         <span class="pull-right">
-                          <input type="number" placeholder="Frecuencia" name="frec" class="form-control ph{{this._id}}" >
+                          <div class="input-group" style="width: 132px">
+                            <input type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "2" min="0" max="50" name="frec" class="form-control ph{{this._id}}" >
+                            <span class="input-group-addon">minutos</span>
+                          </div>
+                          <!-- <input type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "2" min="0" max="50" placeholder="Frecuencia" name="frec" class="form-control ph{{this._id}}" style="width: 200px"> -->
                         </span>
                       </li>
                     {{/each}}
