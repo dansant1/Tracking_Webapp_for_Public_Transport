@@ -18,7 +18,7 @@ export function time (start, end, interval) {
     }
 
     for (var i = 0; i < t.length - 1; i++) {
-        res.push(t[i] + " - " + t[i + 1]);
+        res.push(t[i] /*+ " - " + t[i + 1]*/);
     }
 
     return res;

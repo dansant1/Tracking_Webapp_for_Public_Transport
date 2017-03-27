@@ -13,17 +13,37 @@
                                 </div>
                                 <div class="row">
                                   <div class="col-md-3">
-                                      <input type="number" style="display: block; margin-bottom: 20px"  class="total_vehicles form-control" placeholder="número de vehículos">
+                                      <input min="2" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  maxlength = "3" type="number" max="{{maximoVehiculos}}" style="display: block; margin-bottom: 20px"  class="total_vehicles form-control" placeholder="número de vehículos">
                                   </div>
-
                                 </div>
                                 <div>
+                                  <ul class="list-group">
                                     {{#each planeamientoHoy}}
-                                        <!-- <p class="header-hora">Hora Inicio: <b>{{hora_inicio}}</b> | Hora Fin:
-                                            <b>{{hora_fin}}</b> |
-                                            Frecuencia: <b>{{ frecuencia }} min</b></p> -->
-                                        <ul class="list-group">
-                                            {{#each horas}}
+
+                                            <li class="list-group-item clearfix">
+                                              <span class="pull-left" style="width: 60%; margin-left: 10px">
+                                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                    {{this}}
+                                              </span>
+                                              <span class="pull-right" style="width: 35%">
+                                                <select class="js-example-basic form-control vehicle">
+
+                                                                <option value="?" selected>Elegir vehículo</option>
+
+                                                                {{#each vehicles}}
+
+                                                                        <option value="{{_id}}">{{placa}} - {{padron}}</option>
+                                                                
+                                                                {{else}}
+                                                                    <option value="0">Cargando...</option>
+                                                                {{/each}}
+                                    						</select>
+                                              </span>
+                                            </li>
+
+
+
+                                            <!-- {{#each horas}}
                                                 <li class="list-group-item clearfix horario planeamiento">
           				  <span class="pull-left" style="width: 75%; margin-left: 10px">
                           <i class="fa fa-clock-o" aria-hidden="true"></i>
@@ -48,13 +68,14 @@
                 					</div>
           				  </span>
                                                 </li>
-                                            {{/each}}
-                                        </ul>
+                                            {{/each}} -->
+
                                     {{else}}
+
                                     <h3>No hay planeamiento registrado para hoy</h3>
 
                                     {{/each}}
-
+                                    </ul>
                                 </div>
                             </div>
                         </div>

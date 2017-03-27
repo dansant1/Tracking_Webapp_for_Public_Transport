@@ -1,5 +1,30 @@
 import { time, hoy } from '../../Utilities/Horas';
 
+function crearProgramacion (rango) {
+
+  let programacion = Plan.find({dia: hoy(), ida: true, rutaId: FlowRouter.getParam('rutaId')}).fetch()[0].programacion
+
+  let rangos = [];
+
+  if (programacion) {
+    programacion.forEach( p => {
+      let rango = time(p.hi, p.hf, p.frecuencia);
+      rangos.push(rango);
+    })
+  }
+
+  let programacion_rangos = [];
+  rangos.map( r => {
+      programacion_rangos = _.union(programacion_rangos, r)
+  })
+
+
+
+  return programacion_rangos.slice(0, rango);
+
+
+}
+
 function addMinutes(time, minsToAdd) {
     function z(n) {
         return (n < 10 ? '0' : '') + n;
@@ -19,54 +44,27 @@ function crearProgramaciones(template) {
     if (template.totalVehicles.get() === null) {
       let empresaId;
       if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
-
-
         empresaId = Rutas.findOne({_id: FlowRouter.getParam('rutaId')}).empresasId;
       } else {
-
         empresaId = Meteor.user().profile.empresaId;
       }
 
-        template.totalVehicles.set(Vehiculos.find({
-                empresaId: empresaId,
-                sancionActiva: {$not: true}
-            }).count() / 2);
+      template.totalVehicles.set(Vehiculos.find({
+        empresaId: empresaId,
+        sancionActiva: {$not: true}
+      }).count() / 2);
 
     }
 
-    let fecha = new Date();
-    let hoyEs = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"][fecha.getDay()];
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
 
-    var yyyy = today.getFullYear();
-    if(dd<10){
-        dd='0'+dd;
-    }
-    if(mm<10){
-        mm='0'+mm;
-    }
-    var today = yyyy+'-'+mm+'-'+dd;
-    let plan_dia = Plan.findOne({dia: today, ida: true, rutaId: FlowRouter.getParam('rutaId')});
+    let plan_dia = Plan.findOne({dia: hoy(), ida: true, rutaId: FlowRouter.getParam('rutaId')});
+    let plan_rangos;
+    let programacion_rangos = [];
+    let index = 0;
 
     if (plan_dia) {
 
-
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth()+1;
-
-        var yyyy = today.getFullYear();
-        if(dd<10){
-            dd='0'+dd;
-        }
-        if(mm<10){
-            mm='0'+mm;
-        }
-        var today = yyyy+'-'+mm+'-'+dd;
-
-        let plan_rangos = Plan.find({dia: today, ida: true, rutaId: FlowRouter.getParam('rutaId')}).fetch()[0].programacion.map( p => {
+        plan_rangos = plan_dia.programacion.map( p => {
             return {
               hora_inicio: p.hi,
               hora_fin: p.hf,
@@ -75,19 +73,17 @@ function crearProgramaciones(template) {
         })
 
         console.log('Rangos: ', plan_rangos);
+        let i = 0;
 
-        let programacion_rangos = [];
+        for (i in plan_rangos) {
 
-        let index = 0;
-
-        for (let i in plan_rangos) {
-            console.log('I: ', i);
             let r = plan_rangos[i];
+            console.log(r);
             let hora = r.hora_inicio;
             let minutosAlInicio = converToMinutes(r.hora_inicio);
             let minutosAlFinal = converToMinutes(r.hora_fin);
             let minutos = minutosAlInicio;
-            console.log('Minutos: ', minutos);
+
             let group = {
                 hora_inicio: r.hora_inicio,
                 hora_fin: r.hora_fin,
@@ -95,24 +91,25 @@ function crearProgramaciones(template) {
                 horas: []
             };
 
+            console.log('primero grupo: ', group.horas);
+
             group.horas.push({
                 time: hora,
                 vehicleId: null,
                 vehicles: []
             });
+
             index++;
 
-            console.log('Horas: ', group.horas);
-            console.log('minutos mas frecuencia: ', r.frecuencia);
-            console.log('minutosAlFinal:', minutosAlFinal);
+
             let suma = minutos + parseInt(r.frecuencia)
+
             suma = parseInt(suma)
+
             minutosAlFinal = parseInt(minutosAlFinal)
-            if (suma <= minutosAlFinal) {
-              console.log('cumplopop');
-            }
+
             while (suma <= minutosAlFinal) {
-                console.log('cumple');
+
                 if (index >= template.totalVehicles.get()) {
                     break;
                 }
@@ -124,64 +121,61 @@ function crearProgramaciones(template) {
                 });
                 index++;
                 minutos += r.frecuencia;
-                console.log('Horas reales: ', group.horas);
+                //console.log('Horas reales: ', group.horas);
             }
 
             programacion_rangos.push(group);
 
             if (index >= template.totalVehicles.get()) {
+                console.log('BREAK');
                 break;
             }
         }
 
         template.planeamientoHoy.set(programacion_rangos);
+
     } else {
+
         template.planeamientoHoy.set(null);
+
     }
 }
 
-function crearProgramacion () {
 
-  let programacion = Plan.find({dia: hoy(), ida: true, rutaId: FlowRouter.getParam('rutaId')}).fetch()[0].programacion
-
-  let rangos = [];
-
-  programacion.forEach( p => {
-    let rango = time(p.hi, p.hf, p.frecuencia);
-    rangos.push(rango);
-  })
-
-  return rangos
-
-}
 
 Template.NuevoPlaneamientoDelDia.onCreated(() => {
     let template = Template.instance();
 
     template.planeamientoHoy = new ReactiveVar([]);
     template.totalVehicles = new ReactiveVar(null);
-    let empresaId
+    template.programacion = new ReactiveVar();
+    template.cantidadVehiculos = new ReactiveVar(2);
+    template.empresaId = new ReactiveVar();
     template.autorun(() => {
           template.subscribe('rutas', () => {
 
           if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
 
-            empresaId = Rutas.findOne({_id: FlowRouter.getParam('rutaId')}).empresasId;
+            template.empresaId.set(Rutas.findOne({_id: FlowRouter.getParam('rutaId')}).empresasId);
           } else {
 
-            empresaId = Meteor.user().profile.empresaId;
+            template.empresaId.set(Meteor.user().profile.empresaId)
           }
         })
 
 
         // template.subscribe('DetalleDeEmpresaPlaneamiento', empresaId);
         template.subscribe('VehiculosEmpresa', () => {
-            //template.subscribe('planes', true, function () {
-                template.subscribe('ProgramacionHoy', true, function () {
-                    console.log('Programacion: ', crearProgramacion());
-                    crearProgramaciones(template);
-                });
-            //});
+
+          template.subscribe('ProgramacionHoy', true, function () {
+            let cantidad = Vehiculos.find({
+              empresaId: template.empresaId.get(),
+              sancionActiva: {$not: true}
+            }).count() / template.cantidadVehiculos.get();
+            let programacion = crearProgramacion(cantidad)
+            template.programacion.set(programacion)
+          });
+
         });
     })
 });
@@ -206,18 +200,66 @@ Template.NuevoPlaneamientoDelDia.onRendered(() => {
 
 
 Template.NuevoPlaneamientoDelDia.helpers({
-    planeamientoHoy(){
-        return Template.instance().planeamientoHoy.get();
+    planeamientoHoy() {
+
+        let programacion = Template.instance().programacion.get();
+        if (programacion) {
+          return programacion
+        }
+
+
     },
     matchVehicle(vehicleId, _id){
         return vehicleId === _id;
+    },
+    vehicles() {
+      return Vehiculos.find({
+        empresaId: Template.instance().empresaId.get(),
+        sancionActiva: {$not: true}})
+    },
+    maximoVehiculos() {
+      let cantidad = Vehiculos.find({
+        empresaId: Template.instance().empresaId.get(),
+        sancionActiva: {$not: true}
+      }).count() / Template.instance().cantidadVehiculos.get();
+
+      if (cantidad) {
+        return cantidad;
+      }
     }
 });
 
 Template.NuevoPlaneamientoDelDia.events({
     'change .total_vehicles'(e, t){
-        Template.instance().totalVehicles.set(parseInt(e.target.value));
-        crearProgramaciones(Template.instance());
+
+        if (e.target.value > 0) {
+          t.cantidadVehiculos.set(parseInt(e.target.value));
+          let programacion = crearProgramacion(t.cantidadVehiculos.get())
+          t.programacion.set(programacion)
+        } else {
+          let cantidad = Vehiculos.find({
+            empresaId: Template.instance().empresaId.get(),
+            sancionActiva: {$not: true}
+          }).count() / 2;
+          let programacion = crearProgramacion(cantidad)
+          t.programacion.set(programacion)
+        }
+
+    },
+    'keyup .total_vehicles'(e, t){
+
+        if (e.target.value > 0) {
+          t.cantidadVehiculos.set(parseInt(e.target.value));
+          let programacion = crearProgramacion(t.cantidadVehiculos.get())
+          t.programacion.set(programacion)
+        } else {
+          let cantidad = Vehiculos.find({
+            empresaId: Template.instance().empresaId.get(),
+            sancionActiva: {$not: true}
+          }).count() / 2;
+          let programacion = crearProgramacion(cantidad)
+          t.programacion.set(programacion)
+        }
     },
     'click .vehicle'(e, t){
         let planeamientoHoy = Template.instance().planeamientoHoy.get();
@@ -267,21 +309,14 @@ Template.NuevoPlaneamientoDelDia.events({
         Template.instance().planeamientoHoy.set(planeamientoHoy)
     },
     'click .guardar'(e, t) {
-        let planeamientoHoy = Template.instance().planeamientoHoy.get();
 
-        if (planeamientoHoy.some(r=>r.horas.some(h=>h.vehicleId === null))) {
+        let planeamientoHoy = Template.instance().programacion.get();
+        let programaciones = [];
+
+        if (planeamientoHoy.some(r => r.horas.some( h => h.vehicleId === null ) ) ) {
             Bert.alert('Todas las horas deben tener asignadas un vehículo', 'danger');
             return;
         }
-        let hoy = new Date();
-        let dd = hoy.getDate();
-        var mm = hoy.getMonth() + 1;
-        let yyyy = hoy.getFullYear();
-        dd = (dd < 10 ? '0' : '') + dd;
-        mm = (mm < 10 ? '0' : '') + mm;
-        var today = dd + '/' + mm + '/' + yyyy;
-
-        let programaciones = [];
 
         planeamientoHoy = planeamientoHoy.forEach(r=> {
             return r.horas.forEach(h=> {
@@ -292,20 +327,12 @@ Template.NuevoPlaneamientoDelDia.events({
                 });
             });
         });
-        let empresaId;
-        if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
-          console.log(empresaId);
-          empresaId = Rutas.findOne({_id: FlowRouter.getParam('rutaId')}).empresasId;
-        } else {
-          console.log('holaaa');
-          empresaId = Meteor.user().profile.empresaId;
-        }
 
         let data = {
-            empresaId: empresaId,
+            empresaId: t.empresaId.get(),
             rutaId: FlowRouter.getParam('rutaId'),
             createdAt: new Date(),
-            dia: today,
+            dia: hoy(),
             ida: true,
             programacion: programaciones
         };
