@@ -45,7 +45,7 @@ Meteor.startup(() => {
     //         		case 'director@tpi.com.pe':
     //    			Roles.addUsersToRoles(id, user.roles, ROLES.grupos.empresa);
     //     		break;
-     //
+     // 
     //     		case 'operador@tpi.com.pe':
     //     			Roles.addUsersToRoles(id, user.roles, ROLES.grupos.empresa);
     //     		break;

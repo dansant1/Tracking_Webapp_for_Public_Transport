@@ -94,7 +94,6 @@ FlowRouter.route('/despacho/d/:rutaId', {
 FlowRouter.route('/planeamiento/:rutaId/nuevo', {
     name: 'Planeamiento.Nuevo',
     action() {
-        console.log('holas');
         BlazeLayout.render('LayoutCliente', {cliente: 'NuevoPlaneamientoDelDia', administrador: 'NuevoPlaneamientoDelDia'});
     }
 });
@@ -120,7 +119,6 @@ FlowRouter.route('/planeamiento/:rutaId/nuevo/ida', {
 FlowRouter.route('/rutas', {
     name: 'Rutas',
     action() {
-        console.log('haa');
         BlazeLayout.render('LayoutCliente', {cliente: 'Rutas'});
     }
 });

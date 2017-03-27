@@ -1,4 +1,6 @@
-function addMinutes(time/*"hh:mm"*/, minsToAdd/*"N"*/) {
+import { time, hoy } from '../../Utilities/Horas';
+
+function addMinutes(time, minsToAdd) {
     function z(n) {
         return (n < 10 ? '0' : '') + n;
     }
@@ -138,6 +140,20 @@ function crearProgramaciones(template) {
     }
 }
 
+function crearProgramacion () {
+
+  let programacion = Plan.find({dia: hoy(), ida: true, rutaId: FlowRouter.getParam('rutaId')}).fetch()[0].programacion
+
+  let rangos = [];
+
+  programacion.forEach( p => {
+    let rango = time(p.hi, p.hf, p.frecuencia);
+    rangos.push(rango);
+  })
+
+  return rangos
+
+}
 
 Template.NuevoPlaneamientoDelDia.onCreated(() => {
     let template = Template.instance();
@@ -162,6 +178,7 @@ Template.NuevoPlaneamientoDelDia.onCreated(() => {
         template.subscribe('VehiculosEmpresa', () => {
             //template.subscribe('planes', true, function () {
                 template.subscribe('ProgramacionHoy', true, function () {
+                    console.log('Programacion: ', crearProgramacion());
                     crearProgramaciones(template);
                 });
             //});
