@@ -47,6 +47,39 @@ function formarJSON(date) {
 }
 
 Meteor.methods({
+  seleccionarVehiculo(vehiculoId) {
+    if (Vehiculos.findOne({_id: vehiculoId}).seleccionado === true ) {
+      return {
+        mensaje: 'Vehiculo no Disponible',
+        disponible: false
+      }
+    } else {
+      Vehiculos.update({_id: vehiculoId}, {
+        $set: {
+          seleccionado: true,
+          guardado: false
+        }
+      })
+
+      return {
+        mensaje: '',
+        disponible: true
+      }
+    }
+
+
+  },
+  vehiculosNoGuardado(empresaId) {
+    console.log(empresaId);
+    Vehiculos.find({empresaId: empresaId, guardado: false}).forEach(v => {
+      Vehiculos.update({_id: v._id}, {
+        $set: {
+          seleccionado: false
+        }
+      })
+    })
+
+  },
   agregarLista(nombre) {
     if (this.userId) {
       Listas.insert({

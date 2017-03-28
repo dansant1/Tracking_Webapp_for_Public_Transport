@@ -27,17 +27,17 @@
             <h3>Lista de Vehiculos a Despachar de Hoy</h3>
             <br>
             <ul>
-                {{#each ProgramacionVehiculo.programacion }}
-                    {{#unless despachado}}
+                {{#each programacion }}
+
                         <li class="list-group-item clearfix horario planeamiento">
                             <div class="pull-left" style="width: 75%; margin-left: 10px">
                                 <i class="fa fa-clock-o" aria-hidden="true"></i>
                                 <span class="time hour">{{hora}}</span>
 
-                                {{#let v=(vehiculo vehiculoId ) }}
-                                    <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{v.placa}}
-                                        - Padron {{v.padron}}</span>
-                                {{/let}}
+
+                                    <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{placa}}
+                                        - Padron {{padron}}</span>
+
                             </div>
                             <div class="pull-right">
 
@@ -46,17 +46,15 @@
                                 </button>
                             </div>
                         </li>
-                    {{/unless}}
+
                 {{/each}}
             </ul>
         </div>
         <div id="menu1" class="tab-pane fade">
-            <h3>Vehiculos Programados de Hoy</h3>
+            <h3>Vehiculos Despachados</h3>
             <br><br>
-            {{#each ProgramacionVehiculo.programacion }}
-              {{#unless despachado}}
+            {{#each despachados }}
 
-                {{else}}
                 <li class="list-group-item clearfix horario planeamiento">
           <span class="pull-left" style="width: 75%; margin-left: 10px">
                 <i class="fa fa-clock-o" aria-hidden="true"></i>
@@ -73,8 +71,6 @@
                     <span class="pull-right">
                     </span>
                 </li>
-                {{/unless}}
-
 
             {{/each}}
         </div>
@@ -114,11 +110,7 @@
 
                     <span class="pull-right">
             <div class="form-group" style="display: inline-block; margin-left: 10px">
-              <!-- {{#if this.ida}}
-              <span style="display: inline-block; margin-left: 0px; color: blue">IDA</span>
-              {{else}}
-              <span style="display: inline-block; margin-left: 0px; color: red">VUELTA</span>
-              {{/if}} -->
+            
             </div>
           </span>
                 </li>
@@ -244,7 +236,7 @@
                             <br>
                             <ul>
                                 {{#each checklist}}
-                                  
+
                                   {{#each requisitos this._id}}
                                       <li class="list-group-item clearfix reqs">
                                           <input type="checkbox" id="req{{this._id}}" class="requisito">

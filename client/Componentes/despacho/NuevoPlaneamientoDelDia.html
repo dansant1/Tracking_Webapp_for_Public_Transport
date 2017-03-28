@@ -7,7 +7,7 @@
                         <div class="col-md-12 col-sm-18 col-xs-18">
                             <div class="box">
                                 <div class="page-header clearfix" style="margin-top: 0">
-                                    <h4 class="pull-left">Nueva Programación de Hoy</h4>
+                                    <h4 class="pull-left">Nueva Programación de Hoy de Ida</h4>
                                     <br><br>
                                     <button type="button" class="btn btn-success guardar">Guardar</button>
                                 </div>
@@ -20,56 +20,26 @@
                                   <ul class="list-group">
                                     {{#each planeamientoHoy}}
 
-                                            <li class="list-group-item clearfix">
+                                            <li class="list-group-item clearfix" id="programaciones">
                                               <span class="pull-left" style="width: 60%; margin-left: 10px">
                                                     <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                    {{this}}
+                                                    <a id="h" style="color: black">{{this}}</a>
                                               </span>
                                               <span class="pull-right" style="width: 35%">
-                                                <select class="js-example-basic form-control vehicle">
+                                                <select id="v" class="js-example-basic form-control vehicle">
 
                                                                 <option value="?" selected>Elegir vehículo</option>
 
                                                                 {{#each vehicles}}
 
-                                                                        <option value="{{_id}}">{{placa}} - {{padron}}</option>
-                                                                
+                                                                        <option value="{{this._id}}">{{placa}} - {{padron}}</option>
+
                                                                 {{else}}
                                                                     <option value="0">Cargando...</option>
                                                                 {{/each}}
                                     						</select>
                                               </span>
                                             </li>
-
-
-
-                                            <!-- {{#each horas}}
-                                                <li class="list-group-item clearfix horario planeamiento">
-          				  <span class="pull-left" style="width: 75%; margin-left: 10px">
-                          <i class="fa fa-clock-o" aria-hidden="true"></i>
-                          <span class="time hour">{{time}}</span>
-                					<div class="form-group" style="display: inline-block; margin-left: 20px">
-                						<select class="js-example-basic form-control vehicle">
-                                            {{#if vehicleId}}
-                                                <option value="?">Elegir vehículo</option>
-                                            {{else}}
-                                                <option value="?" selected>Elegir vehículo</option>
-                                            {{/if}}
-                                            {{#each vehicles}}
-                                                {{#if matchVehicle ../vehicleId _id}}
-                                                    <option value="{{_id}}" selected>{{placa}} - {{padron}}</option>
-                                                {{else}}
-                                                    <option value="{{_id}}">{{placa}} - {{padron}}</option>
-                                                {{/if}}
-                                            {{else}}
-                                                <option value="0">Cargando...</option>
-                                            {{/each}}
-                						</select>
-                					</div>
-          				  </span>
-                                                </li>
-                                            {{/each}} -->
-
                                     {{else}}
 
                                     <h3>No hay planeamiento registrado para hoy</h3>

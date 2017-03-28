@@ -1,80 +1,77 @@
+import { time, hoy } from '../../Utilities/Horas';
+
 Template.VistaDespacho.onCreated(() => {
     let template = Template.instance();
 
-    template.autorun(() => {
-        let hoy = new Date();
-        let dd = hoy.getDate();
-        var mm = hoy.getMonth() + 1;
-        let yyyy = hoy.getFullYear();
-        dd = (dd < 10 ? '0' : '') + dd;
-        mm = (mm < 10 ? '0' : '') + mm;
-        var today = dd + '/' + mm + '/' + yyyy;
-        let empresaId = Meteor.user().profile.empresaId;
-        let rutaId = FlowRouter.getParam('rutaId');
-        if (empresaId === undefined) {
-          Meteor.call('obtenerEmpresaId', rutaId, (err, result) => {
+    template.autorun( () => {
+        template.empresaId = new ReactiveVar();
+        template.empresaId.set(Meteor.user().profile.empresaId);
+        template.rutaId = new ReactiveVar();
+        template.rutaId.set(FlowRouter.getParam('rutaId'))
+        if (template.empresaId.get() === undefined) {
+          Meteor.call('obtenerEmpresaId', template.rutaId.get(), (err, result) => {
             if (err) {
-              alert(err)
+              console.log(err)
             } else {
-              console.log('empresaid: ' ,result);
-              empresaId = result;
-              template.subscribe('VehiculosEmpresaId', empresaId, () => {
-                console.log(Vehiculos.find().fetch());
-              });
+              template.empresaId.set(result);
+              template.subscribe('VehiculosEmpresaId', template.empresaId.get());
             }
           })
         } else {
-          template.subscribe('VehiculosEmpresaId', empresaId, () => {
-            console.log(Vehiculos.find().fetch());
-          });
+          template.subscribe('VehiculosEmpresaId', template.empresaId.get());
         }
 
-        template.unidadesProgramadas = new ReactiveVar([]);
 
-        template.programacionList = new ReactiveVar(null);
-        template.programacionListDespachados = new ReactiveVar(null);
+        template.ida = new ReactiveVar();
 
-        let ida;
         if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
-            ida = true
+            template.ida.set(true)
         } else {
 
             if (Meteor.user().profile.ida === undefined) {
-              ida = Session.get('Ida')
+              template.ida.set(Session.get('Ida'))
+
             } else {
-              ida = Meteor.user().profile.ida;
+              template.ida.set(Meteor.user().profile.ida)
+
             }
 
         }
 
-        template.subscribe('ProgramacionVehiculoRutaDiaIda', rutaId, today, ida, ()=> {
-            template.programacionList.set(ProgramacionVehiculo.findOne());
-            template.programacionListDespachados.set(ProgramacionVehiculo.findOne({ida: ida , 'programacion.$.despachado': true}));
-        });
+        template.subscribe('ProgramacionVehiculoRutaDiaIda', template.rutaId.get(), hoy(), template.ida.get());
 
     })
 
-    Tracker.autorun( () => {
-      ProgramacionVehiculo.find()
-      Template.instance().programacionList.get();
-    });
 })
 
 Template.VistaDespacho.helpers({
-    ProgramacionVehiculo() {
-        return Template.instance().programacionList.get();
+    programacion() {
+      let ida = Template.instance().ida.get()
+      let rutaId = Template.instance().rutaId.get()
+      console.log(ida);
+      console.log(rutaId);
+      console.log(hoy());
+      let programacion = ProgramacionVehiculo.find({}).fetch()
+      console.log(programacion);
+      return programacion[0].programacion.filter( (p) => {
+        return p.despachado == false;
+      })
     },
     despacho() {
-        let ida;
-        if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
-            ida = true
-        } else {
-            ida = Meteor.user().profile.ida;
-        }
-        return ProgramacionVehiculo.find({ida: ida, 'programacion.$.despachado': false}).fetch()[0].programacion;
+
+        //return ProgramacionVehiculo.find({ida: ida, 'programacion.$.despachado': false}).fetch()[0].programacion;
     },
     despachados() {
-      return Template.instance().programacionListDespachados.get();
+      let ida = Template.instance().ida.get()
+      let rutaId = Template.instance().rutaId.get()
+      console.log(ida);
+      console.log(rutaId);
+      console.log(hoy());
+      let programacion = ProgramacionVehiculo.find({}).fetch()
+      console.log(programacion);
+      return programacion[0].programacion.filter( (p) => {
+        return p.despachado == true;
+      })
     },
     despachocola() {
         return Vehiculos.find({espera: true});
@@ -98,20 +95,8 @@ Template.VistaDespacho.helpers({
 
 Template.VistaDespacho.events({
     'click .despachar'(e, t) {
-        let programacionList = Template.instance().programacionList.get();
-        let p = programacionList.programacion.find(p=>p.hora == this.hora);
-        p.despachado = true;
 
-        let ida;
-        if (Roles.userIsInRole(Meteor.userId(), ['director'], 'Empresa')) {
-            ida = Session.get('Ida');
-        } else if (Roles.userIsInRole(Meteor.userId(), ['gerente'], 'Administracion')) {
-            ida = Session.get('Ida');
-        } else {
-            ida = Meteor.user().profile.ida;
-        }
-
-        console.log(ida);
+        let ida = t.ida.get()
 
         console.log('ID: ', ProgramacionVehiculo.findOne({ida: ida})._id);
         Session.set('RegistroDeVehiculoADespachar', ProgramacionVehiculo.findOne({ida: ida})._id);

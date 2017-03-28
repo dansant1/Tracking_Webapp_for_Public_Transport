@@ -42,3 +42,18 @@ export function hoy () {
 
   return yyyy + '-' + mm + '-' + dd;
 }
+
+export function addMinutes(time, minsToAdd) {
+    function z(n) {
+        return (n < 10 ? '0' : '') + n;
+    }
+
+    let bits = time.split(':');
+    let mins = bits[0] * 60 + (+bits[1]) + (+minsToAdd);
+
+    return z(mins % (24 * 60) / 60 | 0) + ':' + z(mins % 60);
+}
+
+export function converToMinutes(time) {
+    return parseInt(time.split(":")[0]) * 60 + parseInt(time.split(":")[1]);
+}
