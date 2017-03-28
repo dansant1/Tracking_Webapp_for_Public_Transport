@@ -47,6 +47,14 @@ function formarJSON(date) {
 }
 
 Meteor.methods({
+  crearGrupoHorario(nombre, fecha, ida) {
+    GruposHorarios.insert({
+      nombre: nombre,
+      fecha: fecha,
+      ida: ida,
+      createdAt: new Date()
+    })
+  },
   seleccionarVehiculo(vehiculoId) {
     if (Vehiculos.findOne({_id: vehiculoId}).seleccionado === true ) {
       return {

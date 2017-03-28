@@ -40,3 +40,5 @@ CalendarioPlaneamiento.deny({
 	update: () => { return true },
 	remove: () => { return true }
 });
+
+GruposHorarios = new Mongo.Collection('grupos_horarios');

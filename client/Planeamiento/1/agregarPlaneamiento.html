@@ -1,15 +1,16 @@
 <template name="agregarPlaneamientoIda">
     <br>
     <div class="row">
-      <div class="col-md-3">
-        <select class="form-control" id="ruta">
+      <div class="col-md-8">
+        <select class="form-control" id="ruta" style="display: inline-block; width: 180px">
           <option value="0">--Selecciona una Ruta--</option>
           {{#each rutas}}
           <option value="{{this._id}}">{{this.nombre}}</option>
           {{/each}}
         </select>
+        <button type="button" name="crear_grupo" class="btn btn-success">Crear Grupo</button>
+        <button type="button" name="asignar_grupo" class="btn btn-primary">Asignar Grupo</button>
       </div>
-
     </div>
     <br>
     <div class="row">
@@ -19,6 +20,37 @@
 
     </div>
 
+</template>
+
+<template name="CrearGrupo">
+  <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Crear Grupo de Planeamiento</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                      <input type="text" name="nombre" style="width: 200px;" placeholder="Nombre de Grupo" class="form-control">
+                      <br>
+                      <div class="input-group datetimepicker">
+                          <span  class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                          <input class="set-due-date form-control" name="fecha" style="width: 100px" type="text"/>
+                      </div>
+                      <br>
+                      <button type="button" class="btn btn-success" name="crear_grupo">Crear Grupo</button>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </template>
 
 <template name="ConfigurarPlaneamiento">

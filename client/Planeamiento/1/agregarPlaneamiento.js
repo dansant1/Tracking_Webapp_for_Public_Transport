@@ -25,12 +25,26 @@ Template.agregarPlaneamientoIda.onCreated( () => {
 
 })
 
+Template.agregarPlaneamientoIda.events({
+  'click [name="crear_grupo"]'(e, t) {
+
+    if (t.rutaId.get() !== undefined) {
+      Modal.show('CrearGrupo')
+    } else {
+      Bert.alert('Seleccione una Ruta', 'warning')
+    }
+
+  }
+})
+
 Template.agregarPlaneamientoIda.onRendered( () => {
   let template = Template.instance();
   template.rutaId = new ReactiveVar(undefined)
   $( "#ruta" ).change(function(e) {
     template.rutaId.set($(this).val())
   });
+
+
 
   var today = new Date();
   var dd = today.getDate();
@@ -405,5 +419,32 @@ Template.ConfigurarPlaneamientoVuelta.events({
       Bert.alert('Complete los datos')
     }
 
+  }
+})
+
+Template.CrearGrupo.onRendered( () => {
+  let template = Template.instance()
+  template.$('.datetimepicker').datetimepicker();
+})
+
+Template.CrearGrupo.events({
+  'click [name="crear_grupo"]'(e, t) {
+    let datos = {
+      nombre: t.find('[name="nombre"]').value,
+      fecha:  t.find('[name="fecha"]').value,
+      ida: true
+    }
+
+    if (datos.nombre !== "" && datos.fecha !== "") {
+      Meteor.call('crearGrupoHorario', datos.nombre, datos.fecha, datos.ida, (err) => {
+        if (err) {
+          Bert.alert(err, 'Danger')
+        } else {
+          Bert.alert('Grupo Horario Agregado', 'success')
+        }
+      })
+    } else {
+      Bert.alert('Complete los datos', 'warning')
+    }
   }
 })
