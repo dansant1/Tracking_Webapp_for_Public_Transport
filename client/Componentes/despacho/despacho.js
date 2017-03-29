@@ -45,6 +45,12 @@ Template.VistaDespacho.onCreated(() => {
 })
 
 Template.VistaDespacho.helpers({
+    cero() {
+      let ida = Template.instance().ida.get()
+      let cero = ProgramacionVehiculo.find({ida: ida}).fetch()[0].cero
+
+      return cero;
+    },
     programacion() {
       let ida = Template.instance().ida.get()
       let rutaId = Template.instance().rutaId.get()
@@ -67,7 +73,7 @@ Template.VistaDespacho.helpers({
       console.log(ida);
       console.log(rutaId);
       console.log(hoy());
-      let programacion = ProgramacionVehiculo.find({}).fetch()
+      let programacion = ProgramacionVehiculo.find({ida: ida}).fetch()
       console.log(programacion);
       return programacion[0].programacion.filter( (p) => {
         return p.despachado == true;
@@ -94,6 +100,32 @@ Template.VistaDespacho.helpers({
 })
 
 Template.VistaDespacho.events({
+    'click .activar_cero'(e, t) {
+      let ida = t.ida.get()
+
+      console.log('ID: ', ProgramacionVehiculo.findOne({ida: ida})._id);
+      let programacionId = ProgramacionVehiculo.findOne({ida: ida})._id
+      Meteor.call('toggleCero', programacionId, true, (err) => {
+        if (err) {
+          Bert.alert(err, 'danger')
+        } else {
+          Bert.alert('Modo Cero Activado', 'success')
+        }
+      })
+    },
+    'click .desactivar_cero'(e, t) {
+      let ida = t.ida.get()
+
+      console.log('ID: ', ProgramacionVehiculo.findOne({ida: ida})._id);
+      let programacionId = ProgramacionVehiculo.findOne({ida: ida})._id
+      Meteor.call('toggleCero', programacionId, false, (err) => {
+        if (err) {
+          Bert.alert(err, 'danger')
+        } else {
+          Bert.alert('Modo Cero Desactivado', 'success')
+        }
+      })
+    },
     'click .despachar'(e, t) {
 
         let ida = t.ida.get()

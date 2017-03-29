@@ -21,6 +21,7 @@ Template.agregarPlaneamientoIda.onCreated( () => {
     template.subscribe('PlanesHorarios')
     template.subscribe('rutas')
     template.subscribe('calendario')
+    template.subscribe('GruposHorarios', true);
   })
 
 })
@@ -29,6 +30,7 @@ Template.agregarPlaneamientoIda.events({
   'click [name="crear_grupo"]'(e, t) {
 
     if (t.rutaId.get() !== undefined) {
+      Session.set('asignar_ida', true)
       Modal.show('CrearGrupo')
     } else {
       Bert.alert('Seleccione una Ruta', 'warning')
@@ -45,12 +47,30 @@ Template.agregarPlaneamientoIda.events({
   }
 })
 
-Template.ImportarGrupo.onCreated( () => {
-  let template = Template.instance()
+Template.agregarPlaneamientoVuelta.events({
+  'click [name="crear_grupo"]'(e, t) {
 
-  template.autorun( () => {
-    template.subscribe('GruposHorarios');
-  })
+    if (t.rutaId.get() !== undefined) {
+      Session.set('asignar_ida', false)
+
+      Modal.show('CrearGrupo')
+    } else {
+      Bert.alert('Seleccione una Ruta', 'warning')
+    }
+
+  },
+  'click [name="asignar_grupo"]'(e, t) {
+    if (t.rutaId.get() !== undefined) {
+      Session.set('asignar_ruta', t.rutaId.get())
+      Modal.show('ImportarGrupo')
+    } else {
+      Bert.alert('Seleccione una Ruta', 'warning')
+    }
+  }
+})
+
+
+Template.ImportarGrupo.onCreated( () => {
 
 })
 
@@ -60,10 +80,10 @@ Template.ImportarGrupo.events({
     let fecha = process(t.find('[name="fecha"]').value.slice(0, 10))
     let rutaId = Session.get('asignar_ruta')
     if (grupoId !== "" && fecha !== "") {
-      
+
       Meteor.call('importarGrupoHorario', grupoId, rutaId, fecha, (err) => {
         if (err) {
-          Bert.alert('Hubo un error', 'danger')
+          Bert.alert(err, 'danger')
         } else {
           Modal.hide('ImportarGrupo')
           Bert.alert('Grupo Horario de Planeamiento Asignado', 'success')
@@ -199,6 +219,7 @@ Template.agregarPlaneamientoVuelta.onCreated( () => {
     template.subscribe('PlanesHorarios')
     template.subscribe('rutas')
     template.subscribe('calendario')
+    template.subscribe('GruposHorarios', false);
   })
 
 })
@@ -498,7 +519,7 @@ Template.CrearGrupo.events({
     let datos = {
       nombre: t.find('[name="nombre"]').value,
       fecha:  process(t.find('[name="fecha"]').value.slice(0, 10)),
-      ida: true
+      ida: Session.get('asignar_ida')
     }
 
     if (datos.nombre !== "" && datos.fecha !== "") {

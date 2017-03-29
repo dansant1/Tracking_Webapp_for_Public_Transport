@@ -117,8 +117,8 @@ Meteor.methods({
 
     }
 
-    if (Plan.find({ activo: false, dia: validacion.dia, rutaId: validacion.rutaId}).fetch().length > 0) {
-      Plan.update({ activo: false, dia: validacion.dia, rutaId: validacion.rutaId}, {
+    if (Plan.find({ activo: false, dia: validacion.dia, ida: validacion.ida, rutaId: validacion.rutaId}).fetch().length > 0) {
+      Plan.update({ activo: false, dia: validacion.dia, ida: validacion.ida, rutaId: validacion.rutaId}, {
         $push: {
           programacion: programacion
         }
@@ -149,6 +149,7 @@ Meteor.methods({
 
 
     } else {
+      console.log(validacion.ida);
       let planId = Plan.insert({
         activo: false,
         rutaId: validacion.rutaId,

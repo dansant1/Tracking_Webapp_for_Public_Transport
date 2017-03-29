@@ -200,13 +200,15 @@
 <template name="agregarPlaneamientoVuelta">
   <br>
   <div class="row">
-    <div class="col-md-3">
-      <select class="form-control" id="ruta2">
+    <div class="col-md-8">
+      <select class="form-control" id="ruta2" style="display: inline-block; width: 180px">
         <option value="0">--Selecciona una Ruta--</option>
         {{#each rutas}}
         <option value="{{this._id}}">{{this.nombre}}</option>
         {{/each}}
       </select>
+      <button type="button" name="crear_grupo" class="btn btn-success">Crear Grupo</button>
+      <button type="button" name="asignar_grupo" class="btn btn-primary">Asignar Grupo</button>
     </div>
 
   </div>

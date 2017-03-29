@@ -13,6 +13,19 @@
         </div>
 
     {{/if}}
+    {{#if isInRole 'gerente' 'Administracion'}}
+        <div class="row">
+            <div class="col-md-4">
+              {{#if cero}}
+                <button type="button" class="btn btn-danger desactivar_cero" name="button">Desactivar Plan Cero</button>
+
+              {{else}}
+                <button type="button" class="btn btn-success activar_cero" name="button">Activar Plan Cero</button>
+              {{/if}}
+            </div>
+        </div>
+
+    {{/if}}
 
     <br><br>
     <ul class="nav nav-tabs">
@@ -31,9 +44,11 @@
 
                         <li class="list-group-item clearfix horario planeamiento">
                             <div class="pull-left" style="width: 75%; margin-left: 10px">
+                              {{#if cero}}
+                              {{else}}
                                 <i class="fa fa-clock-o" aria-hidden="true"></i>
                                 <span class="time hour">{{hora}}</span>
-
+                              {{/if}}
 
                                     <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{placa}}
                                         - Padron {{padron}}</span>
@@ -110,7 +125,7 @@
 
                     <span class="pull-right">
             <div class="form-group" style="display: inline-block; margin-left: 10px">
-            
+
             </div>
           </span>
                 </li>

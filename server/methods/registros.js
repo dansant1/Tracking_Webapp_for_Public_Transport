@@ -104,6 +104,13 @@ function formarJSON(date) {
 }
 
 Meteor.methods({
+  toggleCero(programacionId, cero) {
+    ProgramacionVehiculo.update({_id: programacionId}, {
+      $set: {
+        cero: cero
+      }
+    })
+  },
   crearGrupoHorario(nombre, fecha, ida) {
     let grupoHorarioId = GruposHorarios.insert({
       nombre: nombre,
@@ -126,7 +133,10 @@ Meteor.methods({
 
       let plan = Plan.findOne({ activo: false, dia: dia, rutaId: rutaId, ida: ida})
 
-      console.log(plan);
+    if (plan === undefined) {
+      throw new Meteor.Error('Error', 'No existen planeamientos asociados al dia');
+      return;
+    }
 
       Plan.insert({
         activo: false,
@@ -176,7 +186,7 @@ Meteor.methods({
           hi: p.hi,
           hf: p.hf,
           editable: false,
-          permitir: true
+          permitir: false
         })
 
         rango = {
@@ -185,6 +195,18 @@ Meteor.methods({
         }
 
       })
+
+      let numeroCalendario = CalendarioPlaneamiento.find({ida: ida, dia: fecha, rutaId: rutaId}).fetch().length
+      if (numeroCalendario) {
+            let CalendarioId = CalendarioPlaneamiento.find({ida: ida, dia: fecha, rutaId: rutaId}).fetch()[numeroCalendario - 1]._id
+
+            CalendarioPlaneamiento.update({_id: CalendarioId}, {
+              $set: {
+                permitir: true
+              }
+            })
+      }
+
 
       if (hayHoras.length > 0) {
         HorasPorDia.update({dia: fecha, ida: ida, rutaId: rutaId}, {

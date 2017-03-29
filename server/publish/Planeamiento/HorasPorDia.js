@@ -7,6 +7,6 @@ Meteor.publish('HorasPorDia', function (ida) {
   }
 })
 
-Meteor.publish('GruposHorarios', function () {
-  return GruposHorarios.find({});
+Meteor.publish('GruposHorarios', function (ida) {
+  return GruposHorarios.find({ida: ida});
 })
