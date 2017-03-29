@@ -138,11 +138,15 @@ Template.VistaDespacho.events({
 
 
     },
-    'click [name="volver_salir"]'() {
-      Meteor.call('volver_salir', this._id, (err) => {
+    'click [name="volver_salir"]'(e, t) {
+      let ida = t.ida.get()
+      let programacionId = ProgramacionVehiculo.findOne({ida: ida})._id;
+      Meteor.call('volverDeLaEspera', this._id, programacionId, (err, result) => {
         if (err) {
+          console.log(err);
           Bert.alert('Hubo un error', 'danger')
         } else {
+          console.log(result);
           Bert.alert('Vehiculo volvio a ruta', 'success')
         }
       })

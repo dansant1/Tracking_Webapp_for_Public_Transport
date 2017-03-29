@@ -104,6 +104,55 @@ function formarJSON(date) {
 }
 
 Meteor.methods({
+  volverDeLaEspera(vehiculoId, programacionId) {
+
+    Vehiculos.update({_id: vehiculoId}, {
+      $set: {
+        espera: false
+      }
+    })
+
+    let nueva_programacion = [];
+
+
+
+    let programacion2 = ProgramacionVehiculo.findOne({_id: programacionId}).programacion
+    let programacion = programacion2.filter( (p) => {
+      return p.despachado == false;
+    })
+
+    let programacion_despachada = programacion2.filter( (p) => {
+      return p.despachado == true;
+    })
+
+    console.log(programacion);
+    nueva_programacion.push({
+      vehiculoId: vehiculoId,
+      despachado: false,
+      hora: programacion[0].hora
+    })
+
+    for (var i = 1; i < programacion.length; i++) {
+      console.log(programacion[i].hora);
+      if (programacion[i].hora !== undefined) {
+        nueva_programacion.push({
+          vehiculoId: programacion[i - 1].vehiculoId,
+          despachado: false,
+          hora: programacion[i].hora
+        })
+      }
+
+    }
+
+    console.log(nueva_programacion);
+
+    ProgramacionVehiculo.update({_id: programacionId}, {
+      $set: {
+        programacion: nueva_programacion
+      }
+    })
+
+  },
   toggleCero(programacionId, cero) {
     ProgramacionVehiculo.update({_id: programacionId}, {
       $set: {
