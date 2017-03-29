@@ -99,7 +99,7 @@ Meteor.methods({
       if (parseInt(programacion.hi.slice(0, 2)) > 9) {
         hi = programacion.hi.slice(0, 2) + ":00:00"
       } else {
-        console.log(programacion.hi);
+        //console.log(programacion.hi);
         hi = programacion.hi.slice(0, 2) + ":00:00"
       }
 

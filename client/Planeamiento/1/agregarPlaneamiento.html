@@ -22,13 +22,48 @@
 
 </template>
 
+<template name="ImportarGrupo">
+  <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Importar Grupo Horario de Planeamiento</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                      <select class="form-control" name="grupo_horario">
+                        {{#each grupos}}
+                        <option value="{{this._id}}">{{this.nombre}}</option>
+                        {{/each}}
+                      </select>
+                      <br>
+                      <div class="input-group datetimepicker">
+                          <span  class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                          <input class="set-due-date form-control" name="fecha" style="width: 100px" type="text"/>
+                      </div>
+                      <br>
+                      <button type="button" class="btn btn-success" name="importar_grupo">Importar Grupo Horario</button>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
 <template name="CrearGrupo">
   <div class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h4 class="modal-title">Crear Grupo de Planeamiento</h4>
+                    <h4 class="modal-title">Crear Grupo Horario de Planeamiento</h4>
                 </div>
 
                 <div class="modal-body">

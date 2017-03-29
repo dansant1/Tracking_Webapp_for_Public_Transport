@@ -2,6 +2,63 @@ import {Meteor} from 'meteor/meteor';
 import {Excel} from 'meteor/netanelgilad:excel'
 import ROLES from '../../Both/Roles'
 
+function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
+  let r1 = rango.hi.slice(0, 2)
+  let r2 = rango.hf.slice(0, 2)
+  r1 = parseInt(r1)
+  r2 = parseInt(r2)
+
+  let horas = _.range(r1, r2 + 1);
+
+  let u = [];
+
+  let inicio;
+
+  if (opcion === true) {
+    if (r1 + 1 > 9) {
+      inicio = r1 + ':00'
+    }  else {
+      inicio = '0' + r1 + ':00'
+    }
+  } else {
+    if (r1 + 1 > 9) {
+      inicio = r1 + ':01'
+    }  else {
+      inicio = '0' + r1 + ':01'
+    }
+  }
+
+
+
+
+
+  horas.map( d => {
+
+    if (d > 9) {
+      u.push(d + ':00')
+    } else {
+      u.push( '0' + d + ':00')
+    }
+
+  })
+
+  u.shift()
+
+  u.unshift(inicio)
+  console.log(dia);
+  console.log(ida);
+  console.log(rutaId);
+  let horario = HorasPorDia.findOne({dia: dia, ida: ida, rutaId: rutaId}).horas
+
+  horario.shift();
+
+  let nuevo_horario = []
+
+  nuevo_horario = _.union(u, horario)
+
+  return nuevo_horario
+}
+
 function process(date) {
     if (date === null || date === undefined) {
         return '';
@@ -48,12 +105,101 @@ function formarJSON(date) {
 
 Meteor.methods({
   crearGrupoHorario(nombre, fecha, ida) {
-    GruposHorarios.insert({
+    let grupoHorarioId = GruposHorarios.insert({
       nombre: nombre,
       fecha: fecha,
       ida: ida,
       createdAt: new Date()
     })
+  },
+  importarGrupoHorario(grupoHorarioId, rutaId, fecha) {
+    let grupoHorario = GruposHorarios.findOne({_id: grupoHorarioId})
+
+    let dia = grupoHorario.fecha;
+    let ida = grupoHorario.ida;
+
+    let hayHoras = HorasPorDia.find({dia: fecha, ida: ida, rutaId: rutaId}).fetch();
+
+      console.log(ida);
+      console.log(rutaId);
+      console.log(dia);
+
+      let plan = Plan.findOne({ activo: false, dia: dia, rutaId: rutaId, ida: ida})
+
+      console.log(plan);
+
+      Plan.insert({
+        activo: false,
+        dia: fecha,
+        rutaId: rutaId,
+        ida: ida,
+        programacion: plan.programacion
+      })
+
+      let rango;
+
+      plan.programacion.forEach( p => {
+        let hi = p.hi.slice(0, 2);
+        let hf = p.hf.slice(0, 2)
+        if (hi === '00') {
+          hi = p.hi.slice(0, 2) + ":00:00"
+        } else {
+          if (parseInt(p.hi.slice(0, 2)) > 9) {
+            hi = p.hi.slice(0, 2) + ":00:00"
+          } else {
+            //console.log(programacion.hi);
+            hi = p.hi.slice(0, 2) + ":00:00"
+          }
+
+        }
+
+        if (hf === '00') {
+          hf = p.hf.slice(0, 2) + ":00:00"
+        } else {
+          if (parseInt(p.hf.slice(0, 2)) > 9) {
+            hf = p.hf.slice(0, 2) + ":00:00"
+          } else {
+            //console.log(programacion.hf);
+            hf = p.hf.slice(0, 2) + ":00:00"
+          }
+
+        }
+        CalendarioPlaneamiento.insert({
+          ida: ida,
+          dia: fecha,
+          hora: p.hi + ':' + p.hf,
+          planId: Plan.findOne({ activo: false, dia: fecha, rutaId: rutaId})._id,
+          rutaId: rutaId,
+          title: 'H: ' + p.hi + ' - ' + p.hf + ' F: ' + p.frecuencia,
+          start: fecha + 'T' + hi,
+          end: fecha + 'T' + hf,
+          hi: p.hi,
+          hf: p.hf,
+          editable: false,
+          permitir: true
+        })
+
+        rango = {
+          hi: p.hi,
+          hf: p.hf
+        }
+
+      })
+
+      if (hayHoras.length > 0) {
+        HorasPorDia.update({dia: fecha, ida: ida, rutaId: rutaId}, {
+          $set: {
+            primera: true,
+            horas: getHorarioNuevo (rango, fecha, ida, rutaId, false)
+          }
+        })
+      } else {
+        HorasPorDia.insert({dia: fecha, ida: ida, rutaId: rutaId, horas: getHorarioNuevo (rango, dia, ida, rutaId, false), primera: true, createdAt: new Date()})
+      }
+
+
+
+
   },
   seleccionarVehiculo(vehiculoId) {
     if (Vehiculos.findOne({_id: vehiculoId}).seleccionado === true ) {

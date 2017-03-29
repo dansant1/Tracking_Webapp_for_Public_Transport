@@ -34,6 +34,51 @@ Template.agregarPlaneamientoIda.events({
       Bert.alert('Seleccione una Ruta', 'warning')
     }
 
+  },
+  'click [name="asignar_grupo"]'(e, t) {
+    if (t.rutaId.get() !== undefined) {
+      Session.set('asignar_ruta', t.rutaId.get())
+      Modal.show('ImportarGrupo')
+    } else {
+      Bert.alert('Seleccione una Ruta', 'warning')
+    }
+  }
+})
+
+Template.ImportarGrupo.onCreated( () => {
+  let template = Template.instance()
+
+  template.autorun( () => {
+    template.subscribe('GruposHorarios');
+  })
+
+})
+
+Template.ImportarGrupo.events({
+  'click [name="importar_grupo"]'(e, t) {
+    let grupoId = t.find('[name="grupo_horario"]').value
+    let fecha = process(t.find('[name="fecha"]').value.slice(0, 10))
+    let rutaId = Session.get('asignar_ruta')
+    if (grupoId !== "" && fecha !== "") {
+      
+      Meteor.call('importarGrupoHorario', grupoId, rutaId, fecha, (err) => {
+        if (err) {
+          Bert.alert('Hubo un error', 'danger')
+        } else {
+          Modal.hide('ImportarGrupo')
+          Bert.alert('Grupo Horario de Planeamiento Asignado', 'success')
+        }
+      })
+
+    } else {
+      Bert.alert('Complete los datos', 'warning')
+    }
+  }
+})
+
+Template.ImportarGrupo.helpers({
+  grupos() {
+    return GruposHorarios.find({});
   }
 })
 
@@ -422,16 +467,37 @@ Template.ConfigurarPlaneamientoVuelta.events({
   }
 })
 
+Template.ImportarGrupo.onRendered( () => {
+  let template = Template.instance()
+  template.$('.datetimepicker').datetimepicker();
+})
+
 Template.CrearGrupo.onRendered( () => {
   let template = Template.instance()
   template.$('.datetimepicker').datetimepicker();
 })
 
+function process(date) {
+    if (date === null || date === undefined) {
+        return '';
+    } else {
+        let parts;
+        if (date.search("/") !== -1) {
+            parts = date.split("/");
+            //format dd/mm/yyyy
+            return    parts[2] + '-' +
+                      parts[0] + '-' +
+                      parts[1]
+        }
+    }
+
+}
+
 Template.CrearGrupo.events({
   'click [name="crear_grupo"]'(e, t) {
     let datos = {
       nombre: t.find('[name="nombre"]').value,
-      fecha:  t.find('[name="fecha"]').value,
+      fecha:  process(t.find('[name="fecha"]').value.slice(0, 10)),
       ida: true
     }
 
@@ -441,6 +507,7 @@ Template.CrearGrupo.events({
           Bert.alert(err, 'Danger')
         } else {
           Bert.alert('Grupo Horario Agregado', 'success')
+          Modal.hide('CrearGrupo')
         }
       })
     } else {
