@@ -18,7 +18,6 @@ Meteor.startup(() => {
     }
 
 
-
     //  	let users = [
     //     	{nombre: "Usuario 1", email: "superadministrador@tpi.com.pe", roles: [ ROLES.administracion.gerente ]},
      //
@@ -45,7 +44,7 @@ Meteor.startup(() => {
     //         		case 'director@tpi.com.pe':
     //    			Roles.addUsersToRoles(id, user.roles, ROLES.grupos.empresa);
     //     		break;
-     // 
+     //
     //     		case 'operador@tpi.com.pe':
     //     			Roles.addUsersToRoles(id, user.roles, ROLES.grupos.empresa);
     //     		break;

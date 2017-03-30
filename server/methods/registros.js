@@ -3,60 +3,81 @@ import {Excel} from 'meteor/netanelgilad:excel'
 import ROLES from '../../Both/Roles'
 
 function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
-  let r1 = rango.hi.slice(0, 2)
-  let r2 = rango.hf.slice(0, 2)
-  r1 = parseInt(r1)
-  r2 = parseInt(r2)
 
-  let horas = _.range(r1, r2 + 1);
+    let r1 = rango.hi;
+    let r2 = rango.hf;
 
-  let u = [];
+    let aux = r1;
+    let aux2 = r2;
+    console.log('AUX: ', aux);
+    let horario = HorasPorDia.find({dia: dia, ida: ida, rutaId: rutaId}).fetch()[0].horas
+    let horario_oficial = [];
+    let nuevo_horario = [];
+    let rangos = [];
+    r1.slice(0, 2)
+    r2.slice(0, 2)
 
-  let inicio;
+    r1 = parseInt(r1)
+    r2 = parseInt(r2)
 
-  if (opcion === true) {
-    if (r1 + 1 > 9) {
-      inicio = r1 + ':00'
-    }  else {
-      inicio = '0' + r1 + ':00'
-    }
-  } else {
-    if (r1 + 1 > 9) {
-      inicio = r1 + ':01'
-    }  else {
-      inicio = '0' + r1 + ':01'
-    }
-  }
+    console.log('r1: ', r1);
+    console.log('r2: ', r2);
+
+    let diferencia = _.range(0, r2 + 1);
 
 
 
+    let inicio;
 
+    // if (r2 + 1 > 9) {
+    //   inicio = r2 + ':01'
+    // }  else {
+    //   inicio = '0' + r2 + ':01'
+    // }
 
-  horas.map( d => {
-
-    if (d > 9) {
-      u.push(d + ':00')
+    if (opcion === true) {
+      if (r2 + 1 > 9) {
+        inicio = r2 + ':00'
+      }  else {
+        inicio = '0' + r2 + ':00'
+      }
     } else {
-      u.push( '0' + d + ':00')
+      if (r2 + 1 > 9) {
+        inicio = r2 + ':01'
+      }  else {
+        inicio = '0' + r2 + ':01'
+      }
     }
 
-  })
+    diferencia.map( d => {
 
-  u.shift()
+      if (d > 9) {
+        console.log(d + ':00');
+        rangos.push(d + ':00')
+      } else {
+        console.log( '0' + d + ':00');
+        rangos.push( '0' + d + ':00')
+      }
 
-  u.unshift(inicio)
-  console.log(dia);
-  console.log(ida);
-  console.log(rutaId);
-  let horario = HorasPorDia.findOne({dia: dia, ida: ida, rutaId: rutaId}).horas
+    })
 
-  horario.shift();
+    console.log(rangos);
 
-  let nuevo_horario = []
+    let h = _.difference(horario, rangos);
 
-  nuevo_horario = _.union(u, horario)
+    if (aux === h[0]) {
+      h.shift()
+    }
 
-  return nuevo_horario
+    h.unshift(inicio);
+
+    console.log(h);
+
+    if (h[0] === '9:01') {
+      h[0] = '09:01'
+    }
+
+    return h;
 }
 
 function process(date) {
@@ -256,8 +277,9 @@ Meteor.methods({
             })
       }
 
-
+      console.log(rango);
       if (hayHoras.length > 0) {
+
         HorasPorDia.update({dia: fecha, ida: ida, rutaId: rutaId}, {
           $set: {
             primera: true,

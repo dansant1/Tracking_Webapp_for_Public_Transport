@@ -1,14 +1,89 @@
 function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
-  let r1 = rango.hi.slice(0, 2)
-  let r2 = rango.hf.slice(0, 2)
+  // let r1 = rango.hi.slice(0, 2)
+  // let r2 = rango.hf.slice(0, 2)
+  // r1 = parseInt(r1)
+  // r2 = parseInt(r2)
+  //
+  // let horas = _.range(r1, r2 + 1);
+  //
+  // let u = [];
+  //
+  // let inicio;
+  //
+  // if (opcion === true) {
+  //   if (r1 + 1 > 9) {
+  //     inicio = r1 + ':00'
+  //   }  else {
+  //     inicio = '0' + r1 + ':00'
+  //   }
+  // } else {
+  //   if (r1 + 1 > 9) {
+  //     inicio = r1 + ':01'
+  //   }  else {
+  //     inicio = '0' + r1 + ':01'
+  //   }
+  // }
+  //
+  //
+  //
+  //
+  //
+  // horas.map( d => {
+  //
+  //   if (d > 9) {
+  //     u.push(d + ':00')
+  //   } else {
+  //     u.push( '0' + d + ':00')
+  //   }
+  //
+  // })
+  //
+  // u.shift()
+  //
+  // u.unshift(inicio)
+  //
+  // let horario = HorasPorDia.findOne({dia: dia, ida: ida, rutaId}).horas
+  //
+  // horario.shift();
+  //
+  // let nuevo_horario = []
+  //
+  // nuevo_horario = _.union(u, horario)
+  //
+  //
+  //
+  // return nuevo_horario
+
+  let r1 = rango.hi;
+  let r2 = rango.hf;
+
+  let aux = r1;
+  let aux2 = r2;
+  console.log('AUX: ', aux2);
+  let horario = HorasPorDia.find({dia: dia, ida: ida, rutaId: rutaId}).fetch()[0].horas
+  let horario_oficial = [];
+  let nuevo_horario = [];
+  let rangos = [];
+  r1.slice(0, 2)
+  r2.slice(0, 2)
+
   r1 = parseInt(r1)
   r2 = parseInt(r2)
 
-  let horas = _.range(r1, r2 + 1);
+  console.log('r1: ', r1);
+  console.log('r2: ', r2);
 
-  let u = [];
+  let diferencia = _.range(0, r1 + 1);
+
+  console.log(diferencia);
 
   let inicio;
+
+  // if (r2 + 1 > 9) {
+  //   inicio = r2 + ':01'
+  // }  else {
+  //   inicio = '0' + r2 + ':01'
+  // }
 
   if (opcion === true) {
     if (r1 + 1 > 9) {
@@ -24,33 +99,35 @@ function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
     }
   }
 
-
-
-
-
-  horas.map( d => {
+  diferencia.map( d => {
 
     if (d > 9) {
-      u.push(d + ':00')
+      console.log(d + ':00');
+      rangos.push(d + ':00')
     } else {
-      u.push( '0' + d + ':00')
+      console.log( '0' + d + ':00');
+      rangos.push( '0' + d + ':00')
     }
 
   })
 
-  u.shift()
+  console.log(rangos);
 
-  u.unshift(inicio)
+  let h = _.difference(horario, rangos);
 
-  let horario = HorasPorDia.findOne({dia: dia, ida: ida, rutaId}).horas
 
-  horario.shift();
+  h.shift()
 
-  let nuevo_horario = []
 
-  nuevo_horario = _.union(u, horario)
+  h.unshift(inicio);
 
-  return nuevo_horario
+  console.log(h);
+
+  if (h[0] === '9:01') {
+    h[0] = '09:01'
+  }
+
+  return h;
 }
 
 Meteor.methods({
