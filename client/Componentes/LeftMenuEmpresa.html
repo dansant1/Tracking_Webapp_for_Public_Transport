@@ -20,11 +20,6 @@
 					<li class="has-children overview top-nav-btn">
 						<a href="/rastreo">Monitoreo</a>
 					</li>
-
-
-					<li class="has-children  notifications top-nav-btn">
-						<a href="#">Alarmas <span class="count">3</span></a>
-					</li>
 				</ul>
 				{{/if}}
 			{{/if}}
@@ -172,12 +167,12 @@
 			<ul>
 					{{#if isInRole 'gerente' 'Administracion'}}
 				<li class="cd-label">Gestión</li>
-				<li class="has-children overview top-nav-btn" style="z-index: 1001 !important" >
+				<li class="has-children overview top-nav-btn" style="z-index: 1001 !important">
 					<a href="/empresas">Empresas</a>
 					<ul style="z-index: 1001 !important">
-						<li style="z-index: 1001 !important" > <a href="/empresas">Lista de Empresa</a></li>
+						<li style="z-index: 1001 !important" > <a class="hov" href="/empresas">Lista de Empresas</a></li>
 
-						<li style="z-index: 1001 !important" class="ae"><a href="#">Agregar Empresa</a></li>
+						<li style="z-index: 1001 !important" class="ae"><a class="hov" href="#">Agregar Empresa</a></li>
 					</ul>
 				</li>
 
@@ -189,19 +184,12 @@
 						<li class="has-children overview top-nav-btn" style="z-index: 1001 !important" >
 							<a href="/empresas">Empresas</a>
 							<ul style="z-index: 1001 !important">
-								<li style="z-index: 1001 !important" > <a href="/empresas">Lista de Empresa</a></li>
+								<li style="z-index: 1001 !important" > <a class="hov" href="/empresas">Lista de Empresas</a></li>
 
-								<li style="z-index: 1001 !important" class="ae"><a href="#">Agregar Empresa</a></li>
+								<li style="z-index: 1001 !important" class="ae"><a class="hov" href="#">Agregar Empresa</a></li>
 							</ul>
 						</li>
-					<!--	<li class="has-children comments top-nav-btn">
-							<a href="/admin/rutas">Rutas</a>
-							<ul>
-								<li><a href="/admin/rutas">Rutas por Empresa</a></li>
 
-								<li><a href="/admin/agregaruta">Agregar Ruta</a></li>
-							</ul>
-						</li> -->
 						{{/if}}
 				{{/if}}
 
@@ -212,9 +200,9 @@
 				<li class="has-children comments top-nav-btn">
 					<a href="#">Flota y Operadores</a>
 					<ul>
-						<li><a href="/admin/flotas">Flota Vehicular</a></li>
+						<li><a href="/admin/flotas" class="hov">Flota Vehicular</a></li>
 
-						<li><a href="/admin/operadores">Operadores</a></li>
+						<li><a href="/admin/operadores" class="hov">Operadores</a></li>
 					</ul>
 				</li>
 
@@ -226,27 +214,27 @@
                     <ul>
 
                       <!--  <li><a href="/admin/planeamiento">Planeamientos por Empresa</a></li> -->
-												<li><a href="/admin/listas/planeshorarios">Planes Horarios</a></li>
+												<li><a href="/admin/listas/planeshorarios" class="hov">Planes Horarios</a></li>
 
-												<li><a href="/admin/listas/planes">Planeamientos</a></li>
+												<li><a href="/admin/listas/planes" class="hov">Planeamientos</a></li>
 
-												<li><a href="/admin/listas/programacion">Programacion por Empresa</a></li>
-												<li><a href="/admin/listas/despacho">Despacho por Empresa</a></li>
+												<li><a href="/admin/listas/programacion" class="hov">Programacion por Empresa</a></li>
+												<li><a href="/admin/listas/despacho" class="hov">Despacho por Empresa</a></li>
                     </ul>
                 </li>
                 <li class="has-children comments top-nav-btn">
                     <a href="/admin/entidades">Entidades</a>
                     <ul>
-                        <li><a href="/admin/entidades">Lista de Entidades</a></li>
-                        <li class="add__entity"><a href="#">Agregar Entidad</a></li>
+                        <li><a href="/admin/entidades" class="hov">Lista de Entidades</a></li>
+                        <li class="add__entity"><a href="#" class="hov">Agregar Entidad</a></li>
                     </ul>
                 </li>
 
 								<li class="has-children comments top-nav-btn">
                     <a href="/mantenimiento">Checklist</a>
                     <ul>
-												<li><a href="/pc">Puntos de Control</a></li>
-                        <li><a href="/mantenimiento">Lista de Requisitos de Operacion</a></li>
+												<li><a href="/pc" class="hov">Puntos de Control</a></li>
+                        <li><a href="/mantenimiento" class="hov">Lista de Requisitos de Operacion</a></li>
 
                     </ul>
                 </li>
@@ -254,8 +242,8 @@
 								<li class="has-children comments top-nav-btn">
 									<a href="#">Reportes TPI</a>
 									<ul>
-											<li><a href="/admin/reportes">General</a></li>
-											<li><a href="/admin/reportes">Por Definir</a></li>
+											<li><a href="/admin/reportes" class="hov">General</a></li>
+											<!-- <li><a href="/admin/reportes" class="hov">Por Definir</a></li> -->
 									</ul>
 								</li>
 
@@ -266,27 +254,27 @@
 	                    <a>Planeamiento</a>
 	                    <ul>
 
-													<li><a href="/admin/listas/planeshorarios">Planes Horarios</a></li>
+													<li><a href="/admin/listas/planeshorarios" class="hov">Planes Horarios</a></li>
 
-													<li><a href="/admin/listas/planes">Planeamientos</a></li>
+													<li><a href="/admin/listas/planes" class="hov">Planeamientos</a></li>
 
-													<li><a href="/admin/listas/programacion">Programacion por Empresa</a></li>
-													<li><a href="/admin/listas/despacho">Despacho por Empresa</a></li>
+													<li><a href="/admin/listas/programacion" class="hov">Programacion por Empresa</a></li>
+													<li><a href="/admin/listas/despacho" class="hov">Despacho por Empresa</a></li>
 	                    </ul>
 	                </li>
 	                <li class="has-children comments top-nav-btn">
 	                    <a href="/admin/entidades">Entidades</a>
 	                    <ul>
-	                        <li><a href="/admin/entidades">Lista de Entidades</a></li>
-	                        <li class="add__entity"><a href="#">Agregar Entidad</a></li>
+	                        <li><a href="/admin/entidades" class="hov">Lista de Entidades</a></li>
+	                        <li class="add__entity"><a href="#" class="hov">Agregar Entidad</a></li>
 	                    </ul>
 	                </li>
 
 									<li class="has-children comments top-nav-btn">
 	                    <a href="/mantenimiento">Checklist</a>
 	                    <ul>
-	                        <li><a href="/mantenimiento">Lista de Requisitos de Operacion</a></li>
-	                       
+	                        <li><a href="/mantenimiento" class="hov">Lista de Requisitos de Operacion</a></li>
+
 	                    </ul>
 	                </li>
 
@@ -302,10 +290,10 @@
 				<ul>
 				<li class="cd-label">Recaudación</li>
 				<li class="has-children notifications app top-nav-btn">
-					<a href="/gestiontpi">Gestión</a>
+					<a href="/gestiontpi" class="hov">Gestión</a>
 				</li>
 				<li class="has-children images top-nav-btn">
-					<a href="#">Reportes</a>
+					<a href="#" class="hov">Reportes</a>
 
 
 				</li>
@@ -320,14 +308,14 @@
 				<ul>
 				<li class="cd-label">Usuarios</li>
 				<li class="has-children notifications app top-nav-btn">
-					<a href="/admin/equipo">Equipo</a>
+					<a href="/admin/equipo" class="hov">Equipo</a>
 				</li>
 				</ul>
 				{{/if}}
 
 			<ul>
 				<li class="cd-label">Soporte</li>
-				<li class="action-btn"><a style="padding: 10px;text-align: center;" href="#0" class="top-nav-btn blue">Manual</a></li>
+				<li class="action-btn"><a style="padding: 10px;text-align: center;" href="#0" class="hov top-nav-btn blue">Manual</a></li>
 			</ul>
 		</nav>
 </template>

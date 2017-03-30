@@ -15,6 +15,14 @@
 	font-size: 28px;
 }
 
+.fc-view, .fc-view > table {
+    z-index: 0 !important;
+}
+
+.hov:hover {
+	background-color: #3498db
+}
+
 @media only screen and (min-width: 768px) {
 	.cd-top-nav .has-children {
 		background-color: #1784c7;

@@ -70,10 +70,6 @@ Template.agregarPlaneamientoVuelta.events({
 })
 
 
-Template.ImportarGrupo.onCreated( () => {
-
-})
-
 Template.ImportarGrupo.events({
   'click [name="importar_grupo"]'(e, t) {
     let grupoId = t.find('[name="grupo_horario"]').value
@@ -108,8 +104,6 @@ Template.agregarPlaneamientoIda.onRendered( () => {
   $( "#ruta" ).change(function(e) {
     template.rutaId.set($(this).val())
   });
-
-
 
   var today = new Date();
   var dd = today.getDate();
