@@ -203,10 +203,22 @@ Meteor.methods({
 
       let plan = Plan.findOne({ activo: false, dia: dia, rutaId: rutaId, ida: ida})
 
-    if (plan === undefined) {
-      throw new Meteor.Error('Error', 'No existen planeamientos asociados al dia');
-      return;
-    }
+      if (plan === undefined) {
+        throw new Meteor.Error('Error', 'No existen planeamientos asociados al dia');
+        return;
+      }
+      let p = Plan.findOne({ activo: false, dia: fecha, rutaId: rutaId, ida: ida});
+
+      if (p !== undefined) {
+        if (p.programacion !==  undefined) {
+          if ( p.programacion.length > 0 ) {
+            throw new Meteor.Error('Error', 'Ya Existe un planeamiento para esa fecha');
+            return;
+          }
+        }
+      }
+
+
 
       Plan.insert({
         activo: false,

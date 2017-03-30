@@ -1,58 +1,5 @@
 function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
-  // let r1 = rango.hi.slice(0, 2)
-  // let r2 = rango.hf.slice(0, 2)
-  // r1 = parseInt(r1)
-  // r2 = parseInt(r2)
-  //
-  // let horas = _.range(r1, r2 + 1);
-  //
-  // let u = [];
-  //
-  // let inicio;
-  //
-  // if (opcion === true) {
-  //   if (r1 + 1 > 9) {
-  //     inicio = r1 + ':00'
-  //   }  else {
-  //     inicio = '0' + r1 + ':00'
-  //   }
-  // } else {
-  //   if (r1 + 1 > 9) {
-  //     inicio = r1 + ':01'
-  //   }  else {
-  //     inicio = '0' + r1 + ':01'
-  //   }
-  // }
-  //
-  //
-  //
-  //
-  //
-  // horas.map( d => {
-  //
-  //   if (d > 9) {
-  //     u.push(d + ':00')
-  //   } else {
-  //     u.push( '0' + d + ':00')
-  //   }
-  //
-  // })
-  //
-  // u.shift()
-  //
-  // u.unshift(inicio)
-  //
-  // let horario = HorasPorDia.findOne({dia: dia, ida: ida, rutaId}).horas
-  //
-  // horario.shift();
-  //
-  // let nuevo_horario = []
-  //
-  // nuevo_horario = _.union(u, horario)
-  //
-  //
-  //
-  // return nuevo_horario
+
 
   let r1 = rango.hi;
   let r2 = rango.hf;
@@ -73,17 +20,11 @@ function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
   console.log('r1: ', r1);
   console.log('r2: ', r2);
 
-  let diferencia = _.range(0, r2 + 1);
+  let diferencia = _.range(r1, r2 + 1);
 
   console.log(diferencia);
 
   let inicio;
-
-  // if (r2 + 1 > 9) {
-  //   inicio = r2 + ':01'
-  // }  else {
-  //   inicio = '0' + r2 + ':01'
-  // }
 
   if (opcion === true) {
     if (r1 + 1 > 9) {
@@ -111,9 +52,9 @@ function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
 
   })
 
-  console.log(rangos);
+  horario.shift()
 
-  let h = _.difference(horario, rangos);
+  let h = _.union(rangos, horario);
 
 
   h.shift()
