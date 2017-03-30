@@ -73,7 +73,7 @@ function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
   console.log('r1: ', r1);
   console.log('r2: ', r2);
 
-  let diferencia = _.range(0, r1 + 1);
+  let diferencia = _.range(0, r2 + 1);
 
   console.log(diferencia);
 

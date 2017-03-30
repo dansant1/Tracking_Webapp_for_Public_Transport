@@ -102,7 +102,12 @@ Template.agregarPlaneamientoIda.onRendered( () => {
   let template = Template.instance();
   template.rutaId = new ReactiveVar(undefined)
   $( "#ruta" ).change(function(e) {
-    template.rutaId.set($(this).val())
+    if ($(this).val() === "0") {
+        template.rutaId.set(undefined)
+    } else {
+      template.rutaId.set($(this).val())
+    }
+
   });
 
   var today = new Date();
@@ -222,7 +227,12 @@ Template.agregarPlaneamientoVuelta.onRendered( () => {
   let template = Template.instance();
   template.rutaId = new ReactiveVar(undefined)
   $( "#ruta2" ).change(function(e) {
-    template.rutaId.set($(this).val())
+    if ($(this).val() === "0") {
+      template.rutaId.set(undefined)
+    } else {
+      template.rutaId.set($(this).val())
+    }
+
   });
 
   var today = new Date();
@@ -263,11 +273,15 @@ Template.agregarPlaneamientoVuelta.onRendered( () => {
       element.append( "<span class='closeon'>X</span>" );
             element.find(".closeon").click(function() {
               console.log(event._id);
-              Meteor.call('removePlan2', event._id, function (err) {
+              Meteor.call('removePlan2', event._id, function (err, result) {
                 if (err) {
                   Bert.alert('Hubo un error', 'danger')
                 } else {
-                  Bert.alert('Plan Horario eliminado', 'success')
+                  Bert.alert(result.mensaje, 'success')
+
+                  if (result.eliminado === true) {
+                    $('#calendar').fullCalendar('removeEvents', event._id);
+                  }
                 }
               })
                $('#calendar').fullCalendar('removeEvents', event._id);
