@@ -15,14 +15,12 @@ Template.VistaDespacho.onCreated(() => {
             } else {
               template.empresaId.set(result);
               template.subscribe('VehiculosEmpresaId', template.empresaId.get());
-              template.subscribe('conductoresEmpresa', template.empresaId.get())
-              template.subscribe('cobradoresEmpresa', template.empresaId.get())
+
             }
           })
         } else {
           template.subscribe('VehiculosEmpresaId', template.empresaId.get());
-          template.subscribe('conductoresEmpresa', template.empresaId.get())
-          template.subscribe('cobradoresEmpresa', template.empresaId.get())
+
         }
 
 
@@ -43,7 +41,7 @@ Template.VistaDespacho.onCreated(() => {
         }
 
         template.subscribe('ProgramacionVehiculoRutaDiaIda', template.rutaId.get(), hoy(), template.ida.get());
-        template.subscribe('VehiculosDespachados')
+        template.subscribe('VehiculosDespachados', template.ida.get())
 
     })
 
@@ -76,18 +74,13 @@ Template.VistaDespacho.helpers({
         return p.despachado == false;
       })
     },
-    despacho() {
-
-        //return ProgramacionVehiculo.find({ida: ida, 'programacion.$.despachado': false}).fetch()[0].programacion;
-    },
+    despacho() {},
     despachados() {
       let ida = Template.instance().ida.get()
       let rutaId = Template.instance().rutaId.get()
-      console.log(ida);
-      console.log(rutaId);
-      console.log(hoy());
+
       let programacion = ProgramacionVehiculo.find({ida: ida}).fetch()
-      console.log(programacion);
+
       return programacion[0].programacion.filter( (p) => {
         return p.despachado == true;
       })
@@ -109,17 +102,6 @@ Template.VistaDespacho.helpers({
     },
     padron() {
       return Vehiculos.findOne({_id: this.vehiculoId}).padron;
-    },
-    cobrador() {
-      let nombre = Cobradores.findOne({_id: this.cobradorId}).datos.nombre;
-
-      let apellido = Cobradores.findOne({_id: this.cobradorId}).datos.apellido
-      return nombre + " " + apellido
-    },
-    conductor() {
-      let nombre = Conductores.findOne({_id: this.conductorId}).datos.nombre;
-      let apellido = Conductores.findOne({_id: this.conductorId}).datos.apellido
-      return nombre + " " + apellido
     }
 })
 
@@ -127,7 +109,7 @@ Template.VistaDespacho.events({
     'click .activar_cero'(e, t) {
       let ida = t.ida.get()
 
-      console.log('ID: ', ProgramacionVehiculo.findOne({ida: ida})._id);
+      //console.log('ID: ', ProgramacionVehiculo.findOne({ida: ida})._id);
       let programacionId = ProgramacionVehiculo.findOne({ida: ida})._id
       Meteor.call('toggleCero', programacionId, true, (err) => {
         if (err) {
@@ -136,11 +118,11 @@ Template.VistaDespacho.events({
           Bert.alert('Modo Cero Activado', 'success')
         }
       })
+
     },
     'click .desactivar_cero'(e, t) {
       let ida = t.ida.get()
 
-      console.log('ID: ', ProgramacionVehiculo.findOne({ida: ida})._id);
       let programacionId = ProgramacionVehiculo.findOne({ida: ida})._id
       Meteor.call('toggleCero', programacionId, false, (err) => {
         if (err) {
@@ -154,13 +136,10 @@ Template.VistaDespacho.events({
 
         let ida = t.ida.get()
 
-        console.log('ID: ', ProgramacionVehiculo.findOne({ida: ida})._id);
         Session.set('RegistroDeVehiculoADespachar', ProgramacionVehiculo.findOne({ida: ida})._id);
 
         let rutaId = Template.instance().rutaId.get()
-        console.log(ida);
-        console.log(rutaId);
-        console.log(hoy());
+
         let programacion = ProgramacionVehiculo.find({}).fetch()
 
         let progra = programacion[0].programacion.filter( (p) => {
@@ -169,6 +148,7 @@ Template.VistaDespacho.events({
 
 
         Session.set('vehiculoId', progra[0].vehiculoId);
+        Session.set('despachar_ida', ida)
 
         Modal.show('Asignar');
 
@@ -248,19 +228,29 @@ Template.Asignar.events({
     },
     'click .cumple'(e, t) {
         let vehiculo = Session.get('vehiculoId');
-      //  console.log(vehiculo);
+        let target = $(e.currentTarget);
         let registroId = Session.get('RegistroDeVehiculoADespachar');
+        let boleto = t.find('[name="numero_boleto"]').value;
+        let ida = Session.get('despachar_ida')
         if (t.conductor.get() !== undefined && t.cobrador.get() !== undefined) {
-          Meteor.call('RegistrarVehiculoParaDespachar', registroId, vehiculo, t.conductor.get(), t.cobrador.get(), (err) => {
-              if (err) {
-                  Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
-              } else {
-                  Modal.hide('Asignar');
+          if (boleto !== "") {
+            target.text("Despachando...");
+            target.attr("disabled", "");
+            Meteor.call('RegistrarVehiculoParaDespachar', registroId, vehiculo, t.conductor.get(), t.cobrador.get(), boleto, ida, (err) => {
+                target.removeAttr("disabled", "");
+                if (err) {
+                    Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
+                    Modal.hide('Asignar');
+                } else {
+                    Modal.hide('Asignar');
+                    Bert.alert('Vehiculo Despachado', 'success')
 
-                  Bert.alert('Vehiculo Despachado', 'success')
+                }
+            })
+          } else {
+            Bert.alert('Ingrese número de serie del boleto', 'warning')
+          }
 
-              }
-          })
         } else {
           Bert.alert('Selecciona un conductor y cobrador', 'warning')
         }
@@ -274,18 +264,18 @@ Template.Asignar.events({
 
         let target = $(e.currentTarget);
 
-        target.text("Reasignando ...");
-        console.log(programacionVehiculoId, vehiculoId);
+        target.text("Reasignando...");
+        // console.log(programacionVehiculoId, vehiculoId);
         target.attr("disabled", "");
         Meteor.call('reasignarVehiculos', programacionVehiculoId, vehiculoId, (err) => {
             target.removeAttr("disabled", "");
              if (err) {
                      Bert.alert('Hubo un error, vuelva a intentarlo', 'danger');
-                     console.log(err);
+                     Modal.hide('Asignar');
                  } else {
                      Bert.alert('Vehiculos Reasignados', 'success');
                      Modal.hide('Asignar');
-                     //location.reload();
+
                  }
         });
     }
@@ -323,8 +313,6 @@ Template.Asignar.helpers({
 
     },
     requisitos(id) {
-        console.log('id: ', id);
-        console.log('reqs: ', Requisitos.find({listaId: this._id}));
         return Requisitos.find({listaId: id});
     }
 })
@@ -376,31 +364,29 @@ Template.Asignar.onCreated(() => {
               if (err) {
                 alert(err)
               } else {
-                console.log('empresaid: ' ,result);
+
                 empresaId = result;
-                // console.log('empresa', Empresas.findOne({_id: empresaId}));
-                // console.log('lista: ', Listas.findOne({_id: Empresas.find({_id: empresaId}).plan }));
-                console.log(Listas.find({_id: Empresas.findOne({_id: empresaId}).plan }).fetch());
+                //console.log(Listas.find({_id: Empresas.findOne({_id: empresaId}).plan }).fetch());
                 template.reqs.set(Listas.find({_id: Empresas.findOne({_id: empresaId}).plan }))
               }
             })
-            //return Listas.find({_id: Empresas.findOne({_id: empresaId}).plan })
+
           } else {
-            // console.log('empresa', Empresas.findOne({_id: empresaId}));
-            // console.log('lista: ', Listas.findOne({_id: Empresas.findOne({_id: empresaId}).plan }));
+
             template.reqs.set(Listas.find({_id: Empresas.findOne({_id: empresaId}).plan }))
           }
         })
+
         template.subscribe('Empresas')
         template.subscribe('CobradoresPorEmpresa', FlowRouter.getParam('rutaId'), template.searchQuery2.get(), () => {
-            console.log('primero');
+
             setTimeout(() => {
                 template.searching2.set(false);
             }, 300);
         });
 
         template.subscribe('ConductoresPorEmpresa', FlowRouter.getParam('rutaId'), template.searchQuery.get(), () => {
-            console.log('segundo');
+
             setTimeout(() => {
                 template.searching.set(false);
             }, 300);

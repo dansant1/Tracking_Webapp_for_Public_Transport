@@ -73,25 +73,20 @@
             <h3>Vehiculos Despachados</h3>
             <br><br>
             {{#each vehiculosDespachados }}
-
                 <li class="list-group-item clearfix horario planeamiento">
-          <span class="pull-left" style="width: 75%; margin-left: 10px">
+                    <span class="pull-left" style="width: 75%; margin-left: 10px">
                 <i class="fa fa-clock-o" aria-hidden="true"></i>
                 <span class="time hour">{{hour}}</span>
-
-                <!-- {{#let v=(vehiculo vehiculoId ) }} -->
-                    <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{placa}}
-                        - Padron {{padron}}</span>
-                        <br>
-                      <span>Conductor: {{conductor }}</span>
-                      <br>
-                      <span>Cobrador: {{cobrador }}</span>
-                <!-- {{/let}} -->
-
-
-          </span>
-
+                    <br><br>
+                    <span>Placa {{placa}}
+                    </span>
+                      <br><br>
+                      <span>Conductor: {{conductor}}</span>
+                      <br><br>
+                      <span>Cobrador: {{cobrador}}</span>
+                    </span>
                     <span class="pull-right">
+                      Boleto: {{boleto}}
                     </span>
                 </li>
 
@@ -102,22 +97,18 @@
             <br><br>
             {{#each despachocola}}
                 <li class="list-group-item clearfix horario planeamiento">
-          <span class="pull-left" style="width: 75%; margin-left: 10px">
-
-
-                <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{this.placa}}
-                    - Padron {{this.padron}}</span>
-
-
-          </span>
-
+                    <span class="pull-left" style="width: 75%; margin-left: 10px">
+                      <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{this.placa}}
+                          - Padron {{this.padron}}
+                      </span>
+                    </span>
                     <span class="pull-right">
-            <div class="form-group" style="display: inline-block; margin-left: 10px">
-              <span style="display: inline-block; margin-left: 0px; color: blue">
-                <button type="button" name="volver_salir" class="btn btn-success">Volver a Salir</button>
-              </span>
-            </div>
-          </span>
+                      <div class="form-group" style="display: inline-block; margin-left: 10px">
+                        <span style="display: inline-block; margin-left: 0px; color: blue">
+                          <button type="button" name="volver_salir" class="btn btn-success">Volver a Salir</button>
+                        </span>
+                      </div>
+                    </span>
                 </li>
             {{/each}}
         </div>
@@ -126,16 +117,10 @@
             <br><br>
             {{#each vehiculosSancionados}}
                 <li class="list-group-item clearfix horario planeamiento">
-          <span class="pull-left" style="width: 75%; margin-left: 10px">
-                <i class="fa fa-clock-o" aria-hidden="true"></i>
-                <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{this.placa}} - Padron {{this.padron}}</span>
-          </span>
-
-                    <span class="pull-right">
-            <div class="form-group" style="display: inline-block; margin-left: 10px">
-
-            </div>
-          </span>
+                  <span class="pull-left" style="width: 75%; margin-left: 10px">
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{this.placa}} - Padron {{this.padron}}</span>
+                  </span>
                 </li>
             {{else}}
                 Aun no hay vehiculos sancionados.
@@ -192,7 +177,7 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#list_despacho">Conductor</a></li>
                         <li><a data-toggle="tab" href="#selectcobrador">Cobrador</a></li>
-                        <li><a data-toggle="tab" href="#selectreq">Requisitos</a></li>
+                        <li><a data-toggle="tab" href="#selectreq">Requisitos / Boleto</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -255,6 +240,10 @@
                             {{/if}}
                         </div>
                         <div id="selectreq" class="tab-pane fade">
+                            <h3>Boleto</h3>
+                            <br>
+                            <input type="text" class="form-control" name="numero_boleto" placeholder="Numero de Serie de Boleto.">
+                            <br>
                             <h3>Requisitos</h3>
                             <br>
                             <ul>

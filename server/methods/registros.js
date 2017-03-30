@@ -670,7 +670,7 @@ Meteor.methods({
         }
     },
 
-    RegistrarVehiculoParaDespachar(registroId, vehiculoId, conductorId, cobradorId, number) {
+    RegistrarVehiculoParaDespachar(registroId, vehiculoId, conductorId, cobradorId, number, ida) {
 
         if (this.userId) {
 
@@ -703,11 +703,35 @@ Meteor.methods({
                 }
             })
 
+            let conductor = Conductores.findOne({_id: conductorId}).datos.nombre + ' ' +Conductores.findOne({_id: conductorId}).datos.apellido
+            let cobrador = Cobradores.findOne({_id: cobradorId}).datos.nombre + ' ' + Cobradores.findOne({_id: cobradorId}).datos.apellido
+
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1;
+
+            var yyyy = today.getFullYear();
+
+            if (dd < 10){
+                dd = '0' + dd;
+            }
+
+            if ( mm < 10){
+                mm = '0' + mm;
+            }
+
+            let hoy = yyyy + '-' + mm + '-' + dd;
+
             VehiculosDespachados.insert({
               vehiculoId: vehiculoId,
               conductorId: conductorId,
+              conductor: conductor,
+              ida: ida,
+              dia: hoy,
+              cobrador: cobrador,
               cobradorId: cobradorId,
-              hora: new Date()
+              hora: new Date(),
+              boleto: number
             })
 
         } else {

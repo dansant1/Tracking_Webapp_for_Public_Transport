@@ -17,10 +17,24 @@ Meteor.publish('Horarios', function (ida, rutaId) {
     }
 });
 
-Meteor.publish('VehiculosDespachados', function (/*ida*/) {
+Meteor.publish('VehiculosDespachados', function (ida) {
     if (this.userId) {
-        //return VehiculosDespachados.find({ida: ida, hoy: hoy()});
-        return VehiculosDespachados.find();
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1;
+
+        var yyyy = today.getFullYear();
+
+        if (dd < 10){
+            dd = '0' + dd;
+        }
+
+        if ( mm < 10){
+            mm = '0' + mm;
+        }
+
+        let hoy = yyyy + '-' + mm + '-' + dd;
+        return VehiculosDespachados.find({ida: ida, dia: hoy});
     } else {
         this.stop();
         return;
