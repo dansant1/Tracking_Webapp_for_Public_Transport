@@ -362,6 +362,9 @@ Template.ConfigurarPlaneamiento.events({
     }
 
 
+    console.log(programacion.hi);
+    console.log(programacion.hf);
+
     if (programacion.hi !== "" && programacion.hf !== "") {
 
       let h1 = programacion.hi.slice(0, 2)
@@ -374,19 +377,21 @@ Template.ConfigurarPlaneamiento.events({
         Meteor.call('add_plan_horario', programacion, validacion, (err) => {
           if (err) {
             Bert.alert('Hubo un Error', 'danger');
-            Modal.hide('ConfigurarPlaneamiento')
+
 
           } else {
             Meteor.call('ActualizarRangoHorarioPorDia', validacion.dia, validacion.ida, programacion, validacion.rutaId, (err) => {
               if (err) {
                 console.log(err);
               } else {
-                Modal.hide('ConfigurarPlaneamiento')
+                //Modal.hide('ConfigurarPlaneamiento')
                 Bert.alert('Planeamiento Agregado', 'success');
               }
             })
           }
         })
+
+        Modal.hide('ConfigurarPlaneamiento')
       }
 
     } else {
@@ -454,25 +459,27 @@ Template.ConfigurarPlaneamientoVuelta.events({
       h1 = parseInt(h1)
       let h2 = programacion.hf.slice(0, 2)
       h2 = parseInt(h2)
-      if (h1 === h2) {
+      if (h1 === h2 || h1 > h2) {
           Bert.alert('Ingrese un rango de horas valido', 'warning')
       } else {
         Meteor.call('add_plan_horario', programacion, validacion, (err) => {
           if (err) {
             Bert.alert('Hubo un Error', 'danger');
-            Modal.hide('ConfigurarPlaneamientoVuelta')
+
 
           } else {
             Meteor.call('ActualizarRangoHorarioPorDia', validacion.dia, validacion.ida, programacion, validacion.rutaId, (err) => {
               if (err) {
                 console.log(err);
               } else {
-                Modal.hide('ConfigurarPlaneamientoVuelta')
+
                 Bert.alert('Planeamiento Agregado', 'success');
               }
             })
           }
         })
+
+          Modal.hide('ConfigurarPlaneamientoVuelta')
       }
 
     } else {

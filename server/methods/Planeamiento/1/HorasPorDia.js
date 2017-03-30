@@ -41,8 +41,10 @@ let getHorario = (rango, dia, ida, rutaId) => {
   diferencia.map( d => {
 
     if (d > 9) {
+      console.log(d + ':00');
       rangos.push(d + ':00')
     } else {
+      console.log( '0' + d + ':00');
       rangos.push( '0' + d + ':00')
     }
 
@@ -59,6 +61,10 @@ let getHorario = (rango, dia, ida, rutaId) => {
   h.unshift(inicio);
 
   console.log(h);
+
+  if (h[0] === '9:01') {
+    h[0] = '09:01'
+  }
 
   return h;
 
