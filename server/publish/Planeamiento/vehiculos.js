@@ -16,3 +16,13 @@ Meteor.publish('Horarios', function (ida, rutaId) {
         return;
     }
 });
+
+Meteor.publish('VehiculosDespachados', function (/*ida*/) {
+    if (this.userId) {
+        //return VehiculosDespachados.find({ida: ida, hoy: hoy()});
+        return VehiculosDespachados.find();
+    } else {
+        this.stop();
+        return;
+    }
+});

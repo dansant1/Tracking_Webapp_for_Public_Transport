@@ -485,6 +485,7 @@ Meteor.publish('ProgramacionVehiculoPorRuta', function (rutaId) {
 
 Meteor.publish('cobradoresEmpresa', function (empresaId) {
     if (this.userId) {
+        
         return Cobradores.find({empresaId: empresaId})
     } else {
         this.stop();

@@ -15,10 +15,14 @@ Template.VistaDespacho.onCreated(() => {
             } else {
               template.empresaId.set(result);
               template.subscribe('VehiculosEmpresaId', template.empresaId.get());
+              template.subscribe('conductoresEmpresa', template.empresaId.get())
+              template.subscribe('cobradoresEmpresa', template.empresaId.get())
             }
           })
         } else {
           template.subscribe('VehiculosEmpresaId', template.empresaId.get());
+          template.subscribe('conductoresEmpresa', template.empresaId.get())
+          template.subscribe('cobradoresEmpresa', template.empresaId.get())
         }
 
 
@@ -39,6 +43,7 @@ Template.VistaDespacho.onCreated(() => {
         }
 
         template.subscribe('ProgramacionVehiculoRutaDiaIda', template.rutaId.get(), hoy(), template.ida.get());
+        template.subscribe('VehiculosDespachados')
 
     })
 
@@ -51,6 +56,14 @@ Template.VistaDespacho.helpers({
 
       return cero;
     },
+    vehiculosDespachados() {
+      return VehiculosDespachados.find()
+    },
+    hour() {
+      let hora = new Date(this.hora).getHours()
+      let minuto = new Date(this.hora).getMinutes()
+       return  hora + ':' + minuto
+    },
     programacion() {
       let ida = Template.instance().ida.get()
       let rutaId = Template.instance().rutaId.get()
@@ -58,7 +71,7 @@ Template.VistaDespacho.helpers({
       console.log(rutaId);
       console.log(hoy());
       let programacion = ProgramacionVehiculo.find({}).fetch()
-      console.log(programacion);
+
       return programacion[0].programacion.filter( (p) => {
         return p.despachado == false;
       })
@@ -96,6 +109,17 @@ Template.VistaDespacho.helpers({
     },
     padron() {
       return Vehiculos.findOne({_id: this.vehiculoId}).padron;
+    },
+    cobrador() {
+      let nombre = Cobradores.findOne({_id: this.cobradorId}).datos.nombre;
+
+      let apellido = Cobradores.findOne({_id: this.cobradorId}).datos.apellido
+      return nombre + " " + apellido
+    },
+    conductor() {
+      let nombre = Conductores.findOne({_id: this.conductorId}).datos.nombre;
+      let apellido = Conductores.findOne({_id: this.conductorId}).datos.apellido
+      return nombre + " " + apellido
     }
 })
 
@@ -132,7 +156,19 @@ Template.VistaDespacho.events({
 
         console.log('ID: ', ProgramacionVehiculo.findOne({ida: ida})._id);
         Session.set('RegistroDeVehiculoADespachar', ProgramacionVehiculo.findOne({ida: ida})._id);
-        Session.set('vehiculoId', this.vehiculoId);
+
+        let rutaId = Template.instance().rutaId.get()
+        console.log(ida);
+        console.log(rutaId);
+        console.log(hoy());
+        let programacion = ProgramacionVehiculo.find({}).fetch()
+
+        let progra = programacion[0].programacion.filter( (p) => {
+          return p.despachado == false;
+        })
+
+
+        Session.set('vehiculoId', progra[0].vehiculoId);
 
         Modal.show('Asignar');
 
@@ -214,17 +250,21 @@ Template.Asignar.events({
         let vehiculo = Session.get('vehiculoId');
       //  console.log(vehiculo);
         let registroId = Session.get('RegistroDeVehiculoADespachar');
-        //console.log(registroId);
-        Meteor.call('RegistrarVehiculoParaDespachar', registroId, vehiculo, t.conductor.get(), t.cobrador.get(), (err) => {
-            if (err) {
-                Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
-            } else {
-                Modal.hide('Asignar');
+        if (t.conductor.get() !== undefined && t.cobrador.get() !== undefined) {
+          Meteor.call('RegistrarVehiculoParaDespachar', registroId, vehiculo, t.conductor.get(), t.cobrador.get(), (err) => {
+              if (err) {
+                  Bert.alert('Hubo un error, vuelva a intentarlo', 'danger')
+              } else {
+                  Modal.hide('Asignar');
 
-                Bert.alert('Vehiculo Despachado', 'success')
+                  Bert.alert('Vehiculo Despachado', 'success')
 
-            }
-        })
+              }
+          })
+        } else {
+          Bert.alert('Selecciona un conductor y cobrador', 'warning')
+        }
+
     },
     'click .reasignar'(e, t) {
         let rutaId = FlowRouter.getParam('rutaId');
@@ -322,8 +362,8 @@ Template.Asignar.onCreated(() => {
     template.searchQuery2 = new ReactiveVar();
     template.searching2 = new ReactiveVar(false);
 
-    template.conductor = new ReactiveVar();
-    template.cobrador = new ReactiveVar();
+    template.conductor = new ReactiveVar(undefined);
+    template.cobrador = new ReactiveVar(undefined);
     template.despachar = new ReactiveVar(false);
 
     template.autorun(() => {

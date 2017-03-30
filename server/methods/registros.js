@@ -29,12 +29,6 @@ function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
 
     let inicio;
 
-    // if (r2 + 1 > 9) {
-    //   inicio = r2 + ':01'
-    // }  else {
-    //   inicio = '0' + r2 + ':01'
-    // }
-
     if (opcion === true) {
       if (r2 + 1 > 9) {
         inicio = r2 + ':00'
@@ -76,6 +70,8 @@ function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
     if (h[0] === '9:01') {
       h[0] = '09:01'
     }
+
+    h = _.uniq(h)
 
     return h;
 }
@@ -705,6 +701,13 @@ Meteor.methods({
                 $set: {
                     despachado: true
                 }
+            })
+
+            VehiculosDespachados.insert({
+              vehiculoId: vehiculoId,
+              conductorId: conductorId,
+              cobradorId: cobradorId,
+              hora: new Date()
             })
 
         } else {

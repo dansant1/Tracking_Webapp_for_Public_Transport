@@ -39,6 +39,15 @@
         <div id="home" class="tab-pane fade in active">
             <h3>Lista de Vehiculos a Despachar de Hoy</h3>
             <br>
+            <div class="row">
+
+              <div class="col-md-4">
+                <button type="button" class="despachar btn btn-warning">Asignar Personal
+                </button>
+              </div>
+
+            </div>
+            <br>
             <ul>
                 {{#each programacion }}
 
@@ -54,12 +63,7 @@
                                         - Padron {{padron}}</span>
 
                             </div>
-                            <div class="pull-right">
 
-
-                                <button type="button" class="despachar btn btn-warning">Asignar Personal
-                                </button>
-                            </div>
                         </li>
 
                 {{/each}}
@@ -68,16 +72,20 @@
         <div id="menu1" class="tab-pane fade">
             <h3>Vehiculos Despachados</h3>
             <br><br>
-            {{#each despachados }}
+            {{#each vehiculosDespachados }}
 
                 <li class="list-group-item clearfix horario planeamiento">
           <span class="pull-left" style="width: 75%; margin-left: 10px">
                 <i class="fa fa-clock-o" aria-hidden="true"></i>
-                <span class="time hour">{{hora}}</span>
+                <span class="time hour">{{hour}}</span>
 
                 <!-- {{#let v=(vehiculo vehiculoId ) }} -->
                     <span style="display: inline-block; margin-right: 30px; margin-left: 20px;">Placa {{placa}}
                         - Padron {{padron}}</span>
+                        <br>
+                      <span>Conductor: {{conductor }}</span>
+                      <br>
+                      <span>Cobrador: {{cobrador }}</span>
                 <!-- {{/let}} -->
 
 
