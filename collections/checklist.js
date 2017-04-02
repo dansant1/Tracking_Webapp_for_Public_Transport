@@ -25,3 +25,5 @@ Listas.deny({
 	update: () => {return true},
 	remove: () => {return true}
 });
+
+Horas = new Mongo.Collection('horas');
