@@ -9,7 +9,7 @@ function padron (p) {
   } else if (p >= 10 && p <= 99) {
     return '0' + p
   } else {
-    return p
+    return p.toString()
   }
 }
 
@@ -1453,7 +1453,9 @@ Meteor.methods({
         }
     },
     eliminarRuta(rutaId) {
+
         if (this.userId) {
+            //let empresaId = Rutas.findOne({_id: rutaId}).empresaId;
             Rutas.remove({_id: rutaId});
         } else {
             return;

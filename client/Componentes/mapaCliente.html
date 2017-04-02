@@ -4,9 +4,9 @@
 			<div class="col-md-12">
 				<select id="ruta" class="form-control" style="position: absolute; top: 7px; z-index: 1001; left: 12%; width: 180px">
 						<option value="0">--Filtrar por Ruta--</option>
-						{{#each empresa.rutas}}
+						{{#each rutas}}
 
-						<option value="{{this}}">{{ruta this}}</option>
+						<option value="{{this._id}}">{{this.nombre}}</option>
 
 						{{/each}}
 				</select>
@@ -56,9 +56,9 @@
 				</select>
 				<select id="ruta" class="form-control" style="position: absolute; top: 45px; z-index: 1001; left: 12%; width: 180px">
 						<option value="0">--Filtrar por Ruta--</option>
-						{{#each empresa.rutas}}
+						{{#each rutas}}
 
-						<option value="{{this}}">{{ruta this}}</option>
+						<option value="{{this._id}}">{{this.nombre}}</option>
 
 						{{/each}}
 				</select>

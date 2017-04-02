@@ -133,15 +133,23 @@ export function handleFile (e, id, empresaId, rutaId) {
                   if (err) {
                       alert(err);
                       Modal.hide('CargandoExcel');
+                      $("#" + id).val('');
+                      console.log(archivo.files);
                   } else {
                       Modal.hide('CargandoExcel');
+                      $("#" + id).val('');
+
+                      console.log(archivo.files);
                       Bert.alert( result, 'success', 'growl-top-right' );
                   }
               });
 
             }
 
+
         }
+
+
 
       }
   }
@@ -185,7 +193,7 @@ export function SubirFotoVehiculo (event, template, vehiculoId, tipo, id) {
                         }
                     });
                     archivo.files = undefined;
-                    console.log(archivo.files)
+
                 } else {
                     FotosDeVehiculos.insert(doc, function (err, fileObj) {
                         if (err) {
@@ -231,13 +239,28 @@ export function SubirFotoConductor (event, template, conductorId, elemento, tipo
 
             console.log('llego');
 
-            FotosDeConductores.insert(doc, function (err, fileObj) {
-              if (err) {
-                alert('Hubo un problema', 'warning');
-              } else {
-                console.log('Listo!');
-              }
-            });
+            if (FotosDeConductores.find({'metadata.conductorId': conductorId, 'metadata.tipo': tipo}).fetch().length > 0) {
+                let _Id= FotosDeConductores.find({'metadata.conductorId': conductorId, 'metadata.tipo': tipo}).fetch()[0]._id;
+                FotosDeConductores.remove({_id: _Id});
+                FotosDeConductores.insert(doc, function (err, fileObj) {
+                    if (err) {
+                        alert('Hubo un problema', 'warning');
+                    } else {
+                        console.log('Listo!');
+                    }
+                });
+                archivo.files = undefined;
+
+            } else {
+                FotosDeConductores.insert(doc, function (err, fileObj) {
+                    if (err) {
+                        alert('Hubo un problema', 'warning');
+                    } else {
+                        console.log('Listo!');
+                    }
+                });
+                archivo.files = undefined;
+            }
 
             console.log('lego 2');
           }
@@ -274,13 +297,36 @@ export function SubirFotoCobrador (event, template, cobradorId, elemento, tipo) 
 
             console.log('llego');
 
-            FotosDeCobradores.insert(doc, function (err, fileObj) {
-              if (err) {
-                alert('Hubo un problema', 'warning');
-              } else {
-                console.log('Listo!');
-              }
-            });
+            if (FotosDeCobradores.find({'metadata.cobradorId': cobradorId, 'metadata.tipo': tipo}).fetch().length > 0) {
+                let _Id = FotosDeCobradores.find({'metadata.cobradorId': cobradorId, 'metadata.tipo': tipo}).fetch()[0]._id;
+                FotosDeCobradores.remove({_id: _Id});
+                FotosDeCobradores.insert(doc, function (err, fileObj) {
+                    if (err) {
+                        alert('Hubo un problema', 'warning');
+                    } else {
+                        console.log('Listo!');
+                    }
+                });
+                archivo.files = undefined;
+
+            } else {
+                FotosDeCobradores.insert(doc, function (err, fileObj) {
+                    if (err) {
+                        alert('Hubo un problema', 'warning');
+                    } else {
+                        console.log('Listo!');
+                    }
+                });
+                archivo.files = undefined;
+            }
+
+            // FotosDeCobradores.insert(doc, function (err, fileObj) {
+            //   if (err) {
+            //     alert('Hubo un problema', 'warning');
+            //   } else {
+            //     console.log('Listo!');
+            //   }
+            // });
 
             console.log('lego 2');
           }

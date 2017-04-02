@@ -19,6 +19,10 @@ Template.Empresas.onCreated(() => {
     });
 });
 
+Template.Empresas.onRendered(() => {
+  this.$('.tooltipped').tooltip()
+})
+
 Template.Empresas.helpers({
     searching() {
         return Template.instance().searching.get();
@@ -189,13 +193,27 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
 Template.ListaDeVehiculosPorEmpresas.events({
     'click [name="borrar_vehiculos"]'() {
       if ($("[name='empresa']").val() !== "0") {
-        Meteor.call('eliminarVehiculosEmpresa', $("[name='empresa']").val(), (err) => {
-          if (err) {
-            Bert.alert(err, 'danger')
-          } else {
-            Bert.alert('Vehiculos Elininados', 'success')
-          }
-        })
+        swal({
+          title: "Seguro que deseas eliminar",
+          text: "Los datos se borraran",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Si, borrar todo",
+          closeOnConfirm: false
+        },
+        function(){
+          Meteor.call('eliminarVehiculosEmpresa', $("[name='empresa']").val(), (err) => {
+            if (err) {
+              Bert.alert(err, 'danger')
+              swal("Error", "Hubo un error.", "success");
+            } else {
+              swal("Eliminado", "Los datos se eliminaron.", "success");
+              Bert.alert('Vehiculos Elininados', 'success')
+            }
+          })
+        });
+
       } else {
         Bert.alert('Seleccione una Empresa', 'warning')
       }
@@ -357,13 +375,28 @@ Template.ListaDeConductoresPorEmpresa.helpers({
 Template.ListaDeConductoresPorEmpresa.events({
     'click [name="borrar_conductores"]'() {
       if ($("[name='empresa']").val() !== "0") {
-        Meteor.call('eliminarConductoresEmpresa', $("[name='empresa']").val(), (err) => {
-          if (err) {
-            Bert.alert(err, 'danger')
-          } else {
-            Bert.alert('Conductores Elininados', 'success')
-          }
-        })
+        swal({
+          title: "Seguro que deseas eliminar",
+          text: "Los datos se borraran",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Si, borrar todo",
+          closeOnConfirm: false
+        },
+        function() {
+          Meteor.call('eliminarConductoresEmpresa', $("[name='empresa']").val(), (err) => {
+            if (err) {
+              Bert.alert(err, 'danger')
+              swal("Error", "Hubo un error.", "success");
+            } else {
+              Bert.alert('Conductores Elininados', 'success')
+              swal("Eliminado", "Los datos se eliminaron.", "success");
+            }
+          })
+
+        });
+
       } else {
         Bert.alert('Seleccione una Empresa', 'warning')
       }
@@ -393,6 +426,11 @@ Template.ListaDeConductoresPorEmpresa.events({
         printWindow.print();
         printWindow.close();
         return false;
+    },
+    'click .print_pdf'() {
+      let getMyFrame = document.getElementById('print' + this._id);
+      getMyFrame.focus();
+      getMyFrame.contentWindow.print();
     },
     'keyup [name="search"]' (event, template) {
 
@@ -508,15 +546,30 @@ Template.ListaDeCobradoresPorEmpresa.helpers({
 
 Template.ListaDeCobradoresPorEmpresa.events({
     'click [name="borrar_cobradores"]'() {
-      console.log($("[name='empresa2']").val());
+
       if ($("[name='empresa2']").val() !== "0") {
-        Meteor.call('eliminarCobradoresEmpresa', $("[name='empresa2']").val(), (err) => {
-          if (err) {
-            Bert.alert(err, 'danger')
-          } else {
-            Bert.alert('Cobradores Elininados', 'success')
-          }
-        })
+        swal({
+          title: "Seguro que deseas eliminar",
+          text: "Los datos se borraran",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Si, borrar todo",
+          closeOnConfirm: false
+        },
+        function() {
+          Meteor.call('eliminarCobradoresEmpresa', $("[name='empresa2']").val(), (err) => {
+            if (err) {
+              Bert.alert(err, 'danger')
+              swal("Error", "Hubo un error.", "success");
+            } else {
+              Bert.alert('Cobradores Elininados', 'success')
+              swal("Eliminado", "Los datos se eliminaron.", "success");
+            }
+          })
+          
+        });
+
       } else {
         Bert.alert('Seleccione una Empresa', 'warning')
       }
@@ -537,6 +590,11 @@ Template.ListaDeCobradoresPorEmpresa.events({
         printWindow.print();
         printWindow.close();
         return false;
+    },
+    'click .print_pdf'() {
+      let getMyFrame = document.getElementById('print' + this._id);
+      getMyFrame.focus();
+      getMyFrame.contentWindow.print();
     },
     'change #routeCollector' (event, template) {
         let value = event.currentTarget.value;
@@ -1016,6 +1074,7 @@ Template.agregarEmpresa.events({
             entidadId: $('#entidad').val()
         };
 
+        datos.telefono = $('[name="codigo_provincia"]').val() +  datos.telefono
         //console.log(datos.fecha_inicio);
 
         let parts = datos.fecha_inicio.split("-");

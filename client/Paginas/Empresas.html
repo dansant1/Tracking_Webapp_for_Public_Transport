@@ -24,8 +24,8 @@
 
                             {{#each empresas}}
                             <li class="list-group-item clearfix">
-                                <span class="pull-left">{{this.ruc}} - {{this.nombre}}</span>
-                                <span class="pull-right" style="width: 275px">
+                                <span class="pull-left" style="position: relative; top: 10px;">{{this.ruc}} - {{this.nombre}}</span>
+                                <span class="pull-right" style="width: 410px">
                                  <select
                                     data-empresaId="{{this._id}}"
                                     style="width: 88px; display: inline-block; position: relative; top: 1px; margin-right: 5px;"
@@ -37,7 +37,7 @@
                                  </select>
 
                                  <label class="btn btn-success btn-file">
-                                   <i class="fa fa-upload" aria-hidden="true"></i>
+                                   <i class="fa fa-file-excel-o" aria-hidden="true"></i> Cargar
                                    <input
                                       class="subirFlota2"
                                       id="subirFlota{{this._id}}"
@@ -52,10 +52,10 @@
                                     class="btn btn-primary"
                                     id="e{{this._id}}"
                                   >
-                                   <i class="fa fa-eye" aria-hidden="true"></i>
+                                   <i class="fa fa-eye" aria-hidden="true"></i> Ingresar
                                  </a>
                                  <button type="button" class="btn btn-success editar-empresa">
-                                   <i class="fa fa-pencil" aria-hidden="true"></i>
+                                   <i class="fa fa-pencil" aria-hidden="true"></i> Editar
                                  </button>
                                  <button type="button" class="btn btn-danger eliminar-empresa">
                                    <i class="fa fa-trash" aria-hidden="true"></i>
@@ -356,19 +356,16 @@
                             <div class="col-md-5">
                                 <div class="lista-photos">
                                     <button type="button" class="btn btn-primary" name="ver_datos_mtc">Ver infracciones (MTC)</button>
+                                    <br><br>
                                     {{>FotosDeConductores1}}
 
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
                                         <input type="file" class="fotoconductor1"
                                                style="display: none;" name="fotosubir"
-                                               accept="image/*">
+                                               accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printDriver">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
 
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -406,13 +403,9 @@
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
                                         <input type="file" class="fotoconductor2" name="fotosubir" style="display: none;"
-                                               accept="image/*">
+                                               accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printDriver">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
 
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -446,13 +439,9 @@
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
                                         <input type="file" name="fotosubir" class="fotoconductor3" style="display: none;"
-                                               accept="image/*">
+                                               accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printDriver">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
 
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -488,13 +477,9 @@
                                         <input type="file" class="fotoconductor4"
                                                style="display: none;"
                                                name="fotosubir"
-                                               accept="image/*">
+                                               accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printDriver">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
 
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -511,55 +496,95 @@
 </template>
 
 <template name="FotosDeConductores1">
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
+
+  {{/each}}
 </template>
 
 <template name="FotosDeConductores2">
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
+
+  {{/each}}
 </template>
 
 <template name="FotosDeConductores3">
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
+
+  {{/each}}
 </template>
 
 <template name="FotosDeConductores4">
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
+
+  {{/each}}
 </template>
 
 <template name="ListaDeCobradoresPorEmpresa">
@@ -643,14 +668,10 @@
                                         <input type="file" class="fotocobrador1"
                                                style="display: none;"
                                                name="fotosubir"
-                                               accept="image/*">
+                                               accept="image/*,application/pdf">
 
                                     </label>
-                                    <button class="btn btn-primary imprimir printCollector">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
 
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -687,13 +708,9 @@
                                         <input type="file" class="fotocobrador2"
                                                style="display: none;"
                                                name="fotosubir"
-                                               accept="image/*">
+                                               accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printCollector">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
 
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -728,13 +745,9 @@
                                         <i class="fa fa-camera" aria-hidden="true"></i>
                                         <input type="file" class="fotocobrador3" style="display: none;"
                                                name="fotosubir"
-                                               accept="image/*">
+                                               accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printCollector">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
 
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -793,8 +806,6 @@
 
                 <div class="tab-content">
                     <div id="{{this._id}}" class="tab-pane fade in active">
-
-
                         <div class="row">
                             <div class="col-md-7" style="margin-top: 10px">
                                 <table class="table">
@@ -806,6 +817,38 @@
                                     <tr>
                                         <td>Placa:</td>
                                         <td>{{this.placa}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>N. Serie:</td>
+                                        <td>{{this.tecnico.serie}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Marca:</td>
+                                        <td>{{this.tecnico.serie}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Modelo:</td>
+                                        <td>{{this.tecnico.modelo}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Combustible:</td>
+                                        <td>{{this.tecnico.combustible}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Año de Fabricacion:</td>
+                                        <td>{{this.tecnico.anioDeFabricacion}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Longitud:</td>
+                                        <td>{{this.tecnico.longitud}} m</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>N. Asientos:</td>
+                                        <td>{{this.tecnico.asientos}}</td>
                                     </tr>
 
                                     <tr>
@@ -887,13 +930,9 @@
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
                                         <input type="file" name="fotosubir" class="fotovehiculo2" style="display: none;"
-                                               accept="image/*">
+                                                accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printVehicle">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
 
-                                    </button>
                                 </div>
 
                             </div>
@@ -920,6 +959,11 @@
                                         <td>{{this.SOAT.fin}}</td>
                                     </tr>
 
+                                    <tr>
+                                        <td>Compañia:</td>
+                                        <td>{{this.SOAT.compnia}}</td>
+                                    </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -930,12 +974,9 @@
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
                                         <input type="file" class="fotovehiculo3" name="fotosubir" style="display: none;"
-                                               accept="image/*">
+                                                accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printVehicle">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
-                                    </button>
+
                                 </div>
                             </div>
                         </div>
@@ -949,7 +990,7 @@
                                     <table class="table">
                                         <tbody>
                                         <tr class="entity">
-                                            <td>Entidad:</td>
+                                            <td style="width: 200px">Entidad:</td>
                                             <td>{{this.entidad}}</td>
                                         </tr>
                                         <tr>
@@ -979,12 +1020,9 @@
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
                                         <input type="file" class="fotovehiculo4" name="fotosubir" style="display: none;"
-                                               accept="image/*">
+                                                accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printVehicle">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
-                                    </button>
+
                                 </div>
                             </div>
                         </div>
@@ -1008,6 +1046,11 @@
                                         <td> {{this.CITV.fin}}</td>
                                     </tr>
 
+                                    <tr>
+                                        <td>Compañia:</td>
+                                        <td> {{this.CITV.compania}}</td>
+                                    </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1018,12 +1061,9 @@
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
                                         <input type="file" class="fotovehiculo5" name="fotosubir" style="display: none;"
-                                               accept="image/*">
+                                                accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printVehicle">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
-                                    </button>
+
                                 </div>
                             </div>
                         </div>
@@ -1047,6 +1087,11 @@
                                         <td>{{this.RC.fin}}</td>
                                     </tr>
 
+                                    <tr>
+                                        <td>Compañia:</td>
+                                        <td>{{this.RC.compania}}</td>
+                                    </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1057,12 +1102,9 @@
                                     <label class="btn btn-success btn-file">
                                         <i class="fa fa-camera" aria-hidden="true"></i>
                                         <input type="file" class="fotovehiculo6" name="fotosubir" style="display: none;"
-                                               accept="image/*">
+                                                accept="image/*,application/pdf">
                                     </label>
-                                    <button class="btn btn-primary imprimir printVehicle">
-                                        <i class="fa fa-print"
-                                           aria-hidden="true"></i>
-                                    </button>
+
                                 </div>
                             </div>
                         </div>
@@ -1079,78 +1121,119 @@
 </template>
 
 <template name="FotosDeCobradores">
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                     aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
+
+  {{/each}}
 
 </template>
 
 <template name="FotosDeCobradores1">
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button  class="btn btn-danger remove"><i class="fa fa-trash"
-                                                      aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
 
+  {{/each}}
 </template>
 
 <template name="FotosDeCobradores2">
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                     aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
 
+  {{/each}}
 </template>
 
 <template name="FotosDeCobradores3">
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                     aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
 
+  {{/each}}
 </template>
 
 <template name="FotosDeCobradores4">
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                     aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
 
+  {{/each}}
 </template>
 
 <template name="FotosDeConductores">
@@ -1175,15 +1258,10 @@
 
         {{#if isImage}}
             <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <!--<button class="btn btn-primary printVehicle">
-                <i class="fa fa-print"
-                   aria-hidden="true"></i>
-
-            </button>-->
         {{else}}
             <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
             <br>
-            <a href="{{this.url}}" id="" class="btn btn-primary" target="_blank" >Visualizar</a>
+            <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
             <button class="btn btn-primary print_pdf">
                 <i class="fa fa-print"
                    aria-hidden="true"></i>
@@ -1202,80 +1280,130 @@
 
 <template name="FotosDeVehiculos2">
 
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash" aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
+
+  {{/each}}
 
 </template>
 
 <template name="FotosDeVehiculos3">
 
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                     aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
+
+  {{/each}}
+
 
 </template>
 
 <template name="FotosDeVehiculos4">
 
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo imprimir{{this._id}}" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                     aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
+
+  {{/each}}
+
 
 </template>
 
 <template name="FotosDeVehiculos5">
 
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                     aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
+
+  {{/each}}
+
 
 </template>
 
 <template name="FotosDeVehiculos6">
 
-    {{#each fotos}}
+  {{#each fotos}}
 
-        {{#if isImage}}
-            <a href="{{this.url}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
-            <br><br>
-            <button class="btn btn-danger remove"><i class="fa fa-trash"
-                                                     aria-hidden="true"></i>
-            </button>
-        {{/if}}
+      {{#if isImage}}
+          <a href="{{this.url}}" class="imprimir{{this._id}}" target="_blank"><img class="photo" src="{{this.url}}"/></a>
+      {{else}}
+          <iframe id="print{{this._id}}" src="{{this.url}}" ></iframe>
+          <br>
+          <a href="{{this.url}}" class="btn btn-primary" target="_blank" >Visualizar</a>
+          <button class="btn btn-primary print_pdf">
+              <i class="fa fa-print"
+                 aria-hidden="true"></i>
+          </button>
+      {{/if}}
 
-    {{/each}}
+      <br><br>
+      <button class="btn btn-danger remove"><i class="fa fa-trash"
+                                               aria-hidden="true"></i>
+      </button>
+
+  {{/each}}
+
 
 </template>
 
@@ -1336,17 +1464,42 @@
                         <br><br>
                         <div class="form-group">
                             <label for="telefono">Teléfono</label>
+                            <select class="form-control" style="margin-left: 45px;" name="codigo_provincia">
+                              <option value="01">(01) Lima/Callao</option>
+                              <option value="41">(41) Amazonas</option>
+                              <option value="43">(43) Ancash</option>
+                              <option value="83">(83) Apurimac</option>
+                              <option value="54">(54) Arequipa</option>
+                              <option value="66">(66) Ayacucho</option>
+                              <option value="76">(76) Cajamarca</option>
+                              <option value="84">(84) Cusco</option>
+                              <option value="67">(67) Huancavelica</option>
+                              <option value="62">(62) Huanuco</option>
+                              <option value="56">(56) Ica</option>
+                              <option value="64">(64) Junin</option>
+                              <option value="44">(44) La Libertad</option>
+                              <option value="74">(74) Lambayeque</option>
+                              <option value="65">(65) Loreto</option>
+                              <option value="82">(82) Madre de Dios</option>
+                              <option value="53">(53)Moquegua</option>
+                              <option value="63">(63) Pasco</option>
+                              <option value="73">(73) Piura</option>
+                              <option value="51">(51) Puno</option>
+                              <option value="42">(42) San Martin</option>
+                              <option value="72">(72) Tumbes</option>
+                              <option value="61">(61) Ucayali</option>
+                            </select>
                             <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                                    onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0"
-                                   type="text" maxlength="9" name="telefono" style="width: 117px; margin-left: 45px;"
+                                   type="text" maxlength="7" name="telefono" style="width: 117px;"
                                    class="form-control" id="telefono">
                         </div>
-
+                        <br><br>
                         <div class="form-group">
-                            <label for="movil" style="margin-left: 130px;"> Móvil</label>
+                            <label for="movil"> Móvil</label>
                             <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                                    onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0"
-                                   type="text" maxlength="9" name="movil" style="width: 115px; margin-left: 19px;"
+                                   type="text" maxlength="9" name="movil" style="width: 115px; margin-left: 68px;"
                                    class="form-control" id="movil">
                         </div>
                         <br><br>

@@ -6,6 +6,7 @@ Template.mapaCliente.onCreated(() => {
     template.ruta = new ReactiveVar(false);
     template.vehiculo = new ReactiveVar(false);
     template.listadevehiculos = new ReactiveVar(false);
+    template.empresaId = new ReactiveVar(Meteor.user().profile.empresaId)
 
     template.verparaderos = new ReactiveVar(false);
     template.verpuntosdecontrol = new ReactiveVar(false);
@@ -39,23 +40,10 @@ Template.mapaCliente.helpers({
         return Empresas.findOne({ _id: Meteor.user().profile.empresaId });
     },
     vehiculos() {
-        let query = {};
-        let rutaId = Template.instance().ruta.get();
-        let vehiculoId = Template.instance().vehiculo.get();
-
-        if (rutaId) {
-            query["rutaId"] = rutaId;
-        }
-
-        if (vehiculoId) {
-            query["_id"] = vehiculoId;
-        }
-
-        return Vehiculos.find(query);
+        return Vehiculos.find({rutaId: Template.instance().ruta.get()});
     },
-    ruta(id) {
-        let ruta = Rutas.findOne({_id: id}) || {nombre: ""};
-        return ruta.nombre;
+    rutas() {
+      return Rutas.find({empresaId: Template.instance().empresaId.get()})
     }
 });
 
@@ -340,8 +328,8 @@ Template.mapaCliente.events({
     'change #ruta'(e, t) {
         let instance = Template.instance();
 
-        let target = e.currentTarget;
-        let rutaId = target.options[target.selectedIndex].value;
+        let target = e.target //e.currentTarget;
+        let rutaId = target.value//target.options[target.selectedIndex].value;
 
         instance.ruta.set(rutaId === "0" ? false : rutaId);
         instance.vergeocerca.set( false );
@@ -434,7 +422,7 @@ Template.adminMapaCliente.onCreated(() => {
     template.vergeocerca = new ReactiveVar(false);
 
     template.empresaId = new ReactiveVar(false);
-
+    template.rutaId = new ReactiveVar(false)
     template.autorun(() => {
 
         let empresaId = template.empresaId.get();
@@ -463,19 +451,10 @@ Template.adminMapaCliente.helpers({
         return Empresas.find({}).fetch();
     },
     vehiculos() {
-        let query = {};
-        let rutaId = Template.instance().ruta.get();
-        let vehiculoId = Template.instance().vehiculo.get();
-
-        if (rutaId) {
-            query["rutaId"] = rutaId;
-        }
-
-        if (vehiculoId) {
-            query["_id"] = vehiculoId;
-        }
-
-        return Vehiculos.find(query);
+        return Vehiculos.find({rutaId: Template.instance().rutaId.get()});
+    },
+    rutas() {
+      return Rutas.find({empresaId: Template.instance().empresaId.get()})
     }
 });
 
@@ -559,13 +538,6 @@ Template.adminMapaCliente.onRendered(() => {
                 });
 
             });
-
-            /*vehicle.addListener('click', function() {
-             infowindow.open(map.instance, vehicle);
-             });*/
-
-
-            // mapa.subscribe('RutasPorEmpresa', () => {
 
             let subRutasPorEmp = mapa.subscribe('RutasPorEmpresa',  empresaId, () => {
 
@@ -766,12 +738,12 @@ Template.adminMapaCliente.events({
 
         let target = e.currentTarget;
         let empresaId = target.options[target.selectedIndex].value;
-
+        t.empresaId.set(empresaId)
+        console.log(t.empresaId.get());
         instance.empresaId.set(empresaId === "0" ? false : empresaId);
         instance.vergeocerca.set( false );
 
     },
-
     'click #vergeocerca'(e,t){
       let instance = Template.instance();
 
@@ -784,9 +756,10 @@ Template.adminMapaCliente.events({
 
         let instance = Template.instance();
 
-        let target = e.currentTarget;
-        let rutaId = target.options[target.selectedIndex].value;
-
+        let target = e.target //e.currentTarget;
+        let rutaId = target.value //target.options[target.selectedIndex].value;
+        console.log(rutaId);
+        t.rutaId.set(rutaId)
         instance.ruta.set(rutaId === "0" ? false : rutaId);
         instance.vergeocerca.set( false );
 

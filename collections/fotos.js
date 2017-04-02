@@ -51,8 +51,8 @@ FotosDeConductores = new FS.Collection("fconductores", {
   filter: {
     maxSize: 1048576, //in bytes
     allow: {
-      contentTypes: ['image/*'],
-      extensions: ['png', 'jpg', 'jpeg']
+      contentTypes: ['image/*', 'application/pdf'],
+      extensions: ['png', 'jpg', 'jpeg', 'pdf']
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {
@@ -92,8 +92,8 @@ FotosDeCobradores = new FS.Collection("fcobradores", {
   filter: {
     maxSize: 1048576, //in bytes
     allow: {
-      contentTypes: ['image/*'],
-      extensions: ['png', 'jpg', 'jpeg']
+      contentTypes: ['image/*', 'application/pdf'],
+      extensions: ['png', 'jpg', 'jpeg', 'pdf']
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {
