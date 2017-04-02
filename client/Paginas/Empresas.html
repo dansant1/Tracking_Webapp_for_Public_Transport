@@ -25,14 +25,14 @@
                             {{#each empresas}}
                             <li class="list-group-item clearfix">
                                 <span class="pull-left">{{this.ruc}} - {{this.nombre}}</span>
-                                <span class="pull-right" style="width: 255px">
+                                <span class="pull-right" style="width: 275px">
                                  <select
                                     data-empresaId="{{this._id}}"
                                     style="width: 88px; display: inline-block; position: relative; top: 1px; margin-right: 5px;"
                                     class="form-control ruta" id="listarutas{{this._id}}">
                                     <option value="1">RUTA</option>
-                                    {{#each ruta in rutas this.rutas }}
-                                      <option value="{{ruta._id}}">{{ruta.nombre}}</option>
+                                    {{#each rutas this._id }}
+                                      <option value="{{this._id}}">{{this.nombre}}</option>
                                     {{/each}}
                                  </select>
 
@@ -54,6 +54,9 @@
                                   >
                                    <i class="fa fa-eye" aria-hidden="true"></i>
                                  </a>
+                                 <button type="button" class="btn btn-success editar-empresa">
+                                   <i class="fa fa-pencil" aria-hidden="true"></i>
+                                 </button>
                                  <button type="button" class="btn btn-danger eliminar-empresa">
                                    <i class="fa fa-trash" aria-hidden="true"></i>
                                  </button>
@@ -157,35 +160,17 @@
 
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#opcion-ruta">Ruta</a></li>
-        <li><a data-toggle="tab" href="#opcion-vehiculos">Vehículos</a></li>
-        <li><a data-toggle="tab" href="#opcion-operadores">Operadores</a></li>
         <li><a data-toggle="tab" href="#opcion-administradores">Administradores</a></li>
     </ul>
 
     <div class="tab-content">
-        <div id="opcion-vehiculos" class="tab-pane fade">
-            <button class="btn btn-success agregar-vehiculo">Agregar Vehículo</button>
-            <br>
-            {{>ListaDeVehiculosPorEmpresas empresaId=empresaId rutaId=rutaId}}
-        </div>
-        <div id="opcion-operadores" class="tab-pane fade">
-            <button class="btn btn-success agregar-conductor"><i class="fa fa-user-plus" aria-hidden="true"
-                                                                 style="display: inline-block; margin-right: 5px;"></i>
-                Agregar Conductor
-            </button>
-            <button class="btn btn-primary agregar-cobrador"><i class="fa fa-user-plus" aria-hidden="true"
-                                                                style="display: inline-block; margin-right: 5px;"></i>
-                Agregar Cobrador
-            </button>
-            <br>
-            {{>Operadores}}
+        <div id="opcion-ruta" class="tab-pane fade in active">
+            {{>AdministradorRutasPorEmpresa empresaId=empresaId rutaId=rutaId }}
         </div>
         <div id="opcion-administradores" class="tab-pane fade">
             {{>GestorAdministradores}}
         </div>
-        <div id="opcion-ruta" class="tab-pane fade in active">
-            {{>AdministradorRutasPorEmpresa empresaId=empresaId rutaId=rutaId }}
-        </div>
+
     </div>
 </template>
 
@@ -297,6 +282,15 @@
         <div class="pull-left">
             <input type="text" name="search" class="form-control" style="width: 350px;"
                    placeholder="Buscar conductor por DNI, Nombre o Apellido">
+        </div>
+        <div class="pull-right">
+          <select class="form-control" name="empresa" style="display: inline-block; width: 130px">
+            <option value="0">--Seleccione--</option>
+            {{#each empresas}}
+            <option value="{{this._id}}">{{this.nombre}}</option>
+            {{/each}}
+          </select>
+          <button type="button" name="borrar_conductores" style="display: inline-block" class="btn btn-danger">Borrar Conductores</button>
         </div>
     </div>
 
@@ -575,6 +569,15 @@
             <input type="text" name="search" class="form-control" style="width: 350px;"
                    placeholder="Buscar cobrador por DNI, Nombre o Apellido">
         </div>
+        <div class="pull-right">
+          <select class="form-control" name="empresa2" style="display: inline-block; width: 130px">
+            <option value="0">--Seleccione--</option>
+            {{#each empresas}}
+            <option value="{{this._id}}">{{this.nombre}}</option>
+            {{/each}}
+          </select>
+          <button type="button" name="borrar_cobradores" style="display: inline-block" class="btn btn-danger">Borrar Cobradores</button>
+        </div>
     </div>
 
     {{#if searching}}
@@ -756,9 +759,19 @@
             {{#if hayRuta}}
             <p style="font-size: 14px; margin-bottom: 5px">Ruta {{ruta.nombre}}</p>
             {{/if}}
+
             <br>
             <input type="text" name="search" class="form-control" style="width: 350px;"
                    placeholder="Buscar vehículo por placa, padron o ruta">
+        </div>
+        <div class="pull-right" style="position: relative; top: 15px;">
+          <select class="form-control" name="empresa" style="display: inline-block; width: 130px">
+            <option value="0">--Seleccione--</option>
+            {{#each empresas}}
+            <option value="{{this._id}}">{{this.nombre}}</option>
+            {{/each}}
+          </select>
+          <button type="button" name="borrar_vehiculos" style="display: inline-block" class="btn btn-danger">Borrar Vehiculos</button>
         </div>
     </div>
 
@@ -1299,7 +1312,7 @@
                             <label for="movil" style="margin-left: 2px;">Fecha de Inicio</label>
                             <div class='input-group date' id='datetimepicker1'>
 
-                                <input type='date' name="movil"
+                                <input type='date' name="fecha_inicio"
                                        style="width: 155px; padding-right: 5px; margin-left: 19px;"
                                        class="form-control"/>
 
@@ -1343,12 +1356,24 @@
                                    class="form-control" id="email">
                         </div>
                         <div class="form-group">
-                            <label for="plan" style="    margin-left: 70px;">Checklist</label>
+                            <label for="plan" style="margin-left: 70px;">Checklist</label>
                             <select class="form-control" style="margin-left: 4px;width: 115px;" id="plan">
+                              <option value="0">--Seleccione--</option>
                               {{#each listas}}
                               <option value="{{this._id}}">{{this.nombre}}</option>
                               {{/each}}
                             </select>
+                        </div>
+                        <br><br>
+                        <div class="form-group" id="entidades_container">
+                            <label for="entidad">Entidades</label>
+                            <select class="form-control" style="margin-left: 35px; width: 165px;" id="entidad">
+                              <option value="0">Seleccione la Entidad</option>
+                              {{#each entidades}}
+                              <option value="{{this._id}}">{{this.nombre}}</option>
+                              {{/each}}
+                            </select>
+                            <button type="button" class="btn btn-primary ae" name="agregar_entidad">+</button>
                         </div>
                     </form>
 
@@ -1374,78 +1399,105 @@
 </template>
 
 <template name="EditarEmpresa">
-    <div class="modal fade">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+  <div class="modal fade">
+      <div class="modal-dialog">
+          <div class="modal-content">
 
-                <div class="modal-header">
-                    <h4 class="modal-title">Editar Datos de Empresa</h4>
-                </div>
+              <div class="modal-header">
+                  <h4 class="modal-title">Editar Empresa</h4>
+              </div>
 
-                <div class="modal-body">
-                    {{#with empresa}}
+              <div class="modal-body">
+                  <br>
+                  {{#with empresa}}
+                  <form class="form-inline">
 
-                        <br>
-                        <form class="__formulario">
+                      <div class="form-group">
+                          <label for="nombre">Nombre</label>
+                          <input type="text" name="nombre" style="margin-left: 48px; width: 432px;"
+                                 class="form-control" id="nombre" value="{{this.nombre}}">
+                      </div>
+                      <br><br>
+                      <div class="form-group">
+                          <label for="ruc">RUC</label>
+                          <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                 onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0"
+                                 type="text" maxlength="11" name="ruc" style="width: 138px; margin-left: 70px;"
+                                 class="form-control" value="{{this.ruc}}" id="ruc">
+                      </div>
 
-                            <div class="group">
-                                <input type="text" required name="nombre" value="{{this.nombre}}">
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label>Nombre</label>
-                            </div>
-                            <div class="group">
-                                <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                                       onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0"
-                                       type="text" class="form-control" maxlength="13" required name="ruc"
-                                       value="{{this.ruc}}">
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label>RUC</label>
-                            </div>
-                            <div class="group">
-                                <input type="text" required name="domicilio" value="{{this.domicilio}}"
-                                       onkeypress="return event.charCode!= 64 && event.charCode!= 34 && event.charCode!= 58 && event.charCode!= 59 && event.charCode!= 35 && event.charCode!= 33 && event.charCode!= 36 && event.charCode!= 128 && event.charCode!= 163 && event.charCode!= 42 && event.charCode!= 37 && event.charCode!= 47 && event.charCode!= 43 && event.charCode!= 42">
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label>Domicilio</label>
-                            </div>
-                            <div class="group">
-                                <input type="text" required name="representante" value="{{this.representante}}"
-                                       onkeypress="return event.charCode!= 64 && event.charCode!= 34 && event.charCode!= 58 && event.charCode!= 59 && event.charCode!= 35 && event.charCode!= 33 && event.charCode!= 36 && event.charCode!= 128 && event.charCode!= 163 && event.charCode!= 42 && event.charCode!= 37 && event.charCode!= 47 && event.charCode!= 43 && event.charCode!= 42">
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label>Representante Legal</label>
-                            </div>
-                            <div class="group">
-                                <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                                       onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0"
-                                       type="text" class="form-control" maxlength="9" required name="telefono"
-                                       value="{{this.telefono}}">
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label>Teléfono</label>
-                            </div>
-                            <div class="group">
-                                <input type="email" required name="email" value="{{this.email}}">
-                                <span class="highlight"></span>
-                                <span class="bar"></span>
-                                <label>Email</label>
-                            </div>
-                        </form>
+                      <div class="form-group">
+                          <label for="movil" style="margin-left: 2px;">Fecha de Inicio</label>
+                          <div class='input-group date' id='datetimepicker1'>
 
-                    {{/with}}
+                              <input type='date' value="{{fecha this.fecha_inicio}}" name="fecha_inicio"
+                                     style="width: 155px; padding-right: 5px; margin-left: 19px;"
+                                     class="form-control"/>
 
-                </div>
+                          </div>
+                      </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success guardar ">Guardar</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                </div>
+                      <br><br>
+                      <div class="form-group">
+                          <label for="domicilio">Domicilio</label>
+                          <input type="text" name="domicilio" style="width: 430px; margin-left: 40px;"
+                                 class="form-control" id="domicilio" value="{{this.domicilio}}"
+                                 onkeypress="return event.charCode!= 64 && event.charCode!= 34 && event.charCode!= 58 && event.charCode!= 59 && event.charCode!= 35 && event.charCode!= 33 && event.charCode!= 36 && event.charCode!= 128 && event.charCode!= 163 && event.charCode!= 42 && event.charCode!= 37 && event.charCode!= 47 && event.charCode!= 43 && event.charCode!= 42">
+                      </div>
+                      <br><br>
+                      <div class="form-group">
+                          <label for="representante">Representante</label>
+                          <input type="text" value="{{this.representante}}" name="representante" style="width: 430px;" class="form-control"
+                                 onkeypress="return event.charCode!= 64 && event.charCode!= 34 && event.charCode!= 58 && event.charCode!= 59 && event.charCode!= 35 && event.charCode!= 33 && event.charCode!= 36 && event.charCode!= 128 && event.charCode!= 163 && event.charCode!= 42 && event.charCode!= 37 && event.charCode!= 47 && event.charCode!= 43 && event.charCode!= 42"
+                                 id="representante">
+                      </div>
+                      <br><br>
+                      <div class="form-group">
+                          <label for="telefono">T. Fijo</label>
+                          <input value="{{this.telefono}}" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                 onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0"
+                                 type="text" maxlength="9" name="telefono" style="width: 117px; margin-left: 60px;"
+                                 class="form-control" id="telefono">
+                      </div>
 
-            </div>
-        </div>
-    </div>
+                      <div class="form-group">
+                          <label for="movil" style="margin-left: 130px;">T. Móvil</label>
+                          <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                 onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0"
+                                 type="text" maxlength="9" name="movil" style="width: 115px; margin-left: 19px;"
+                                 class="form-control" value="{{this.movil}}" id="movil">
+                      </div>
+                      <br><br>
+                      <div class="form-group">
+                          <label for="email">Email</label>
+                          <input value="{{this.email}}" type="email" name="email" style="width: 165px; margin-left: 66px;"
+                                 class="form-control" id="email">
+                      </div>
+                      <div class="form-group">
+                          <label for="plan" style="margin-left: 70px; margin-right: 12px">Checklist</label>
+                          <select class="form-control" style="margin-left: 4px;width: 115px;" id="plan">
+                            {{#each listas}}
+                            <option {{select}} class="{{this._id}}" value="{{this._id}}">{{this.nombre}}</option>
+                            {{/each}}
+                          </select>
+                      </div>
+                  </form>
+                  {{/with}}
+                  <form class="__formulario">
+                      <button type="submit" class="__button guardar" style="background-color: #3498db">
+                          Guardar
+                      </button>
+                  </form>
+
+              </div>
+
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              </div>
+
+          </div>
+      </div>
+  </div>
 </template>
 
 <template name="EditarCobrador">

@@ -1,7 +1,7 @@
 import Modules from "/client/Modules";
 import geolib from "geolib";
 
-const geofenceRadius = 50;
+const geofenceRadius = 25;
 
 const getPolygonPoint = (point1, point2) => {
     const bearingDregrees = geolib.getRhumbLineBearing(point1, point2);
@@ -42,40 +42,6 @@ const orderPoints = (pointList) => {
     return [].concat(oddPoints, evenPoints);
 }
 
-// const generatePolygon = (routePoints) => {
-//     let polygon;
-//     let points;
-//
-//     for (let i = 0; i < routePoints.length - 1; i++) {
-//         points = getPolygonPoint(routePoints[i], routePoints[i + 1]);
-//         polygon = _.union(routePoints, points );
-//         console.log( i, points[0], points[1] );
-//
-//         //add last point
-//         // if (i === routePoints.length - 2) {
-//         //     points = getPolygonPoint(routePoints[i + 1], routePoints[i]);
-//         //     polygon = _.union(polygon, [points[1], points[0]]);
-//         //     console.log( points );
-//         // }
-//
-//     }
-//
-//     // polygon = orderPoints( polygon );
-//     // polygon = transformPoints(polygon);
-//
-//     return polygon;
-//
-// }
-
-/**
-* Generate the geofence polygon
-*
-* @param instace object template instance
-* @param map object Google maps instance
-* @param goingPoints array Collection of going points
-* @param goingPoints array Collection of return points
-* @return array Collection of two points defining the SW and NE corners.
-*/
 
 const activateGeofence = (instance, map, goingPoints, returnPoints) => {
     let goingPolygon = []
@@ -142,5 +108,3 @@ const activateGeofence = (instance, map, goingPoints, returnPoints) => {
 }
 
 Modules.client.activarGeocerca = activateGeofence;
-
-// export default activarGeocerca;

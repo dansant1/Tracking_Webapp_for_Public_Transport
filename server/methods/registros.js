@@ -2,6 +2,17 @@ import {Meteor} from 'meteor/meteor';
 import {Excel} from 'meteor/netanelgilad:excel'
 import ROLES from '../../Both/Roles'
 
+function padron (p) {
+  p = parseInt(p)
+  if (p <= 9) {
+    return '00' + p
+  } else if (p >= 10 && p <= 99) {
+    return '0' + p
+  } else {
+    return p
+  }
+}
+
 function getHorarioNuevo (rango, dia, ida, rutaId, opcion) {
 
     let r1 = rango.hi;
@@ -776,13 +787,29 @@ Meteor.methods({
             domicilio: datos.domicilio,
             representante: datos.representante,
             telefono: datos.telefono,
+            movil: datos.movil,
             email: datos.email,
-            plan: datos.plan
+            fecha_inicio: datos.fecha_inicio,
+            plan: datos.plan,
+            entidadId: datos.entidadId
         });
 
     },
     eliminarEmpresa(id) {
         Empresas.remove({_id: id});
+        Rutas.remove({empresaId: id})
+        Vehiculos.remove({empresaId: id})
+        Conductores.remove({empresaId: id})
+        Cobradores.remove({empresaId: id})
+    },
+    eliminarVehiculosEmpresa(empresaId) {
+      Vehiculos.remove({empresaId: empresaId})
+    },
+    eliminarConductoresEmpresa(empresaId) {
+      Conductores.remove({empresaId: empresaId})
+    },
+    eliminarCobradoresEmpresa(empresaId) {
+      Cobradores.remove({empresaId: empresaId})
     },
     agregarEntidad(datos) {
         Entidades.insert({
@@ -953,7 +980,7 @@ Meteor.methods({
                                 rutaId: rutaId,
                                 borrador: false,
                                 despachado: false,
-                                padron: obj['0'],
+                                padron: padron(obj['0']),
                                 placa: obj['1'],
                                 propietario: {
                                     nombre: obj['2'],

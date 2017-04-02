@@ -45,8 +45,8 @@ Template.Empresas.helpers({
 
         return Empresas.find(query, projection);
     },
-    rutas( arrayOfRutaId ) {
-        return Rutas.find({ _id: {$in : arrayOfRutaId } });
+    rutas( empresaId ) {
+        return Rutas.find({ empresaId: empresaId });
     },
     rutaId(){
         return Template.instance().rutaId.get();
@@ -66,6 +66,10 @@ Template.Empresas.events({
         if (value === '') {
             template.searchQuery.set(value);
         }
+    },
+    'click .editar-empresa'() {
+      Session.set('datos_empresa', this._id)
+      Modal.show('EditarEmpresa')
     },
     'click .eliminar-empresa'() {
         swal({
@@ -129,10 +133,15 @@ Template.ListaDeVehiculosPorEmpresas.onCreated(() => {
                 template.searching.set(false);
             }, 300);
         });
+
+        template.subscribe('Empresas')
     });
 });
 
 Template.ListaDeVehiculosPorEmpresas.helpers({
+    empresas() {
+      return Empresas.find({})
+    },
     searching() {
         return Template.instance().searching.get();
     },
@@ -178,6 +187,19 @@ Template.ListaDeVehiculosPorEmpresas.helpers({
 });
 
 Template.ListaDeVehiculosPorEmpresas.events({
+    'click [name="borrar_vehiculos"]'() {
+      if ($("[name='empresa']").val() !== "0") {
+        Meteor.call('eliminarVehiculosEmpresa', $("[name='empresa']").val(), (err) => {
+          if (err) {
+            Bert.alert(err, 'danger')
+          } else {
+            Bert.alert('Vehiculos Elininados', 'success')
+          }
+        })
+      } else {
+        Bert.alert('Seleccione una Empresa', 'warning')
+      }
+    },
     'click .printVehicle'(event, template) {
 
         //console.log($(event.target).parent().find('a img')[0].src);
@@ -295,9 +317,7 @@ Template.ListaDeConductoresPorEmpresa.onCreated(() => {
     template.autorun(() => {
         let empresaId = FlowRouter.getParam('empresaId');
         let rutaId =  FlowRouter.getParam('rutaId');
-
-        console.log(rutaId);
-
+        template.subscribe('Empresas')
         template.subscribe('ConductoresPorEmpresa', rutaId, template.searchQuery.get(), () => {
             setTimeout(() => {
                 template.searching.set(false);
@@ -307,6 +327,9 @@ Template.ListaDeConductoresPorEmpresa.onCreated(() => {
 });
 
 Template.ListaDeConductoresPorEmpresa.helpers({
+    empresas() {
+      return Empresas.find()
+    },
     searching() {
         return Template.instance().searching.get();
     },
@@ -325,13 +348,26 @@ Template.ListaDeConductoresPorEmpresa.helpers({
               return Conductores.find({empresaId: empresaId});
 
             }
-            //return Conductores.find({empresaId: empresaId});
+
         }
 
     }
 });
 
 Template.ListaDeConductoresPorEmpresa.events({
+    'click [name="borrar_conductores"]'() {
+      if ($("[name='empresa']").val() !== "0") {
+        Meteor.call('eliminarConductoresEmpresa', $("[name='empresa']").val(), (err) => {
+          if (err) {
+            Bert.alert(err, 'danger')
+          } else {
+            Bert.alert('Conductores Elininados', 'success')
+          }
+        })
+      } else {
+        Bert.alert('Seleccione una Empresa', 'warning')
+      }
+    },
     'click [name="ver_datos_mtc"]'() {
       Meteor.call('infracciones_conductores_mtc', this._id, (err, res) => {
         if (err) {
@@ -425,7 +461,7 @@ Template.ListaDeCobradoresPorEmpresa.onCreated(() => {
         let empresaId = FlowRouter.getParam('empresaId');
         let rutaId =  FlowRouter.getParam('rutaId');
 
-
+        template.subscribe('Empresas')
         template.subscribe('CobradoresPorEmpresa', rutaId, template.searchQuery.get(), () => {
             setTimeout(() => {
                 template.searching.set(false);
@@ -440,6 +476,9 @@ Template.ListaDeCobradoresPorEmpresa.onCreated(() => {
 });
 
 Template.ListaDeCobradoresPorEmpresa.helpers({
+    empresas() {
+      return Empresas.find()
+    },
     searching() {
         return Template.instance().searching.get();
     },
@@ -468,6 +507,20 @@ Template.ListaDeCobradoresPorEmpresa.helpers({
 });
 
 Template.ListaDeCobradoresPorEmpresa.events({
+    'click [name="borrar_cobradores"]'() {
+      console.log($("[name='empresa2']").val());
+      if ($("[name='empresa2']").val() !== "0") {
+        Meteor.call('eliminarCobradoresEmpresa', $("[name='empresa2']").val(), (err) => {
+          if (err) {
+            Bert.alert(err, 'danger')
+          } else {
+            Bert.alert('Cobradores Elininados', 'success')
+          }
+        })
+      } else {
+        Bert.alert('Seleccione una Empresa', 'warning')
+      }
+    },
     'click .printCollector'(event, template) {
         var windowUrl = 'MyPage.aspx';
         var uniqueName = new Date();
@@ -661,12 +714,17 @@ Template.EditarVehiculo.events({
 Template.EditarEmpresa.onCreated(() => {
 
     let template = Template.instance();
-
+    template.empresaId = new ReactiveVar(undefined)
     template.autorun(() => {
 
-        let empresaId = FlowRouter.getParam('empresaId');
+        if (FlowRouter.getParam('empresaId') === undefined) {
+          template.empresaId.set(Session.get('datos_empresa'))
+        } else {
+          template.empresaId.set(FlowRouter.getParam('empresaId'))
+        }
 
-        template.subscribe('DetalleDeEmpresa', empresaId);
+        template.subscribe('DetalleDeEmpresa', template.empresaId.get());
+        template.subscribe('listas')
 
     });
 
@@ -674,14 +732,49 @@ Template.EditarEmpresa.onCreated(() => {
 
 Template.EditarEmpresa.helpers({
     empresa() {
-        let empresaId = FlowRouter.getParam('empresaId');
-        console.log(Empresas.findOne({_id: empresaId}).nombre);
-        return Empresas.findOne({_id: empresaId});
+        return Empresas.findOne({_id: Template.instance().empresaId.get()});
+    },
+    listas() {
+      return Listas.find();
+    },
+    select() {
+
+      if ($('.' + this._id).val() === this._id) {
+        return 'selected'
+      } else {
+        return ''
+      }
+    },
+    fecha(fecha) {
+
+      if (fecha) {
+
+        var date = fecha;
+        var d  = new Date(date.split("/").reverse().join("-"));
+
+        var dd = d.getDate();
+        var mm = d.getMonth()+1;
+
+        if (mm <= 9) {
+          mm = '0' + mm
+        }
+
+        if (dd <= 9) {
+          dd = '0' + dd
+        }
+
+        var yy = d.getFullYear();
+        var newdate = yy + "-" + mm + "-" + dd;
+          console.log(newdate);
+        return newdate
+      }
+
     }
 });
 
 Template.EditarEmpresa.events({
     'click .guardar'(e, t) {
+        e.preventDefault()
         let re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
         let datos = {
@@ -690,13 +783,13 @@ Template.EditarEmpresa.events({
             domicilio: t.find("[name='domicilio']").value,
             representante: t.find("[name='representante']").value,
             telefono: t.find("[name='telefono']").value,
+            movil: t.find("[name='movil']").value,
+            fecha_inicio: t.find("[name='fecha_inicio']").value,
             email: t.find("[name='email']").value
         };
 
-        let empresaId = FlowRouter.getParam('empresaId');
-
-        if (datos.nombre !== "" && datos.ruc !== "" && datos.domicilio !== "" && datos.representante !== "" && datos.telefono !== "" && re.test(t.find("[name='email']").value)) {
-            Meteor.call('editarEmpresa', datos, empresaId, (err) => {
+        if (datos.nombre !== "" && datos.fecha_inicio && datos.ruc !== "" && datos.domicilio !== "" && datos.representante !== "" && datos.telefono !== "" && datos.movil !== "" && re.test(t.find("[name='email']").value)) {
+            Meteor.call('editarEmpresa', datos, t.empresaId.get(), (err) => {
                 if (err) {
                     sweetAlert("Oops...", "Hubo un error, vuelva a intentarlo", "error");
                 } else {
@@ -837,6 +930,7 @@ Template.EditarCobrador.events({
 
 Template.Empresas.events({
     'click .agregar-empresa'() {
+
         Modal.show('agregarEmpresa');
     },
     'change .subirFlota2'(e, t) {
@@ -867,6 +961,7 @@ Template.agregarEmpresa.onCreated(() => {
 
   template.autorun( () => {
     template.subscribe('listas')
+    template.subscribe('Entidades')
   })
 
 })
@@ -874,10 +969,36 @@ Template.agregarEmpresa.onCreated(() => {
 Template.agregarEmpresa.helpers({
   listas() {
     return Listas.find();
+  },
+  entidades() {
+    return Entidades.find()
   }
 })
 
 Template.agregarEmpresa.events({
+    'click [name="agregar_entidad"]'() {
+      $( ".ae" ).remove();
+      $( "#entidades_container" ).append( $( '<br><br><input type="text" name="nombre_entidad" style="width: 165px; margin-left: 110px;margin-right: 5px" placeholder="Nombre de Entidad"  class="form-control" id="entidades"><button type="button" class="btn btn-primary agregar_entidad">Agregar</button>' ) );
+    },
+    'click .agregar_entidad'(e, t) {
+      var datos = {
+          nombre: t.find('[name="nombre_entidad"]').value
+      }
+
+      if (datos.nombre != "") {
+          Meteor.call('agregarEntidad', datos, (err) => {
+              if (err) {
+                Bert.alert('Hubo un error', 'danger')
+                t.find('[name="nombre_entidad"]').value = ""
+              } else {
+                t.find('[name="nombre_entidad"]').value = ""
+                Bert.alert('Entidad Agregada', 'success')
+              }
+          })
+      } else {
+          Bert.alert('Ingrese el nombre de la entidad', 'warning')
+      }
+    },
     'submit form'(e, t) {
         e.preventDefault();
         let re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
@@ -888,9 +1009,23 @@ Template.agregarEmpresa.events({
             domicilio: t.find("[name='domicilio']").value,
             representante: t.find("[name='representante']").value,
             telefono: t.find("[name='telefono']").value,
+            movil: t.find("[name='movil']").value,
+            fecha_inicio: t.find("[name='fecha_inicio']").value,
             email: t.find("[name='email']").value,
-            plan: $('#plan').val()
+            plan: $('#plan').val(),
+            entidadId: $('#entidad').val()
         };
+
+        //console.log(datos.fecha_inicio);
+
+        let parts = datos.fecha_inicio.split("-");
+
+        datos.fecha_inicio = parts[2] + '/' + parts[1] + '/' + parts[0];
+
+        if (datos.entidadId === "0") {
+          Bert.alert('Seleccione o agregue una entidad')
+          return;
+        }
 
         if (datos.nombre !== "" && datos.ruc !== "" && datos.domicilio !== "" && datos.representante !== "" && datos.telefono !== "" && re.test(t.find("[name='email']").value)) {
 
@@ -942,7 +1077,6 @@ Template.DetalleDeEmpresa.helpers({
 
 Template.DetalleDeEmpresa.events({
     'click .edit'() {
-        console.log('editar');
         Modal.show('EditarEmpresa');
     }
 });

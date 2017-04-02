@@ -82,11 +82,6 @@ Template.Entidades.events({
 
 });
 
-Template.agregarEntidad.onRendered(function () {
-
-
-});
-
 Template.agregarEntidad.events({
 
     'click .send__entity__data'() {

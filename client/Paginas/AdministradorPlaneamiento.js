@@ -525,16 +525,15 @@ function getPathVariableCode(line) {
 }
 
 Template.AdministradorAgregarRuta.onCreated( function () {
-    Session.setDefault('ruta', 'ida');
-
+    let template = Template.instance()
+    template.ida = new ReactiveVar('ida')
     var self = this;
 
     self.autorun( function () {
+        self.subscribe('Entidades')
         self.subscribe('Empresas', function () {
             if (Empresas.find().fetch().length > 0) {
-                $(".js-example-basic-multiple").select2({
-                    placeholder: "Asigna a una o más empresas a esta ruta",
-                });
+                $(".js-example-basic-multiple").select2({});
 
             }
         });
@@ -544,6 +543,9 @@ Template.AdministradorAgregarRuta.onCreated( function () {
 Template.AdministradorAgregarRuta.helpers({
     empresas() {
         return Empresas.find();
+    },
+    entidades() {
+      return Entidades.find({});
     }
 });
 
@@ -674,11 +676,11 @@ Template.AdministradorAgregarRuta.onRendered( function () {
                         lng: location.lng()
                     };
 
-                    if ( Session.get('ruta') === "ida" || Session.get('ruta') === 'misma' ){
+                    if ( template.ida.get() === "ida" || template.ida.get() === 'misma' ){
                       template.ruta.ida.push( latLng );
                     }
 
-                    if ( Session.get('ruta') === "vuelta" || Session.get('ruta') === 'misma' ){
+                    if ( template.ida.get() === "vuelta" || template.ida.get() === 'misma' ){
                       template.ruta.vuelta.push( latLng );
                     }
 
@@ -809,11 +811,24 @@ Template.AdministradorAgregarRuta.onRendered( function () {
 Template.AdministradorAgregarRuta.events({
     'click .save'(e, t) {
 
-        t.ruta.empresasId = $(".js-example-basic-multiple2").val();;
+        let empresa = $(".js-example-basic-multiple2").val()
+        let entidad = $(".js-example-basic-multiple3").val()
+        if (empresa !== "0") {
+          t.ruta.empresaId = $(".js-example-basic-multiple2").val();
+        } else {
+          t.ruta.empresaId = undefined
+        }
+
+        if (entidad !== "0") {
+          t.ruta.entidad = $(".js-example-basic-multiple3").val()
+        } else {
+          t.ruta.entidad = undefined
+        }
+
         t.ruta.nombre =  t.find("[name='nombre']").value;
 
 
-        if (t.ruta.nombre !== "") {
+        if (t.ruta.nombre !== "" && t.ruta.empresaId !== undefined && t.ruta.entidad !== undefined) {
           if (typeof t.ruta.ida !== 'undefined' && t.ruta.ida.length > 0) {
             if (typeof t.ruta.vuelta !== 'undefined' && t.ruta.vuelta.length > 0) {
               Meteor.call('AgregarRuta', t.ruta, (err) => {
@@ -821,7 +836,7 @@ Template.AdministradorAgregarRuta.events({
                   if (err) {
                       Bert.alert( 'Hubo un error, vuelva a intentarlo.', 'danger', 'growl-top-right' );
                   } else {
-                      FlowRouter.go('/admin/rutas');
+                      FlowRouter.go('/');
                       Bert.alert( 'Ruta agregada.', 'success', 'growl-top-right' );
                   }
               });
@@ -845,11 +860,13 @@ Template.AdministradorAgregarRuta.events({
         console.log(id);
 
         if (id === "ida") {
-            Session.set('ruta', 'ida');
+            t.ida.set('ida');
         } else if (id === "vuelta") {
-            Session.set('ruta', 'vuelta');
+            t.ida.set('vuelta');
+
         } else if ( id === "misma") {
-            Session.set('ruta', 'misma');
+            t.ida.set('misma');
+
         }
     }
 });
