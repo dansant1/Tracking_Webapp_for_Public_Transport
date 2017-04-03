@@ -750,3 +750,7 @@ div.wrapper-calendar {
 	padding-bottom: 0px !important;
   border-bottom: 1px solid #ddd;
 }
+
+select.plan option[disabled] {
+	color: #F24115;
+}

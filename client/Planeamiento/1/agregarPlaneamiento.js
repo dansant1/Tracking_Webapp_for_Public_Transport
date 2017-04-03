@@ -172,6 +172,7 @@ Template.agregarPlaneamientoIda.onRendered( () => {
           if (isDateBeforeToday(dia) === false) {
             Session.set('date', date.format())
             Session.set('rutaPorHora', template.rutaId.get())
+            console.log('hola');
             Meteor.call('agregarHoraPorDia', date.format(), true, template.rutaId.get(), (err) => {
                 if (err) {
                   console.log(err);
@@ -328,15 +329,102 @@ Template.agregarPlaneamientoVuelta.helpers({
 
 Template.ConfigurarPlaneamiento.onCreated( () => {
   let template = Template.instance()
-
+  template.horaSelecc = new ReactiveVar(null)
+  template.horas = new ReactiveVar([])
+  template.horasFinales = new ReactiveVar([])
   template.autorun( () => {
-    template.subscribe('HorasPorDia', true);
+    template.subscribe('HorasPorDia', true, () => {
+      let timestamp = $('#hi').val();
+
+      let hoy = Session.get('date')
+      let ruta = Session.get('rutaPorHora')
+
+      const HORAS = [ "1491109200", "1491112800", "1491116400", "1491120000", "1491123600", "1491127200",
+                      "1491130800", "1491134400", "1491138000", "1491141600", "1491145200", "1491148800",
+                      "1491152400", "1491156000", "1491159600", "1491163200", "1491166800", "1491170400",
+                      "1491174000", "1491177600", "1491181200", "1491184800", "1491188400", "1491192000",
+                      "1491195599"];
+
+      let hoursToDisable = HorasPorDia.findOne({dia: hoy, ida: true, rutaId: ruta}).horas;
+      let resultado = []
+
+      let NewHour;
+      for (var i = 0; i < HORAS.length; i++) {
+
+        let CheckDisabled = hoursToDisable.indexOf(HORAS[i]) > -1;
+
+        if (HORAS[i] > timestamp) {
+
+
+
+          if (!CheckDisabled) {
+               NewHour = moment.unix(HORAS[i]).subtract(1,'minutes')/1000;
+              resultado.push(NewHour)
+          } else {
+              break;
+          }
+
+
+        }
+
+      }
+
+      template.horasFinales.set(resultado)
+
+    });
     template.subscribe('PlanesHorarios')
   })
 
 })
 
 Template.ConfigurarPlaneamiento.helpers({
+  hhmm(timestamp) {
+    return moment.unix(timestamp).format("H:mm")
+  },
+  horasIniciales() {
+    let hoy = Session.get('date')
+    let ruta = Session.get('rutaPorHora')
+    let resultado = [];
+    const HORAS = [ "1491109200", "1491112800", "1491116400", "1491120000", "1491123600", "1491127200",
+                    "1491130800", "1491134400", "1491138000", "1491141600", "1491145200", "1491148800",
+                    "1491152400", "1491156000", "1491159600", "1491163200", "1491166800", "1491170400",
+                    "1491174000", "1491177600", "1491181200", "1491184800", "1491188400", "1491192000",
+                    "1491195599"];
+
+    let hoursToDisable = HorasPorDia.findOne({dia: hoy, ida: true, rutaId: ruta}).horas;
+
+    console.log('Horas baneadas: ', hoursToDisable);
+    for (var i = 0; i < HORAS.length - 1 ; i++) {
+      console.log(HORAS[i]);
+
+      let CheckDisabled = hoursToDisable.indexOf(HORAS[i]) > -1;
+      console.log(CheckDisabled);
+      if (CheckDisabled) {
+        console.log('HORAS:',HORAS[i]);
+        resultado.push({
+          timestamp: HORAS[i],
+          disabled: "disabled"
+        })
+
+      } else {
+
+        resultado.push({
+          timestamp: HORAS[i],
+          disabled: ""
+        })
+
+      }
+
+    }
+
+    console.log('resultado: ', resultado);
+    Template.instance().horas.set(resultado);
+    return Template.instance().horas.get()
+
+  },
+  horasFinales() {
+    return Template.instance().horasFinales.get()
+  },
   activo() {
     let hoy = Session.get('date')
     let ruta = Session.get('rutaPorHora')
@@ -360,6 +448,47 @@ Template.ConfigurarPlaneamiento.helpers({
 })
 
 Template.ConfigurarPlaneamiento.events({
+  'change #hi'(e, t) {
+    let timestamp = e.target.value;
+
+    let hoy = Session.get('date')
+    let ruta = Session.get('rutaPorHora')
+
+    const HORAS = [ "1491109200", "1491112800", "1491116400", "1491120000", "1491123600", "1491127200",
+                    "1491130800", "1491134400", "1491138000", "1491141600", "1491145200", "1491148800",
+                    "1491152400", "1491156000", "1491159600", "1491163200", "1491166800", "1491170400",
+                    "1491174000", "1491177600", "1491181200", "1491184800", "1491188400", "1491192000",
+                    "1491195599"];
+
+    let hoursToDisable = HorasPorDia.findOne({dia: hoy, ida: true, rutaId: ruta}).horas;
+    let resultado = []
+
+    let NewHour;
+    for (var i = 0; i < HORAS.length; i++) {
+
+      let CheckDisabled = hoursToDisable.indexOf(HORAS[i]) > -1;
+
+      if (HORAS[i] > timestamp) {
+
+        if (!CheckDisabled) {
+
+            resultado.push(NewHour)
+            NewHour = moment.unix(HORAS[i]).subtract(1,'minutes')/1000;
+        } else {
+          //resultado.push(HORAS[i])
+           break;
+        }
+
+
+      }
+
+    }
+
+
+
+    Template.instance().horasFinales.set(resultado)
+
+  },
   'click [name="guardar_planeamiento"]'(e, t) {
 
     let programacion = {
@@ -385,27 +514,29 @@ Template.ConfigurarPlaneamiento.events({
       h1 = parseInt(h1)
       let h2 = programacion.hf.slice(0, 2)
       h2 = parseInt(h2)
+
+      Meteor.call('add_plan_horario', programacion, validacion, (err) => {
+        if (err) {
+          Bert.alert('Hubo un Error', 'danger');
+
+
+        } else {
+          Meteor.call('ActualizarRangoHorarioPorDia', validacion.dia, validacion.ida, programacion, validacion.rutaId, (err) => {
+            if (err) {
+              console.log(err);
+            } else {
+              Bert.alert('Planeamiento Agregado', 'success');
+            }
+          })
+        }
+      })
+
+      Modal.hide('ConfigurarPlaneamiento')
+
       if (h1 === h2 || h1 > h2) {
           Bert.alert('Ingrese un rango de horas valido', 'warning')
       } else {
-        Meteor.call('add_plan_horario', programacion, validacion, (err) => {
-          if (err) {
-            Bert.alert('Hubo un Error', 'danger');
-
-
-          } else {
-            Meteor.call('ActualizarRangoHorarioPorDia', validacion.dia, validacion.ida, programacion, validacion.rutaId, (err) => {
-              if (err) {
-                console.log(err);
-              } else {
-                //Modal.hide('ConfigurarPlaneamiento')
-                Bert.alert('Planeamiento Agregado', 'success');
-              }
-            })
-          }
-        })
-
-        Modal.hide('ConfigurarPlaneamiento')
+        //metodo
       }
 
     } else {
@@ -431,8 +562,7 @@ Template.ConfigurarPlaneamientoVuelta.helpers({
     let hoy = Session.get('date')
     let ruta = Session.get('rutaPorHora')
     let primera = HorasPorDia.findOne({dia: hoy, ida: false, rutaId: ruta}).primera;
-    console.log(HorasPorDia.findOne({dia: hoy, ida: false, rutaId: ruta}));
-    console.log(primera);
+
     if (primera === true) {
       return 'disabled';
     } else {

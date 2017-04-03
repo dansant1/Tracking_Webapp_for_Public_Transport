@@ -103,9 +103,9 @@
                         <br>
                         <div class="input-group">
                            <span class="input-group-addon">Hora de Inicio</span>
-                           <select class="form-control" {{activo}} name="hi" id="hi">
-                             {{#each horas}}
-                             <option value="{{this}}">{{this}}</option>
+                           <select class="form-control plan" {{activo}} name="hi" id="hi">
+                             {{#each horasIniciales}}
+                             <option value="{{this.timestamp}}" {{this.disabled}}>{{hhmm this.timestamp}}</option>
                              {{/each}}
                            </select>
                         </div>
@@ -113,8 +113,8 @@
                         <div class="input-group">
                            <span class="input-group-addon">Hora de Fin</span>
                            <select class="form-control" name="hf" id="hf">
-                             {{#each horas}}
-                             <option value="{{this}}">{{this}}</option>
+                             {{#each horasFinales}}
+                             <option selected value="{{this}}">{{hhmm this}}</option>
                              {{/each}}
                            </select>
                         </div>
