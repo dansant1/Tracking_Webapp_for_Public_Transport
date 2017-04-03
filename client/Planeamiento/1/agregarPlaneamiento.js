@@ -344,21 +344,28 @@ Template.ConfigurarPlaneamiento.onCreated( () => {
                       "1491152400", "1491156000", "1491159600", "1491163200", "1491166800", "1491170400",
                       "1491174000", "1491177600", "1491181200", "1491184800", "1491188400", "1491192000",
                       "1491195599"];
+    const HORASFINALES = ["1491112800", "1491116400", "1491120000", "1491123600",
+                                            "1491127200", "1491130800", "1491134400", "1491138000",
+                                            "1491141600", "1491145200", "1491148800", "1491152400",
+                                            "1491156000", "1491159600", "1491163200", "1491166800",
+                                            "1491170400", "1491174000", "1491177600", "1491181200",
+                                            "1491184800", "1491188400", "1491192000", "1491195600"];
+
 
       let hoursToDisable = HorasPorDia.findOne({dia: hoy, ida: true, rutaId: ruta}).horas;
       let resultado = []
 
       let NewHour;
-      for (var i = 0; i < HORAS.length; i++) {
+      for (var i = 0; i < HORASFINALES.length; i++) {
 
-        let CheckDisabled = hoursToDisable.indexOf(HORAS[i]) > -1;
+        let CheckDisabled = hoursToDisable.indexOf(HORASFINALES[i]) > -1;
 
-        if (HORAS[i] > timestamp) {
+        if (HORASFINALES[i] > timestamp) {
 
 
 
           if (!CheckDisabled) {
-               NewHour = moment.unix(HORAS[i]).subtract(1,'minutes')/1000;
+               NewHour = moment.unix(HORASFINALES[i]).subtract(1,'minutes')/1000;
               resultado.push(NewHour)
           } else {
               break;
@@ -390,6 +397,8 @@ Template.ConfigurarPlaneamiento.helpers({
                     "1491152400", "1491156000", "1491159600", "1491163200", "1491166800", "1491170400",
                     "1491174000", "1491177600", "1491181200", "1491184800", "1491188400", "1491192000",
                     "1491195599"];
+
+
 
     let hoursToDisable = HorasPorDia.findOne({dia: hoy, ida: true, rutaId: ruta}).horas;
 
@@ -460,20 +469,31 @@ Template.ConfigurarPlaneamiento.events({
                     "1491174000", "1491177600", "1491181200", "1491184800", "1491188400", "1491192000",
                     "1491195599"];
 
+    const HORASFINALES = ["1491112800", "1491116400", "1491120000", "1491123600",
+                          "1491127200", "1491130800", "1491134400", "1491138000",
+                          "1491141600", "1491145200", "1491148800", "1491152400",
+                          "1491156000", "1491159600", "1491163200", "1491166800",
+                          "1491170400", "1491174000", "1491177600", "1491181200",
+                          "1491184800", "1491188400", "1491192000", "1491195600"];
+
     let hoursToDisable = HorasPorDia.findOne({dia: hoy, ida: true, rutaId: ruta}).horas;
     let resultado = []
 
     let NewHour;
-    for (var i = 0; i < HORAS.length; i++) {
+    for (var i = 0; i <= HORASFINALES.length; i++) {
 
-      let CheckDisabled = hoursToDisable.indexOf(HORAS[i]) > -1;
+      let CheckDisabled = hoursToDisable.indexOf(HORASFINALES[i]) > -1;
 
-      if (HORAS[i] > timestamp) {
+      if (HORASFINALES[i] > timestamp) {
 
         if (!CheckDisabled) {
 
-            resultado.push(NewHour)
-            NewHour = moment.unix(HORAS[i]).subtract(1,'minutes')/1000;
+
+          //  var newHour = moment.unix(arrayTestFinal[i]).subtract({minutes: 1})/1000;
+
+          NewHour = moment.unix(HORASFINALES[i]).subtract(1,'minutes')/1000;
+          console.log(NewHour);
+          resultado.push(NewHour)
         } else {
           //resultado.push(HORAS[i])
            break;
